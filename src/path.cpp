@@ -19,26 +19,6 @@ void Path::clear() {
   publishPathVehicles();
 }
 
-////###################################################
-////                                         TRACE PATH
-////###################################################
-//// __________
-//// TRACE PATH
-//void Path::tracePath(const Node3D* node, int i) {
-//  if (i == 0) {
-//    path.header.stamp = ros::Time::now();
-//  }
-
-//  if (node == nullptr) { return; }
-
-//  addSegment(node);
-//  addNode(node, i);
-//  i++;
-//  addVehicle(node, i);
-//  i++;
-
-//  tracePath(node->getPred(), i);
-//}
 
 //###################################################
 //                                         TRACE PATH

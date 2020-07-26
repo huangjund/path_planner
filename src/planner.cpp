@@ -5,14 +5,6 @@ using namespace HybridAStar;
 //                                        CONSTRUCTOR
 //###################################################
 Planner::Planner() {
-  // _____
-  // TODOS
-  //    initializeLookups();
-  // Lookup::collisionLookup(collisionLookup);
-  // ___________________
-  // COLLISION DETECTION
-  //    CollisionDetection configurationSpace;
-  // _________________
   // TOPICS TO PUBLISH
   pubStart = n.advertise<geometry_msgs::PoseStamped>("/move_base_simple/start", 1);
 
@@ -44,7 +36,7 @@ void Planner::initializeLookups() {
 //###################################################
 void Planner::setMap(const nav_msgs::OccupancyGrid::Ptr map) {
   if (Constants::coutDEBUG) {
-    std::cout << "I am seeing the map..." << std::endl;
+    std::cout << "I am seeing the map..." <<Constants::coutDEBUG<< std::endl;
   }
 
   grid = map;
