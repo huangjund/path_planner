@@ -50,9 +50,7 @@ Node3D* Algorithm::hybridAStar(Node3D& start,
   ros::Duration d(0.003);
 
   // OPEN LIST AS BOOST IMPLEMENTATION
-  typedef boost::heap::binomial_heap<Node3D*,
-          boost::heap::compare<CompareNodes>
-          > priorityQueue;
+  typedef boost::heap::binomial_heap<Node3D*, boost::heap::compare<CompareNodes>> priorityQueue;
   priorityQueue O;
 
   // update h value
@@ -72,63 +70,13 @@ Node3D* Algorithm::hybridAStar(Node3D& start,
 
   // continue until O empty
   while (!O.empty()) {
-
-    //    // DEBUG
-    //    Node3D* pre = nullptr;
-    //    Node3D* succ = nullptr;
-
-    //    std::cout << "\t--->>>" << std::endl;
-
-    //    for (priorityQueue::ordered_iterator it = O.ordered_begin(); it != O.ordered_end(); ++it) {
-    //      succ = (*it);
-    //      std::cout << "VAL"
-    //                << " | C:" << succ->getC()
-    //                << " | x:" << succ->getX()
-    //                << " | y:" << succ->getY()
-    //                << " | t:" << helper::toDeg(succ->getT())
-    //                << " | i:" << succ->getIdx()
-    //                << " | O:" << succ->isOpen()
-    //                << " | pred:" << succ->getPred()
-    //                << std::endl;
-
-    //      if (pre != nullptr) {
-
-    //        if (pre->getC() > succ->getC()) {
-    //          std::cout << "PRE"
-    //                    << " | C:" << pre->getC()
-    //                    << " | x:" << pre->getX()
-    //                    << " | y:" << pre->getY()
-    //                    << " | t:" << helper::toDeg(pre->getT())
-    //                    << " | i:" << pre->getIdx()
-    //                    << " | O:" << pre->isOpen()
-    //                    << " | pred:" << pre->getPred()
-    //                    << std::endl;
-    //          std::cout << "SCC"
-    //                    << " | C:" << succ->getC()
-    //                    << " | x:" << succ->getX()
-    //                    << " | y:" << succ->getY()
-    //                    << " | t:" << helper::toDeg(succ->getT())
-    //                    << " | i:" << succ->getIdx()
-    //                    << " | O:" << succ->isOpen()
-    //                    << " | pred:" << succ->getPred()
-    //                    << std::endl;
-
-    //          if (pre->getC() - succ->getC() > max) {
-    //            max = pre->getC() - succ->getC();
-    //          }
-    //        }
-    //      }
-
-    //      pre = succ;
-    //    }
-
     // pop node with lowest cost from priority queue
     nPred = O.top();
     // set index
     iPred = nPred->setIdx(width, height);
     iterations++;
 
-    // RViz visualization
+    // RViz 3D visualization
     if (Constants::visualization) {
       visualization.publishNode3DPoses(*nPred);
       visualization.publishNode3DPose(*nPred);
@@ -137,7 +85,7 @@ Node3D* Algorithm::hybridAStar(Node3D& start,
 
     // _____________________________
     // LAZY DELETION of rewired node
-    // if there exists a pointer this node has already been expanded
+    // if this predecessor node has already been expanded
     if (nodes3D[iPred].isClosed()) {
       // pop node from the open list and start with a fresh node
       O.pop();
@@ -153,8 +101,10 @@ Node3D* Algorithm::hybridAStar(Node3D& start,
 
       // _________
       // GOAL TEST
+      // if the start point is at the goal or iteration exceeds the limit
       if (*nPred == goal || iterations > Constants::iterations) {
         // DEBUG
+        std::cout << "number of iterations: " << iterations << std::endl;
         return nPred;
       }
 
@@ -163,12 +113,15 @@ Node3D* Algorithm::hybridAStar(Node3D& start,
       else {
         // _______________________
         // SEARCH WITH DUBINS SHOT
+        // when nPred shoots the analytical path range, motion primitives is less than 3
+        // and we hope to use dubins curve method, then we have:
+        // TODO: WHAT DOES THIS PRIMITIVE MEAN???
         if (Constants::dubinsShot && nPred->isInRange(goal) && nPred->getPrim() < 3) {
           nSucc = dubinsShot(*nPred, goal, configurationSpace);
 
           if (nSucc != nullptr && *nSucc == goal) {
             //DEBUG
-            // std::cout << "max diff " << max << std::endl;
+            std::cout << "number of iterations: " << iterations << std::endl;
             return nSucc;
           }
         }
@@ -197,7 +150,7 @@ Node3D* Algorithm::hybridAStar(Node3D& start,
                 // calculate H value
                 updateH(*nSucc, goal, nodes2D, dubinsLookup, width, height, configurationSpace, visualization);
 
-                // if the successor is in the same cell but the C value is larger
+                // if the successor is in the same cell with its predecessor but the C value is larger
                 if (iPred == iSucc && nSucc->getC() > nPred->getC() + Constants::tieBreaker) {
                   delete nSucc;
                   continue;
@@ -348,7 +301,13 @@ float aStar(Node2D& start,
 //###################################################
 //                                         COST TO GO
 //###################################################
-void updateH(Node3D& start, const Node3D& goal, Node2D* nodes2D, float* dubinsLookup, int width, int height, CollisionDetection& configurationSpace, Visualize& visualization) {
+void updateH(Node3D& start, 
+            const Node3D& goal, 
+            Node2D* nodes2D, 
+            float* dubinsLookup, 
+            int width, int height, 
+            CollisionDetection& configurationSpace, 
+            Visualize& visualization) {
   float dubinsCost = 0;
   float reedsSheppCost = 0;
   float twoDCost = 0;
@@ -500,7 +459,6 @@ Node3D* dubinsShot(Node3D& start, const Node3D& goal, CollisionDetection& config
       x += Constants::dubinsStepSize;
       i++;
     } else {
-      //      std::cout << "Dubins shot collided, discarding the path" << "\n";
       // delete all nodes
       delete [] dubinsNodes;
       return nullptr;

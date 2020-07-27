@@ -2,6 +2,7 @@
 #define COLLISIONDETECTION_H
 
 #include <nav_msgs/OccupancyGrid.h>
+#include <iostream>
 
 #include "constants.h"
 #include "lookup.h"

@@ -25,7 +25,6 @@ bool CollisionDetection::configurationTest(float x, float y, float t) {
 
     // make sure the configuration coordinates are actually on the grid
     if (cX >= 0 && (unsigned int)cX < grid->info.width && cY >= 0 && (unsigned int)cY < grid->info.height) {
-      std::cout << grid->data.size() << std::endl;
       if (grid->data[cY * grid->info.width + cX]) {
         return false;
       }

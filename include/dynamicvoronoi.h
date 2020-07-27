@@ -51,7 +51,7 @@ class DynamicVoronoi {
 
   // was private, changed to public for obstX, obstY
  public:
-  struct dataCell {
+  typedef struct {
     float dist;
     char voronoi;
     char queueing;
@@ -59,7 +59,7 @@ class DynamicVoronoi {
     int obstY;
     bool needsRaise;
     int sqdist;
-  };
+  }dataCell;
 
   typedef enum {voronoiKeep = -4, freeQueued = -3, voronoiRetry = -2, voronoiPrune = -1, free = 0, occupied = 1} State;
   typedef enum {fwNotQueued = 1, fwQueued = 2, fwProcessed = 3, bwQueued = 4, bwProcessed = 1} QueueingState;

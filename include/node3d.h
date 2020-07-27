@@ -83,7 +83,7 @@ class Node3D {
   bool operator == (const Node3D& rhs) const;
 
   // RANGE CHECKING
-  /// Determines whether it is appropriate to find a analytical solution.
+  /// Determines whether it is appropriate to find an analytical solution.
   bool isInRange(const Node3D& goal) const;
 
   // GRID CHECKING
@@ -121,7 +121,7 @@ class Node3D {
   bool o;
   /// the closed value
   bool c;
-  /// the motion primitive of the node
+  /// the motion primitive of this node from its predecessor
   int prim;
   /// the predecessor pointer
   const Node3D* pred;

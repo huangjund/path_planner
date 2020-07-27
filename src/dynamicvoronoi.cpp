@@ -65,10 +65,9 @@ void DynamicVoronoi::initializeMap(int _sizeX, int _sizeY, bool** _gridMap) {
 
   for (int x=0; x<sizeX; x++) {
     for (int y=0; y<sizeY; y++) {
-      if (gridMap[x][y]) {
+      if (gridMap[x][y]) { // if the pixel has obstacle
         dataCell c = data[x][y];
         if (!isOccupied(x,y,c)) {
-          
           bool isSurrounded = true;
           for (int dx=-1; dx<=1; dx++) {
             int nx = x+dx;

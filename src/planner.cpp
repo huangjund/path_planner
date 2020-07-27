@@ -41,9 +41,11 @@ void Planner::setMap(const nav_msgs::OccupancyGrid::Ptr map) {
 
   grid = map;
   //update the configuration space with the current map
+  // for collision detection preparation
   configurationSpace.updateGrid(map);
+
   //create array for Voronoi diagram
-//  ros::Time t0 = ros::Time::now();
+  // ros::Time t0 = ros::Time::now();
   int height = map->info.height;
   int width = map->info.width;
   bool** binMap;
@@ -60,9 +62,9 @@ void Planner::setMap(const nav_msgs::OccupancyGrid::Ptr map) {
   voronoiDiagram.initializeMap(width, height, binMap);
   voronoiDiagram.update();
   voronoiDiagram.visualize();
-//  ros::Time t1 = ros::Time::now();
-//  ros::Duration d(t1 - t0);
-//  std::cout << "created Voronoi Diagram in ms: " << d * 1000 << std::endl;
+  // ros::Time t1 = ros::Time::now();
+  // ros::Duration d(t1 - t0);
+  // std::cout << "created Voronoi Diagram in ms: " << d * 1000 << std::endl;
 
   // plan if the switch is not set to manual and a transform is available
   if (!Constants::manual && listener.canTransform("/map", ros::Time(0), "/base_link", ros::Time(0), "/map", nullptr)) {
@@ -175,10 +177,6 @@ void Planner::plan() {
     // set theta to a value (0,2PI]
     t = Helper::normalizeHeadingRad(t);
     Node3D nStart(x, y, t, 0, 0, nullptr);
-    // ___________
-    // DEBUG START
-    //    Node3D nStart(108.291, 30.1081, 0, 0, 0, nullptr);
-
 
     // ___________________________
     // START AND TIME THE PLANNING
@@ -189,19 +187,30 @@ void Planner::plan() {
     // CLEAR THE PATH
     path.clear();
     smoothedPath.clear();
+    ros::Time t1 = ros::Time::now();
     // FIND THE PATH
     Node3D* nSolution = Algorithm::hybridAStar(nStart, nGoal, nodes3D, nodes2D, width, height, configurationSpace, dubinsLookup, visualization);
+    ros::Time t2 = ros::Time::now();
     // TRACE THE PATH
     smoother.tracePath(nSolution);
+    ros::Time t3 = ros::Time::now();
     // CREATE THE UPDATED PATH
     path.updatePath(smoother.getPath());
+    ros::Time t4 = ros::Time::now();
     // SMOOTH THE PATH
-    smoother.smoothPath(voronoiDiagram);
+    smoother.smoothPath(voronoiDiagram); // TODO: need to know
+    ros::Time t5 = ros::Time::now();
     // CREATE THE UPDATED PATH
     smoothedPath.updatePath(smoother.getPath());
-    ros::Time t1 = ros::Time::now();
-    ros::Duration d(t1 - t0);
-    std::cout << "TIME in ms: " << d * 1000 << std::endl;
+    ros::Time t6 = ros::Time::now();
+    ros::Duration d1(t1 - t0);ros::Duration d2(t2 - t1);ros::Duration d3(t3 - t2);ros::Duration d4(t4 - t3);ros::Duration d5(t5 - t4);
+    ros::Duration d(t6 - t0);
+    std::cout << "TIME in ms: \n" << d1 * 1000 << "\t"
+                                  << d2 * 1000 << "\t"
+                                  << d3 * 1000 << "\t"
+                                  << d4 * 1000 << "\t"
+                                  << d5 * 1000 << "\t"
+                                  << d * 1000 << "\t" << std::endl;
 
     // _________________________________
     // PUBLISH THE RESULTS OF THE SEARCH
