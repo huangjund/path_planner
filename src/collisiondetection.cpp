@@ -19,6 +19,7 @@ bool CollisionDetection::configurationTest(float x, float y, float t) {
   int cX;
   int cY;
 
+  // TODO: figure out the unit of x is cell or meters
   for (int i = 0; i < collisionLookup[idx].length; ++i) {
     cX = (X + collisionLookup[idx].pos[i].x);
     cY = (Y + collisionLookup[idx].pos[i].y);

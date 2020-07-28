@@ -73,7 +73,7 @@ static const float deltaHeadingRad = 2 * M_PI / (float)vehicleHeadings;
 static const float deltaHeadingNegRad = 2 * M_PI - deltaHeadingRad;
 /// [m] --- The cell size of the 2D grid of the world, [meters/cell]
 //          as the scale in rviz is fixed
-static const float cellSize = 2;
+static const float cellSize = 5;
 /*!
   \brief [m] --- The tie breaker breaks ties between nodes expanded in the same cell
 
