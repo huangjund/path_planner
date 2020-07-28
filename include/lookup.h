@@ -23,7 +23,7 @@ inline void dubinsLookup(float* lookup) {
   //    width++;
   //  }
 
-  const int headings = Constants::headings;
+  const int headings = Constants::vehicleHeadings;
 
   // start and goal vector
   double start[3];
@@ -150,19 +150,19 @@ inline void collisionLookup(Constants::config* lookup) {
     c.x = (double)size / 2 + points[q].x;
     c.y = (double)size / 2 + points[q].y;
 
-    p[0].x = c.x - Constants::length / 2 / cSize;
-    p[0].y = c.y - Constants::width / 2 / cSize;
+    p[0].x = c.x - Constants::vehicleLength / 2 / cSize;
+    p[0].y = c.y - Constants::vehicleWidth / 2 / cSize;
 
-    p[1].x = c.x - Constants::length / 2 / cSize;
-    p[1].y = c.y + Constants::width / 2 / cSize;
+    p[1].x = c.x - Constants::vehicleLength / 2 / cSize;
+    p[1].y = c.y + Constants::vehicleWidth / 2 / cSize;
 
-    p[2].x = c.x + Constants::length / 2 / cSize;
-    p[2].y = c.y + Constants::width / 2 / cSize;
+    p[2].x = c.x + Constants::vehicleLength / 2 / cSize;
+    p[2].y = c.y + Constants::vehicleWidth / 2 / cSize;
 
-    p[3].x = c.x + Constants::length / 2 / cSize;
-    p[3].y = c.y - Constants::width / 2 / cSize;
+    p[3].x = c.x + Constants::vehicleLength / 2 / cSize;
+    p[3].y = c.y - Constants::vehicleWidth / 2 / cSize;
 
-    for (int o = 0; o < Constants::headings; ++o) {
+    for (int o = 0; o < Constants::vehicleHeadings; ++o) {
       if (DEBUG) { std::cout << "\ndegrees: " << theta * 180.f / M_PI << std::endl; }
 
       // initialize cSpace
@@ -293,15 +293,15 @@ inline void collisionLookup(Constants::config* lookup) {
         for (int j = 0; j < size; ++j) {
           if (cSpace[i * size + j]) {
             // compute the relative position of the car cells
-            lookup[q * Constants::headings + o].pos[count].x = j - (int)c.x;
-            lookup[q * Constants::headings + o].pos[count].y = i - (int)c.y;
+            lookup[q * Constants::vehicleHeadings + o].pos[count].x = j - (int)c.x;
+            lookup[q * Constants::vehicleHeadings + o].pos[count].y = i - (int)c.y;
             // add one for the length of the current list
             count++;
           }
         }
       }
 
-      lookup[q * Constants::headings + o].length = count;
+      lookup[q * Constants::vehicleHeadings + o].length = count;
 
       if (DEBUG) {
         //DEBUG
@@ -318,10 +318,10 @@ inline void collisionLookup(Constants::config* lookup) {
         }
 
         //TESTING
-        std::cout << "\n\nthe center of " << q* Constants::headings + o << " is at " << c.x << " | " << c.y << std::endl;
+        std::cout << "\n\nthe center of " << q* Constants::vehicleHeadings + o << " is at " << c.x << " | " << c.y << std::endl;
 
-        for (int i = 0; i < lookup[q * Constants::headings + o].length; ++i) {
-          std::cout << "[" << i << "]\t" << lookup[q * Constants::headings + o].pos[i].x << " | " << lookup[q * Constants::headings + o].pos[i].y << std::endl;
+        for (int i = 0; i < lookup[q * Constants::vehicleHeadings + o].length; ++i) {
+          std::cout << "[" << i << "]\t" << lookup[q * Constants::vehicleHeadings + o].pos[i].x << " | " << lookup[q * Constants::vehicleHeadings + o].pos[i].y << std::endl;
         }
       }
     }

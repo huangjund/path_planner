@@ -99,8 +99,8 @@ void Path::addVehicle(const Node3D& node, int i) {
   pathVehicle.header.stamp = ros::Time(0);
   pathVehicle.id = i;
   pathVehicle.type = visualization_msgs::Marker::CUBE;
-  pathVehicle.scale.x = Constants::length - Constants::bloating * 2;
-  pathVehicle.scale.y = Constants::width - Constants::bloating * 2;
+  pathVehicle.scale.x = Constants::vehicleLength - Constants::vehicleBloating * 2;
+  pathVehicle.scale.y = Constants::vehicleWidth - Constants::vehicleBloating * 2;
   pathVehicle.scale.z = 1;
   pathVehicle.color.a = 0.1;
 

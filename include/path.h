@@ -44,14 +44,6 @@ class Path {
     path.header.frame_id = "path";
   }
 
-  //  // __________
-  //  // TRACE PATH
-  //  /*!
-  //     \brief Given a node pointer the path to the root node will be traced recursively
-  //     \param node a 3D node, usually the goal node
-  //     \param i a parameter for counting the number of nodes
-  //  */
-  //  void tracePath(const Node3D* node, int i = 0);
   /*!
      \brief Given a node pointer the path to the root node will be traced recursively
      \param node a 3D node, usually the goal node

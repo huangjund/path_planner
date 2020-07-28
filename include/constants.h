@@ -14,6 +14,7 @@
 //    Y-COORDINATE => designating the height of the grid
 
 #include <cmath>
+#include <vector>
 
 /*!
     \brief The namespace that wraps the entire project
@@ -26,9 +27,6 @@ namespace HybridAStar {
     \namespace Constants
 */
 namespace Constants {
-// _________________
-// CONFIG FLAGS
-
 /// A flag for additional debugging output via `std::cout`
 static const bool coutDEBUG = false;
 /// A flag for the mode (true = manual; false = dynamic). Manual for static map or dynamic for dynamic map.
@@ -58,23 +56,24 @@ static const bool twoD = true;
 /// [#] --- Limits the maximum search depth of the algorithm, possibly terminating without the solution
 static const int iterations = 60000;
 /// [m] --- Uniformly adds a padding around the vehicle
-static const double bloating = 0;
+static const double vehicleBloating = 0;
 /// [m] --- The width of the vehicle
-static const double width = 1.75 + 2 * bloating;
+static const double vehicleWidth = 1.75 + 2 * vehicleBloating;
 /// [m] --- The length of the vehicle
-static const double length = 2.65 + 2 * bloating;
+static const double vehicleLength = 2.65 + 2 * vehicleBloating;
 /// [m] --- The minimum turning radius of the vehicle
-static const float r = 6;
+static const float r = 3;
 /// [m] --- The number of discretizations in heading
-static const int headings = 72;
+static const int vehicleHeadings = 72;
 /// [°] --- The discretization value of the heading (goal condition)
-static const float deltaHeadingDeg = 360 / (float)headings;
+static const float deltaHeadingDeg = 360 / (float)vehicleHeadings;
 /// [c*M_PI] --- The discretization value of heading (goal condition)
-static const float deltaHeadingRad = 2 * M_PI / (float)headings;
-/// [c*M_PI] --- The heading part of the goal condition
+static const float deltaHeadingRad = 2 * M_PI / (float)vehicleHeadings;
+/// [c*M_PI] --- Complementary rad of one heading piece
 static const float deltaHeadingNegRad = 2 * M_PI - deltaHeadingRad;
-/// [m] --- The cell size of the 2D grid of the world
-static const float cellSize = 1;
+/// [m] --- The cell size of the 2D grid of the world, [meters/cell]
+//          as the scale in rviz is fixed
+static const float cellSize = 2;
 /*!
   \brief [m] --- The tie breaker breaks ties between nodes expanded in the same cell
 
@@ -97,7 +96,7 @@ static const float penaltyReversing = 2.0;
 /// [#] --- A movement cost penalty for change of direction (changing from primitives < 3 to primitives > 2)
 static const float penaltyCOD = 2.0;
 /// [m] --- The distance to the goal when the analytical solution (Dubin's shot) first triggers
-static const float dubinsShotDistance = 100;
+static const float dubinsShotTrigDistance = 100;
 /// [m] --- The step size for the analytical solution (Dubin's shot) primarily relevant for collision checking
 static const float dubinsStepSize = 1;
 
@@ -108,20 +107,20 @@ static const float dubinsStepSize = 1;
 /// [m] --- The width of the dubinsArea / 2 for the analytical solution (Dubin's shot)
 static const int dubinsWidth = 15;
 /// [m] --- The area of the lookup for the analytical solution (Dubin's shot)
-static const int dubinsArea = dubinsWidth * dubinsWidth;
+static const int dubinsArea = dubinsWidth^2;
 
 
 // _________________________
 // COLLISION LOOKUP SPECIFIC
 
 /// [m] -- The bounding box size length and width to precompute all possible headings
-static const int bbSize = std::ceil((sqrt(width * width + length* length) + 4) / cellSize);
+static const int bbSize = std::ceil((sqrt(vehicleWidth*vehicleWidth + vehicleLength*vehicleLength) + 4) / cellSize);
 /// [#] --- The sqrt of the number of discrete positions per cell
 static const int positionResolution = 10;
 /// [#] --- The number of discrete positions per cell
-static const int positions = positionResolution * positionResolution;
+static const int positions = positionResolution*positionResolution;
 /// A structure describing the relative position of the occupied cell based on the center of the vehicle
-struct relPos {
+struct relative2DPos {
   /// the x position relative to the center
   int x;
   /// the y position relative to the center
@@ -132,11 +131,11 @@ struct config {
   /// the number of cells occupied by this configuration of the vehicle
   int length;
   /*!
-     \var relPos pos[64]
+     \var relative2DPos pos[64]
      \brief The maximum number of occupied cells
      \todo needs to be dynamic
   */
-  relPos pos[64];
+  relative2DPos pos[64];
 };
 
 // _________________
@@ -165,8 +164,21 @@ static constexpr color orange = {253.f / 255.f, 151.f / 255.f, 31.f / 255.f};
 static constexpr color pink = {249.f / 255.f, 38.f / 255.f, 114.f / 255.f};
 /// A definition for a color used for visualization
 static constexpr color purple = {174.f / 255.f, 129.f / 255.f, 255.f / 255.f};
-}
-}
+
+typedef struct Primitives{
+
+  const double stepLength; // steplength of the motion primitive
+  std::vector<float> turningAngle; // turning angle set, using degree
+
+  Primitives():stepLength(0.7068582) {
+    std::vector<float> temp{0,360/vehicleHeadings,-360/vehicleHeadings};
+    turningAngle = temp;
+  }
+
+};
+
+} // namespace Constants
+} // namespace HybridAStar
 
 #endif // CONSTANTS
 

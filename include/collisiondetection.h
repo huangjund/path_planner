@@ -93,7 +93,7 @@ class CollisionDetection {
   /// The occupancy grid
   nav_msgs::OccupancyGrid::Ptr grid;
   /// The collision lookup table
-  Constants::config collisionLookup[Constants::headings * Constants::positions];
+  Constants::config collisionLookup[Constants::vehicleHeadings * Constants::positions];
 };
 }
 #endif // COLLISIONDETECTION_H

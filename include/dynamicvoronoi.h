@@ -18,6 +18,16 @@ class DynamicVoronoi {
   DynamicVoronoi();
   ~DynamicVoronoi();
 
+  typedef struct {
+    float dist;
+    char voronoi;
+    char queueing;
+    int obstX;
+    int obstY;
+    bool needsRaise;
+    int sqdist;
+  }dataCell;
+  
   //! Initialization with an empty map
   void initializeEmpty(int _sizeX, int _sizeY, bool initGridMap = true);
   //! Initialization with a given binary map (false==free, true==occupied)
@@ -51,16 +61,6 @@ class DynamicVoronoi {
 
   // was private, changed to public for obstX, obstY
  public:
-  typedef struct {
-    float dist;
-    char voronoi;
-    char queueing;
-    int obstX;
-    int obstY;
-    bool needsRaise;
-    int sqdist;
-  }dataCell;
-
   typedef enum {voronoiKeep = -4, freeQueued = -3, voronoiRetry = -2, voronoiPrune = -1, free = 0, occupied = 1} State;
   typedef enum {fwNotQueued = 1, fwQueued = 2, fwProcessed = 3, bwQueued = 4, bwProcessed = 1} QueueingState;
   typedef enum {invalidObstData = SHRT_MAX / 2} ObstDataState;

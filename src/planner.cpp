@@ -150,7 +150,7 @@ void Planner::plan() {
     // LISTS ALLOWCATED ROW MAJOR ORDER
     int width = grid->info.width;
     int height = grid->info.height;
-    int depth = Constants::headings;
+    int depth = Constants::vehicleHeadings;
     int length = width * height * depth;
     // define list pointers and initialize lists
     Node3D* nodes3D = new Node3D[length]();

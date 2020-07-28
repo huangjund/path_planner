@@ -67,7 +67,7 @@ void DynamicVoronoi::initializeMap(int _sizeX, int _sizeY, bool** _gridMap) {
     for (int y=0; y<sizeY; y++) {
       if (gridMap[x][y]) { // if the pixel has obstacle
         dataCell c = data[x][y];
-        if (!isOccupied(x,y,c)) {
+        if (!isOccupied(x,y,c)) { // TODO: What does this mean?
           bool isSurrounded = true;
           for (int dx=-1; dx<=1; dx++) {
             int nx = x+dx;
@@ -77,13 +77,13 @@ void DynamicVoronoi::initializeMap(int _sizeX, int _sizeY, bool** _gridMap) {
               int ny = y+dy;
               if (ny<=0 || ny>=sizeY-1) continue;
 
-              if (!gridMap[nx][ny]) {
+              if (!gridMap[nx][ny]) { // if there is free space arround the obstacle pixel
                 isSurrounded = false;
                 break;
               }
             }
           }
-          if (isSurrounded) {
+          if (isSurrounded) { // if the pixel is surrounded by obstacles
             c.obstX = x;
             c.obstY = y;
             c.sqdist = 0;
@@ -91,7 +91,7 @@ void DynamicVoronoi::initializeMap(int _sizeX, int _sizeY, bool** _gridMap) {
             c.voronoi=occupied;
             c.queueing = fwProcessed;
             data[x][y] = c;
-          } else setObstacle(x,y);
+          } else setObstacle(x,y); // by setting obstacles, we will get the contour list, addList
         }
       }
     }
@@ -151,19 +151,19 @@ void DynamicVoronoi::exchangeObstacles(std::vector<INTPOINT> points) {
   }  
 }
 
-void DynamicVoronoi::update(bool updateRealDist) {
+void DynamicVoronoi::update(bool updateRealDist) { // default bool parameter is true
 
-  commitAndColorize(updateRealDist);
+  commitAndColorize(updateRealDist); // get queue, open
 
-  while (!open.empty()) {
+  while (!open.empty()) { // if the queue is not empty
     INTPOINT p = open.pop();
     int x = p.x;
     int y = p.y;
     dataCell c = data[x][y];
 
-    if(c.queueing==fwProcessed) continue; 
+    if(c.queueing==fwProcessed) continue; // ?
 
-    if (c.needsRaise) {
+    if (c.needsRaise) { // ?
       // RAISE
       for (int dx=-1; dx<=1; dx++) {
         int nx = x+dx;
@@ -259,7 +259,7 @@ void DynamicVoronoi::commitAndColorize(bool updateRealDist) {
     int y = p.y;
     dataCell c = data[x][y];
 
-    if(c.queueing != fwQueued){
+    if(c.queueing != fwQueued){ // TODO: what does this mean?
       if (updateRealDist) c.dist = 0;
       c.sqdist = 0;
       c.obstX = x;
