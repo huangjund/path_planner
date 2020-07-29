@@ -7,7 +7,7 @@
 #include "constants.h"
 #include "lookup.h"
 #include "node2d.h"
-#include "node3d.h"
+#include "planningmap.h"
 
 namespace HybridAStar {
 namespace {
@@ -18,7 +18,7 @@ void getConfiguration(const Node2D* node, float& x, float& y, float& t) {
   t = 99;
 }
 
-void getConfiguration(const Node3D* node, float& x, float& y, float& t) {
+void getConfiguration(const PlanMapNode* node, float& x, float& y, float& t) {
   x = node->getX();
   y = node->getY();
   t = node->getT();
@@ -93,7 +93,7 @@ class CollisionDetection {
   /// The occupancy grid
   nav_msgs::OccupancyGrid::Ptr grid;
   /// The collision lookup table
-  Constants::config collisionLookup[Constants::vehicleHeadings * Constants::positions];
+  Constants::config collisionLookup[Constants::vehicleHeadings*Constants::positions];
 };
 }
 #endif // COLLISIONDETECTION_H

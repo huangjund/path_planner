@@ -45,20 +45,20 @@ void Planner::setMap(const nav_msgs::OccupancyGrid::Ptr map) {
   configurationSpace.updateGrid(map);
 
   //create array for Voronoi diagram
-  int height = map->info.height;
-  int width = map->info.width;
+  int collisionMapHeight = map->info.height;
+  int collisionMapWidth = map->info.width;
   bool** binMap;
-  binMap = new bool*[width];
+  binMap = new bool*[collisionMapWidth];
 
-  for (int x = 0; x < width; x++) { binMap[x] = new bool[height]; }
+  for (int x = 0; x < collisionMapWidth; x++) { binMap[x] = new bool[collisionMapHeight]; }
 
-  for (int x = 0; x < width; ++x) {
-    for (int y = 0; y < height; ++y) {
-      binMap[x][y] = map->data[y * width + x] ? true : false;
+  for (int x = 0; x < collisionMapWidth; ++x) {
+    for (int y = 0; y < collisionMapHeight; ++y) {
+      binMap[x][y] = map->data[y * collisionMapWidth + x] ? true : false;
     }
   }
 
-  voronoiDiagram.initializeMap(width, height, binMap);
+  voronoiDiagram.initializeMap(collisionMapWidth, collisionMapHeight, binMap);
   voronoiDiagram.update();
   voronoiDiagram.visualize();
 
@@ -98,7 +98,7 @@ void Planner::setStart(const geometry_msgs::PoseWithCovarianceStamped::ConstPtr&
   startN.header.frame_id = "map";
   startN.header.stamp = ros::Time::now();
 
-  std::cout << "I am seeing a new start x:" << x << " y:" << y << " t:" << Helper::toDeg(t) << std::endl;
+  std::cout << "I am seeing a new start x:" << x << " y:" << y << " t:" << Helper::Rad2Deg(t) << std::endl;
 
   if (grid->info.height >= y && y >= 0 && grid->info.width >= x && x >= 0) {
     validStart = true;
@@ -109,7 +109,7 @@ void Planner::setStart(const geometry_msgs::PoseWithCovarianceStamped::ConstPtr&
     // publish start for RViz
     pubStart.publish(startN);
   } else {
-    std::cout << "invalid start x:" << x << " y:" << y << " t:" << Helper::toDeg(t) << std::endl;
+    std::cout << "invalid start x:" << x << " y:" << y << " t:" << Helper::Rad2Deg(t) << std::endl;
   }
 }
 
@@ -122,7 +122,7 @@ void Planner::setGoal(const geometry_msgs::PoseStamped::ConstPtr& end) {
   float y = end->pose.position.y / Constants::cellSize;
   float t = tf::getYaw(end->pose.orientation);
 
-  std::cout << "I am seeing a new goal x:" << x << " y:" << y << " t:" << Helper::toDeg(t) << std::endl;
+  std::cout << "I am seeing a new goal x:" << x << " y:" << y << " t:" << Helper::Rad2Deg(t) << std::endl;
 
   if (grid->info.height >= y && y >= 0 && grid->info.width >= x && x >= 0) {
     validGoal = true;
@@ -131,7 +131,7 @@ void Planner::setGoal(const geometry_msgs::PoseStamped::ConstPtr& end) {
     if (Constants::manual) { plan();}
 
   } else {
-    std::cout << "invalid goal x:" << x << " y:" << y << " t:" << Helper::toDeg(t) << std::endl;
+    std::cout << "invalid goal x:" << x << " y:" << y << " t:" << Helper::Rad2Deg(t) << std::endl;
   }
 }
 
@@ -143,36 +143,37 @@ void Planner::plan() {
   if (validStart && validGoal) {
 
     // ___________________________
-    // LISTS ALLOWCATED ROW MAJOR ORDER
-    int width = grid->info.width;
-    int height = grid->info.height;
-    int depth = Constants::vehicleHeadings;
-    int length = width * height * depth;
-    // define list pointers and initialize lists
-    Node3D* nodes3D = new Node3D[length]();
-    Node2D* nodes2D = new Node2D[width * height]();
+    // get two maps' property
+    constexpr int collisionMapWidth = grid->info.width;
+    constexpr int collisionMapHeight = grid->info.height;
+    constexpr int depth = Constants::vehicleHeadings;
+    constexpr int clisLength = collisionMapWidth * collisionMapHeight * depth; // the collision map length
+    constexpr int planMapWidth = static_cast<int>(
+      collisionMapWidth*Constants::collisionMapCellSize/PlanMapNode::planmapCellSize);
+    constexpr int planMapHeight = static_cast<int>(
+      collisionMapHeight*Constants::collisionMapCellSize/PlanMapNode::planmapCellSize);
+    constexpr int planLength = planMapWidth*planMapHeight*depth; // the planning map length
+    // create two planning maps
+    PlanMapNode* nodes3D = new PlanMapNode[planLength]();
+    Node2D* nodes2D = new Node2D[planMapWidth*planMapHeight]();
 
     // ________________________
     // retrieving goal position
-    float x = goal.pose.position.x / Constants::cellSize;
-    float y = goal.pose.position.y / Constants::cellSize;
+    float x = goal.pose.position.x/PlanMapNode::planmapCellSize;
+    float y = goal.pose.position.y/PlanMapNode::planmapCellSize;
     float t = tf::getYaw(goal.pose.orientation);
-    // set theta to a value (0,2PI]
-    t = Helper::normalizeHeadingRad(t);
-    const Node3D nGoal(x, y, t, 0, 0, nullptr);
-    // __________
-    // DEBUG GOAL
-    //    const Node3D nGoal(155.349, 36.1969, 0.7615936, 0, 0, nullptr);
-
+    // set theta to a value (0,360]
+    t = Helper::Rad2Deg(t);
+    const PlanMapNode nGoal(x, y, t, 0, 0, nullptr);
 
     // _________________________
     // retrieving start position
-    x = start.pose.pose.position.x / Constants::cellSize;
-    y = start.pose.pose.position.y / Constants::cellSize;
+    x = start.pose.pose.position.x/PlanMapNode::planmapCellSize;
+    y = start.pose.pose.position.y/PlanMapNode::planmapCellSize;
     t = tf::getYaw(start.pose.pose.orientation);
-    // set theta to a value (0,2PI]
-    t = Helper::normalizeHeadingRad(t);
-    Node3D nStart(x, y, t, 0, 0, nullptr);
+    // set theta to a value (0,360]
+    t = Helper::Rad2Deg(t);
+    PlanMapNode nStart(x, y, t, 0, 0, nullptr);
 
     // ___________________________
     // START AND TIME THE PLANNING
@@ -185,7 +186,7 @@ void Planner::plan() {
     smoothedPath.clear();
     ros::Time t1 = ros::Time::now();
     // FIND THE PATH
-    Node3D* nSolution = Algorithm::hybridAStar(nStart, nGoal, nodes3D, nodes2D, width, height, configurationSpace, dubinsLookup, visualization);
+    PlanMapNode* nSolution = Algorithm::hybridAStar(nStart, nGoal, nodes3D, nodes2D, planMapWidth, planMapHeight, configurationSpace, dubinsLookup, visualization);
     ros::Time t2 = ros::Time::now();
     // TRACE THE PATH
     smoother.tracePath(nSolution);
@@ -216,8 +217,8 @@ void Planner::plan() {
     smoothedPath.publishPath();
     smoothedPath.publishPathNodes();
     smoothedPath.publishPathVehicles();
-    visualization.publishNode3DCosts(nodes3D, width, height, depth);
-    visualization.publishNode2DCosts(nodes2D, width, height);
+    visualization.publishNode3DCosts(nodes3D, collisionMapWidth, collisionMapHeight, depth);
+    visualization.publishNode2DCosts(nodes2D, collisionMapWidth, collisionMapHeight);
 
 
 

@@ -5,16 +5,18 @@ using namespace HybridAStar;
 //###################################################
 //                                        IS IN RANGE
 //###################################################
+// TODO: need to be changed to varying according to heuristics
 bool PlanMapNode::isInRange(const PlanMapNode& goal) const {
   int random = rand() % 10 + 1;
-  float dx = std::abs(x - goal.x) / random;
-  float dy = std::abs(y - goal.y) / random;
+  float dx = std::abs(rx - goal.rx) / random;
+  float dy = std::abs(ry - goal.ry) / random;
   return (dx * dx) + (dy * dy) < Constants::dubinsShotTrigDistance;
 }
 
 //###################################################
 //                                      MOVEMENT COST
 //###################################################
+// TODO: penalization of cos so far is not reasonable
 void PlanMapNode::updateG() {
   // forward driving
   if (prim < 3) {
@@ -51,10 +53,11 @@ void PlanMapNode::updateG() {
 //                                 3D NODE COMPARISON
 //###################################################
 bool PlanMapNode::operator == (const PlanMapNode& rhs) const {
-  return (int)x == (int)rhs.x &&
-         (int)y == (int)rhs.y &&
-         (std::abs(t - rhs.t) <= Constants::deltaHeadingRad ||
-          std::abs(t - rhs.t) >= Constants::deltaHeadingNegRad);
+  return (int)rx == (int)rhs.rx &&
+         (int)ry == (int)rhs.ry &&
+         (int)rt == (int)rhs.rt;
+        //  (std::abs(rt - rhs.rt) <= Constants::deltaHeadingRad ||
+        //   std::abs(rt - rhs.rt) >= Constants::deltaHeadingNegRad);
 }
 
 //###################################################
@@ -64,18 +67,26 @@ PlanMapNode* PlanMapNode::createSuccessor(const int i) {
   float xSucc;
   float ySucc;
   float tSucc;
+  float theta = this->getT()*M_PI/180; // get the actual angle
+  float x = this->getX(); // get the actual x position
+  float y = this->getY(); // get the actual y position
 
+  //_______________________________________
   // calculate successor positions forward
+  // transformation
+  //   / cos(t) -sin(t) \ / dx \ 
+  //   \ sin(t)  cos(t) / \ dy /
+  //_______________________________________
   if (i < 3) {
-    xSucc = x + dx[i] * cos(t) - dy[i] * sin(t);
-    ySucc = y + dx[i] * sin(t) + dy[i] * cos(t);
-    tSucc = Helper::normalizeHeadingRad(t + dt[i]);
+    xSucc = (x + dx[i]*cos(theta) - dy[i]*sin(theta))/planmapCellSize;
+    ySucc = (y + dx[i]*sin(theta) + dy[i]*cos(theta))/planmapCellSize;
+    tSucc = Helper::Rad2Deg(theta + dt[i]); // normalized when transformed to degree
   }
   // backwards
   else {
-    xSucc = x - dx[i - 3] * cos(t) - dy[i - 3] * sin(t);
-    ySucc = y - dx[i - 3] * sin(t) + dy[i - 3] * cos(t);
-    tSucc = Helper::normalizeHeadingRad(t - dt[i - 3]);
+    xSucc = (x - dx[i - 3]*cos(theta) - dy[i - 3]*sin(theta))/planmapCellSize;
+    ySucc = (y - dx[i - 3]*sin(theta) + dy[i - 3]*cos(theta))/planmapCellSize;
+    tSucc = Helper::Rad2Deg(theta - dt[i - 3]); // normalized when transformed to degree
   }
 
   return new PlanMapNode(xSucc, ySucc, tSucc, g, 0, this, i);

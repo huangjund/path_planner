@@ -5,16 +5,18 @@
 #include <ompl/base/spaces/DubinsStateSpace.h>
 #include <ompl/base/spaces/SE2StateSpace.h>
 #include <ompl/base/State.h>
+#include <vector>
 
 typedef ompl::base::SE2StateSpace::StateType State;
 
+#include "planningmap.h"
 #include "node3d.h"
 #include "node2d.h"
 #include "visualize.h"
 #include "collisiondetection.h"
 
 namespace HybridAStar {
-class Node3D;
+class PlanMapNode;
 class Node2D;
 class Visualize;
 
@@ -41,15 +43,8 @@ class Algorithm {
      \param visualization the visualization object publishing the search to RViz
      \return the pointer to the node satisfying the goal condition
   */
-  static Node3D* hybridAStar(Node3D& start,
-                             const Node3D& goal,
-                             Node3D* nodes3D,
-                             Node2D* nodes2D,
-                             int width,
-                             int height,
-                             CollisionDetection& configurationSpace,
-                             float* dubinsLookup,
-                             Visualize& visualization);
+  PlanMapNode* hybridAStar(PlanMapNode&, const PlanMapNode&, PlanMapNode*, Node2D* ,
+                             const int, const int, CollisionDetection&, float*, Visualize& );
 
 };
 }

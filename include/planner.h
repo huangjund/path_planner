@@ -15,7 +15,7 @@
 #include "collisiondetection.h"
 #include "dynamicvoronoi.h"
 #include "algorithm.h"
-#include "node3d.h"
+#include "planningmap.h"
 #include "path.h"
 #include "smoother.h"
 #include "visualize.h"

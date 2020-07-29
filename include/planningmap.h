@@ -8,12 +8,18 @@
 
 namespace HybridAStar {
 class PlanMapNode : public Node3D {
+  // TODO: in class normalization
+  // param t should be normalized before sent to this class
 public:
 	PlanMapNode():PlanMapNode(0,0,0,0,0,nullptr){}
 	PlanMapNode(float x, float y, float t, float g, float h, const PlanMapNode* pred, int prim = 0):
-							Node3D(x*planmapCellSize,y*planmapCellSize,t*Constants::deltaHeadingDeg,pred){
+							Node3D(x*planmapCellSize, y*planmapCellSize, t*planmapAngleSize,pred){
+                this->rx = x;
+                this->ry = y;
+                this->rt = t;
 								this->g = g;
 								this->h = h;
+                this->pred = pred;
 								this->o = false;
 								this->c = false;
 								this->idx = -1;
@@ -22,6 +28,12 @@ public:
 	~PlanMapNode();
 
 	/// ============GET===============
+  // get the relative x value [unit:cells]
+  float getrx() const {return rx;}
+  // get the relative y value [unit:cells]
+  float getry() const {return ry;}
+  // get the relative t value [unit:cells]
+  float getrt() const {return rt;}
 	/// get the cost-so-far (real value)
   float getG() const { return g; }
   /// get the cost-to-come (heuristic value)
@@ -36,19 +48,29 @@ public:
   bool isOpen() const { return o; }
   /// determine whether the node is closed
   bool isClosed() const { return c; }
+  // get predecessor
+  const PlanMapNode* getPred() const {return pred;}
 
 	
 	/// ==========SET==================
+  /// set relative x
+  void setrx(const float x) {this->rx = x; this->setX(x*planmapCellSize);}
+  /// set relative y
+  void setry(const float y) {this->ry = y; this->setX(y*planmapCellSize);}
+  /// set relative t
+  void setrt(const float t) {this->rt = t; this->setX(t*planmapAngleSize);}
 	/// set the cost-so-far (real value)
   void setG(const float& g) { this->g = g; }
   /// set the cost-to-come (heuristic value)
   void setH(const float& h) { this->h = h; }
   /// set and get the index of the node in the 3D grid
-  int setIdx(int width, int height) { this->idx = (int)(t / Constants::deltaHeadingRad) * width * height + (int)(y) * width + (int)(x); return idx;}
+  int setIdx(int width, int height) { this->idx = (int)(rt)*width*height + (int)(ry)*width + (int)(rx); return idx;}
   /// open the node
   void open() { o = true; c = false;}
   /// close the node
   void close() { c = true; o = false; }
+  /// set PREDECESSOR
+  void setPred(const PlanMapNode* pred) {this->pred = pred;this->setnodePred(pred);}
 
 	// UPDATE METHODS
   /// Updates the cost-so-far for the node x' coming from its predecessor. It also discovers the node.
@@ -66,13 +88,19 @@ public:
   /// Creates a successor in the continous space.
   PlanMapNode* createSuccessor(const int i);
 
-  private:
+public:
+  /// the size of planning map cell [unit:meters/cell]
+  const static float planmapCellSize = 0.5;
+  /// the size of planning map angle piece [unit:degree/piece]
+  const static float planmapAngleSize = Constants::deltaHeadingDeg;
+
+private:
   /// the relative x position, [unit: cells]
-  float x;
+  float rx;
   /// the relative y position, [unit: cells]
-  float y;
+  float ry;
   /// the relative heading theta, [unit: pieces]
-  float t;
+  float rt;
   /// the cost-so-far
 	float g;
   /// the cost-to-go
@@ -87,7 +115,5 @@ public:
   const PlanMapNode* pred;
   /// the motion primitive of this node from its predecessor
   int prim;
-  /// the size of planning map cell [unit:meters]
-  const float planmapCellSize = 0.5; 
 };
 } // namespace HybridAStar

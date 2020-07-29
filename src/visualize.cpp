@@ -34,13 +34,13 @@ void Visualize::clear() {
 //###################################################
 //                                    CURRENT 3D NODE
 //###################################################
-void Visualize::publishNode3DPose(Node3D& node) {
+void Visualize::publishNode3DPose(PlanMapNode& node) {
   geometry_msgs::PoseStamped pose;
   pose.header.frame_id = "path";
   pose.header.stamp = ros::Time::now();
   pose.header.seq = 0;
-  pose.pose.position.x = node.getX() * Constants::cellSize;
-  pose.pose.position.y = node.getY() * Constants::cellSize;
+  pose.pose.position.x = node.getX();
+  pose.pose.position.y = node.getY();
 
   //FORWARD
   if (node.getPrim() < 3) {
@@ -58,10 +58,10 @@ void Visualize::publishNode3DPose(Node3D& node) {
 //###################################################
 //                              ALL EXPANDED 3D NODES
 //###################################################
-void Visualize::publishNode3DPoses(Node3D& node) {
+void Visualize::publishNode3DPoses(PlanMapNode& node) {
   geometry_msgs::Pose pose;
-  pose.position.x = node.getX() * Constants::cellSize;
-  pose.position.y = node.getY() * Constants::cellSize;
+  pose.position.x = node.getX();
+  pose.position.y = node.getY();
 
   //FORWARD
   if (node.getPrim() < 3) {
@@ -119,7 +119,7 @@ void Visualize::publishNode2DPoses(Node2D& node) {
 //###################################################
 //                                    COST HEATMAP 3D
 //###################################################
-void Visualize::publishNode3DCosts(Node3D* nodes, int width, int height, int depth) {
+void Visualize::publishNode3DCosts(PlanMapNode* nodes, int width, int height, int depth) {
   visualization_msgs::MarkerArray costCubes;
   visualization_msgs::Marker costCube;
 

@@ -59,7 +59,7 @@ class Node2D {
   /// set the cost-to-come (heuristic value)
   void setH(const float& h) { this->h = h; }
   /// set and get the index of the node in the 2D array
-  int setIdx(int width) { this->idx = y * width + x; return idx;}
+  int setIdx(int width) { this->idx = y*width + x; return idx;}
   /// open the node
   void open() { o = true; c = false; }
   /// close the node
@@ -77,7 +77,7 @@ class Node2D {
   /// Updates the cost-to-go for the node x' to the goal node.
   void updateH(const Node2D& goal) { h = movementCost(goal); }
   /// The heuristic as well as the cost measure.
-  float movementCost(const Node2D& pred) const { return sqrt((x - pred.x) * (x - pred.x) + (y - pred.y) * (y - pred.y)); }
+  float movementCost(const Node2D& pred) const { return sqrt((x - pred.x)*(x - pred.x) + (y - pred.y)*(y - pred.y)); }
 
   // CUSTOM OPERATORS
   /// Custom operator to compare nodes. Nodes are equal if their x and y position is the same.
@@ -85,7 +85,7 @@ class Node2D {
 
   // GRID CHECKING
   /// Validity check to test, whether the node is in the 2D array.
-  bool isOnGrid(const int width, const int height) const;
+  bool isOnGrid(const int planMapWidth, const int planMapHeight) const;
 
   // SUCCESSOR CREATION
   /// Creates a successor on a eight-connected grid.
@@ -118,6 +118,8 @@ class Node2D {
   bool d;
   /// the predecessor pointer
   Node2D* pred;
+  // planing map cell size [unit:meters/cell]
+  static const float planningMapCellSize = 0.5;
 };
 }
 #endif // NODE2D_H

@@ -74,6 +74,8 @@ static const float deltaHeadingNegRad = 2 * M_PI - deltaHeadingRad;
 /// [m] --- The cell size of the 2D grid of the world, [meters/cell]
 //          as the scale in rviz is fixed
 static const float cellSize = 5;
+/// [m] --- The cell size of the 2D grid of the collision map, [meters/cell]
+static const float collisionMapCellSize = 0.05;
 /*!
   \brief [m] --- The tie breaker breaks ties between nodes expanded in the same cell
 
@@ -113,10 +115,10 @@ static const int dubinsArea = dubinsWidth^2;
 // _________________________
 // COLLISION LOOKUP SPECIFIC
 
-/// [m] -- The bounding box size length and width to precompute all possible headings
-static const int bbSize = std::ceil((sqrt(vehicleWidth*vehicleWidth + vehicleLength*vehicleLength) + 4) / cellSize);
+/// [m] -- The bounding box size length and width to precompute all possible headings [unit:cell]
+static const int bbSize = std::ceil((sqrt(vehicleWidth*vehicleWidth + vehicleLength*vehicleLength) + 2)/collisionMapCellSize);
 /// [#] --- The sqrt of the number of discrete positions per cell
-static const int positionResolution = 10;
+static const int positionResolution = 1;
 /// [#] --- The number of discrete positions per cell
 static const int positions = positionResolution*positionResolution;
 /// A structure describing the relative position of the occupied cell based on the center of the vehicle
@@ -131,11 +133,11 @@ struct config {
   /// the number of cells occupied by this configuration of the vehicle
   int length;
   /*!
-     \var relative2DPos pos[64]
+     \var relative2DPos contour[64]
      \brief The maximum number of occupied cells
      \todo needs to be dynamic
   */
-  relative2DPos pos[64];
+  relative2DPos contour[2000];
 };
 
 // _________________

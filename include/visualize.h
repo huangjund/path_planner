@@ -9,7 +9,7 @@
 
 #include "gradient.h"
 
-#include "node3d.h"
+#include "planningmap.h"
 #include "node2d.h"
 namespace HybridAStar {
 class Node3D;

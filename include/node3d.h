@@ -8,7 +8,7 @@
 namespace HybridAStar {
 /*!
    \brief A three dimensional node class that is at the heart of the algorithm.
-
+   the angle needs to be within 0 to 360 deg when in this class
    Each node has a unique configuration (x, y, theta) in the configuration space C.
 */
 class Node3D {
@@ -31,7 +31,7 @@ class Node3D {
   /// get the heading theta
   float getT() const { return t; }
   /// determine whether the node is open
-  const Node3D* getPred() const { return pred; }
+  const Node3D* getnodePred() const { return pred; }
 
   // SETTER METHODS
   /// set the x position
@@ -41,11 +41,11 @@ class Node3D {
   /// set the heading theta
   void setT(const float& t) { this->t = t; }
   /// set a pointer to the predecessor of the node
-  void setPred(const Node3D* pred) { this->pred = pred; }
+  void setnodePred(const Node3D* pred) { this->pred = pred; }
 
   // GRID CHECKING
   /// Validity check to test, whether the node is in the 3D array.
-  bool isOnGrid(const int width, const int height) const;
+  bool isOnGrid(const int width, const int height, const float gridCellSize) const;
 
   // CONSTANT VALUES
   /// Number of possible directions

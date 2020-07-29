@@ -51,20 +51,20 @@ static inline float normalizeHeadingRad(float t) {
 }
 
 /*!
-   \fn float toDeg(float t)
+   \fn float Rad2Deg(float t)
    \brief Converts and normalizes a heading given in rad to deg
    \param t heading in deg
 */
-static inline float toDeg(float t) {
+static inline float Rad2Deg(float t) {
   return normalizeHeadingRad(t) * 180.f / M_PI ;
 }
 
 /*!
-   \fn float toRad(float t)
+   \fn float Deg2Rad(float t)
    \brief Converts and normalizes a heading given in deg to rad
    \param t heading in rad
 */
-static inline float toRad(float t) {
+static inline float Deg2Rad(float t) {
   return normalizeHeadingRad(t / 180.f * M_PI);
 }
 
