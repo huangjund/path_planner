@@ -21,61 +21,69 @@ find_package(catkin REQUIRED COMPONENTS
     tf
     )
 
-set(SOURCES
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/algorithm.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/node2d.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/node3d.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/collisiondetection.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/planner.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/path.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/smoother.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/visualize.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/dubins.cpp #Andrew Walker
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/dynamicvoronoi.cpp #Boris Lau, Christoph Sprunk, Wolfram Burgard
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/bucketedqueue.cpp #Boris Lau, Christoph Sprunk, Wolfram Burgard
-    )
-set(HEADERS
-    ${CMAKE_CURRENT_SOURCE_DIR}/include/algorithm.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/include/node2d.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/include/node3d.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/include/collisiondetection.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/include/planner.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/include/path.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/include/smoother.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/include/vector2d.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/include/visualize.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/include/helper.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/include/constants.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/include/lookup.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/include/gradient.h #Andrew Noske
-    ${CMAKE_CURRENT_SOURCE_DIR}/include/dubins.h #Andrew Walker
-    ${CMAKE_CURRENT_SOURCE_DIR}/include/dynamicvoronoi.h #Boris Lau, Christoph Sprunk, Wolfram Burgard
-    ${CMAKE_CURRENT_SOURCE_DIR}/include/bucketedqueue.h #Boris Lau, Christoph Sprunk, Wolfram Burgard
-    ${CMAKE_CURRENT_SOURCE_DIR}/include/point.h #Boris Lau, Christoph Sprunk, Wolfram Burgard
+# set(SOURCES
+#     ${CMAKE_CURRENT_SOURCE_DIR}/src/algorithm.cpp
+#     ${CMAKE_CURRENT_SOURCE_DIR}/src/node2d.cpp
+#     ${CMAKE_CURRENT_SOURCE_DIR}/src/node3d.cpp
+#     ${CMAKE_CURRENT_SOURCE_DIR}/src/collisiondetection.cpp
+#     ${CMAKE_CURRENT_SOURCE_DIR}/src/planner.cpp
+#     ${CMAKE_CURRENT_SOURCE_DIR}/src/path.cpp
+#     ${CMAKE_CURRENT_SOURCE_DIR}/src/smoother.cpp
+#     ${CMAKE_CURRENT_SOURCE_DIR}/src/visualize.cpp
+#     ${CMAKE_CURRENT_SOURCE_DIR}/src/dubins.cpp #Andrew Walker
+#     ${CMAKE_CURRENT_SOURCE_DIR}/src/dynamicvoronoi.cpp #Boris Lau, Christoph Sprunk, Wolfram Burgard
+#     ${CMAKE_CURRENT_SOURCE_DIR}/src/bucketedqueue.cpp #Boris Lau, Christoph Sprunk, Wolfram Burgard
+#     )
+# set(HEADERS
+#     ${CMAKE_CURRENT_SOURCE_DIR}/include/algorithm.h
+#     ${CMAKE_CURRENT_SOURCE_DIR}/include/node2d.h
+#     ${CMAKE_CURRENT_SOURCE_DIR}/include/node3d.h
+#     ${CMAKE_CURRENT_SOURCE_DIR}/include/collisiondetection.h
+#     ${CMAKE_CURRENT_SOURCE_DIR}/include/planner.h
+#     ${CMAKE_CURRENT_SOURCE_DIR}/include/path.h
+#     ${CMAKE_CURRENT_SOURCE_DIR}/include/smoother.h
+#     ${CMAKE_CURRENT_SOURCE_DIR}/include/vector2d.h
+#     ${CMAKE_CURRENT_SOURCE_DIR}/include/visualize.h
+#     ${CMAKE_CURRENT_SOURCE_DIR}/include/helper.h
+#     ${CMAKE_CURRENT_SOURCE_DIR}/include/constants.h
+#     ${CMAKE_CURRENT_SOURCE_DIR}/include/lookup.h
+#     ${CMAKE_CURRENT_SOURCE_DIR}/include/gradient.h #Andrew Noske
+#     ${CMAKE_CURRENT_SOURCE_DIR}/include/dubins.h #Andrew Walker
+#     ${CMAKE_CURRENT_SOURCE_DIR}/include/dynamicvoronoi.h #Boris Lau, Christoph Sprunk, Wolfram Burgard
+#     ${CMAKE_CURRENT_SOURCE_DIR}/include/bucketedqueue.h #Boris Lau, Christoph Sprunk, Wolfram Burgard
+#     ${CMAKE_CURRENT_SOURCE_DIR}/include/point.h #Boris Lau, Christoph Sprunk, Wolfram Burgard
 
-    )
-add_library(HYAS ${SOURCES} ${HEADERS})
+#     )
+# add_library(HYAS ${SOURCES} ${HEADERS})
 
 ## Declare a catkin package
 catkin_package()
 
 ## OPEN MOTION PLANNING LIBRARY
-find_package(OMPL REQUIRED)
+find_package(ompl REQUIRED)
+find_package(gflags REQUIRED)
 
 if(NOT OMPL_FOUND)
     message(AUTHOR_WARNING,"Open Motion Planning Library not found")
 endif(NOT OMPL_FOUND)
 
+if(NOT GFLAGS_FOUND)
+    message(AUTHOR_WARNING,"gflags not found")
+endif(NOT GFLAGS_FOUND)
+
+
 include_directories(include ${catkin_INCLUDE_DIRS})
 include_directories(include ${OMPL_INCLUDE_DIRS})
+include_directories(include ${GFLAGS_INCLUDE_DIRS})
 include_directories(include include)
 
-add_executable(tf_broadcaster src/tf_broadcaster.cpp)
+add_executable(tf_broadcaster examples/hastar/tf_broadcaster.cpp)
 target_link_libraries(tf_broadcaster ${catkin_LIBRARIES})
 
-add_executable(hybrid_astar src/main.cpp ${HEADERS} ${SOURCES})
+add_executable(hybrid_astar examples/hastar/main.cpp ${HEADERS} ${SOURCES})
 target_link_libraries(hybrid_astar ${catkin_LIBRARIES})
 target_link_libraries(hybrid_astar ${OMPL_LIBRARIES})
+target_link_libraries(hybrid_astar ${GFLAGS_LIBRARIES})
 
 install(TARGETS ${PROJECT_NAME} tf_broadcaster
     ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
