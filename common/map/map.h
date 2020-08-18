@@ -1,5 +1,6 @@
 #pragma once
 
+#include <ros/ros.h>
 #include <ompl/util/ClassForward.h>
 #include <nav_msgs/OccupancyGrid.h>
 
@@ -17,13 +18,14 @@ namespace Common {
   class Map {
   private:
     bool hasStateSpace_ = false;
+    ros::NodeHandle n;
+    ros::Subscriber sub;
   public:
     // non-copyable
     Map(const Map &) = delete;
     Map &operator=(const Map &) = delete;
     // constructor
-    Map() = default;
-    explicit Map(const nav_msgs::OccupancyGrid::Ptr readinMap);
+    explicit Map();
     virtual ~Map() = default;
 
     struct characteristic {
@@ -38,6 +40,7 @@ namespace Common {
     std::vector<T> statespace;
     
     void setMap(const nav_msgs::OccupancyGrid::Ptr map);
+    void setSS();
     const std::vector<T>& getStateSpace() const;
     const bool hasStateSpace() { return hasStateSpace_;}
   };

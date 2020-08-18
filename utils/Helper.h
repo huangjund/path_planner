@@ -15,19 +15,7 @@ namespace Utils {
    \brief Normalizes a heading given in degrees to (0,360]
    \param t heading in degrees
 */
- float normalizeHeading(float t) {
-  if ((int)t <= 0 || (int)t >= 360) {
-    if (t < -0.1) {
-      t += 360.f;
-    } else if ((int)t >= 360) {
-      t -= 360.f;
-    } else {
-      t =  0;
-    }
-  }
-
-  return t;
-}
+ float normalizeHeading(float t);
 
 /*!
    \fn float normalizeHeadingRad(float t)
@@ -48,18 +36,14 @@ inline float normalizeHeadingRad(float t) {
    \brief Converts and normalizes a heading given in rad to deg
    \param t heading in deg
 */
- float toDeg(float t) {
-  return normalizeHeadingRad(t) * 180.f / M_PI ;
-}
+ float toDeg(float t);
 
 /*!
    \fn float toRad(float t)
    \brief Converts and normalizes a heading given in deg to rad
    \param t heading in rad
 */
- float toRad(float t) {
-  return normalizeHeadingRad(t / 180.f * M_PI);
-}
+ float toRad(float t);
 
 /*!
    \fn float clamp(float n, float lower, float upper)

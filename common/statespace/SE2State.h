@@ -37,7 +37,7 @@ namespace Common {
     /// collision map cell size [unit: meters/cell]
     static const float collisionMapCellSize;
     /// planning map cell size [unit: meters/cell]
-    const float cellSize_;
+    const float cellSize_ = 0.5;
     /// planning map angle size [unit: rad/piece]
     const float angleSize_;
     /// TODO: some temporal values
@@ -52,6 +52,7 @@ namespace Common {
     const float deltaHeadingNegRad = 2*M_PI - deltaHeadingRad;
 
   public:
+    SE2State() = default;
     SE2State(float cellsize, float anglesize):SE2State(0,0,0,0,0,nullptr,cellsize,anglesize){}
     explicit SE2State(float x, float y, float t, float g, float h,
                      SE2State* pred, float cellsize, float anglesize, int prim = 0):

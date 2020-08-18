@@ -30,7 +30,8 @@ namespace Common {
   public:
     int *values_; // coordinate value
 
-    GridState():GridState(nullptr,0,0,nullptr){int value[dimension] = {0}; values_ = value;}
+    GridState(float cellsize, float anglesize):GridState(nullptr,0,0,nullptr){int value[dimension] = {0}; values_ = value;}
+    
     explicit GridState(int *values, float g, float h, GridState* pred) {
       g_ = g;
       h_ = h;

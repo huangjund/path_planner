@@ -3,17 +3,10 @@
 namespace HybridAStar {
 namespace Common {
   template <typename T>
-  Map<T>::Map(const nav_msgs::OccupancyGrid::Ptr readinMap) {
-    info_.data = readinMap->data;
-    info_.width = readinMap->info.width;
-    info_.height = readinMap->info.height;
-    info_.resolution = readinMap->info.resolution;
-
-    statespace.reserve(200000);
-    statespace = std::vector<T>(info_.width*info_.height, T());
-
-    hasStateSpace_ = true;
+  Map<T>::Map() {
+    sub = n.subscribe("/map", 1, &Map<T>::setMap, this);
   }
+  
   template <typename T>
   void Map<T>::setMap(const nav_msgs::OccupancyGrid::Ptr map) {
     info_.data = map->data;
@@ -21,7 +14,16 @@ namespace Common {
     info_.height = map->info.height;
     info_.resolution = map->info.resolution;
 
-    hasStateSpace_ = false;
+    setSS();
+  }
+
+  template <typename T>
+  void Map<T>::setSS() {
+    if (!hasStateSpace_) {
+      statespace.reserve(200000);
+    }
+    statespace = std::vector<T>(info_.width*info_.height, T(info_.resolution,0.087266));
+    hasStateSpace_ = true;
   }
 
   template <typename T>
