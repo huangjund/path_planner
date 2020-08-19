@@ -4,12 +4,13 @@
 
 namespace HybridAStar {
 namespace Geometry {
-  class HAstar : Planner() {
+  class HAstar : Planner {
   private:
     
   public:
     HAstar();
     ~HAstar();
+    void solve();
   };
 } // namespace Geometry
 } // namespace HybridAstar

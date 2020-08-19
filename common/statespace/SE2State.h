@@ -12,20 +12,25 @@ namespace Common {
   // the SE2State class contains discretization information
   class SE2State : State {
   private:
+    static const unsigned int dimension = 3;
     float x_;
     float y_;
     float t_;
+    float g_;
+    float h_;
+    int prim_;
+    float o_;
+    float c_;
+    float idx_;
+    // TODO: change into intelligent pointer
+    const SE2State* pred_;
     float rx_;
     float ry_;
     float rt_;
-    float g_;
-    float h_;
-    float idx_;
-    float o_;
-    float c_;
-    int prim_;
-    // TODO: change into intelligent pointer
-    const SE2State* pred_;
+    /// planning map cell size [unit: meters/cell]
+    const float cellSize_ = 0.5;
+    /// planning map angle size [unit: rad/piece]
+    const float angleSize_;
     /// Number of possible directions
     static const int dir;
     /// Possible movements in the x direction
@@ -34,12 +39,6 @@ namespace Common {
     static const float dy[];
     /// Possible movements regarding heading theta
     static const float dt[];
-    /// collision map cell size [unit: meters/cell]
-    static const float collisionMapCellSize;
-    /// planning map cell size [unit: meters/cell]
-    const float cellSize_ = 0.5;
-    /// planning map angle size [unit: rad/piece]
-    const float angleSize_;
     /// TODO: some temporal values
     ///  some should be clustered to Motion Primitives class
     /// some should be clustered to Map
@@ -52,27 +51,16 @@ namespace Common {
     const float deltaHeadingNegRad = 2*M_PI - deltaHeadingRad;
 
   public:
+	  /// collision map cell size [unit: meters/cell]
+	  static const float collisionMapCellSize;
+  public:
     SE2State() = default;
-    SE2State(float cellsize, float anglesize):SE2State(0,0,0,0,0,nullptr,cellsize,anglesize){}
+    explicit SE2State(float cellsize, float anglesize);
     explicit SE2State(float x, float y, float t, float g, float h,
-                     SE2State* pred, float cellsize, float anglesize, int prim = 0):
-                    pred_(pred), cellSize_(cellsize), angleSize_(anglesize){
-      x_ = x;
-      y_ = y;
-      t_ = t;
-      g_ = g;
-      h_ = h;
-      o_ = false;
-      c_ = false;
-      idx_ = -1;
-      prim_ = prim;
-      rx_ = x/cellSize_;
-      ry_ = y/cellSize_;
-      rt_ = t/angleSize_;
-    }
-    // no copy no assign
-    SE2State(const SE2State &) = delete;
-    SE2State &operator=(const SE2State &) = delete;
+                     SE2State* pred, float cellsize, float anglesize, int prim);
+    // copy constructor & assignment
+    SE2State(const SE2State &);
+    SE2State &operator=(const SE2State &);
 
     ~SE2State() = default;
     /// get the x position
@@ -102,6 +90,7 @@ namespace Common {
     bool isClosed() const { return c_; }
     /// determine whether the node is open
     const SE2State *getPred() const { return pred_; }
+    unsigned int getDimensions() {return dimension;}
 
     /// set the x position
     void setX(const float& x) { x_ = x; setrx(x);}
@@ -110,9 +99,10 @@ namespace Common {
     /// set the heading theta
     void setT(const float& t) { t_ = t; setrt(t);}
 
-    void setrx(const float& x) {rx_ = x/cellSize_; }
-    void setry(const float& y) {ry_ = y/cellSize_; }
-    void setrt(const float& t) {rt_ = t/angleSize_;}
+    inline void setrx(const float& x) {rx_ = x/cellSize_; }
+    inline void setry(const float& y) {ry_ = y/cellSize_; }
+    inline void setrt(const float& t) {rt_ = t/angleSize_;}
+    void setRelative(const float& x,const float& y,const float& t){setrx(x);setry(y);setrt(t);}
 
     /// set the cost-so-far (real value)
     void setG(const float& g) { g_ = g; }

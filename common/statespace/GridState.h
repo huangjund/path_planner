@@ -26,22 +26,16 @@ namespace Common {
     /// the closed value
     bool c;
     /// the predecessor pointer
-    GridState* pred_;
+    const GridState* pred_;
   public:
     int *values_; // coordinate value
 
-    GridState(float cellsize, float anglesize):GridState(nullptr,0,0,nullptr){int value[dimension] = {0}; values_ = value;}
-    
-    explicit GridState(int *values, float g, float h, GridState* pred) {
-      g_ = g;
-      h_ = h;
-      pred_ = pred;
-      this->o = false;
-      this->c = false;
-      this->idx = -1;
-      for (size_t i = 0; i<dimension; ++i)
-        values_[i] = values[i];
-    }
+    GridState(const GridState &);
+    GridState &operator=(const GridState &);
+
+    // constructor  
+    explicit GridState(float,float);
+    explicit GridState(int *values, float g, float h, GridState* pred); 
     ~GridState() = default;
 
     double distance (const State *state1, const State *state2) const;
@@ -64,7 +58,8 @@ namespace Common {
     /// determine whether the node is closed
     bool  isClosed() const { return c; }
     /// get a pointer to the predecessor
-    GridState* getPred() const { return pred_; }
+    const GridState* getPred() const { return pred_; }
+    unsigned int getDimensions() {return dimension;}
 
     /// set the x position
     void setX(const int& x) { this->values_[0] = x; }
@@ -100,7 +95,7 @@ namespace Common {
 
     /// Creates a successor on a eight-connected grid.
     // TODO: need to fit high dimension
-    GridState* createSuccessor(const int i);
+    // GridState* createSuccessor(const int i);
 
     int operator[](unsigned int i) const
     {

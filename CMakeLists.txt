@@ -28,6 +28,9 @@ set(SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/common/map/map.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/common/statespace/GridState.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/common/statespace/SE2State.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/common/collision/clsDetection.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/geometry/Planner.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/geometry/hybridastar/HAstar.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/utils/Helper.cpp
     )
 set(HEADERS
@@ -35,6 +38,10 @@ set(HEADERS
     ${CMAKE_CURRENT_SOURCE_DIR}/common/statespace/GridState.h
     ${CMAKE_CURRENT_SOURCE_DIR}/common/statespace/State.h
     ${CMAKE_CURRENT_SOURCE_DIR}/common/statespace/SE2State.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/common/collision/clsDetection.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/geometry/Planner.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/geometry/hybridastar/HAstar.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/multibody/SingleForkLiftPlant.h
     ${CMAKE_CURRENT_SOURCE_DIR}/utils/Helper.h
     )
 add_library(HYAS ${SOURCES} ${HEADERS})

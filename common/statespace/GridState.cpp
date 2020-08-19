@@ -9,6 +9,40 @@ namespace Common {
   // possible movements
   const int GridState::dx[] = { -1, -1, 0, 1, 1, 1, 0, -1 };
   const int GridState::dy[] = { 0, 1, 1, 1, 0, -1, -1, -1 };
+
+  GridState::GridState(float,float):GridState(nullptr,0,0,nullptr) {
+    int values[dimension] = {0};
+    values_ = values;
+  }
+
+  GridState::GridState(const GridState &cp):g_(cp.g_),h_(cp.h_),idx(cp.idx),o(cp.o), c(cp.c),pred_(cp.pred_) {
+    int temp[dimension];
+    for (size_t i = 0; i<dimension; ++i)
+      temp[i] = cp.values_[i];
+    values_ = temp;
+  }
+
+  GridState::GridState(int *values, float g, float h, GridState* pred):g_(g),h_(h),pred_(pred) {
+      this->o = false;
+      this->c = false;
+      this->idx = -1;
+      int temp[dimension];
+      for (size_t i = 0; i<dimension; ++i)
+        temp[i] = values[i];
+      values_ = temp;
+  }
+  
+  GridState &GridState::operator=(const GridState &rhs) {
+    g_ = rhs.g_;
+    h_ = rhs.h_;
+    pred_ = rhs.pred_;
+    o = rhs.o;
+    c = rhs.c;
+    idx = rhs.idx;
+    for (size_t i = 0; i<dimension; ++i)
+      values_[i] = rhs.values_[i];
+    return *this;
+  }
   // Eu measure
   double GridState::distance(const State *state1, const State *state2) const {
     double dist = 0;
@@ -48,9 +82,9 @@ namespace Common {
     return values_[0] >= 0 && values_[0] < width && values_[1] >= 0 && values_[1] < Height;
   }
 
-  GridState* GridState::createSuccessor(const int i) {
+  // GridState* GridState::createSuccessor(const int i) {
 
-  }
+  // }
 
   bool GridState::operator == (const State& rhs) const {
     for (size_t i = 0; i < dimension; ++i) {

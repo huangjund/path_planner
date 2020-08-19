@@ -5,6 +5,7 @@
 #include <nav_msgs/OccupancyGrid.h>
 
 #include "../statespace/GridState.h"
+#include "../statespace/SE2State.h"
 
 #include <functional>
 #include <memory>
@@ -14,7 +15,7 @@
 namespace HybridAStar {
 namespace Common {
   // OMPL_CLASS_FORWARD(Map);
-  template <typename T>
+  template <class T>
   class Map {
   private:
     bool hasStateSpace_ = false;
@@ -41,8 +42,9 @@ namespace Common {
     
     void setMap(const nav_msgs::OccupancyGrid::Ptr map);
     void setSS();
-    const std::vector<T>& getStateSpace() const;
+    // const std::vector<T>& getStateSpace() const;
     const bool hasStateSpace() { return hasStateSpace_;}
   };
+
 } // namespace Common
 } // namespace HybridAStar
