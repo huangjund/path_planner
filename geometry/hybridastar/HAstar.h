@@ -45,6 +45,8 @@ namespace Geometry {
     SE2State* solve();
     void updateHeuristic(SE2State &,SE2State &);
     SE2State* dubinsShot(SE2State&, const SE2State&);
+    SE2State &getStart();
+    SE2State &getGoal();
   };
 } // namespace Geometry
 } // namespace HybridAstar

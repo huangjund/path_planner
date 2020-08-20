@@ -13,6 +13,9 @@ namespace HybridAStar{
   using HybridAStar::Multibody::SingleForkLiftPlant;
 
   Interface::Interface(){
+    isStartvalid_ = false;
+    isGoalvalid_ = false;
+    hasMap_ = false;
     subGoal_ = n_.subscribe("/move_base_simple/goal", 1, &Interface::makeGoal, this);
     subStart_ = n_.subscribe("/initialpose", 1, &Interface::makeStart, this);
     subMap_ = n_.subscribe("/map", 1, &Interface::setMap, this);
@@ -30,6 +33,9 @@ namespace HybridAStar{
     } else {
       std::cout << "invalid start x:" << x << " y:" << y << " t:" << t << std::endl;
     }
+
+    if(isabletoPlanning())
+      setOutput();
   }
 
   void Interface::makeGoal(const geometry_msgs::PoseStamped::ConstPtr& goal) {
@@ -44,28 +50,65 @@ namespace HybridAStar{
     } else {
       std::cout << "invalid goal x:" << x << " y:" << y << " t:" << t << std::endl;
     }
+
+    if(isabletoPlanning())
+      setOutput();
   }
   
   void Interface::setMap(const nav_msgs::OccupancyGrid::Ptr map) {
     grid_ = map;
+    hasMap_ = true;
+    clearStartandGoal();
+    
+    if(isabletoPlanning())
+      setOutput();
   }
 
-  int do_main(){
-    ros::NodeHandle rosHandler;
-    ros::Subscriber subMap;
-    auto interface(std::make_shared<Interface>());
-    std::unique_ptr<SingleForkLiftPlant> plant = std::make_unique<SingleForkLiftPlant>();
-    std::unique_ptr<Map<GridState>> collisionMap = std::make_unique<Map<GridState>>();
-    std::unique_ptr<Map<SE2State>> planningMap = std::make_unique<Map<SE2State>>();
-    std::unique_ptr<CollisionDetection> configSpace = std::make_unique<CollisionDetection>(); // the grid is a nullptr
+  inline bool Interface::isabletoPlanning() const {
+    return hasMap_&&isStartvalid_&&isGoalvalid_;
+  }
+
+  bool Interface::setOutput() {
+    // output to map object
+    auto collisionMap = std::make_unique<Map<GridState>>(grid_);
+    auto planningMap = std::make_unique<Map<SE2State>>(grid_);
+    auto configSpace = std::make_unique<CollisionDetection>(grid_); // the grid is a nullptr
+
+    // output to planner
+    SE2State start(0.5,0.08726646); // initialize using planning map resolution
+    SE2State goal(0.5,0.08726646);
+    start.setX(start_.pose.pose.position.x);
+    start.setY(start_.pose.pose.position.y);
+    goal.setX(goal_.pose.position.x);
+    goal.setY(goal_.pose.position.y);
+    start.setT(Utils::normalizeHeadingRad(tf::getYaw(goal_.pose.orientation)));
+    goal.setT(Utils::normalizeHeadingRad(tf::getYaw(goal_.pose.orientation)));
+    auto planner = std::make_unique<HAstar>(start,goal,collisionMap,planningMap,configSpace);
+
+    // run simulation
+    simulate(collisionMap,planningMap,planner);
+    return true;
+  }
+
+  void Interface::clearStartandGoal() {
+    isStartvalid_ = false;
+    isGoalvalid_ = false;
+  }
+
+  void Interface::simulate(std::unique_ptr<Map<GridState>> &cmap,std::unique_ptr<Map<SE2State>> &pmap,
+    std::unique_ptr<HAstar>& planner) {
+    // retrieve start point and goal point
+    auto nStart = planner->getStart();
+    auto nGoal = planner->getGoal();
+
     
-    std::unique_ptr<HAstar> planner = std::make_unique<HAstar>();
-    return 0;
   }
 }
 
 int main(int argc, char** argv) {
   gflags::ParseCommandLineFlags(&argc, &argv, true);
   ros::init(argc, argv, "a_star");
-  return HybridAStar::do_main();
+  auto interface(std::make_unique<HybridAStar::Interface>());
+  ros::spin();
+  return 0;
 }

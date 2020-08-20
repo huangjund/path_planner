@@ -28,7 +28,7 @@ namespace Common {
     float ry_;
     float rt_;
     /// planning map cell size [unit: meters/cell]
-    const float cellSize_ = 0.5;
+    const float cellSize_;
     /// planning map angle size [unit: rad/piece]
     const float angleSize_;
     /// Number of possible directions

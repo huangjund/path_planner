@@ -22,7 +22,7 @@ namespace Geometry {
   public:
     explicit Planner(Common::SE2State&,Common::SE2State&);
     virtual ~Planner() = default;
-
+  
     Planner(const Planner &) = delete;
     Planner &operator=(const Planner &) = delete;
   };

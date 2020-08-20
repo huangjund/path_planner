@@ -5,6 +5,8 @@
 #include "common/statespace/SE2State.h"
 #include "common/map/map.h"
 
+#include <nav_msgs/OccupancyGrid.h>
+
 #include <memory>
 #include <cmath>
 
@@ -52,7 +54,7 @@ namespace Common {
     CollisionDetection(const CollisionDetection&) = delete;
     CollisionDetection &operator=(const CollisionDetection &) = delete;
     // constructor
-    CollisionDetection();
+    CollisionDetection(nav_msgs::OccupancyGrid::Ptr &);
     ~CollisionDetection();
 
     void getConfiguration(const SE2State*, float &,float &, float &);

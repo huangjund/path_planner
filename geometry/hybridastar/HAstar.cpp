@@ -92,6 +92,14 @@ namespace Geometry{
     
   }
 
+  SE2State &HAstar::getStart() {
+    return start_;
+  }
+
+  SE2State &HAstar::getGoal() {
+    return goal_;
+  }
+
   // solve for the whole path
   SE2State* HAstar::solve(){
     auto pWidth = pMap_->info_.width;
