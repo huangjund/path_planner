@@ -2,37 +2,29 @@
 #define PLANNER_H
 
 #include <ros/ros.h>
-#include <geometry_msgs/PoseWithCovarianceStamped.h>
-#include <geometry_msgs/PoseStamped.h>
 #include <tf/transform_datatypes.h>
 
 #include <common/map/map.h>
 #include <multibody/SingleForkLiftPlant.h>
+#include <nav_msgs/OccupancyGrid.h>
+#include "common/statespace/SE2State.h"
 
 namespace HybridAStar {
 namespace Geometry {
   class Planner {
-  private:
+  protected:
+    Common::SE2State start_;
+    Common::SE2State goal_;
+    // TODO: change this into map class
+    nav_msgs::OccupancyGrid::Ptr grid_;
+  
     std::unique_ptr<Multibody::SingleForkLiftPlant> carPlant_;
-    ros::NodeHandle n_;
-    ros::Subscriber subStart_;
-    ros::Subscriber subGoal_;
-    bool isStartvalid = false;
-    bool isGoalvalid = false;
-    geometry_msgs::PoseWithCovarianceStamped start_;
-    geometry_msgs::PoseStamped goal_;
-
-
-    void makeStart(const geometry_msgs::PoseWithCovarianceStamped::ConstPtr& );
-    void makeGoal(const geometry_msgs::PoseStamped::ConstPtr& );
   public:
-    explicit Planner();
+    explicit Planner(Common::SE2State&,Common::SE2State&);
     virtual ~Planner() = default;
 
     Planner(const Planner &) = delete;
     Planner &operator=(const Planner &) = delete;
-
-
   };
 } // namespace Geometry
 } // namespace HybridAStar

@@ -49,12 +49,13 @@ namespace Common {
     const float deltaHeadingRad = 2*M_PI/(float)headings;
     const float deltaHeadingDeg = 360/(float)headings;
     const float deltaHeadingNegRad = 2*M_PI - deltaHeadingRad;
+    const float dubinsShotDistance = 100;
 
   public:
 	  /// collision map cell size [unit: meters/cell]
 	  static const float collisionMapCellSize;
   public:
-    SE2State() = default;
+    explicit SE2State();
     explicit SE2State(float cellsize, float anglesize);
     explicit SE2State(float x, float y, float t, float g, float h,
                      SE2State* pred, float cellsize, float anglesize, int prim);
@@ -115,7 +116,7 @@ namespace Common {
     /// close the node
     void close() { c_ = true; o_ = false; }
     /// set a pointer to the predecessor of the node
-    void setPred(SE2State* pred) { pred_ = pred; }
+    void setPred(const SE2State* pred) { pred_ = pred; }
 
     // UPDATE METHODS
     /// Updates the cost-so-far for the node x' coming from its predecessor. It also discovers the node.
@@ -128,6 +129,9 @@ namespace Common {
     // GRID CHECKING
     /// Validity check to test, whether the node is in the 3D array.
     bool isOnGrid(const int width, const int height) const;
+
+    // TODO: change this function into a more scientific mode
+    bool isInRange(const SE2State&) const;
 
     // SUCCESSOR CREATION
     /// Creates a successor in the continous space.

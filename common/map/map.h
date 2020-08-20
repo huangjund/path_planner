@@ -19,14 +19,12 @@ namespace Common {
   class Map {
   private:
     bool hasStateSpace_ = false;
-    ros::NodeHandle n;
-    ros::Subscriber sub;
   public:
     // non-copyable
     Map(const Map &) = delete;
     Map &operator=(const Map &) = delete;
     // constructor
-    explicit Map();
+    explicit Map(const nav_msgs::OccupancyGrid::Ptr map);
     virtual ~Map() = default;
 
     struct characteristic {
@@ -39,7 +37,6 @@ namespace Common {
     } info_;
     
     std::vector<T> statespace;
-    
     void setMap(const nav_msgs::OccupancyGrid::Ptr map);
     void setSS();
     // const std::vector<T>& getStateSpace() const;

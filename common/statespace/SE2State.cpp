@@ -10,6 +10,8 @@ namespace Common {
 
   const float SE2State::collisionMapCellSize = 1;
 
+  SE2State::SE2State():SE2State(0,0,0,0,0,nullptr,1,1,0){}
+
   SE2State::SE2State(float cellsize, float anglesize):SE2State(0,0,0,0,0,nullptr,cellsize,anglesize,0){}
 
   SE2State::SE2State(float x, float y, float t, float g, float h,
@@ -40,6 +42,13 @@ namespace Common {
 
   inline bool SE2State::isOnGrid(const int width, const int height) const {
     return rx_ >= 0 && ry_ >= 0 && rx_ < width && ry_ < height;
+  }
+
+  bool SE2State::isInRange(const SE2State& goal) const {
+    int random = rand() % 10 + 1;
+    float dx = std::abs(x_ - goal.getX()) / random;
+    float dy = std::abs(y_ - goal.getY()) / random;
+    return (dx * dx) + (dy * dy) < dubinsShotDistance;
   }
 
   SE2State *SE2State::createSuccessor(const int i) {

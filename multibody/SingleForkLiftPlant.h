@@ -39,6 +39,15 @@ namespace Multibody{
     static constexpr int positionResolution_ = 10;
     /// [#] --- The number of discrete positions per cell
     static constexpr int positions_ = positionResolution_ * positionResolution_;
+    /*!
+      \brief [m] --- The tie breaker breaks ties between nodes expanded in the same cell
+
+
+      As the cost-so-far are bigger than the cost-to-come it is reasonbale to believe that the algorithm would prefer the predecessor rather than the successor.
+      This would lead to the fact that the successor would never be placed and the the one cell could only expand one node. The tieBreaker artificially increases the cost of the predecessor
+      to allow the successor being placed in the same cell.
+    */
+    static constexpr float tieBreaker_ = 0.01;
   public:
     SingleForkLiftPlant() = default;
     ~SingleForkLiftPlant() = default;

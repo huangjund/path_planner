@@ -4,8 +4,8 @@
 namespace HybridAStar {
 namespace Common {
   template <class T>
-  Map<T>::Map() {
-    sub = n.subscribe("/map", 1, &Map<T>::setMap, this);
+  Map<T>::Map(const nav_msgs::OccupancyGrid::Ptr map) {
+    setMap(map);
   }
   
   template <class T>
