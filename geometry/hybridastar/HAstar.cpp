@@ -102,8 +102,8 @@ namespace Geometry{
 
   // solve for the whole path
   SE2State* HAstar::solve(){
-    auto pWidth = pMap_->info_.width;
-    auto pHeight = pMap_->info_.height;
+    auto pWidth = pMap_->info_.width*pMap_->info_.resolution/pMap_->info_.planResolution;
+    auto pHeight = pMap_->info_.height*pMap_->info_.resolution/pMap_->info_.planResolution;
     // PREDECESSOR AND SUCCESSOR INDEX
     int iPred, iSucc;
     float newG;
@@ -143,18 +143,18 @@ namespace Geometry{
       // set index
       iPred = nPred->setIdx(pMap_->info_.width, pMap_->info_.height);
       iterations++;
-
-      // RViz visualization
-      try
-      {
-        visualization.publishNode3DPoses(*nPred);
-        visualization.publishNode3DPose(*nPred);
-        d.sleep();
-      }
-      catch(const std::exception& e)
-      {
-        std::cerr << e.what() << '\n';
-      }
+      // TODO: enable this
+      // // RViz visualization
+      // try
+      // {
+      //   visualization.publishNode3DPoses(*nPred);
+      //   visualization.publishNode3DPose(*nPred);
+      //   d.sleep();
+      // }
+      // catch(const std::exception& e)
+      // {
+      //   std::cerr << e.what() << '\n';
+      // }
       
       
 
@@ -204,8 +204,7 @@ namespace Geometry{
             iSucc = nSucc->setIdx(pMap_->info_.width, pMap_->info_.height);
 
             // ensure successor is on grid and traversable / resolution:[meters/cell]
-            if (nSucc->isOnGrid(pWidth*pMap_->info_.resolution/cMap_->info_.resolution,
-              pHeight*pMap_->info_.resolution/cMap_->info_.resolution) && configSpace_.isTraversable(nSucc)) {
+            if (nSucc->isOnGrid(static_cast<int>(pWidth), static_cast<int>(pHeight)) && configSpace_.isTraversable(nSucc)) {
 
               // ensure successor is not on closed list or it has the same index as the predecessor
               if (!pMap_->statespace[iSucc].isClosed() || iPred == iSucc) {

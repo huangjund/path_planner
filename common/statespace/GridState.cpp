@@ -10,7 +10,12 @@ namespace Common {
   const int GridState::dx[] = { -1, -1, 0, 1, 1, 1, 0, -1 };
   const int GridState::dy[] = { 0, 1, 1, 1, 0, -1, -1, -1 };
 
-  GridState::GridState(float,float):GridState(nullptr,0,0,nullptr) {
+  GridState::GridState():GridState(nullptr,0,0,nullptr,1) {
+    int values[dimension] = {0};
+    values_ = values;
+  }
+
+  GridState::GridState(float cellsize,float):GridState(nullptr,0,0,nullptr,cellsize) {
     int values[dimension] = {0};
     values_ = values;
   }
@@ -22,7 +27,7 @@ namespace Common {
     values_ = temp;
   }
 
-  GridState::GridState(int *values, float g, float h, GridState* pred):g_(g),h_(h),pred_(pred) {
+  GridState::GridState(int *values, float g, float h, GridState* pred,float cellsize):g_(g),h_(h),pred_(pred),cellSize_(cellsize) {
       this->o = false;
       this->c = false;
       this->idx = -1;

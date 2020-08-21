@@ -11,12 +11,18 @@
 #include "../common/collision/clsDetection.h"
 #include "../multibody/SingleForkLiftPlant.h"
 #include "geometry/hybridastar/HAstar.h"
-#include "aux/visualize.h"
-#include "geometry/path.h"
-#include "geometry/dynamicvoronoi.h"
-#include "math/smoother.h"
+// #include "aux/visualize.h"
+// #include "geometry/path.h"
+// #include "geometry/dynamicvoronoi.h"
+// #include "math/smoother.h"
 
 namespace HybridAStar{
+  using HybridAStar::Common::CollisionDetection;
+  using HybridAStar::Common::GridState;
+  using HybridAStar::Common::SE2State;
+  using HybridAStar::Common::Map;
+  using HybridAStar::Geometry::HAstar;
+  using HybridAStar::Multibody::SingleForkLiftPlant;
   class Interface
   {
   private:
@@ -32,12 +38,12 @@ namespace HybridAStar{
     geometry_msgs::PoseStamped goal_;
     nav_msgs::OccupancyGrid::Ptr grid_;
 
-    Visualize visualizer_;
-    Path path_;
-    Smoother smoothedPath_;
+    // Visualize visualizer_;
+    // Path path_;
+    // Smoother smoothedPath_;
   public:
     explicit Interface();
-    ~Interface();
+    ~Interface() = default;
 
     void makeStart(const geometry_msgs::PoseWithCovarianceStamped::ConstPtr& );
     void makeGoal(const geometry_msgs::PoseStamped::ConstPtr& );

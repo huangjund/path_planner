@@ -64,7 +64,8 @@ namespace Common {
     // initialize a 3d node
     auto x = static_cast<float>(r2state[0]);
     auto y = static_cast<float>(r2state[1]);
-    auto node = std::make_shared<SE2State>(x, y, 0, 0, 0, nullptr, 0, 0);
+    auto node = std::make_shared<SE2State>(x, y, 0, 0, 0, nullptr, 0, 0, 0);
+    
     // check for collision
     config_.isTraversable<SE2State>(node.get(), true);
     return true;

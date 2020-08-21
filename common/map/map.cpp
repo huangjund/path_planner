@@ -10,8 +10,6 @@ namespace Common {
   
   template <class T>
   void Map<T>::setMap(const nav_msgs::OccupancyGrid::Ptr map) {
-    // TODO: change this map to fit in two classes
-    // probably merge this with collision percentage map
     info_.data = map->data;
     info_.width = map->info.width;
     info_.height = map->info.height;
@@ -22,8 +20,9 @@ namespace Common {
 
   template <class T>
   void Map<T>::setSS() {
+    T temp;
     // TODO: needs to be fixed
-    if(T::getDimensions() == 2)
+    if(temp.getDimensions() == 2)
       statespace = std::vector<T>(info_.width*info_.height, T(info_.resolution,0.087266));
     else
       statespace = std::vector<T>(info_.width*info_.height*72, T(0.5,0.087266));

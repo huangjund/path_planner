@@ -5,12 +5,6 @@
 #include "main.h"
 
 namespace HybridAStar{
-  using HybridAStar::Common::CollisionDetection;
-  using HybridAStar::Common::GridState;
-  using HybridAStar::Common::SE2State;
-  using HybridAStar::Common::Map;
-  using HybridAStar::Geometry::HAstar;
-  using HybridAStar::Multibody::SingleForkLiftPlant;
 
   Interface::Interface(){
     isStartvalid_ = false;
@@ -72,7 +66,7 @@ namespace HybridAStar{
     // output to map object
     auto collisionMap = std::make_unique<Map<GridState>>(grid_);
     auto planningMap = std::make_unique<Map<SE2State>>(grid_);
-    auto configSpace = std::make_unique<CollisionDetection>(grid_); // the grid is a nullptr
+    CollisionDetection configSpace(grid_);
 
     // output to planner
     SE2State start(0.5,0.08726646); // initialize using planning map resolution
@@ -95,13 +89,14 @@ namespace HybridAStar{
     isGoalvalid_ = false;
   }
 
-  void Interface::simulate(std::unique_ptr<Map<GridState>> &cmap,std::unique_ptr<Map<SE2State>> &pmap,
-    std::unique_ptr<HAstar>& planner) {
+  void Interface::simulate(std::unique_ptr<Map<GridState>> &cmap,
+                          std::unique_ptr<Map<SE2State>> &pmap,
+                          std::unique_ptr<HAstar>& planner) {
     // retrieve start point and goal point
     auto nStart = planner->getStart();
     auto nGoal = planner->getGoal();
-
     
+    SE2State *nSolution = planner->solve();
   }
 }
 

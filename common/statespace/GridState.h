@@ -14,7 +14,7 @@ namespace Common {
   /// Grid State is a Rn discrete coordinate state class
   class GridState : State{
   private:
-    static const unsigned int dimension = 2;
+    
     /// the cost-so-far
     float g_;
     /// the cost-to-go
@@ -27,15 +27,17 @@ namespace Common {
     bool c;
     /// the predecessor pointer
     const GridState* pred_;
+    float cellSize_;
   public:
     int *values_; // coordinate value
 
     GridState(const GridState &);
     GridState &operator=(const GridState &);
 
-    // constructor  
+    // constructor
+    explicit GridState();
     explicit GridState(float,float);
-    explicit GridState(int *values, float g, float h, GridState* pred); 
+    explicit GridState(int *values, float g, float h, GridState* pred, float cellsize); 
     ~GridState() = default;
 
     double distance (const State *state1, const State *state2) const;
@@ -59,7 +61,8 @@ namespace Common {
     bool  isClosed() const { return c; }
     /// get a pointer to the predecessor
     const GridState* getPred() const { return pred_; }
-    unsigned int getDimensions() {return dimension;}
+    static const unsigned int dimension = 2;
+    unsigned int getDimensions() const {return dimension;}
 
     /// set the x position
     void setX(const int& x) { this->values_[0] = x; }

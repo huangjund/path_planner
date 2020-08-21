@@ -27,13 +27,14 @@ namespace Common {
     explicit Map(const nav_msgs::OccupancyGrid::Ptr map);
     virtual ~Map() = default;
 
-    struct characteristic {
+    struct RawMap {
       int width;
       int height;
-      float resolution;
+      float resolution;   // [unit: meters/cell]
+      float planResolution; // [unit: meters/cell]
 
       nav_msgs::OccupancyGrid::_data_type data;
-      characteristic(){width = 0; height = 0; resolution = 0; data.reserve(200000);}
+      RawMap(){width = 0; height = 0; resolution = 0; planResolution = 0.5; data.reserve(200000);}
     } info_;
     
     std::vector<T> statespace;

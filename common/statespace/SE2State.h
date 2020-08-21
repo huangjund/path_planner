@@ -12,7 +12,6 @@ namespace Common {
   // the SE2State class contains discretization information
   class SE2State : State {
   private:
-    static const unsigned int dimension = 3;
     float x_;
     float y_;
     float t_;
@@ -91,7 +90,8 @@ namespace Common {
     bool isClosed() const { return c_; }
     /// determine whether the node is open
     const SE2State *getPred() const { return pred_; }
-    unsigned int getDimensions() {return dimension;}
+    static const unsigned int dimension = 3;
+    unsigned int getDimensions() const {return dimension;}
 
     /// set the x position
     void setX(const float& x) { x_ = x; setrx(x);}

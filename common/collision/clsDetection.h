@@ -57,15 +57,15 @@ namespace Common {
     CollisionDetection(nav_msgs::OccupancyGrid::Ptr &);
     ~CollisionDetection();
 
-    void getConfiguration(const SE2State*, float &,float &, float &);
-    void getConfiguration(const GridState*, float &, float &);
+    void getConfiguration(const SE2State*, float &,float &, float &) ;
+    void getConfiguration(const GridState*, float &, float &, float &) ;
 
     template <class T>
-    bool isTraversable(const T*);
+    bool isTraversable(const T*) ;
     template <class T>
-    bool isTraversable(const T*,const bool);  // when it is rrtx
+    bool isTraversable(const T*, const bool) ;  // when it is rrtx
 
-    bool configinCFree(float x, float y, float t);
+    bool configinCFree(float x, float y, float t) ;
     
     void collisionLookup(configuration *lookup);
   };

@@ -36,7 +36,7 @@ namespace Geometry {
     
   public:
     explicit HAstar(SE2State &,SE2State &,unique_ptr<Map<GridState>>&,unique_ptr<Map<SE2State>>&,CollisionDetection &);
-    ~HAstar();
+    ~HAstar() = default;
 
     HAstar(const HAstar &) = delete;
     HAstar &operator=(const HAstar &) = delete;

@@ -19,7 +19,7 @@ namespace Common{
   }
 
 
-  void CollisionDetection::getConfiguration(const GridState* state, float &x,float &y) {
+  void CollisionDetection::getConfiguration(const GridState* state, float &x,float &y,float &) {
     x = state->getX();
     y = state->getY();
   }
@@ -27,28 +27,40 @@ namespace Common{
   template <class T>
   bool CollisionDetection::isTraversable(const T* state) {
     float x, y, t;
-    float cost = 0;
+    getConfiguration(state,x,y,t);
     // TODO:change this into an enumeration struct
-    if (state->getDimensions() == 2) {
-      getConfiguration(state,x,y);
+    switch (state->dimension)
+    {
+    case 2:
       if (pGrid_.planGrid[state->getIdx()] > pGrid_.threshold){
         return false;
       }
       return true;
-    }
-    else if(state->getDimensions() == 3) {
-      getConfiguration(state,x,y,t);
+      break;
+    
+    case 3:
       return configinCFree(x, y, t);
+      break;
+
+    default:
+      exit(0);
+      break;
     }
   }
 
+  template bool CollisionDetection::isTraversable<SE2State>(const SE2State*);
+  template bool CollisionDetection::isTraversable<GridState>(const GridState*);
+
   template <class T>
   bool CollisionDetection::isTraversable(const T* state, const bool rrtmap) {
-    float x,y;
-    getConfiguration(state,x,y);
+    float x,y,t;
+    getConfiguration(state,x,y,t);
     int idx = (int)(y/grid_->info.resolution)*grid_->info.width + (int)(x/grid_->info.resolution);
     return static_cast<bool>(grid_->data[idx]);
   }
+
+  template bool CollisionDetection::isTraversable<SE2State>(const SE2State*,const bool);
+
 
   bool CollisionDetection::configinCFree(float x, float y, float t) {
     int X = (int)(x/grid_->info.resolution); // [unit:collision cell]

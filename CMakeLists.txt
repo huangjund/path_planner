@@ -79,19 +79,19 @@ include_directories(include ${GFLAGS_INCLUDE_DIRS})
 include_directories(include ${CMAKE_CURRENT_SOURCE_DIR})
 include_directories(include include)
 
-# add_executable(tf_broadcaster examples/tf_broadcaster.cpp)
-# target_link_libraries(tf_broadcaster ${catkin_LIBRARIES})
+add_executable(tf_broadcaster examples/tf_broadcaster.cpp)
+target_link_libraries(tf_broadcaster ${catkin_LIBRARIES})
 
 add_executable(hybrid_astar examples/main.cpp ${HEADERS} ${SOURCES})
 target_link_libraries(hybrid_astar ${catkin_LIBRARIES})
 target_link_libraries(hybrid_astar ${OMPL_LIBRARIES})
 target_link_libraries(hybrid_astar ${GFLAGS_LIBRARIES})
 
-# install(TARGETS ${PROJECT_NAME} tf_broadcaster
-#     ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-#     LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-#     RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
-#     )
+install(TARGETS ${PROJECT_NAME} tf_broadcaster
+    ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+    LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+    RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+    )
 
 install(DIRECTORY launch/
     DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/launch

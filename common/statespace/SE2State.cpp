@@ -21,7 +21,8 @@ namespace Common {
     setRelative(x,y,t); // set the relative position
   }
 
-  SE2State::SE2State(const SE2State &cp):x_(cp.x_),y_(cp.y_),t_(cp.t_),g_(cp.g_),h_(cp.h_),
+  SE2State::SE2State(const SE2State &cp):
+                    x_(cp.x_),y_(cp.y_),t_(cp.t_),g_(cp.g_),h_(cp.h_),
                     prim_(cp.prim_),o_(cp.o_),c_(cp.c_),idx_(cp.idx_),pred_(cp.pred_),
                     cellSize_(cellSize_),angleSize_(cp.angleSize_) {
     setRelative(x_,y_,t_);
@@ -40,7 +41,7 @@ namespace Common {
     delete rstate;
   }
 
-  inline bool SE2State::isOnGrid(const int width, const int height) const {
+  bool SE2State::isOnGrid(const int width, const int height) const {
     return rx_ >= 0 && ry_ >= 0 && rx_ < width && ry_ < height;
   }
 
