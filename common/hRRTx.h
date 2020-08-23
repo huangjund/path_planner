@@ -11,6 +11,7 @@
 #include <ompl/base/PlannerTerminationCondition.h>
 
 #include <memory>
+#include <iostream>
 
 namespace HybridAStar {
 namespace Common {

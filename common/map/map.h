@@ -24,6 +24,7 @@ namespace Common {
     Map(const Map &) = delete;
     Map &operator=(const Map &) = delete;
     // constructor
+    Map() = default;
     explicit Map(const nav_msgs::OccupancyGrid::Ptr map);
     virtual ~Map() = default;
 
@@ -34,7 +35,7 @@ namespace Common {
       float planResolution; // [unit: meters/cell]
 
       nav_msgs::OccupancyGrid::_data_type data;
-      RawMap(){width = 0; height = 0; resolution = 0; planResolution = 0.5; data.reserve(200000);}
+      RawMap(){width = 0; height = 0; resolution = 0; planResolution = 0.5; data.reserve(20000);}
     } info_;
     
     std::vector<T> statespace;

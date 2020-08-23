@@ -10,7 +10,7 @@ namespace Common {
 
   const float SE2State::collisionMapCellSize = 1;
 
-  SE2State::SE2State():SE2State(0,0,0,0,0,nullptr,1,1,0){}
+  SE2State::SE2State():SE2State(0,0,0,0,0,nullptr,0.5,0.08726646,0){}
 
   SE2State::SE2State(float cellsize, float anglesize):SE2State(0,0,0,0,0,nullptr,cellsize,anglesize,0){}
 
@@ -24,14 +24,17 @@ namespace Common {
   SE2State::SE2State(const SE2State &cp):
                     x_(cp.x_),y_(cp.y_),t_(cp.t_),g_(cp.g_),h_(cp.h_),
                     prim_(cp.prim_),o_(cp.o_),c_(cp.c_),idx_(cp.idx_),pred_(cp.pred_),
-                    cellSize_(cellSize_),angleSize_(cp.angleSize_) {
+                    cellSize_(cp.cellSize_),angleSize_(cp.angleSize_) {
     setRelative(x_,y_,t_);
   }
 
   SE2State &SE2State::operator=(const SE2State &rhs) {
-    x_ = rhs.x_;y_ = rhs.y_; t_ = rhs.t_; g_ = rhs.g_; h_ = rhs.h_;
-    prim_ = rhs.prim_; o_ = rhs.o_; c_ = rhs.c_; idx_ = rhs.idx_;
-    pred_ = rhs.pred_;
+    this->x_ = rhs.x_;this->y_ = rhs.y_; 
+    this->t_ = rhs.t_; this->g_ = rhs.g_; 
+    this->h_ = rhs.h_; this->prim_ = rhs.prim_; 
+    this->o_ = rhs.o_; this->c_ = rhs.c_; 
+    this->idx_ = rhs.idx_; this->pred_ = rhs.pred_;
+    this->cellSize_ = rhs.cellSize_; this->angleSize_ = rhs.angleSize_;
     setRelative(x_,y_,t_);
     return *this;
   }

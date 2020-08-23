@@ -85,7 +85,12 @@ namespace Common {
       problemDef_->setStartAndGoalStates(goal,start);
     }
     rrtxPlanner_->solve(ob::PlannerTerminationCondition(terminationFn));
-    return problemDef_->getSolutionDifference();
+    if(problemDef_->hasSolution())
+      return problemDef_->getSolutionPath()->length();
+    else
+      std::cerr << "in problem definition, there is no solution path " << std::endl;
+
+
   }
 } // namespace Common
 } // namespace HybridAStar

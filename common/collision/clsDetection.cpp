@@ -2,14 +2,21 @@
 
 namespace HybridAStar{
 namespace Common{
+  CollisionDetection::CollisionDetection():carPlant_(std::make_unique<Multibody::SingleForkLiftPlant>()),
+  grid_(nullptr),collisionLookup_(new configuration[carPlant_->headings_*carPlant_->positions_]()){}
+
   CollisionDetection::CollisionDetection(nav_msgs::OccupancyGrid::Ptr &grid):
     carPlant_(std::make_unique<Multibody::SingleForkLiftPlant>()),
     grid_(grid),collisionLookup_(new configuration[carPlant_->headings_*carPlant_->positions_]()) {
-    collisionLookup(collisionLookup_); // initialize collision lookup
+    makeClsLookup(); // initialize collision lookup
   }
 
 	CollisionDetection::~CollisionDetection() {
 		delete [] collisionLookup_;
+  }
+
+  void CollisionDetection::setGrid(nav_msgs::OccupancyGrid::Ptr &grid) {
+    grid_ = grid;
   }
 
   void CollisionDetection::getConfiguration(const SE2State* state, float &x,float &y, float &t) {
@@ -94,11 +101,11 @@ namespace Common{
 			else { return -1; }
 	}
 
-  void CollisionDetection::collisionLookup(configuration *lookup) {
-    bool DEBUG = true;
+  void CollisionDetection::makeClsLookup() {
+    bool DEBUG = false;
     std::cout << "I am building the collision lookup table...";
-    // cell size
-    const float cSize = SE2State::collisionMapCellSize;
+    // collision cell size [unit: meters/cell]
+    const float cSize = grid_->info.resolution;
     // bounding box size length/width
 		/// [unit: collision cells] -- The bounding box size length and width to precompute all possible headings
 		const int bbSize = std::ceil((sqrt(carPlant_->width_*carPlant_->width_ + carPlant_->length_*carPlant_->length_) + 4) / cSize);
@@ -310,15 +317,15 @@ namespace Common{
           for (int j = 0; j < bbSize; ++j) {
             if (cSpace[i * bbSize + j]) {
               // compute the relative position of the car cells
-              lookup[q * carPlant_->headings_ + o].pos[count].x = j - (int)c.x;
-              lookup[q * carPlant_->headings_ + o].pos[count].y = i - (int)c.y; // [unit:cell]
+              collisionLookup_[q * carPlant_->headings_ + o].pos[count].x = j - (int)c.x;
+              collisionLookup_[q * carPlant_->headings_ + o].pos[count].y = i - (int)c.y; // [unit:cell]
               // add one for the length of the current list
               count++;
             }
           }
         }
 
-        lookup[q * carPlant_->headings_ + o].length = count;
+        collisionLookup_[q * carPlant_->headings_ + o].length = count;
 
         if (DEBUG) {
           //DEBUG
@@ -337,8 +344,8 @@ namespace Common{
           //TESTING
           std::cout << "\n\nthe center of " << q* carPlant_->headings_ + o << " is at " << c.x << " | " << c.y << std::endl;
 
-          for (int i = 0; i < lookup[q * carPlant_->headings_ + o].length; ++i) {
-            std::cout << "[" << i << "]\t" << lookup[q * carPlant_->headings_ + o].pos[i].x << " | " << lookup[q * carPlant_->headings_ + o].pos[i].y << std::endl;
+          for (int i = 0; i < collisionLookup_[q * carPlant_->headings_ + o].length; ++i) {
+            std::cout << "[" << i << "]\t" << collisionLookup_[q * carPlant_->headings_ + o].pos[i].x << " | " << collisionLookup_[q * carPlant_->headings_ + o].pos[i].y << std::endl;
           }
         }
       }

@@ -30,12 +30,11 @@ namespace Geometry {
     CollisionDetection &configSpace_;
     unique_ptr<hRScurve> rsPlanner_;
     unique_ptr<hRRTx> rrtxPlanner_;
-    unique_ptr<Map<GridState>> cMap_; // map used for collision
-    unique_ptr<Map<SE2State>> pMap_;  // map used for planning
+    shared_ptr<Map<SE2State>> pMap_;  // map used for planning
     int defaultIter = 3000;
     
   public:
-    explicit HAstar(SE2State &,SE2State &,unique_ptr<Map<GridState>>&,unique_ptr<Map<SE2State>>&,CollisionDetection &);
+    explicit HAstar(SE2State &,SE2State &,shared_ptr<Map<SE2State>>,CollisionDetection &);
     ~HAstar() = default;
 
     HAstar(const HAstar &) = delete;

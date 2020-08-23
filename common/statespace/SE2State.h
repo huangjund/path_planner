@@ -27,9 +27,9 @@ namespace Common {
     float ry_;
     float rt_;
     /// planning map cell size [unit: meters/cell]
-    const float cellSize_;
+    float cellSize_;
     /// planning map angle size [unit: rad/piece]
-    const float angleSize_;
+    float angleSize_;
     /// Number of possible directions
     static const int dir;
     /// Possible movements in the x direction
@@ -110,7 +110,8 @@ namespace Common {
     /// set the cost-to-come (heuristic value)
     void setH(const float& h) { h_ = h; }
     /// set and get the index of the node in the 3D grid
-    int setIdx(int width, int height) { idx_ = (int)(rt_) * width * height + (int)(ry_) * width + (int)(rx_); return idx_;}
+    int setIdx(int width, int height) { 
+      idx_ = (int)(rt_) * width * height + (int)(ry_) * width + (int)(rx_); return idx_;}
     /// open the node
     void open() { o_ = true; c_ = false;}
     /// close the node

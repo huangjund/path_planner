@@ -54,9 +54,11 @@ namespace Common {
     CollisionDetection(const CollisionDetection&) = delete;
     CollisionDetection &operator=(const CollisionDetection &) = delete;
     // constructor
+    CollisionDetection();
     CollisionDetection(nav_msgs::OccupancyGrid::Ptr &);
     ~CollisionDetection();
 
+    void setGrid(nav_msgs::OccupancyGrid::Ptr &);
     void getConfiguration(const SE2State*, float &,float &, float &) ;
     void getConfiguration(const GridState*, float &, float &, float &) ;
 
@@ -67,7 +69,7 @@ namespace Common {
 
     bool configinCFree(float x, float y, float t) ;
     
-    void collisionLookup(configuration *lookup);
+    void makeClsLookup();
   };
 } // namespace Common
 } // namespace HybridAStar

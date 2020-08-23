@@ -7,6 +7,8 @@
 namespace HybridAStar{
 
   Interface::Interface(){
+    planningMap = std::make_shared<Map<SE2State>>();
+    CollisionDetection configSpace();
     isStartvalid_ = false;
     isGoalvalid_ = false;
     hasMap_ = false;
@@ -64,9 +66,10 @@ namespace HybridAStar{
 
   bool Interface::setOutput() {
     // output to map object
-    auto collisionMap = std::make_unique<Map<GridState>>(grid_);
-    auto planningMap = std::make_unique<Map<SE2State>>(grid_);
-    CollisionDetection configSpace(grid_);
+    //auto collisionMap = std::make_unique<Map<GridState>>(grid_);
+    planningMap->setMap(grid_);
+    configSpace.setGrid(grid_); // set the grid for configuration space
+    configSpace.makeClsLookup();  // make up look up table in configuration space
 
     // output to planner
     SE2State start(0.5,0.08726646); // initialize using planning map resolution
@@ -75,12 +78,13 @@ namespace HybridAStar{
     start.setY(start_.pose.pose.position.y);
     goal.setX(goal_.pose.position.x);
     goal.setY(goal_.pose.position.y);
-    start.setT(Utils::normalizeHeadingRad(tf::getYaw(goal_.pose.orientation)));
+    start.setT(Utils::normalizeHeadingRad(tf::getYaw(start_.pose.pose.orientation)));
     goal.setT(Utils::normalizeHeadingRad(tf::getYaw(goal_.pose.orientation)));
-    auto planner = std::make_unique<HAstar>(start,goal,collisionMap,planningMap,configSpace);
+    // TODO: extract this planner into a specified class
+    auto planner = std::make_shared<HAstar>(start,goal,planningMap,configSpace);
 
     // run simulation
-    simulate(collisionMap,planningMap,planner);
+    simulate(planningMap,planner);
     return true;
   }
 
@@ -89,9 +93,8 @@ namespace HybridAStar{
     isGoalvalid_ = false;
   }
 
-  void Interface::simulate(std::unique_ptr<Map<GridState>> &cmap,
-                          std::unique_ptr<Map<SE2State>> &pmap,
-                          std::unique_ptr<HAstar>& planner) {
+  void Interface::simulate(std::shared_ptr<Map<SE2State>> pmap,
+                          std::shared_ptr<HAstar> planner) {
     // retrieve start point and goal point
     auto nStart = planner->getStart();
     auto nGoal = planner->getGoal();

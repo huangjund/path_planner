@@ -10,10 +10,10 @@ namespace Common {
   
   template <class T>
   void Map<T>::setMap(const nav_msgs::OccupancyGrid::Ptr map) {
-    info_.data = map->data;
     info_.width = map->info.width;
     info_.height = map->info.height;
     info_.resolution = map->info.resolution;
+    info_.data = map->data;
 
     setSS();
   }
@@ -21,11 +21,13 @@ namespace Common {
   template <class T>
   void Map<T>::setSS() {
     T temp;
+    int pwidth = info_.width*info_.resolution/info_.planResolution;
+    int pheight = info_.height*info_.resolution/info_.planResolution;
     // TODO: needs to be fixed
     if(temp.getDimensions() == 2)
-      statespace = std::vector<T>(info_.width*info_.height, T(info_.resolution,0.087266));
+      statespace = std::vector<T>(pwidth*pwidth, T(info_.resolution,0.087266));
     else
-      statespace = std::vector<T>(info_.width*info_.height*72, T(0.5,0.087266));
+      statespace = std::vector<T>(pwidth*pheight*72, T(0.5,0.087266));
     hasStateSpace_ = true;
   }
 

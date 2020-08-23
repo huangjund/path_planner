@@ -17,10 +17,11 @@ namespace Geometry{
     }
   };
 
-  HAstar::HAstar(SE2State &start,SE2State &goal,unique_ptr<Map<GridState>> &cmap,
-      unique_ptr<Map<SE2State>> &pmap,CollisionDetection &configSpace): Planner(start,goal),
-      start_(start),goal_(goal),configSpace_(configSpace), rsPlanner_(std::make_unique<hRScurve>(start_,goal_)),
-      rrtxPlanner_(std::make_unique<hRRTx>(start_,goal_,cmap->info_.width,cmap->info_.height,configSpace)){
+  HAstar::HAstar(SE2State &start,SE2State &goal,shared_ptr<Map<SE2State>> pmap,CollisionDetection &configSpace): 
+                Planner(start,goal),start_(start),goal_(goal),configSpace_(configSpace), 
+                rsPlanner_(std::make_unique<hRScurve>(start_,goal_)),
+      rrtxPlanner_(std::make_unique<hRRTx>(start_,goal_,pmap->info_.width,pmap->info_.height,configSpace)),
+      pMap_(pmap){
 
   }
 
@@ -48,7 +49,8 @@ namespace Geometry{
     float x = 0.f;
     float length = dubins_path_length(&path);
 
-    SE2State* dubinsNodes = new SE2State[(int)(length / carPlant_->dubinsStepSize_) + 1]();
+    // TODO: this construction should not related to the default constructor
+    SE2State* dubinsNodes = new SE2State[(int)(length / carPlant_->dubinsStepSize_) + 2]();
     
     while (x <  length) {
       double q[3];
@@ -80,7 +82,13 @@ namespace Geometry{
       }
     }
 
-    // // return &dubinsNodes[i - 1];
+    // TODO: change to a more delicated loop, which also include is Traversable judging
+    dubinsNodes[i].setX(q1[0]);
+    dubinsNodes[i].setY(q1[1]);
+    dubinsNodes[i].setT(Utils::normalizeHeadingRad(q1[2]));
+    dubinsNodes[i].setPred(&dubinsNodes[i-1]);
+
+    return &dubinsNodes[i];
     // ompl::base::ReedsSheppStateSpace reedsSheppPath(Constants::r);
     // State* rsStart = (State*)reedsSheppPath.allocState();
     // State* rsEnd = (State*)reedsSheppPath.allocState();
@@ -102,8 +110,8 @@ namespace Geometry{
 
   // solve for the whole path
   SE2State* HAstar::solve(){
-    auto pWidth = pMap_->info_.width*pMap_->info_.resolution/pMap_->info_.planResolution;
-    auto pHeight = pMap_->info_.height*pMap_->info_.resolution/pMap_->info_.planResolution;
+    int pWidth = pMap_->info_.width*(pMap_->info_.resolution)/(pMap_->info_.planResolution);
+    int pHeight = pMap_->info_.height*(pMap_->info_.resolution)/(pMap_->info_.planResolution);
     // PREDECESSOR AND SUCCESSOR INDEX
     int iPred, iSucc;
     float newG;
@@ -127,7 +135,7 @@ namespace Geometry{
     start_.open();
     // push on priority queue open list
     O.push(&start_);
-    iPred = start_.setIdx(pMap_->info_.width, pMap_->info_.height);
+    iPred = start_.setIdx(pWidth, pHeight);
     pMap_->statespace[iPred] = start_;
 
     // NODE POINTER
@@ -141,7 +149,7 @@ namespace Geometry{
       // pop node with lowest cost from priority queue
       nPred = O.top();
       // set index
-      iPred = nPred->setIdx(pMap_->info_.width, pMap_->info_.height);
+      iPred = nPred->setIdx(pWidth, pHeight);
       iterations++;
       // TODO: enable this
       // // RViz visualization
@@ -187,6 +195,7 @@ namespace Geometry{
           // _______________________
           // SEARCH WITH DUBINS SHOT
           // TODO:when changed to RS curve, the primitives < 3 needs to be removed
+          // the isInRange function needs to be more scientific
           if (nPred->isInRange(goal_) && nPred->getPrim() < 3) {
             nSucc = dubinsShot(*nPred, goal_);
 
@@ -201,7 +210,7 @@ namespace Geometry{
             // create possible successor
             nSucc = nPred->createSuccessor(i);
             // set index of the successor
-            iSucc = nSucc->setIdx(pMap_->info_.width, pMap_->info_.height);
+            iSucc = nSucc->setIdx(pWidth, pHeight);
 
             // ensure successor is on grid and traversable / resolution:[meters/cell]
             if (nSucc->isOnGrid(static_cast<int>(pWidth), static_cast<int>(pHeight)) && configSpace_.isTraversable(nSucc)) {

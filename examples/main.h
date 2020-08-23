@@ -38,6 +38,8 @@ namespace HybridAStar{
     geometry_msgs::PoseStamped goal_;
     nav_msgs::OccupancyGrid::Ptr grid_;
 
+    std::shared_ptr<Map<SE2State>> planningMap;
+    CollisionDetection configSpace;
     // Visualize visualizer_;
     // Path path_;
     // Smoother smoothedPath_;
@@ -51,7 +53,6 @@ namespace HybridAStar{
     void clearStartandGoal();
     bool isabletoPlanning()const;
     bool setOutput();
-    void simulate(std::unique_ptr<Map<GridState>>&,std::unique_ptr<Map<SE2State>>&,
-                  std::unique_ptr<HAstar>&);
+    void simulate(std::shared_ptr<Map<SE2State>>, std::shared_ptr<HAstar>);
   };
 }
