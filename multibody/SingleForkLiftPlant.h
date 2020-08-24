@@ -31,6 +31,7 @@ namespace Multibody{
     static constexpr float dubinsShotDistance_ = 100;
     /// [m] --- The step size for the analytical solution (Dubin's shot) primarily relevant for collision checking
     static constexpr float dubinsStepSize_ = 1;
+    static constexpr double reedsheppStepSize_ = 0.5;
     /// [m] --- The width of the dubinsArea / 2 for the analytical solution (Dubin's shot)
     static constexpr int dubinsWidth_ = 1;
     /// [m] --- The area of the lookup for the analytical solution (Dubin's shot)

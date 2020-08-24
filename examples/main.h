@@ -42,11 +42,10 @@ namespace HybridAStar{
     CollisionDetection configSpace;
     Visualize visualizer_;
     Path path_;
-    /// The path smoothed and ready for the controller
-    Path smoothedPath_ = Path(true);
-    /// The smoother used for optimizing the path
-    Smoother smoother_;
+    Path smoothedPath_ = Path(true);/// The path smoothed and ready for the controller
+    Smoother smoother_;/// The smoother used for optimizing the path
     DynamicVoronoi voronoiDiagram_;
+    
   public:
     explicit Interface();
     ~Interface() = default;

@@ -35,6 +35,7 @@ namespace Geometry{
     start.setH(std::max(rrtxCost,rsCost));
   }
 
+#ifdef DUBINS_H
   SE2State* HAstar::dubinsShot(SE2State& start, const SE2State& goal) {
     // start
     double q0[] = { start.getX(), start.getY(), start.getT() };
@@ -99,7 +100,58 @@ namespace Geometry{
 
     
   }
+#endif
 
+#ifdef _HYBRIDASTAR_REEDSSHEPPPATH_H
+  SE2State* HAstar::ReedsShepp(const SE2State &start, const SE2State &goal) {
+    std::vector<double> bounds{0,(pMap_->info_.width*pMap_->info_.resolution),
+                                0,(pMap_->info_.width*pMap_->info_.resolution)};
+    auto startNode = std::make_shared<Node3d>(start.getX(),start.getY(),start.getT(),pMap_->info_.planResolution,0.08726646,bounds);
+    auto goalNode = std::make_shared<Node3d>(goal.getX(),goal.getY(),goal.getT(),pMap_->info_.planResolution,0.08726646,bounds);
+
+    // TODO:change the last 0.5 to a carplant related value
+    // should carplant class be an abstract base class and other class inherit from this class?
+    auto reed_shepp_generator = std::make_shared<ReedShepp>(0.5,0.5);
+    ReedSheppPath optimal_path;
+
+    if (reed_shepp_generator->ShortestRSP(startNode, goalNode,
+                                           optimal_path) == false) {
+      std::cout << "RS path generation failed!" << std::endl;
+    }
+
+    auto length = optimal_path.total_length;
+    // TODO : change to a smart pointer
+    SE2State* RSNodes = new SE2State[(int)(length / carPlant_->reedsheppStepSize_) + 2]();
+
+    int i;
+    for (i = 0; i < optimal_path.x.size(); ++i) {
+      RSNodes[i].setX(optimal_path.x[i]);
+      RSNodes[i].setY(optimal_path.y[i]);
+      RSNodes[i].setT(Utils::normalizeHeadingRad(optimal_path.phi[i]));
+
+      // collision check
+      if (configSpace_.isTraversable(&RSNodes[i])) {
+
+        // set the predecessor to the previous step
+        if (i > 0) {
+          RSNodes[i].setPred(&RSNodes[i - 1]);
+        } else {
+          RSNodes[i].setPred(&start);
+        }
+
+        if (&RSNodes[i] == RSNodes[i].getPred()) {
+          std::cout << "looping shot";
+        }
+
+      } else {
+        // collided, discarding the path
+        delete [] RSNodes;
+        return nullptr;
+      }
+    }
+    return &RSNodes[i-1];
+  }
+#endif
   SE2State &HAstar::getStart() {
     return start_;
   }
@@ -197,7 +249,8 @@ namespace Geometry{
           // TODO:when changed to RS curve, the primitives < 3 needs to be removed
           // the isInRange function needs to be more scientific
           if (nPred->isInRange(goal_) && nPred->getPrim() < 3) {
-            nSucc = dubinsShot(*nPred, goal_);
+            //nSucc = dubinsShot(*nPred, goal_);
+            nSucc = ReedsShepp(*nPred, goal_);
 
             if (nSucc != nullptr && *nSucc == goal_) {
               return nSucc;

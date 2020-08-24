@@ -1,4 +1,5 @@
-#pragma once
+#ifndef _HYBRIDASTAR_REEDSSHEPPPATH_H
+#define _HYBRIDASTAR_REEDSSHEPPPATH_H
 
 #include <iostream>
 #include <limits>
@@ -8,9 +9,12 @@
 #include <utility>
 #include <vector>
 
+#include "common/statespace/SE2State.h"
 #include "Node3d.h"
 #include "math.h"
 
+namespace HybridAStar{
+namespace Geometry {
 struct ReedSheppPath {
   std::vector<double> segs_lengths;
   std::vector<char> segs_types;
@@ -98,4 +102,8 @@ class ReedShepp {
 
   double max_kappa_;
   double step_size_;
-};
+}; // class ReedShepp
+} // namespace Geometry
+} // namespace HybridAStar
+
+#endif

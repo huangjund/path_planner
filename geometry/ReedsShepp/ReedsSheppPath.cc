@@ -1,5 +1,7 @@
-#include "planner/ReedsSheppPath.h"
+#include "ReedsSheppPath.h"
 
+namespace HybridAStar{
+namespace Geometry {
 double NormalizeAngle(const double angle) {
   double a = std::fmod(angle + M_PI, 2.0 * M_PI);
   if (a < 0.0) {
@@ -1237,4 +1239,8 @@ bool ReedShepp::GenerateRSPPar(const std::shared_ptr<Node3d> start_node,
   }
   return true;
 }
+  
+} // namespace Geometry
+} // namespace HybridAStar
+
 

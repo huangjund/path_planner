@@ -2,7 +2,9 @@
 
 #include "geometry/Planner.h"
 #include "geometry/RRTxstatic/RRTXstatic.h"
-#include "geometry/dubins/dubins.h"
+//#include "geometry/dubins/dubins.h"
+#include "geometry/ReedsShepp/ReedsSheppPath.h"
+#include "geometry/ReedsShepp/Node3d.h"
 #include "common/statespace/SE2State.h"
 #include "common/statespace/GridState.h"
 #include "common/map/map.h"
@@ -11,6 +13,8 @@
 #include "common/collision/clsDetection.h"
 
 #include <memory>
+#include <iostream>
+#include <vector>
 
 namespace HybridAStar {
 namespace Geometry {
@@ -44,6 +48,7 @@ namespace Geometry {
     SE2State* solve();
     void updateHeuristic(SE2State &,SE2State &);
     SE2State* dubinsShot(SE2State&, const SE2State&);
+    SE2State* ReedsShepp(const SE2State&, const SE2State&);
     SE2State &getStart();
     SE2State &getGoal();
   };
