@@ -36,7 +36,12 @@ set(SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/geometry/hybridastar/HAstar.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/geometry/RRTxstatic/RRTXstatic.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/geometry/dubins/dubins.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/geometry/dynamicvoronoi.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/geometry/path.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/utils/Helper.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/utils/bucketedqueue.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/math/smoother.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/aux/visualize.cpp
     )
 set(HEADERS
     ${CMAKE_CURRENT_SOURCE_DIR}/common/map/map.h
@@ -51,8 +56,14 @@ set(HEADERS
     ${CMAKE_CURRENT_SOURCE_DIR}/geometry/hybridastar/HAstar.h
     ${CMAKE_CURRENT_SOURCE_DIR}/geometry/RRTxstatic/RRTXstatic.h
     ${CMAKE_CURRENT_SOURCE_DIR}/geometry/dubins/dubins.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/geometry/dynamicvoronoi.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/geometry/path.h
     ${CMAKE_CURRENT_SOURCE_DIR}/multibody/SingleForkLiftPlant.h
     ${CMAKE_CURRENT_SOURCE_DIR}/utils/Helper.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/utils/bucketedqueue.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/aux/visualize.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/math/smoother.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/math/vector2d.h
     ${CMAKE_CURRENT_SOURCE_DIR}/examples/main.h
     )
 add_library(HYAS ${SOURCES} ${HEADERS})

@@ -99,7 +99,23 @@ namespace HybridAStar{
     auto nStart = planner->getStart();
     auto nGoal = planner->getGoal();
     
+    visualizer_.clear();
+    path_.clear();
+    smoothedPath_.clear();
+
     SE2State *nSolution = planner->solve();
+    smoother_.tracePath(nSolution);
+    path_.updatePath(smoother_.getPath());
+    smoother_.smoothPath(voronoiDiagram_);
+    smoothedPath_.updatePath(smoother_.getPath());
+
+    path_.publishPath();
+    path_.publishPathNodes();
+    path_.publishPathVehicles();
+    smoothedPath_.publishPath();
+    smoothedPath_.publishPathNodes();
+    smoothedPath_.publishPathVehicles();
+    visualizer_.publishNode3DCosts(pmap);
   }
 }
 

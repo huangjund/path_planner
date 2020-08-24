@@ -11,10 +11,10 @@
 #include "../common/collision/clsDetection.h"
 #include "../multibody/SingleForkLiftPlant.h"
 #include "geometry/hybridastar/HAstar.h"
-// #include "aux/visualize.h"
-// #include "geometry/path.h"
-// #include "geometry/dynamicvoronoi.h"
-// #include "math/smoother.h"
+#include "aux/visualize.h"
+#include "geometry/path.h"
+#include "geometry/dynamicvoronoi.h"
+#include "math/smoother.h"
 
 namespace HybridAStar{
   using HybridAStar::Common::CollisionDetection;
@@ -40,9 +40,13 @@ namespace HybridAStar{
 
     std::shared_ptr<Map<SE2State>> planningMap;
     CollisionDetection configSpace;
-    // Visualize visualizer_;
-    // Path path_;
-    // Smoother smoothedPath_;
+    Visualize visualizer_;
+    Path path_;
+    /// The path smoothed and ready for the controller
+    Path smoothedPath_ = Path(true);
+    /// The smoother used for optimizing the path
+    Smoother smoother_;
+    DynamicVoronoi voronoiDiagram_;
   public:
     explicit Interface();
     ~Interface() = default;

@@ -18,7 +18,7 @@ namespace HybridAStar {
 */
 class Smoother {
  public:
-  Smoother() {}
+  Smoother();
 
   /*!
      \brief This function takes a path consisting of nodes and attempts to iteratively smooth the same using gradient descent.
@@ -36,10 +36,10 @@ class Smoother {
      \param node a 3D node, usually the goal node
      \param i a parameter for counting the number of nodes
   */
-  void tracePath(const SE2State* node, int i = 0, std::vector<SE2State> path = std::vector<SE2State>());
+  void tracePath(const Common::SE2State* node, int i = 0, std::vector<Common::SE2State> path = std::vector<Common::SE2State>());
 
   /// returns the path of the smoother object
-  std::vector<SE2State> getPath() {return path;}
+  std::vector<Common::SE2State> getPath() {return path;}
 
   /// obstacleCost - pushes the path away from obstacles
   Vector2D obstacleTerm(Vector2D xi);
@@ -63,12 +63,17 @@ class Smoother {
   }
 
  private:
+  std::unique_ptr<Multibody::SingleForkLiftPlant> carPlant_;
   /// maximum possible curvature of the non-holonomic vehicle
-  float kappaMax = 1.f / Constants::r;
+  float kappaMax = 1.f / carPlant_->rad_;
   /// maximum distance to obstacles that is penalized
-  float obsDMax = Constants::minRoadWidth;
+  //   TODO: this should be in the shield?
+  // [m] --- The minimum width of a safe road for the vehicle at hand
+  float obsDMax = 1;
+  // TODO: below
   /// maximum distance for obstacles to influence the voronoi field
-  float vorObsDMax = Constants::minRoadWidth;
+  // [m] --- The minimum width of a safe road for the vehicle at hand
+  float vorObsDMax = 1;
   /// falloff rate for the voronoi field
   float alpha = 0.1;
   /// weight for the obstacle term
@@ -88,7 +93,7 @@ class Smoother {
   // collision map height
   int height;
   /// path to be smoothed
-  std::vector<SE2State> path;
+  std::vector<Common::SE2State> path;
 };
 }
 #endif // SMOOTHER_H

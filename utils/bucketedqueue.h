@@ -7,7 +7,7 @@
 #include <vector>
 #include <set>
 #include <queue>
-#include <assert.h>
+#include <cassert>
 #include "point.h"
 
 namespace HybridAStar {

@@ -8,7 +8,7 @@ using namespace HybridAStar;
 //###################################################
 
 void Path::clear() {
-  Node3D node;
+  Common::SE2State node;
   path.poses.clear();
   pathNodes.markers.clear();
   pathVehicles.markers.clear();
@@ -24,7 +24,7 @@ void Path::clear() {
 ////###################################################
 //// __________
 //// TRACE PATH
-//void Path::tracePath(const Node3D* node, int i) {
+//void Path::tracePath(const Common::SE2State* node, int i) {
 //  if (i == 0) {
 //    path.header.stamp = ros::Time::now();
 //  }
@@ -45,7 +45,7 @@ void Path::clear() {
 //###################################################
 // __________
 // TRACE PATH
-void Path::updatePath(std::vector<Node3D> nodePath) {
+void Path::updatePath(std::vector<Common::SE2State> nodePath) {
   path.header.stamp = ros::Time::now();
   int k = 0;
 
@@ -61,10 +61,11 @@ void Path::updatePath(std::vector<Node3D> nodePath) {
 }
 // ___________
 // ADD SEGMENT
-void Path::addSegment(const Node3D& node) {
+void Path::addSegment(const Common::SE2State& node) {
   geometry_msgs::PoseStamped vertex;
-  vertex.pose.position.x = node.getX() * Constants::cellSize;
-  vertex.pose.position.y = node.getY() * Constants::cellSize;
+  // TODO: should this x multiply a collision cell size
+  vertex.pose.position.x = node.getX();
+  vertex.pose.position.y = node.getY();
   vertex.pose.position.z = 0;
   vertex.pose.orientation.x = 0;
   vertex.pose.orientation.y = 0;
@@ -75,7 +76,7 @@ void Path::addSegment(const Node3D& node) {
 
 // ________
 // ADD NODE
-void Path::addNode(const Node3D& node, int i) {
+void Path::addNode(const Common::SE2State& node, int i) {
   visualization_msgs::Marker pathNode;
 
   // delete all previous markers
@@ -107,7 +108,7 @@ void Path::addNode(const Node3D& node, int i) {
   pathNodes.markers.push_back(pathNode);
 }
 
-void Path::addVehicle(const Node3D& node, int i) {
+void Path::addVehicle(const Common::SE2State& node, int i) {
   visualization_msgs::Marker pathVehicle;
 
   // delete all previous markersg
@@ -119,8 +120,8 @@ void Path::addVehicle(const Node3D& node, int i) {
   pathVehicle.header.stamp = ros::Time(0);
   pathVehicle.id = i;
   pathVehicle.type = visualization_msgs::Marker::CUBE;
-  pathVehicle.scale.x = Constants::length - Constants::bloating * 2;
-  pathVehicle.scale.y = Constants::width - Constants::bloating * 2;
+  pathVehicle.scale.x = carPlant_->length_ - carPlant_->bloating_ * 2;
+  pathVehicle.scale.y = carPlant_->width_ - carPlant_->bloating_ * 2;
   pathVehicle.scale.z = 1;
   pathVehicle.color.a = 0.1;
 

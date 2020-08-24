@@ -4,6 +4,7 @@
 #include <iostream>
 #include <cstring>
 #include <vector>
+#include <memory>
 
 #include <ros/ros.h>
 #include <tf/transform_datatypes.h>
@@ -14,6 +15,7 @@
 
 #include "../common/statespace/SE2State.h"
 #include "../utils/Helper.h"
+#include "../multibody/SingleForkLiftPlant.h"
 
 namespace HybridAStar {
 /*!
@@ -51,30 +53,30 @@ class Path {
   //     \param node a 3D node, usually the goal node
   //     \param i a parameter for counting the number of nodes
   //  */
-  //  void tracePath(const Node3D* node, int i = 0);
+  //  void tracePath(const Common::SE2State* node, int i = 0);
   /*!
      \brief Given a node pointer the path to the root node will be traced recursively
      \param node a 3D node, usually the goal node
      \param i a parameter for counting the number of nodes
   */
-  void updatePath(std::vector<Node3D> nodePath);
+  void updatePath(std::vector<Common::SE2State> nodePath);
   /*!
      \brief Adds a segment to the path
      \param node a 3D node
   */
-  void addSegment(const Node3D& node);
+  void addSegment(const Common::SE2State& node);
   /*!
      \brief Adds a node to the path
      \param node a 3D node
      \param i a parameter for counting the number of nodes
   */
-  void addNode(const Node3D& node, int i);
+  void addNode(const Common::SE2State& node, int i);
   /*!
      \brief Adds a vehicle shape to the path
      \param node a 3D node
      \param i a parameter for counting the number of nodes
   */
-  void addVehicle(const Node3D& node, int i);
+  void addVehicle(const Common::SE2State& node, int i);
 
   // ______________
   // PUBLISH METHODS
@@ -89,6 +91,7 @@ class Path {
   void publishPathVehicles() { pubPathVehicles.publish(pathVehicles); }
 
  private:
+  std::unique_ptr<Multibody::SingleForkLiftPlant> carPlant_;
   /// A handle to the ROS node
   ros::NodeHandle n;
   /// Publisher for the path as a spline
@@ -106,5 +109,29 @@ class Path {
   /// Value that indicates that the path is smoothed/post processed
   bool smoothed = false;
 };
+
+namespace Constants {
+   // ____________________________________________
+   // COLOR DEFINITIONS FOR VISUALIZATION PURPOSES
+   /// A structure to express colors in RGB values
+   struct color {
+   /// the red portion of the color
+   float red;
+   /// the green portion of the color
+   float green;
+   /// the blue portion of the color
+   float blue;
+   };
+   /// A definition for a color used for visualization
+   static constexpr color teal = {102.f / 255.f, 217.f / 255.f, 239.f / 255.f};
+   /// A definition for a color used for visualization
+   static constexpr color green = {166.f / 255.f, 226.f / 255.f, 46.f / 255.f};
+   /// A definition for a color used for visualization
+   static constexpr color orange = {253.f / 255.f, 151.f / 255.f, 31.f / 255.f};
+   /// A definition for a color used for visualization
+   static constexpr color pink = {249.f / 255.f, 38.f / 255.f, 114.f / 255.f};
+   /// A definition for a color used for visualization
+   static constexpr color purple = {174.f / 255.f, 129.f / 255.f, 255.f / 255.f};
+}  // namespace Constants
 }
 #endif // PATH_H

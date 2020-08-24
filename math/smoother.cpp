@@ -1,9 +1,12 @@
 #include "smoother.h"
 using namespace HybridAStar;
+
+Smoother::Smoother():carPlant_(std::make_unique<Multibody::SingleForkLiftPlant>()){}
+
 //###################################################
 //                                     CUSP DETECTION
 //###################################################
-inline bool isCusp(std::vector<Node3D> path, int i) {
+inline bool isCusp(std::vector<Common::SE2State> path, int i) {
   bool revim2 = path[i - 2].getPrim() > 3 ? true : false;
   bool revim1 = path[i - 1].getPrim() > 3 ? true : false;
   bool revi   = path[i].getPrim() > 3 ? true : false;
@@ -31,7 +34,7 @@ void Smoother::smoothPath(DynamicVoronoi& voronoi) {
 
   // path objects with all nodes oldPath the original, newPath the resulting smoothed path
   pathLength = path.size();
-  std::vector<Node3D> newPath = path;
+  std::vector<Common::SE2State> newPath = path;
 
   // descent along the gradient untill the maximum number of iterations has been reached
   // TODO: can be upgrade
@@ -83,8 +86,8 @@ void Smoother::smoothPath(DynamicVoronoi& voronoi) {
   path = newPath;
 }
 
-void Smoother::tracePath(const Node3D* node, int i, std::vector<Node3D> path) {
-  const Node3D *waypoint = node;
+void Smoother::tracePath(const Common::SE2State* node, int i, std::vector<Common::SE2State> path) {
+  const Common::SE2State *waypoint = node;
   // std::cout << "terminal point:" << waypoint->getX()<<'\t'<<waypoint->getY()<<'\t'<<waypoint->getT() << std::endl;
   while (waypoint!=nullptr){
     path.push_back(*waypoint);
@@ -99,8 +102,8 @@ void Smoother::tracePath(const Node3D* node, int i, std::vector<Node3D> path) {
 Vector2D Smoother::obstacleTerm(Vector2D xi) {
   Vector2D gradient;
   // the distance to the closest obstacle from the current node
-  float tempColCellx = xi.getX()/Node3D::collisionMapCellSize;
-  float tempColCelly = xi.getY()/Node3D::collisionMapCellSize;
+  float tempColCellx = xi.getX()/Common::SE2State::collisionMapCellSize;
+  float tempColCelly = xi.getY()/Common::SE2State::collisionMapCellSize;
   float obsDst = voronoi.getDistance(tempColCellx, tempColCelly);
   // the vector determining where the obstacle is
   int x = (int)tempColCellx;
@@ -178,7 +181,7 @@ Vector2D Smoother::curvatureTerm(Vector2D xim1, Vector2D xi, Vector2D xip1) {
   // ensure that the absolute values are not null
   if (absDxi > 0 && absDxip1 > 0) {
     // the angular change at the node
-    float Dphi = std::acos(Helper::clamp(Dxi.dot(Dxip1) / (absDxi * absDxip1), -1, 1));
+    float Dphi = std::acos(Utils::clamp(Dxi.dot(Dxip1) / (absDxi * absDxip1), -1, 1));
     float kappa = Dphi / absDxi;
 
     // if the curvature is smaller then the maximum do nothing
