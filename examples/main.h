@@ -45,7 +45,7 @@ namespace HybridAStar{
     Path smoothedPath_ = Path(true);/// The path smoothed and ready for the controller
     Smoother smoother_;/// The smoother used for optimizing the path
     DynamicVoronoi voronoiDiagram_;
-    
+    std::unique_ptr<Multibody::SingleForkLiftPlant> carPlant_;
   public:
     explicit Interface();
     ~Interface() = default;

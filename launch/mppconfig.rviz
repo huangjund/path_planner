@@ -50,7 +50,7 @@ Visualization Manager:
         Y: 0
         Z: 0
       Plane: XY
-      Plane Cell Count: 200
+      Plane Cell Count: 320
       Reference Frame: <Fixed Frame>
       Value: true
     - Alpha: 0.699999988079071
@@ -142,6 +142,14 @@ Visualization Manager:
       Topic: /sPath
       Unreliable: false
       Value: true
+    - Class: rviz/Marker
+      Enabled: true
+      Marker Topic: /rrtxPath
+      Name: Marker
+      Namespaces:
+        {}
+      Queue Size: 100
+      Value: true
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
@@ -169,7 +177,7 @@ Visualization Manager:
   Value: true
   Views:
     Current:
-      Angle: 0
+      Angle: -0.004999999888241291
       Class: rviz/TopDownOrtho
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
@@ -179,10 +187,10 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Scale: 17.119516372680664
+      Scale: 13.860274314880371
       Target Frame: <Fixed Frame>
-      X: 29.116069793701172
-      Y: 25.887649536132812
+      X: 24.29997444152832
+      Y: 40.53079605102539
     Saved: ~
 Window Geometry:
   Displays:

@@ -1,5 +1,7 @@
 #pragma once
 
+
+
 #include "geometry/Planner.h"
 #include "geometry/RRTxstatic/RRTXstatic.h"
 //#include "geometry/dubins/dubins.h"
@@ -36,7 +38,6 @@ namespace Geometry {
     unique_ptr<hRRTx> rrtxPlanner_;
     shared_ptr<Map<SE2State>> pMap_;  // map used for planning
     int defaultIter = 3000;
-    
   public:
     explicit HAstar(SE2State &,SE2State &,shared_ptr<Map<SE2State>>,CollisionDetection &);
     ~HAstar() = default;

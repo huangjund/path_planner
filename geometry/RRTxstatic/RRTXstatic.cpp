@@ -49,6 +49,13 @@
 #include "ompl/tools/config/SelfConfig.h"
 #include "ompl/util/GeometricEquations.h"
 #include "ompl/base/spaces/RealVectorStateSpace.h"
+#include <visualization_msgs/MarkerArray.h>
+
+#define DISTANCE 5
+
+ompl::geometric::RRTXstatic::Visualizer::Visualizer() {
+    pubPath = n.advertise<visualization_msgs::Marker>("/rrtxPath",1);
+}
 
 ompl::geometric::RRTXstatic::RRTXstatic(const base::SpaceInformationPtr &si)
   : base::Planner(si, "RRTXstatic")
@@ -93,6 +100,7 @@ void ompl::geometric::RRTXstatic::setup()
 {
     Planner::setup();
     tools::SelfConfig sc(si_, getName());
+    setRange(DISTANCE);
     sc.configurePlannerRange(maxDistance_);
     if (!si_->getStateSpace()->hasSymmetricDistance() || !si_->getStateSpace()->hasSymmetricInterpolate())
     {
@@ -272,7 +280,7 @@ ompl::base::PlannerStatus ompl::geometric::RRTXstatic::solve(const base::Planner
             if (!sampleUniform(rstate))
                 continue;
         }
-
+        
         // find closest state in the tree
         nmotion = nn_->nearest(rmotion);
 
@@ -579,7 +587,45 @@ ompl::base::PlannerStatus ompl::geometric::RRTXstatic::solve(const base::Planner
     OMPL_INFORM("%s: Created %u new states. Checked %u rewire options. %u goal states in tree. Final solution cost "
                 "%.3f",
                 getName().c_str(), statesGenerated, rewireTest, goalMotions_.size(), bestCost_.value());
+    // FOR VISUALIZATION
+    {   // only print the tree that constructed the first time
+        if(goal_equ_flag){
+            std::vector<Motion*> data;
+            visualization_msgs::Marker marker;
+            geometry_msgs::Point p_start,p_end;
+            marker.header.frame_id = "path";
+            marker.header.stamp = ros::Time::now();
+            marker.ns = "tree";
+            marker.action = visualization_msgs::Marker::ADD;
+            marker.pose.orientation.w = 1.0;
+            marker.id = 0;
+            marker.type = visualization_msgs::Marker::LINE_LIST;
+            marker.scale.x = .01;
+            marker.color.b = 1.0;
+            marker.color.a = 1.0;
+            
+            nn_->list(data); // get all states in nn_
+            // travel over every edges in the tree
+            for(auto parent : data) {
+                assert(parent); // parent should not be a null ptr
+                auto parent_state = parent->state->as<base::RealVectorStateSpace::StateType>()->values;
+                auto children = parent->children;
+                for(auto i = children.begin(); i != children.end(); ++i) {
+                    auto child_state = (*i)->state->as<base::RealVectorStateSpace::StateType>()->values;
+                    p_start.x = parent_state[0];
+                    p_start.y = parent_state[1];
+                    p_start.z = 0;
+                    p_end.x = child_state[0];
+                    p_end.y = child_state[1];
+                    p_end.z = 0;
+                    marker.points.push_back(p_start);
+                    marker.points.push_back(p_end);
+                }
+            }
 
+            visualizer.pubPath.publish(marker);
+        }
+    }
     return {addedSolution, approximate};
 }
 

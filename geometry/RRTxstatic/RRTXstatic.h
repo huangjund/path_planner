@@ -37,6 +37,8 @@
 #ifndef OMPL_GEOMETRIC_PLANNERS_RRT_RRTXSTATIC_
 #define OMPL_GEOMETRIC_PLANNERS_RRT_RRTXSTATIC_
 
+#include <ros/ros.h>
+
 #include <ompl/datastructures/BinaryHeap.h>
 #include "ompl/base/OptimizationObjective.h"
 #include "ompl/datastructures/NearestNeighbors.h"
@@ -103,6 +105,7 @@ namespace ompl
         /** \brief Optimal Rapidly-exploring Random Trees Maintaining A Pseudo Optimal Tree*/
         class RRTXstatic : public base::Planner
         {
+            friend class hRRTx;
         public:
             RRTXstatic(const base::SpaceInformationPtr &si);
 
@@ -481,6 +484,14 @@ namespace ompl
             {
                 return std::to_string(nn_->size());
             }
+
+        private:
+            struct Visualizer {
+              ros::NodeHandle n;
+              ros::Publisher pubPath;
+              Visualizer();
+            }visualizer;
+
         };
     }
 }

@@ -10,10 +10,10 @@ namespace Multibody{
     static constexpr bool isReversable_ = true;
     // [m] padding around the vechicle
     static constexpr double bloating_ = 0;
-    static constexpr double width_ = 1.75+2*bloating_;
-    static constexpr double length_ = 2.65+2*bloating_;
+    static constexpr double width_ = 1.5+2*bloating_;
+    static constexpr double length_ = 2.8+2*bloating_;
     // minimum turning radius of the vehicle
-    static constexpr double rad_ = 6;
+    static constexpr double rad_ = 0.6;
     static constexpr int headings_ = 72;
     /// [°] --- The discretization value of the heading (goal condition)
     static constexpr float deltaHeadingDeg_ = 360 / (float)headings_;
@@ -28,16 +28,17 @@ namespace Multibody{
     /// [#] --- A movement cost penalty for change of direction (changing from primitives < 3 to primitives > 2)
     static constexpr float penaltyCOD_ = 2.0;
     /// [m] --- The distance to the goal when the analytical solution (Dubin's shot) first triggers
+    // TODO: need to change
     static constexpr float dubinsShotDistance_ = 100;
     /// [m] --- The step size for the analytical solution (Dubin's shot) primarily relevant for collision checking
-    static constexpr float dubinsStepSize_ = 1;
+    static constexpr float dubinsStepSize_ = 0.5;
     static constexpr double reedsheppStepSize_ = 0.5;
     /// [m] --- The width of the dubinsArea / 2 for the analytical solution (Dubin's shot)
     static constexpr int dubinsWidth_ = 1;
     /// [m] --- The area of the lookup for the analytical solution (Dubin's shot)
     static constexpr int dubinsArea_ = dubinsWidth_ * dubinsWidth_;
     /// [#] --- The sqrt of the number of discrete positions per cell
-    static constexpr int positionResolution_ = 10;
+    static constexpr int positionResolution_ = 1;
     /// [#] --- The number of discrete positions per cell
     static constexpr int positions_ = positionResolution_ * positionResolution_;
     /*!
@@ -49,6 +50,12 @@ namespace Multibody{
       to allow the successor being placed in the same cell.
     */
     static constexpr float tieBreaker_ = 0.01;
+
+    static constexpr float planResolution = 0.5; // [unit: meters/cell]
+
+    static constexpr float planAngleResolution = 2*M_PI/headings_; // [unit : rad/piece]
+
+    
   public:
     SingleForkLiftPlant() = default;
     ~SingleForkLiftPlant() = default;

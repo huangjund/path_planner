@@ -1,5 +1,6 @@
 #include "clsDetection.h"
 
+
 namespace HybridAStar{
 namespace Common{
   CollisionDetection::CollisionDetection():carPlant_(std::make_unique<Multibody::SingleForkLiftPlant>()),
@@ -63,7 +64,7 @@ namespace Common{
     float x,y,t;
     getConfiguration(state,x,y,t);
     int idx = (int)(y/grid_->info.resolution)*grid_->info.width + (int)(x/grid_->info.resolution);
-    return static_cast<bool>(grid_->data[idx]);
+    return !static_cast<bool>(grid_->data[idx]);
   }
 
   template bool CollisionDetection::isTraversable<SE2State>(const SE2State*,const bool);
@@ -170,7 +171,6 @@ namespace Common{
     for (int q = 0; q < positions; ++q) {
       // set the starting angle to zero;
       theta = 0;
-
       // set points of rectangle
       c.x = (double)bbSize / 2 + points[q].x;
       c.y = (double)bbSize / 2 + points[q].y;
@@ -188,8 +188,6 @@ namespace Common{
       p[3].y = c.y - carPlant_->width_ / 2 / cSize;
 
       for (int o = 0; o < carPlant_->headings_; ++o) {
-        if (DEBUG) { std::cout << "\ndegrees: " << theta * 180.f / M_PI << std::endl; }
-
         // initialize cSpace
         for (int i = 0; i < bbSize; ++i) {
           for (int j = 0; j < bbSize; ++j) {

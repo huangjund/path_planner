@@ -6,9 +6,10 @@
 
 namespace HybridAStar{
 
-  Interface::Interface(){
-    planningMap = std::make_shared<Map<SE2State>>();
-    CollisionDetection configSpace();
+  Interface::Interface():
+    planningMap(std::make_shared<Map<SE2State>>()),
+    configSpace()
+  {
     isStartvalid_ = false;
     isGoalvalid_ = false;
     hasMap_ = false;
@@ -72,8 +73,8 @@ namespace HybridAStar{
     configSpace.makeClsLookup();  // make up look up table in configuration space
 
     // output to planner
-    SE2State start(0.5,0.08726646); // initialize using planning map resolution
-    SE2State goal(0.5,0.08726646);
+    SE2State start(carPlant_->planResolution,carPlant_->planAngleResolution); // initialize using planning map resolution
+    SE2State goal(carPlant_->planResolution,carPlant_->planAngleResolution);
     start.setX(start_.pose.pose.position.x);
     start.setY(start_.pose.pose.position.y);
     goal.setX(goal_.pose.position.x);

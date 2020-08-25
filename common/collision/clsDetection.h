@@ -38,7 +38,7 @@ namespace Common {
         \brief The maximum number of occupied cells
         \todo needs to be dynamic
       */
-      relPos pos[64];
+      relPos pos[10000];
     };
     
     std::unique_ptr<Multibody::SingleForkLiftPlant> carPlant_;

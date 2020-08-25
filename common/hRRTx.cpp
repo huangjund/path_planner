@@ -1,6 +1,6 @@
 #include "hRRTx.h"
 
-#define TIME 3
+#define TIME 10
 
 namespace HybridAStar  {
 namespace Common {
@@ -67,8 +67,7 @@ namespace Common {
     auto node = std::make_shared<SE2State>(x, y, 0, 0, 0, nullptr, 0, 0, 0);
     
     // check for collision
-    config_.isTraversable<SE2State>(node.get(), true);
-    return true;
+    return config_.isTraversable<SE2State>(node.get(), true);;
   }
 
   double hRRTx::getDistance() {

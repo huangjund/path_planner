@@ -12,12 +12,13 @@
 
 #include <memory>
 #include <iostream>
+#include <vector>
 
 namespace HybridAStar {
 namespace Common {
     namespace ob = ompl::base;
     namespace og = ompl::geometric;
-  class hRRTx : Heuristic{
+  class hRRTx : public Heuristic{
   private:
     static constexpr int ITER_ = 1;  // iterations ran for RRTx replanning
     bool treeConstructed_ = false;
