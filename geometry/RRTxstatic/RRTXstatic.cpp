@@ -51,7 +51,9 @@
 #include "ompl/base/spaces/RealVectorStateSpace.h"
 #include <visualization_msgs/MarkerArray.h>
 
-#define DISTANCE 5
+// TODO: set this to parameter server
+#define DISTANCE 3
+// #define DEBUG
 
 ompl::geometric::RRTXstatic::Visualizer::Visualizer() {
     pubPath = n.advertise<visualization_msgs::Marker>("/rrtxPath",1);
@@ -175,10 +177,14 @@ ompl::base::PlannerStatus ompl::geometric::RRTXstatic::solve(const base::Planner
     // if the previous goal equals current one, set falgs
     if ( std::abs(pre_goalx-goal->as<base::GoalState>()->getState()->as<base::RealVectorStateSpace::StateType>()->values[0]) < 1e-6 &&
         std::abs(pre_goaly-goal->as<base::GoalState>()->getState()->as<base::RealVectorStateSpace::StateType>()->values[1]) < 1e-6){
+    #ifdef DEBUG
         OMPL_INFORM("we have got a SAME goal");
+    #endif
         goal_equ_flag = true;
     } else {
+    #ifdef DEBUG
         OMPL_INFORM("we have got a DIFFERENT goal");
+    #endif
         goal_equ_flag = false;
     }
     pre_goalx = goal->as<base::GoalState>()->getState()->as<base::RealVectorStateSpace::StateType>()->values[0];
@@ -197,7 +203,9 @@ ompl::base::PlannerStatus ompl::geometric::RRTXstatic::solve(const base::Planner
 
         // And assure that, if we're using an informed sampler, it's reset
         infSampler_.reset();
+    #ifdef DEBUG
         OMPL_INFORM("THIS IS THE FIRST START POINT");
+    #endif
     }
 
     if (nn_->size() == 0)
@@ -212,13 +220,16 @@ ompl::base::PlannerStatus ompl::geometric::RRTXstatic::solve(const base::Planner
         allocSampler();
     }
 
+#ifdef DEBUG
     OMPL_INFORM("%s: Starting planning with %u states already in datastructure", getName().c_str(), nn_->size());
+#endif
 
     if (!si_->getStateSpace()->isMetricSpace())
         OMPL_WARN("%s: The state space (%s) is not metric and as a result the optimization objective may not satisfy "
                   "the triangle inequality. "
                   "You may need to disable rejection.",
                   getName().c_str(), si_->getStateSpace()->getName().c_str());
+
 
     const base::ReportIntermediateSolutionFn intermediateSolutionCallback = pdef_->getIntermediateSolutionCallback();
 
@@ -245,6 +256,7 @@ ompl::base::PlannerStatus ompl::geometric::RRTXstatic::solve(const base::Planner
 
     base::Cost incCost, cost;
 
+#ifdef DEBUG
     if (solution)
         OMPL_INFORM("%s: Starting planning with existing solution of cost %.5f", getName().c_str(),
                     solution->cost.value());
@@ -257,6 +269,7 @@ ompl::base::PlannerStatus ompl::geometric::RRTXstatic::solve(const base::Planner
             "%s: Initial rewiring radius of %.2f", getName().c_str(),
             std::min(maxDistance_, r_rrt_ * std::pow(log((double)(nn_->size() + 1u)) / ((double)(nn_->size() + 1u)),
                                                      1 / (double)(si_->getStateDimension()))));
+#endif
 
     while (ptc == false)
     {
@@ -484,9 +497,11 @@ ompl::base::PlannerStatus ompl::geometric::RRTXstatic::solve(const base::Planner
                     {
                         if (opt_->isFinite(bestCost_) == false)
                         {
+                        #ifdef DEBUG
                             OMPL_INFORM("%s: Found an initial solution with a cost of %.2f in %u iterations (%u "
                                         "vertices in the graph)",
                                         getName().c_str(), goalMotion->cost.value(), iterations_, nn_->size());
+                        #endif
                         }
                         bestCost_ = goalMotion->cost;
                         updatedSolution = true;
@@ -584,12 +599,17 @@ ompl::base::PlannerStatus ompl::geometric::RRTXstatic::solve(const base::Planner
         si_->freeState(rmotion->state);
     delete rmotion;
 
+#ifdef DEBUG
     OMPL_INFORM("%s: Created %u new states. Checked %u rewire options. %u goal states in tree. Final solution cost "
                 "%.3f",
                 getName().c_str(), statesGenerated, rewireTest, goalMotions_.size(), bestCost_.value());
+#endif
+
     // FOR VISUALIZATION
     {   // only print the tree that constructed the first time
-        if(goal_equ_flag){
+        static bool once = true;
+        if(goal_equ_flag && once){
+            once = false;
             std::vector<Motion*> data;
             visualization_msgs::Marker marker;
             geometry_msgs::Point p_start,p_end;

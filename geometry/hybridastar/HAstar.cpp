@@ -1,5 +1,6 @@
 #include "HAstar.h"
 
+#include <cassert>
 #include <boost/heap/binomial_heap.hpp>
 #include "utils/Helper.h"
 
@@ -16,14 +17,12 @@ namespace Geometry{
       return lhs->getC() > rhs->getC();
     }
   };
-
   HAstar::HAstar(SE2State &start,SE2State &goal,shared_ptr<Map<SE2State>> pmap,CollisionDetection &configSpace): 
-                Planner(start,goal),start_(start),goal_(goal),configSpace_(configSpace), 
+                Planner(start,goal),start_(start),goal_(goal),configSpace_(&configSpace), 
                 rsPlanner_(std::make_unique<hRScurve>(start_,goal_)),
-      rrtxPlanner_(std::make_unique<hRRTx>(start_,goal_,pmap->info_.width,pmap->info_.height,configSpace)),
-      pMap_(pmap){
-
-  }
+      rrtxPlanner_(std::make_unique<hRRTx>(start_,goal_,
+      pmap->info_.width*pmap->info_.resolution, pmap->info_.height*pmap->info_.resolution,configSpace)),
+      pMap_(pmap){}
 
   void HAstar::updateHeuristic(SE2State &start,SE2State &goal) {
     rsPlanner_->setStartGoal(start,goal);
@@ -61,7 +60,7 @@ namespace Geometry{
       dubinsNodes[i].setT(Utils::normalizeHeadingRad(q[2]));
 
       // collision check
-      if (configSpace_.isTraversable(&dubinsNodes[i])) {
+      if (configSpace_->isTraversable(&dubinsNodes[i])) {
 
         // set the predecessor to the previous step
         if (i > 0) {
@@ -111,7 +110,7 @@ namespace Geometry{
 
     // TODO:change the last 0.5 to a carplant related value
     // should carplant class be an abstract base class and other class inherit from this class?
-    auto reed_shepp_generator = std::make_shared<ReedShepp>(0.5,0.5);
+    auto reed_shepp_generator = std::make_shared<ReedShepp>(1/carPlant_->rad_,0.5);
     ReedSheppPath optimal_path;
 
     if (reed_shepp_generator->ShortestRSP(startNode, goalNode,
@@ -130,7 +129,7 @@ namespace Geometry{
       RSNodes[i].setT(Utils::normalizeHeadingRad(optimal_path.phi[i]));
 
       // collision check
-      if (configSpace_.isTraversable(&RSNodes[i])) {
+      if (configSpace_->isTraversable(&RSNodes[i])) {
 
         // set the predecessor to the previous step
         if (i > 0) {
@@ -152,12 +151,20 @@ namespace Geometry{
     return &RSNodes[i-1];
   }
 #endif
+
   SE2State &HAstar::getStart() {
     return start_;
   }
 
   SE2State &HAstar::getGoal() {
     return goal_;
+  }
+
+  void HAstar::setStart(SE2State &start) {
+    assert(rrtxPlanner_->isTreeconstructed());
+    start_ = start;
+    rsPlanner_->setStart(start);
+    rrtxPlanner_->setGoal(start); // the goal and start in rrtx is reversed
   }
 
   // solve for the whole path
@@ -176,7 +183,7 @@ namespace Geometry{
     ros::Duration d(0.003);
 
     // OPEN LIST AS BOOST IMPLEMENTATION
-    typedef boost::heap::binomial_heap<SE2State*,
+    typedef boost::heap::binomial_heap<std::shared_ptr<SE2State>,
             boost::heap::compare<CompareNodes>
             > priorityQueue;
     priorityQueue O;
@@ -186,13 +193,13 @@ namespace Geometry{
     // mark start_ as open
     start_.open();
     // push on priority queue open list
-    O.push(&start_);
+    O.push(std::unique_ptr<SE2State>(&start_));
     iPred = start_.setIdx(pWidth, pHeight);
     pMap_->statespace[iPred] = start_;
 
     // NODE POINTER
-    SE2State* nPred;
-    SE2State* nSucc;
+    std::shared_ptr<SE2State> nPred;
+    std::shared_ptr<SE2State> nSucc;
 
     // float max = 0.f;
 
@@ -249,10 +256,11 @@ namespace Geometry{
           // TODO:when changed to RS curve, the primitives < 3 needs to be removed
           // the isInRange function needs to be more scientific
           if (nPred->isInRange(goal_) && nPred->getPrim() < 3) {
-            //nSucc = dubinsShot(*nPred, goal_);
-            nSucc = ReedsShepp(*nPred, goal_);
+            nSucc = dubinsShot(*nPred, goal_);
+            //nSucc = ReedsShepp(*nPred, goal_);
 
             if (nSucc != nullptr && *nSucc == goal_) {
+              std::cout << "iterations:" << iterations << std::endl;
               return nSucc;
             }
           }
@@ -266,7 +274,7 @@ namespace Geometry{
             iSucc = nSucc->setIdx(pWidth, pHeight);
 
             // ensure successor is on grid and traversable / resolution:[meters/cell]
-            if (nSucc->isOnGrid(static_cast<int>(pWidth), static_cast<int>(pHeight)) && configSpace_.isTraversable(nSucc)) {
+            if (nSucc->isOnGrid(static_cast<int>(pWidth), static_cast<int>(pHeight)) && configSpace_->isTraversable(nSucc)) {
 
               // ensure successor is not on closed list or it has the same index as the predecessor
               if (!pMap_->statespace[iSucc].isClosed() || iPred == iSucc) {

@@ -33,13 +33,16 @@ namespace HybridAStar{
     bool isStartvalid_;
     bool isGoalvalid_;
     bool hasMap_;
+    enum CurrentState{initial, plan, planned, replan}automata_;
+    enum Action{noAct,mapSetting,startSetting,goalSetting};
+
     // raw datas from outside
     geometry_msgs::PoseWithCovarianceStamped start_;
     geometry_msgs::PoseStamped goal_;
     nav_msgs::OccupancyGrid::Ptr grid_;
-
     std::shared_ptr<Map<SE2State>> planningMap;
     CollisionDetection configSpace;
+    std::shared_ptr<HAstar> planner;
     Visualize visualizer_;
     Path path_;
     Path smoothedPath_ = Path(true);/// The path smoothed and ready for the controller
@@ -50,12 +53,16 @@ namespace HybridAStar{
     explicit Interface();
     ~Interface() = default;
 
+    Interface(const Interface &) = delete;
+    Interface &operator=(const Interface&) = delete;
+
     void makeStart(const geometry_msgs::PoseWithCovarianceStamped::ConstPtr& );
     void makeGoal(const geometry_msgs::PoseStamped::ConstPtr& );
     void setMap(const nav_msgs::OccupancyGrid::Ptr map);
     void clearStartandGoal();
-    bool isabletoPlanning()const;
-    bool setOutput();
+    bool outputAutomata(Action);
+    bool setAllOutput();
+    void setStartOutput();
     void simulate(std::shared_ptr<Map<SE2State>>, std::shared_ptr<HAstar>);
   };
 }

@@ -35,12 +35,13 @@ namespace Common {
       float planResolution; // [unit: meters/cell]
 
       nav_msgs::OccupancyGrid::_data_type data;
-      RawMap(){width = 0; height = 0; resolution = 0; planResolution = 0.5; data.reserve(200000);}
+      RawMap(){width = 0; height = 0; resolution = 0; planResolution = 0.5; data.reserve(19000000);}
     } info_;
     
     std::vector<T> statespace;
     void setMap(const nav_msgs::OccupancyGrid::Ptr map);
     void setSS();
+    void resetSS();
     // const std::vector<T>& getStateSpace() const;
     const bool hasStateSpace() { return hasStateSpace_;}
   };

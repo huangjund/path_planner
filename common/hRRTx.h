@@ -44,7 +44,8 @@ namespace Common {
     std::shared_ptr<ob::ProblemDefinition> problemDef_;
     std::unique_ptr<og::RRTXstatic> rrtxPlanner_;
   public:
-    hRRTx(SE2State &, SE2State &,const int &,const int &,CollisionDetection&);
+    hRRTx() = default;
+    hRRTx(SE2State &, SE2State &,const double &,const double &,CollisionDetection&);
     ~hRRTx() = default;
 
     hRRTx(const hRRTx &) = delete;

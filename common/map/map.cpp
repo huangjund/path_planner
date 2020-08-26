@@ -27,7 +27,15 @@ namespace Common {
     if(temp.getDimensions() == 2)
       statespace = std::vector<T>(pwidth*pwidth, T(info_.resolution,0.087266));
     else
-      statespace = std::vector<T>(pwidth*pheight*72, T(0.5,0.087266));
+      statespace = std::vector<T>(pwidth*pheight*72, T(info_.planResolution,0.087266));
+    hasStateSpace_ = true;
+  }
+
+  template <class T>
+  void Map<T>::resetSS() {
+    assert(statespace.size());
+    for (auto i = statespace.begin(); i < statespace.end(); ++i)
+      i->clear();
     hasStateSpace_ = true;
   }
 
@@ -41,7 +49,7 @@ namespace Common {
   //   return statespace;
   // }
 
-  template class Map<GridState>;
+  //template class Map<GridState>;
   template class Map<SE2State>;
 } // namespace Common
 } // namespace HybridAStar

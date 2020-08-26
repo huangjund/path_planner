@@ -22,6 +22,7 @@ namespace Common {
   public:
     // TODO: this state can be put into base class using dynamic binding
     // how to implent the start_ and goal_ into base class?
+    hRScurve() = default;
     hRScurve(SE2State &start, SE2State &goal);
     ~hRScurve() = default;
 

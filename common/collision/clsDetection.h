@@ -9,6 +9,7 @@
 
 #include <memory>
 #include <cmath>
+#include <limits>
 
 namespace HybridAStar {
 namespace Common {
@@ -38,7 +39,8 @@ namespace Common {
         \brief The maximum number of occupied cells
         \todo needs to be dynamic
       */
-      relPos pos[10000];
+     //TODO: this car related term should not be at here
+      relPos pos[1000];
     };
     
     std::unique_ptr<Multibody::SingleForkLiftPlant> carPlant_;

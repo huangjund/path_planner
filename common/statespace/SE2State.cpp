@@ -21,6 +21,10 @@ namespace Common {
     setRelative(x,y,t); // set the relative position
   }
 
+  SE2State::~SE2State() {
+    delete pred_;
+  }
+
   SE2State::SE2State(const SE2State &cp):
                     x_(cp.x_),y_(cp.y_),t_(cp.t_),g_(cp.g_),h_(cp.h_),
                     prim_(cp.prim_),o_(cp.o_),c_(cp.c_),idx_(cp.idx_),pred_(cp.pred_),
@@ -112,5 +116,11 @@ namespace Common {
           (std::abs(t_ - rhs.t_) <= deltaHeadingRad ||
             std::abs(t_ - rhs.t_) >= deltaHeadingNegRad);
 }
+
+  void SE2State::clear() {
+    x_ = 0; y_ = 0; t_ = 0; g_ = 0; h_ = 0;
+    pred_ = nullptr; prim_ = 0; o_ = false; c_ = false;
+    idx_ = -1;
+  }
 }  // namespace Common
 }  // namespace HybridAStar

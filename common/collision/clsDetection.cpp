@@ -14,6 +14,7 @@ namespace Common{
 
 	CollisionDetection::~CollisionDetection() {
 		delete [] collisionLookup_;
+    delete pGrid_.planGrid;
   }
 
   void CollisionDetection::setGrid(nav_msgs::OccupancyGrid::Ptr &grid) {
@@ -103,7 +104,6 @@ namespace Common{
 	}
 
   void CollisionDetection::makeClsLookup() {
-    bool DEBUG = false;
     std::cout << "I am building the collision lookup table...";
     // collision cell size [unit: meters/cell]
     const float cSize = grid_->info.resolution;
@@ -233,13 +233,13 @@ namespace Common{
           if (t.x != 0) {
             tDeltaX = 1.f / std::abs(t.x);
           } else {
-            tDeltaX = 1000;
+            tDeltaX = std::numeric_limits<double>::max();
           }
 
           if (t.y != 0) {
             tDeltaY = 1.f / std::abs(t.y);
           } else {
-            tDeltaY = 1000;
+            tDeltaY = std::numeric_limits<double>::max();
           }
 
           // set maximum traversal values
@@ -325,27 +325,6 @@ namespace Common{
 
         collisionLookup_[q * carPlant_->headings_ + o].length = count;
 
-        if (DEBUG) {
-          //DEBUG
-          for (int i = 0; i < bbSize; ++i) {
-            std::cout << "\n";
-
-            for (int j = 0; j < bbSize; ++j) {
-              if (cSpace[i * bbSize + j]) {
-                std::cout << "#";
-              } else {
-                std::cout << ".";
-              }
-            }
-          }
-
-          //TESTING
-          std::cout << "\n\nthe center of " << q* carPlant_->headings_ + o << " is at " << c.x << " | " << c.y << std::endl;
-
-          for (int i = 0; i < collisionLookup_[q * carPlant_->headings_ + o].length; ++i) {
-            std::cout << "[" << i << "]\t" << collisionLookup_[q * carPlant_->headings_ + o].pos[i].x << " | " << collisionLookup_[q * carPlant_->headings_ + o].pos[i].y << std::endl;
-          }
-        }
       }
     }
 

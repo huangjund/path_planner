@@ -4,7 +4,7 @@
 
 namespace HybridAStar  {
 namespace Common {
-  hRRTx::hRRTx(SE2State &start, SE2State &goal,const int& cwidth,const int &cheight,CollisionDetection& config): 
+  hRRTx::hRRTx(SE2State &start, SE2State &goal,const double &mapwidth,const double &mapheight,CollisionDetection& config): 
   start_(start), goal_(goal),
   r2Space_(std::make_shared<ob::RealVectorStateSpace>(2)),
   spaceInfo_(std::make_shared<ob::SpaceInformation>(r2Space_)),
@@ -14,8 +14,8 @@ namespace Common {
     ob::RealVectorBounds bounds(2);
     bounds.setLow(0,0);
     bounds.setLow(1,0);
-    bounds.setHigh(0,cwidth);
-    bounds.setHigh(1,cheight);
+    bounds.setHigh(0,mapwidth);
+    bounds.setHigh(1,mapheight);
     r2Space_->setBounds(bounds);
 
     spaceInfo_->setStateValidityChecker(std::make_shared<rrtValidityChecker>(spaceInfo_,config));

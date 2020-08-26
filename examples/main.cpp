@@ -6,9 +6,9 @@
 
 namespace HybridAStar{
 
-  Interface::Interface():
+  Interface::Interface():automata_(initial),
     planningMap(std::make_shared<Map<SE2State>>()),
-    configSpace()
+    configSpace(),planner(std::make_shared<HAstar>())
   {
     isStartvalid_ = false;
     isGoalvalid_ = false;
@@ -26,13 +26,16 @@ namespace HybridAStar{
 
     if (grid_->info.height >= y && y >= 0 && grid_->info.width >= x && x >= 0) {
       isStartvalid_ = true;
+      Action action = startSetting;
       start_ = *start;
+
+      // automata
+      outputAutomata(action);
     } else {
       std::cout << "invalid start x:" << x << " y:" << y << " t:" << t << std::endl;
     }
 
-    if(isabletoPlanning())
-      setOutput();
+    
   }
 
   void Interface::makeGoal(const geometry_msgs::PoseStamped::ConstPtr& goal) {
@@ -43,29 +46,63 @@ namespace HybridAStar{
 
     if (grid_->info.height >= y && y >= 0 && grid_->info.width >= x && x >= 0) {
       isGoalvalid_ = true;
+      Action action = goalSetting;
       goal_ = *goal;
+
+      // automata
+      outputAutomata(action);
     } else {
       std::cout << "invalid goal x:" << x << " y:" << y << " t:" << t << std::endl;
     }
-
-    if(isabletoPlanning())
-      setOutput();
   }
   
   void Interface::setMap(const nav_msgs::OccupancyGrid::Ptr map) {
     grid_ = map;
     hasMap_ = true;
+    Action action = Action::mapSetting;
     clearStartandGoal();
     
-    if(isabletoPlanning())
-      setOutput();
+    // automata
+    outputAutomata(action);
   }
 
-  inline bool Interface::isabletoPlanning() const {
-    return hasMap_&&isStartvalid_&&isGoalvalid_;
+  bool Interface::outputAutomata(Action action) {
+    switch (automata_)
+    {
+    case initial:
+      if (hasMap_ && isStartvalid_ && isGoalvalid_){
+        automata_ = plan;
+        setAllOutput();
+        simulate(planningMap,planner);
+        automata_ = planned;
+      }
+      break;
+    case plan:
+      /* no action executed */
+      /* this action should no really exist in this automata
+         as it is a temporary value */
+      break;
+    case planned:
+      if (action == Action::mapSetting || action == goalSetting) {
+        automata_ = initial;
+        outputAutomata(action);
+      } else if(action == startSetting) {
+        automata_ = replan;
+        outputAutomata(action);
+      }
+      break;
+    case replan:
+      setStartOutput();
+      simulate(planningMap,planner);
+      automata_ = planned;
+      break;
+    default:
+      std::cerr << "AUTOMATA ERROR" << std::endl;
+      break;
+    }
   }
 
-  bool Interface::setOutput() {
+  bool Interface::setAllOutput() {
     // output to map object
     //auto collisionMap = std::make_unique<Map<GridState>>(grid_);
     planningMap->setMap(grid_);
@@ -82,16 +119,9 @@ namespace HybridAStar{
     start.setT(Utils::normalizeHeadingRad(tf::getYaw(start_.pose.pose.orientation)));
     goal.setT(Utils::normalizeHeadingRad(tf::getYaw(goal_.pose.orientation)));
     // TODO: extract this planner into a specified class
-    auto planner = std::make_shared<HAstar>(start,goal,planningMap,configSpace);
+    planner = std::make_shared<HAstar>(start,goal,planningMap,configSpace);
 
-    // run simulation
-    simulate(planningMap,planner);
     return true;
-  }
-
-  void Interface::clearStartandGoal() {
-    isStartvalid_ = false;
-    isGoalvalid_ = false;
   }
 
   void Interface::simulate(std::shared_ptr<Map<SE2State>> pmap,
@@ -104,11 +134,16 @@ namespace HybridAStar{
     path_.clear();
     smoothedPath_.clear();
 
-    SE2State *nSolution = planner->solve();
+    auto t0 = ros::Time::now();
+    SE2State *nSolution = planner->solve(); auto t1 = ros::Time::now();
     smoother_.tracePath(nSolution);
     path_.updatePath(smoother_.getPath());
-    smoother_.smoothPath(voronoiDiagram_);
+    smoother_.smoothPath(voronoiDiagram_); auto t4 = ros::Time::now();
     smoothedPath_.updatePath(smoother_.getPath());
+    ros::Duration d1(t1 - t0);
+    ros::Duration d2(t4 - t1);
+
+    std::cout << "TIME in ms:" << d1*1000 << '\t' << d2*1000 << std::endl;
 
     path_.publishPath();
     path_.publishPathNodes();
@@ -118,7 +153,22 @@ namespace HybridAStar{
     smoothedPath_.publishPathVehicles();
     visualizer_.publishNode3DCosts(pmap);
   }
-}
+
+  void Interface::setStartOutput(){
+    planningMap->resetSS();
+    SE2State start(carPlant_->planResolution,carPlant_->planAngleResolution);
+    start.setX(start_.pose.pose.position.x);
+    start.setY(start_.pose.pose.position.y);
+    start.setT(Utils::normalizeHeadingRad(tf::getYaw(start_.pose.pose.orientation)));
+
+    planner->setStart(start);
+  }
+
+  void Interface::clearStartandGoal() {
+    isStartvalid_ = false;
+    isGoalvalid_ = false;
+  }
+} // namespace HybridAStar
 
 int main(int argc, char** argv) {
   gflags::ParseCommandLineFlags(&argc, &argv, true);

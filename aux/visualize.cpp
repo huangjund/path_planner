@@ -1,4 +1,6 @@
 #include "visualize.h"
+
+#include <limits>
 using namespace HybridAStar;
 //###################################################
 //                                CLEAR VISUALIZATION
@@ -123,14 +125,13 @@ void Visualize::publishNode3DCosts(std::shared_ptr<Common::Map<SE2State>> pmap,i
   visualization_msgs::MarkerArray costCubes;
   visualization_msgs::Marker costCube;
 
-  float min = 1000;
-  float max = 0;
+  float min = std::numeric_limits<float>::max();
+  float max = std::numeric_limits<float>::min();
   int idx;
   bool once = true;
   float red = 0;
   float green = 0;
   float blue = 0;
-  int count = 0;
   int width = pmap->info_.width*pmap->info_.resolution/pmap->info_.planResolution;
   int height = pmap->info_.height*pmap->info_.resolution/pmap->info_.planResolution;
   
@@ -143,7 +144,7 @@ void Visualize::publishNode3DCosts(std::shared_ptr<Common::Map<SE2State>> pmap,i
   // ________________________________
   // DETERMINE THE MAX AND MIN VALUES
   for (int i = 0; i < width * height; ++i) {
-    values[i] = 1000;
+    values[i] = 0;
 
     // iterate over all headings
     for (int k = 0; k < depth; ++k) {
@@ -161,7 +162,7 @@ void Visualize::publishNode3DCosts(std::shared_ptr<Common::Map<SE2State>> pmap,i
     }
 
     // set a new maximum
-    if (values[i] > 0 && values[i] > max && values[i] != 1000) {
+    if (values[i] > 0 && values[i] > max) {
       max = values[i];
     }
   }
@@ -170,15 +171,14 @@ void Visualize::publishNode3DCosts(std::shared_ptr<Common::Map<SE2State>> pmap,i
   // PAINT THE CUBES
   for (int i = 0; i < width * height; ++i) {
     // if a value exists continue
-    if (values[i] != 1000) {
-      count++;
+    if (values[i]) {
 
       // delete all previous markers
       if (once) {
-        costCube.action = 3;
+        costCube.action = visualization_msgs::Marker::DELETEALL;
         once = false;
       } else {
-        costCube.action = 0;
+        costCube.action = visualization_msgs::Marker::ADD;
       }
 
 

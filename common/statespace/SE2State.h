@@ -62,7 +62,7 @@ namespace Common {
     SE2State(const SE2State &);
     SE2State &operator=(const SE2State &);
 
-    ~SE2State() = default;
+    ~SE2State();
     /// get the x position
     float getX() const { return x_; }
     /// get the y position
@@ -139,6 +139,8 @@ namespace Common {
     SE2State *createSuccessor(const int i);
 
     void freeState (State *state) const;
+
+    void clear();
   };
 }
 }

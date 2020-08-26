@@ -19,13 +19,14 @@ namespace Common {
 
   double hRScurve::getDistance() {
     ompl::base::ReedsSheppStateSpace reedsSheppPath(carPlant_->rad_);
-    auto *rsStart = reedsSheppPath.allocState()->as<ompl::base::SE2StateSpace::StateType>();
-    auto *rsEnd = reedsSheppPath.allocState()->as<ompl::base::SE2StateSpace::StateType>();
+    std::unique_ptr<ompl::base::SE2StateSpace::StateType> rsStart(reedsSheppPath.allocState()->as<ompl::base::SE2StateSpace::StateType>());
+    std::unique_ptr<ompl::base::SE2StateSpace::StateType> rsEnd(reedsSheppPath.allocState()->as<ompl::base::SE2StateSpace::StateType>());
     rsStart->setXY(start_.getX(), start_.getY());
     rsStart->setYaw(start_.getT());
     rsEnd->setXY(goal_.getX(), goal_.getY());
     rsEnd->setYaw(goal_.getT());
-    return reedsSheppPath.distance(rsStart, rsEnd);
+
+    return reedsSheppPath.distance(rsStart.get(), rsEnd.get());
   }
 } // namespace Common
 } // namespace HybridAStar

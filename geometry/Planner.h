@@ -9,6 +9,7 @@
 #include <nav_msgs/OccupancyGrid.h>
 #include "common/statespace/SE2State.h"
 
+// TODO: this class needs to be changed
 namespace HybridAStar {
 namespace Geometry {
   class Planner {
@@ -20,6 +21,7 @@ namespace Geometry {
   
     std::unique_ptr<Multibody::SingleForkLiftPlant> carPlant_;
   public:
+    Planner() = default;
     explicit Planner(Common::SE2State&,Common::SE2State&);
     virtual ~Planner() = default;
   
