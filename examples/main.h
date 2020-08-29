@@ -42,7 +42,7 @@ namespace HybridAStar{
     nav_msgs::OccupancyGrid::Ptr grid_;
     std::shared_ptr<Map<SE2State>> planningMap;
     CollisionDetection configSpace;
-    std::shared_ptr<HAstar> planner;
+    std::shared_ptr<HAstar> planner_;
     Visualize visualizer_;
     Path path_;
     Path smoothedPath_ = Path(true);/// The path smoothed and ready for the controller

@@ -22,7 +22,7 @@ namespace Common {
     float c_;
     float idx_;
     // TODO: change into intelligent pointer
-    const SE2State* pred_;
+    std::shared_ptr<SE2State> pred_;
     float rx_;
     float ry_;
     float rt_;
@@ -54,15 +54,15 @@ namespace Common {
 	  /// collision map cell size [unit: meters/cell]
 	  static const float collisionMapCellSize;
   public:
-    explicit SE2State();
+    SE2State();
     explicit SE2State(float cellsize, float anglesize);
     explicit SE2State(float x, float y, float t, float g, float h,
-                     SE2State* pred, float cellsize, float anglesize, int prim);
+                     std::shared_ptr<SE2State> pred, float cellsize, float anglesize, int prim);
     // copy constructor & assignment
     SE2State(const SE2State &);
     SE2State &operator=(const SE2State &);
 
-    ~SE2State();
+    ~SE2State() = default;
     /// get the x position
     float getX() const { return x_; }
     /// get the y position
@@ -89,7 +89,7 @@ namespace Common {
     /// determine whether the node is closed
     bool isClosed() const { return c_; }
     /// determine whether the node is open
-    const SE2State *getPred() const { return pred_; }
+    std::shared_ptr<SE2State> getPred() const { return pred_; }
     static const unsigned int dimension = 3;
     unsigned int getDimensions() const {return dimension;}
 
@@ -117,7 +117,7 @@ namespace Common {
     /// close the node
     void close() { c_ = true; o_ = false; }
     /// set a pointer to the predecessor of the node
-    void setPred(const SE2State* pred) { pred_ = pred; }
+    void setPred(std::shared_ptr<SE2State> pred) { pred_ = pred; }
 
     // UPDATE METHODS
     /// Updates the cost-so-far for the node x' coming from its predecessor. It also discovers the node.
@@ -136,7 +136,7 @@ namespace Common {
 
     // SUCCESSOR CREATION
     /// Creates a successor in the continous space.
-    SE2State *createSuccessor(const int i);
+    SE2State *createSuccessor(const int i, std::shared_ptr<SE2State>&);
 
     void freeState (State *state) const;
 

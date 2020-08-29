@@ -36,7 +36,7 @@ class Smoother {
      \param node a 3D node, usually the goal node
      \param i a parameter for counting the number of nodes
   */
-  void tracePath(const Common::SE2State* node, int i = 0, std::vector<Common::SE2State> path = std::vector<Common::SE2State>());
+  void tracePath(const std::shared_ptr<Common::SE2State> node, int i = 0, std::vector<Common::SE2State> path = std::vector<Common::SE2State>());
 
   /// returns the path of the smoother object
   std::vector<Common::SE2State> getPath() {return path;}

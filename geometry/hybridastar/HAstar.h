@@ -4,8 +4,8 @@
 
 #include "geometry/Planner.h"
 #include "geometry/RRTxstatic/RRTXstatic.h"
-#include "geometry/dubins/dubins.h"
-//#include "geometry/ReedsShepp/ReedsSheppPath.h"
+//#include "geometry/dubins/dubins.h"
+#include "geometry/ReedsShepp/ReedsSheppPath.h"
 #include "geometry/ReedsShepp/Node3d.h"
 #include "common/statespace/SE2State.h"
 #include "common/statespace/GridState.h"
@@ -31,7 +31,7 @@ namespace Geometry {
 
   class HAstar : Planner {
   private:
-    SE2State start_;
+    std::shared_ptr<SE2State> start_;
     SE2State goal_;
     shared_ptr<CollisionDetection> configSpace_;
     unique_ptr<hRScurve> rsPlanner_;
@@ -41,22 +41,22 @@ namespace Geometry {
     int defaultIter = 3000;
   public:
     HAstar() = default;
-    explicit HAstar(SE2State &,SE2State &,shared_ptr<Map<SE2State>>,CollisionDetection &);
+    explicit HAstar(std::shared_ptr<SE2State>,SE2State &,shared_ptr<Map<SE2State>>,CollisionDetection &);
     ~HAstar() = default;
 
     HAstar(const HAstar &) = delete;
     HAstar &operator=(const HAstar &) = delete;
 
     // TODO: return some prompts
-    SE2State* solve();
+    std::shared_ptr<SE2State> solve();
     void updateHeuristic(SE2State &,SE2State &);
-    SE2State* dubinsShot(SE2State&, const SE2State&);
-    SE2State* ReedsShepp(const SE2State&, const SE2State&);
+    std::shared_ptr<SE2State> dubinsShot(std::shared_ptr<SE2State>, const SE2State&);
+    std::shared_ptr<SE2State> ReedsShepp(std::shared_ptr<SE2State>, const SE2State&);
     
     SE2State &getStart();
     SE2State &getGoal();
     // this function can only be used after the tree has been constructed
-    void setStart(SE2State &);
+    void setStart(std::shared_ptr<SE2State>);
   };
 } // namespace Geometry
 } // namespace HybridAstar

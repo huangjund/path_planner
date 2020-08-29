@@ -86,12 +86,11 @@ void Smoother::smoothPath(DynamicVoronoi& voronoi) {
   path = newPath;
 }
 
-void Smoother::tracePath(const Common::SE2State* node, int i, std::vector<Common::SE2State> path) {
-  const Common::SE2State *waypoint = node;
-  // std::cout << "terminal point:" << waypoint->getX()<<'\t'<<waypoint->getY()<<'\t'<<waypoint->getT() << std::endl;
+void Smoother::tracePath(const std::shared_ptr<Common::SE2State> node, int i, std::vector<Common::SE2State> path) {
+  const Common::SE2State *waypoint = node.get();
   while (waypoint!=nullptr){
     path.push_back(*waypoint);
-    waypoint = (waypoint->getPred());
+    waypoint = (waypoint->getPred().get());
   }
   this->path = path;
 }

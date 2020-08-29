@@ -15,14 +15,10 @@ namespace Common {
   SE2State::SE2State(float cellsize, float anglesize):SE2State(0,0,0,0,0,nullptr,cellsize,anglesize,0){}
 
   SE2State::SE2State(float x, float y, float t, float g, float h,
-                     SE2State* pred, float cellsize, float anglesize, int prim = 0):
+                     std::shared_ptr<SE2State> pred, float cellsize, float anglesize, int prim = 0):
                      x_(x),y_(y),t_(t),g_(g),h_(h),prim_(prim),o_(false),c_(false),idx_(-1),
                     pred_(pred), cellSize_(cellsize), angleSize_(anglesize){
     setRelative(x,y,t); // set the relative position
-  }
-
-  SE2State::~SE2State() {
-    delete pred_;
   }
 
   SE2State::SE2State(const SE2State &cp):
@@ -59,7 +55,7 @@ namespace Common {
     return (dx * dx) + (dy * dy) < dubinsShotDistance;
   }
 
-  SE2State *SE2State::createSuccessor(const int i) {
+  SE2State *SE2State::createSuccessor(const int i, std::shared_ptr<SE2State>& self) {
     float xSucc;
     float ySucc;
     float tSucc;
@@ -76,7 +72,7 @@ namespace Common {
       ySucc = y_ - dx[i - 3] * sin(t_) + dy[i - 3] * cos(t_);
       tSucc = HybridAStar::Utils::normalizeHeadingRad(t_ - dt[i - 3]);
     }
-    return new SE2State(xSucc,ySucc,tSucc,g_,0,this,cellSize_,angleSize_,i);
+    return new SE2State(xSucc,ySucc,tSucc,g_,0,self,cellSize_,angleSize_,i);
   }
 
   void SE2State::updateG() {
@@ -119,7 +115,7 @@ namespace Common {
 
   void SE2State::clear() {
     x_ = 0; y_ = 0; t_ = 0; g_ = 0; h_ = 0;
-    pred_ = nullptr; prim_ = 0; o_ = false; c_ = false;
+    pred_.reset(); prim_ = 0; o_ = false; c_ = false;
     idx_ = -1;
   }
 }  // namespace Common

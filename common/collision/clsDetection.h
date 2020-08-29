@@ -40,7 +40,7 @@ namespace Common {
         \todo needs to be dynamic
       */
      //TODO: this car related term should not be at here
-      relPos pos[1000];
+      relPos pos[2000];
     };
     
     std::unique_ptr<Multibody::SingleForkLiftPlant> carPlant_;

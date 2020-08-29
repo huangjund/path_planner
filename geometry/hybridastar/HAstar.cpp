@@ -9,18 +9,19 @@ namespace HybridAStar{
 namespace Geometry{
   struct CompareNodes {
     /// Sorting 3D nodes by increasing C value - the total estimated cost
-    bool operator()(const SE2State* lhs, const SE2State* rhs) const {
+    bool operator()(const std::shared_ptr<SE2State> lhs, const std::shared_ptr<SE2State> rhs) const {
       return lhs->getC() > rhs->getC();
     }
     /// Sorting 2D nodes by increasing C value - the total estimated cost
-    bool operator()(const GridState* lhs, const GridState* rhs) const {
+    bool operator()(const std::shared_ptr<GridState> lhs, const std::shared_ptr<GridState> rhs) const {
       return lhs->getC() > rhs->getC();
     }
   };
-  HAstar::HAstar(SE2State &start,SE2State &goal,shared_ptr<Map<SE2State>> pmap,CollisionDetection &configSpace): 
-                Planner(start,goal),start_(start),goal_(goal),configSpace_(&configSpace), 
-                rsPlanner_(std::make_unique<hRScurve>(start_,goal_)),
-      rrtxPlanner_(std::make_unique<hRRTx>(start_,goal_,
+
+  HAstar::HAstar(std::shared_ptr<SE2State> start,SE2State &goal,shared_ptr<Map<SE2State>> pmap,CollisionDetection &configSpace): 
+                Planner(*start,goal),start_(start),goal_(goal),configSpace_(&configSpace), 
+                rsPlanner_(std::make_unique<hRScurve>(*start_,goal_)),
+      rrtxPlanner_(std::make_unique<hRRTx>(*start_,goal_,
       pmap->info_.width*pmap->info_.resolution, pmap->info_.height*pmap->info_.resolution,configSpace)),
       pMap_(pmap){}
 
@@ -35,9 +36,10 @@ namespace Geometry{
   }
 
 #ifdef DUBINS_H
-  SE2State* HAstar::dubinsShot(SE2State& start, const SE2State& goal) {
+  std::shared_ptr<SE2State> HAstar::dubinsShot(
+    std::shared_ptr<SE2State> start, const SE2State& goal) {
     // start
-    double q0[] = { start.getX(), start.getY(), start.getT() };
+    double q0[] = { start->getX(), start->getY(), start->getT() };
     // goal
     double q1[] = { goal.getX(), goal.getY(), goal.getT() };
     // initialize the path
@@ -45,31 +47,37 @@ namespace Geometry{
     // calculate the path
     dubins_init(q0, q1, carPlant_->rad_, &path);
 
-    int i = 0;
-    float x = 0.f;
+    float x = carPlant_->dubinsStepSize_;
     float length = dubins_path_length(&path);
+    int i = 0;
 
     // TODO: this construction should not related to the default constructor
-    SE2State* dubinsNodes = new SE2State[(int)(length / carPlant_->dubinsStepSize_) + 2]();
+    // TODO: the angle resolution should be synthesized to a class
+    auto dubinsNodes = std::vector<std::shared_ptr<SE2State>>(
+      (int)(length / carPlant_->dubinsStepSize_) + 2);
+      // std::make_shared<SE2State>(pMap_->info_.planResolution, 0.087266)
     
     while (x <  length) {
+      // TODO: this angle resolution should be synthesized to a class
+      auto temp = std::make_shared<SE2State>(pMap_->info_.planResolution, 0.087266);
       double q[3];
       dubins_path_sample(&path, x, q);
-      dubinsNodes[i].setX(q[0]);
-      dubinsNodes[i].setY(q[1]);
-      dubinsNodes[i].setT(Utils::normalizeHeadingRad(q[2]));
+      temp->setX(q[0]);
+      temp->setY(q[1]);
+      temp->setT(Utils::normalizeHeadingRad(q[2]));
+      dubinsNodes[i] = temp;
 
       // collision check
-      if (configSpace_->isTraversable(&dubinsNodes[i])) {
+      if (configSpace_->isTraversable(dubinsNodes[i].get())) {
 
         // set the predecessor to the previous step
         if (i > 0) {
-          dubinsNodes[i].setPred(&dubinsNodes[i - 1]);
+          dubinsNodes[i]->setPred(dubinsNodes[i-1]);
         } else {
-          dubinsNodes[i].setPred(&start);
+          dubinsNodes[i]->setPred(start);
         }
 
-        if (&dubinsNodes[i] == dubinsNodes[i].getPred()) {
+        if ((dubinsNodes[i]) == dubinsNodes[i]->getPred()) {
           std::cout << "looping shot";
         }
 
@@ -77,35 +85,28 @@ namespace Geometry{
         i++;
       } else {
         // collided, discarding the path
-        delete [] dubinsNodes;
-        return nullptr;
+        std::shared_ptr<SE2State> temp;
+        return temp;
       }
     }
 
     // TODO: change to a more delicated loop, which also include is Traversable judging
-    dubinsNodes[i].setX(q1[0]);
-    dubinsNodes[i].setY(q1[1]);
-    dubinsNodes[i].setT(Utils::normalizeHeadingRad(q1[2]));
-    dubinsNodes[i].setPred(&dubinsNodes[i-1]);
+    auto temp = std::make_shared<SE2State>(pMap_->info_.planResolution, 0.087266);
+    temp->setX(q1[0]);
+    temp->setY(q1[1]);
+    temp->setT(Utils::normalizeHeadingRad(q1[2]));
+    temp->setPred(dubinsNodes[i-1]);
+    dubinsNodes[i] = temp;
 
-    return &dubinsNodes[i];
-    // ompl::base::ReedsSheppStateSpace reedsSheppPath(Constants::r);
-    // State* rsStart = (State*)reedsSheppPath.allocState();
-    // State* rsEnd = (State*)reedsSheppPath.allocState();
-    // rsStart->setXY(start.getX(), start.getY());
-    // rsStart->setYaw(start.getT());
-    // rsEnd->setXY(goal.getX(), goal.getY());
-    // rsEnd->setYaw(goal.getT());
-
-    
+    return dubinsNodes[i];
   }
 #endif
 
 #ifdef _HYBRIDASTAR_REEDSSHEPPPATH_H
-  SE2State* HAstar::ReedsShepp(const SE2State &start, const SE2State &goal) {
+  std::shared_ptr<SE2State> HAstar::ReedsShepp(std::shared_ptr<SE2State> start, const SE2State &goal) {
     std::vector<double> bounds{0,(pMap_->info_.width*pMap_->info_.resolution),
                                 0,(pMap_->info_.width*pMap_->info_.resolution)};
-    auto startNode = std::make_shared<Node3d>(start.getX(),start.getY(),start.getT(),pMap_->info_.planResolution,0.08726646,bounds);
+    auto startNode = std::make_shared<Node3d>(start->getX(),start->getY(),start->getT(),pMap_->info_.planResolution,0.08726646,bounds);
     auto goalNode = std::make_shared<Node3d>(goal.getX(),goal.getY(),goal.getT(),pMap_->info_.planResolution,0.08726646,bounds);
 
     // TODO:change the last 0.5 to a carplant related value
@@ -120,55 +121,59 @@ namespace Geometry{
 
     auto length = optimal_path.total_length;
     // TODO : change to a smart pointer
-    SE2State* RSNodes = new SE2State[(int)(length / carPlant_->reedsheppStepSize_) + 2]();
+    auto RSNodes = std::vector<std::shared_ptr<SE2State>>(
+      (int)(length / carPlant_->reedsheppStepSize_) + 3);
 
     int i;
     for (i = 0; i < optimal_path.x.size(); ++i) {
-      RSNodes[i].setX(optimal_path.x[i]);
-      RSNodes[i].setY(optimal_path.y[i]);
-      RSNodes[i].setT(Utils::normalizeHeadingRad(optimal_path.phi[i]));
+      // TODO: this angle resolution should be synthesized to a class
+      auto temp = std::make_shared<SE2State>(pMap_->info_.planResolution, 0.087266);
+      temp->setX(optimal_path.x[i]);
+      temp->setY(optimal_path.y[i]);
+      temp->setT(Utils::normalizeHeadingRad(optimal_path.phi[i]));
+      RSNodes[i] = temp;
 
       // collision check
-      if (configSpace_->isTraversable(&RSNodes[i])) {
+      if (configSpace_->isTraversable(RSNodes[i].get())) {
 
         // set the predecessor to the previous step
         if (i > 0) {
-          RSNodes[i].setPred(&RSNodes[i - 1]);
+          RSNodes[i]->setPred(RSNodes[i - 1]);
         } else {
-          RSNodes[i].setPred(&start);
+          RSNodes[i]->setPred(start);
         }
 
-        if (&RSNodes[i] == RSNodes[i].getPred()) {
+        if (RSNodes[i] == RSNodes[i]->getPred()) {
           std::cout << "looping shot";
         }
 
       } else {
         // collided, discarding the path
-        delete [] RSNodes;
-        return nullptr;
+        std::shared_ptr<SE2State> temp;
+        return temp;
       }
     }
-    return &RSNodes[i-1];
+    return RSNodes[i-1];
   }
 #endif
 
   SE2State &HAstar::getStart() {
-    return start_;
+    return *start_;
   }
 
   SE2State &HAstar::getGoal() {
     return goal_;
   }
 
-  void HAstar::setStart(SE2State &start) {
+  void HAstar::setStart(std::shared_ptr<SE2State> start) {
     assert(rrtxPlanner_->isTreeconstructed());
     start_ = start;
-    rsPlanner_->setStart(start);
-    rrtxPlanner_->setGoal(start); // the goal and start in rrtx is reversed
+    rsPlanner_->setStart(*start);
+    rrtxPlanner_->setGoal(*start); // the goal and start in rrtx is reversed
   }
 
   // solve for the whole path
-  SE2State* HAstar::solve(){
+  std::shared_ptr<SE2State> HAstar::solve(){
     int pWidth = pMap_->info_.width*(pMap_->info_.resolution)/(pMap_->info_.planResolution);
     int pHeight = pMap_->info_.height*(pMap_->info_.resolution)/(pMap_->info_.planResolution);
     // PREDECESSOR AND SUCCESSOR INDEX
@@ -189,13 +194,13 @@ namespace Geometry{
     priorityQueue O;
 
     // update h value
-    updateHeuristic(start_, goal_);
+    updateHeuristic(*start_, goal_);
     // mark start_ as open
-    start_.open();
+    start_->open();
     // push on priority queue open list
-    O.push(std::unique_ptr<SE2State>(&start_));
-    iPred = start_.setIdx(pWidth, pHeight);
-    pMap_->statespace[iPred] = start_;
+    O.push(start_);
+    iPred = start_->setIdx(pWidth, pHeight);
+    pMap_->statespace[iPred] = *start_;
 
     // NODE POINTER
     std::shared_ptr<SE2State> nPred;
@@ -223,8 +228,6 @@ namespace Geometry{
       //   std::cerr << e.what() << '\n';
       // }
       
-      
-
       // _____________________________
       // LAZY DELETION of rewired node
       // if there exists a pointer this node has already been expanded
@@ -247,7 +250,7 @@ namespace Geometry{
           // DEBUG
           return nPred;
         }
-
+        
         // ____________________
         // CONTINUE WITH SEARCH
         else {
@@ -256,11 +259,11 @@ namespace Geometry{
           // TODO:when changed to RS curve, the primitives < 3 needs to be removed
           // the isInRange function needs to be more scientific
           if (nPred->isInRange(goal_) && nPred->getPrim() < 3) {
-            nSucc = dubinsShot(*nPred, goal_);
-            //nSucc = ReedsShepp(*nPred, goal_);
-
+            //nSucc = dubinsShot(nPred, goal_);
+            nSucc = ReedsShepp(nPred, goal_);
             if (nSucc != nullptr && *nSucc == goal_) {
               std::cout << "iterations:" << iterations << std::endl;
+              
               return nSucc;
             }
           }
@@ -269,12 +272,12 @@ namespace Geometry{
           // SEARCH WITH FORWARD SIMULATION
           for (int i = 0; i < dir; i++) {
             // create possible successor
-            nSucc = nPred->createSuccessor(i);
+            nSucc.reset(nPred->createSuccessor(i,nPred));
             // set index of the successor
             iSucc = nSucc->setIdx(pWidth, pHeight);
 
             // ensure successor is on grid and traversable / resolution:[meters/cell]
-            if (nSucc->isOnGrid(static_cast<int>(pWidth), static_cast<int>(pHeight)) && configSpace_->isTraversable(nSucc)) {
+            if (nSucc->isOnGrid(static_cast<int>(pWidth), static_cast<int>(pHeight)) && configSpace_->isTraversable(nSucc.get())) {
 
               // ensure successor is not on closed list or it has the same index as the predecessor
               if (!pMap_->statespace[iSucc].isClosed() || iPred == iSucc) {
@@ -291,7 +294,6 @@ namespace Geometry{
 
                   // if the successor is in the same cell but the C value is larger
                   if (iPred == iSucc && nSucc->getC() > nPred->getC() + carPlant_->tieBreaker_) {
-                    delete nSucc;
                     continue;
                   }
                   // if successor is in the same cell and the C value is lower, set predecessor to predecessor of predecessor
@@ -306,21 +308,21 @@ namespace Geometry{
                   // put successor on open list
                   nSucc->open();
                   pMap_->statespace[iSucc] = *nSucc;
-                  O.push(&pMap_->statespace[iSucc]);
-                  delete nSucc;
-                } else { delete nSucc; }
-              } else { delete nSucc; }
-            } else { delete nSucc; }
+                  O.push(nSucc);
+                }
+              }
+            }
           }
         }
       }
     }
     std::cout << "iterations:" << iterations << std::endl;
+    std::shared_ptr<SE2State> temp;
     if (O.empty()) {
-      return nullptr;
+      return temp;
     }
 
-    return nullptr;
+    return temp;
   }
 } // namespace Geometry
 } // namespace HybridAStar

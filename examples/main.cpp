@@ -8,7 +8,7 @@ namespace HybridAStar{
 
   Interface::Interface():automata_(initial),
     planningMap(std::make_shared<Map<SE2State>>()),
-    configSpace(),planner(std::make_shared<HAstar>())
+    configSpace(),planner_(std::make_shared<HAstar>())
   {
     isStartvalid_ = false;
     isGoalvalid_ = false;
@@ -73,7 +73,7 @@ namespace HybridAStar{
       if (hasMap_ && isStartvalid_ && isGoalvalid_){
         automata_ = plan;
         setAllOutput();
-        simulate(planningMap,planner);
+        simulate(planningMap,planner_);
         automata_ = planned;
       }
       break;
@@ -93,7 +93,7 @@ namespace HybridAStar{
       break;
     case replan:
       setStartOutput();
-      simulate(planningMap,planner);
+      simulate(planningMap,planner_);
       automata_ = planned;
       break;
     default:
@@ -110,16 +110,18 @@ namespace HybridAStar{
     configSpace.makeClsLookup();  // make up look up table in configuration space
 
     // output to planner
-    SE2State start(carPlant_->planResolution,carPlant_->planAngleResolution); // initialize using planning map resolution
+    // initialize using planning map resolution
+    auto start = std::make_shared<SE2State>(0.5,0.08726646);
     SE2State goal(carPlant_->planResolution,carPlant_->planAngleResolution);
-    start.setX(start_.pose.pose.position.x);
-    start.setY(start_.pose.pose.position.y);
+    start->setX(start_.pose.pose.position.x);
+    start->setY(start_.pose.pose.position.y);
     goal.setX(goal_.pose.position.x);
     goal.setY(goal_.pose.position.y);
-    start.setT(Utils::normalizeHeadingRad(tf::getYaw(start_.pose.pose.orientation)));
+    start->setT(Utils::normalizeHeadingRad(tf::getYaw(start_.pose.pose.orientation)));
     goal.setT(Utils::normalizeHeadingRad(tf::getYaw(goal_.pose.orientation)));
     // TODO: extract this planner into a specified class
-    planner = std::make_shared<HAstar>(start,goal,planningMap,configSpace);
+    auto a = planner_.use_count();
+    planner_ = std::make_shared<HAstar>(start,goal,planningMap,configSpace);
 
     return true;
   }
@@ -135,7 +137,7 @@ namespace HybridAStar{
     smoothedPath_.clear();
 
     auto t0 = ros::Time::now();
-    SE2State *nSolution = planner->solve(); auto t1 = ros::Time::now();
+    auto nSolution = planner->solve(); auto t1 = ros::Time::now();
     smoother_.tracePath(nSolution);
     path_.updatePath(smoother_.getPath());
     smoother_.smoothPath(voronoiDiagram_); auto t4 = ros::Time::now();
@@ -156,12 +158,13 @@ namespace HybridAStar{
 
   void Interface::setStartOutput(){
     planningMap->resetSS();
-    SE2State start(carPlant_->planResolution,carPlant_->planAngleResolution);
-    start.setX(start_.pose.pose.position.x);
-    start.setY(start_.pose.pose.position.y);
-    start.setT(Utils::normalizeHeadingRad(tf::getYaw(start_.pose.pose.orientation)));
+    // TODO: due to undefined reference to carPlant->planResolution
+    auto start = std::make_shared<SE2State>(0.5,0.08726646);
+    start->setX(start_.pose.pose.position.x);
+    start->setY(start_.pose.pose.position.y);
+    start->setT(Utils::normalizeHeadingRad(tf::getYaw(start_.pose.pose.orientation)));
 
-    planner->setStart(start);
+    planner_->setStart(start);
   }
 
   void Interface::clearStartandGoal() {
