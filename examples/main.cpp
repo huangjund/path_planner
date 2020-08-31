@@ -8,7 +8,8 @@ namespace HybridAStar{
 
   Interface::Interface():automata_(initial),
     planningMap(std::make_shared<Map<SE2State>>()),
-    configSpace(),planner_(std::make_shared<HAstar>())
+    configSpace(std::make_shared<CollisionDetection>()),
+    planner_(std::make_shared<HAstar>())
   {
     isStartvalid_ = false;
     isGoalvalid_ = false;
@@ -106,11 +107,12 @@ namespace HybridAStar{
     // output to map object
     //auto collisionMap = std::make_unique<Map<GridState>>(grid_);
     planningMap->setMap(grid_);
-    configSpace.setGrid(grid_); // set the grid for configuration space
-    configSpace.makeClsLookup();  // make up look up table in configuration space
+    configSpace->setGrid(grid_); // set the grid for configuration space
+    configSpace->makeClsLookup();  // make up look up table in configuration space
 
     // output to planner
     // initialize using planning map resolution
+    // TODO: change this cell size and angle size to a class
     auto start = std::make_shared<SE2State>(0.5,0.08726646);
     SE2State goal(carPlant_->planResolution,carPlant_->planAngleResolution);
     start->setX(start_.pose.pose.position.x);

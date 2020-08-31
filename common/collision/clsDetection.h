@@ -21,7 +21,7 @@ namespace Common {
     struct PlanOccupancyGrid {
       int width; // [unit:cells] planning map
       int height; // [unit:cells] planning map
-      float *planGrid; //[unit:percent] counting for occupancy rate of per planning map cells
+      std::shared_ptr<float> planGrid; //[unit:percent] counting for occupancy rate of per planning map cells
       float threshold = 0.01;
     }pGrid_;
     struct relPos {
@@ -52,8 +52,7 @@ namespace Common {
     configuration *collisionLookup_;
 
   public:
-    // no copy no assign
-    CollisionDetection(const CollisionDetection&) = delete;
+    CollisionDetection(const CollisionDetection&);
     CollisionDetection &operator=(const CollisionDetection &) = delete;
     // constructor
     CollisionDetection();
@@ -61,6 +60,7 @@ namespace Common {
     ~CollisionDetection();
 
     void setGrid(nav_msgs::OccupancyGrid::Ptr &);
+    void setPGrid();
     void getConfiguration(const SE2State*, float &,float &, float &) ;
     void getConfiguration(const GridState*, float &, float &, float &) ;
 

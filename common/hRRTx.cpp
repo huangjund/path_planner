@@ -4,7 +4,7 @@
 
 namespace HybridAStar  {
 namespace Common {
-  hRRTx::hRRTx(SE2State &start, SE2State &goal,const double &mapwidth,const double &mapheight,CollisionDetection& config): 
+  hRRTx::hRRTx(SE2State &start, SE2State &goal,const double &mapwidth,const double &mapheight,std::shared_ptr<CollisionDetection>& config): 
   start_(start), goal_(goal),
   r2Space_(std::make_shared<ob::RealVectorStateSpace>(2)),
   spaceInfo_(std::make_shared<ob::SpaceInformation>(r2Space_)),
@@ -67,7 +67,7 @@ namespace Common {
     auto node = std::make_shared<SE2State>(x, y, 0, 0, 0, nullptr, 0, 0, 0);
     
     // check for collision
-    return config_.isTraversable<SE2State>(node.get(), true);;
+    return config_->isTraversable<SE2State>(node.get(), true);;
   }
 
   double hRRTx::getDistance() {

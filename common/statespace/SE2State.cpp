@@ -4,9 +4,9 @@
 namespace HybridAStar {
 namespace Common {
   const int SE2State::dir = 3;
-  const float SE2State::dy[] = { 0,        -0.0415893,  0.0415893};
-  const float SE2State::dx[] = { 0.7068582,   0.705224,   0.705224};
-  const float SE2State::dt[] = { 0,         0.1178097,   -0.1178097};
+  const float SE2State::dy[] = { 0,        -0.2394141,  0.2394141};
+  const float SE2State::dx[] = { 0.7,   0.6577848,   0.6577848};
+  const float SE2State::dt[] = { 0,         0.34906585,   -0.34906585};
 
   const float SE2State::collisionMapCellSize = 1;
 

@@ -41,7 +41,7 @@ namespace HybridAStar{
     geometry_msgs::PoseStamped goal_;
     nav_msgs::OccupancyGrid::Ptr grid_;
     std::shared_ptr<Map<SE2State>> planningMap;
-    CollisionDetection configSpace;
+    std::shared_ptr<CollisionDetection> configSpace;
     std::shared_ptr<HAstar> planner_;
     Visualize visualizer_;
     Path path_;

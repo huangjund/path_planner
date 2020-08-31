@@ -14,7 +14,7 @@ namespace HybridAStar {
 namespace Geometry {
   class Planner {
   protected:
-    Common::SE2State start_;
+    std::shared_ptr<Common::SE2State> start_;
     Common::SE2State goal_;
     // TODO: change this into map class
     nav_msgs::OccupancyGrid::Ptr grid_;
@@ -22,7 +22,7 @@ namespace Geometry {
     std::unique_ptr<Multibody::SingleForkLiftPlant> carPlant_;
   public:
     Planner() = default;
-    explicit Planner(Common::SE2State&,Common::SE2State&);
+    explicit Planner(std::shared_ptr<Common::SE2State>,Common::SE2State&);
     virtual ~Planner() = default;
   
     Planner(const Planner &) = delete;

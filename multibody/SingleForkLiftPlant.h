@@ -10,8 +10,8 @@ namespace Multibody{
     static constexpr bool isReversable_ = true;
     // [m] padding around the vechicle
     static constexpr double bloating_ = 0;
-    static constexpr double width_ = 1.5+2*bloating_;
-    static constexpr double length_ = 2.8+2*bloating_;
+    static constexpr double width_ = 1.2+2*bloating_;
+    static constexpr double length_ = 2.5+2*bloating_;
     // minimum turning radius of the vehicle
     static constexpr double rad_ = 0.6;
     static constexpr int headings_ = 72;
@@ -54,7 +54,6 @@ namespace Multibody{
     static constexpr float planResolution = 0.5; // [unit: meters/cell]
 
     static constexpr float planAngleResolution = 2*M_PI/headings_; // [unit : rad/piece]
-
     
   public:
     SingleForkLiftPlant() = default;

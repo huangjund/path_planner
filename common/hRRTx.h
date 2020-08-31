@@ -1,4 +1,5 @@
-#pragma once 
+#ifndef _HEURISTIC_RRTX_H
+#define _HEURISTIC_RRTX_H
 
 #include "Heuristic.h"
 #include "common/statespace/SE2State.h"
@@ -29,13 +30,13 @@ namespace Common {
     // TODO: change this class into a functional constructor
     class rrtValidityChecker : public ob::StateValidityChecker {
       public:
-        rrtValidityChecker(const ob::SpaceInformationPtr &si, CollisionDetection &config) :
+        rrtValidityChecker(const ob::SpaceInformationPtr &si, std::shared_ptr<CollisionDetection>& config) :
           ob::StateValidityChecker(si), config_(config) {}
         virtual bool isValid(const ob::State *state) const {
           return checker_(state);
         }
       private:
-        CollisionDetection &config_;
+        std::shared_ptr<CollisionDetection> config_;
         bool checker_(const ob::State*) const;
     };
 
@@ -45,7 +46,7 @@ namespace Common {
     std::unique_ptr<og::RRTXstatic> rrtxPlanner_;
   public:
     hRRTx() = default;
-    hRRTx(SE2State &, SE2State &,const double &,const double &,CollisionDetection&);
+    hRRTx(SE2State &, SE2State &,const double &,const double &,std::shared_ptr<CollisionDetection>&);
     ~hRRTx() = default;
 
     hRRTx(const hRRTx &) = delete;
@@ -60,3 +61,5 @@ namespace Common {
   };
 } // namespace Common
 } // namespace Hybri
+
+#endif

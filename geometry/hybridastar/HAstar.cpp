@@ -18,21 +18,67 @@ namespace Geometry{
     }
   };
 
-  HAstar::HAstar(std::shared_ptr<SE2State> start,SE2State &goal,shared_ptr<Map<SE2State>> pmap,CollisionDetection &configSpace): 
-                Planner(*start,goal),start_(start),goal_(goal),configSpace_(&configSpace), 
+  HAstar::HAstar(std::shared_ptr<SE2State> start,SE2State &goal,
+                shared_ptr<Map<SE2State>> pmap,std::shared_ptr<CollisionDetection> &configSpace): 
+                Planner(start,goal),start_(start),goal_(goal),configSpace_(configSpace), 
                 rsPlanner_(std::make_unique<hRScurve>(*start_,goal_)),
-      rrtxPlanner_(std::make_unique<hRRTx>(*start_,goal_,
-      pmap->info_.width*pmap->info_.resolution, pmap->info_.height*pmap->info_.resolution,configSpace)),
-      pMap_(pmap){}
+                rrtxPlanner_(std::make_unique<hRRTx>(*start_,goal_,
+                                                      pmap->info_.width*pmap->info_.resolution,
+                                                      pmap->info_.height*pmap->info_.resolution,
+                                                      configSpace)),
+                // aStarPlanner_(std::make_unique<hAStar>()),
+                pMap_(pmap){
+    #ifdef _HEURISTIC_ASTAR_H
+    auto s = std::make_shared<GridState>(pmap->info_.planResolution,0);
+    GridState g(pmap->info_.planResolution,0);
+    s->setX(start->getX()/pmap->info_.planResolution);
+    s->setY(start->getY()/pmap->info_.planResolution);
+    g.setX(goal.getX()/pmap->info_.planResolution);
+    g.setY(goal.getY()/pmap->info_.planResolution);
+
+    aStarPlanner_.reset(new hAStar(s,g,configSpace));
+    // set map
+    // TODO: make this two different class copyable
+    aStarPlanner_->returnMap().reset(new Map<GridState>());
+    aStarPlanner_->returnMap()->info_.width = pmap->info_.width;
+    aStarPlanner_->returnMap()->info_.height = pmap->info_.height;
+    aStarPlanner_->returnMap()->info_.resolution = pmap->info_.resolution;
+    aStarPlanner_->returnMap()->info_.planResolution = pmap->info_.planResolution;
+    aStarPlanner_->returnMap()->info_.data = pmap->info_.data;
+    aStarPlanner_->setSS();
+    #endif
+  }
 
   void HAstar::updateHeuristic(SE2State &start,SE2State &goal) {
     rsPlanner_->setStartGoal(start,goal);
     auto rsCost = rsPlanner_->getDistance();
 
+    #ifdef _HEURISTIC_RRTX_H
     rrtxPlanner_->setStartGoal(start,goal);
     auto rrtxCost = rrtxPlanner_->getDistance();
 
     start.setH(std::max(rrtxCost,rsCost));
+    #elif defined _HEURISTIC_ASTAR_H
+    auto s = std::make_shared<GridState>(pMap_->info_.planResolution,0);
+    GridState g;
+    float srx = start.getX()/pMap_->info_.planResolution;
+    float sry = start.getY()/pMap_->info_.planResolution;
+    float grx = goal.getY()/pMap_->info_.planResolution;
+    float gry = goal.getY()/pMap_->info_.planResolution;
+    float sx = srx - (int)srx;
+    float sy = sry - (int)sry;
+    float gx = grx - (int)grx;
+    float gy = gry - (int)gry;
+    s->setX(srx); s->setY(sry);
+    g.setX(grx); g.setY(gry);
+    aStarPlanner_->setStartGoal(s,g);
+    auto astarCost = aStarPlanner_->getDistance();
+
+    double offSet = sqrt(pow(sx-gx,2) + pow(sy-gy,2));
+    astarCost -= offSet;
+
+    start.setH(std::max(astarCost,rsCost));
+    #endif
   }
 
 #ifdef DUBINS_H
@@ -114,18 +160,20 @@ namespace Geometry{
     auto reed_shepp_generator = std::make_shared<ReedShepp>(1/carPlant_->rad_,0.5);
     ReedSheppPath optimal_path;
 
+    // TODO: what if the algorithm really goes into this?
+    // more robustness should be achieved
     if (reed_shepp_generator->ShortestRSP(startNode, goalNode,
                                            optimal_path) == false) {
       std::cout << "RS path generation failed!" << std::endl;
     }
 
-    auto length = optimal_path.total_length;
+    const int samplSize = optimal_path.x.size();
+
     // TODO : change to a smart pointer
-    auto RSNodes = std::vector<std::shared_ptr<SE2State>>(
-      (int)(length / carPlant_->reedsheppStepSize_) + 3);
+    auto RSNodes = std::vector<std::shared_ptr<SE2State>>(samplSize);
 
     int i;
-    for (i = 0; i < optimal_path.x.size(); ++i) {
+    for (i = 0; i < samplSize; ++i) {
       // TODO: this angle resolution should be synthesized to a class
       auto temp = std::make_shared<SE2State>(pMap_->info_.planResolution, 0.087266);
       temp->setX(optimal_path.x[i]);
@@ -166,10 +214,19 @@ namespace Geometry{
   }
 
   void HAstar::setStart(std::shared_ptr<SE2State> start) {
+    #ifdef _HEURISTIC_RRTX_H
     assert(rrtxPlanner_->isTreeconstructed());
     start_ = start;
     rsPlanner_->setStart(*start);
     rrtxPlanner_->setGoal(*start); // the goal and start in rrtx is reversed
+    #elif defined _HEURISTIC_ASTAR_H
+    start_ = start;
+    rsPlanner_->setStart(*start);
+    auto s = std::make_shared<GridState>(pMap_->info_.planResolution,0);
+    s->setX(start->getX()/pMap_->info_.planResolution);
+    s->setY(start->getY()/pMap_->info_.planResolution);
+    aStarPlanner_->setStart(s);
+    #endif
   }
 
   // solve for the whole path
@@ -259,8 +316,11 @@ namespace Geometry{
           // TODO:when changed to RS curve, the primitives < 3 needs to be removed
           // the isInRange function needs to be more scientific
           if (nPred->isInRange(goal_) && nPred->getPrim() < 3) {
-            //nSucc = dubinsShot(nPred, goal_);
+            #if defined DUBINS_H
+            nSucc = dubinsShot(nPred, goal_);
+            #elif defined _HYBRIDASTAR_REEDSSHEPPPATH_H
             nSucc = ReedsShepp(nPred, goal_);
+            #endif
             if (nSucc != nullptr && *nSucc == goal_) {
               std::cout << "iterations:" << iterations << std::endl;
               

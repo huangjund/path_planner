@@ -12,13 +12,63 @@ namespace Common{
     makeClsLookup(); // initialize collision lookup
   }
 
+  CollisionDetection::CollisionDetection(const CollisionDetection& cp):
+    carPlant_(std::make_unique<Multibody::SingleForkLiftPlant>()),
+    grid_(cp.grid_),collisionLookup_(new configuration[carPlant_->headings_*carPlant_->positions_]()) {
+      // copy collision lookup
+      for (size_t i = 0; i < carPlant_->headings_*carPlant_->positions_; ++i) {
+        collisionLookup_[i].length = cp.collisionLookup_[i].length;
+        for (size_t j = 0; j < collisionLookup_[i].length; j++)
+        {
+          collisionLookup_[i].pos[j].x = cp.collisionLookup_[i].pos[j].x;
+          collisionLookup_[i].pos[j].y = cp.collisionLookup_[i].pos[j].y;
+        }
+      }
+  }
+
 	CollisionDetection::~CollisionDetection() {
 		delete [] collisionLookup_;
-    delete pGrid_.planGrid;
   }
 
   void CollisionDetection::setGrid(nav_msgs::OccupancyGrid::Ptr &grid) {
     grid_ = grid;
+
+    setPGrid();
+  }
+
+  void CollisionDetection::setPGrid() {
+    auto ccsize = grid_->info.resolution; // collision cell size
+    auto pcsize = carPlant_->planResolution;
+    pGrid_.height = (int)(grid_->info.height*ccsize/pcsize);
+    pGrid_.width = (int)(grid_->info.width*ccsize/pcsize);
+
+    // initailize the grid pointer
+    pGrid_.planGrid.reset(new float[pGrid_.height*pGrid_.width]);
+    auto pg = pGrid_.planGrid;
+    for(int i = 0; i < pGrid_.width; i++){
+      for(int j = 0; j < pGrid_.height; j++){
+        *(pg.get()+j*pGrid_.width+i) = 0;
+      }
+    }
+
+    int cpx, cpy; // the current planning map point along x or y direction
+    // computing occupancy rate
+    for (int i = 0; i < grid_->info.width; i++){
+      for (int j = 0; j < grid_->info.height; j++){
+        if(grid_->data[j*grid_->info.width + i]){ // if the cell has obstacle, add 
+          cpx = static_cast<int>(i*ccsize/pcsize);
+          cpy = static_cast<int>(j*ccsize/pcsize);
+          *(pg.get()+cpy*pGrid_.width + cpx) += ccsize*ccsize;
+        }    
+      }
+    }
+    
+    // attain the percent
+    for(int i = 0; i < pGrid_.width; i++){
+      for(int j = 0; j < pGrid_.height; j++){
+        *(pg.get()+j*pGrid_.width + i) /= pcsize*pcsize;
+      }
+    }
   }
 
   void CollisionDetection::getConfiguration(const SE2State* state, float &x,float &y, float &t) {
@@ -41,7 +91,7 @@ namespace Common{
     switch (state->dimension)
     {
     case 2:
-      if (pGrid_.planGrid[state->getIdx()] > pGrid_.threshold){
+      if (*(pGrid_.planGrid.get()+state->getIdx()) > pGrid_.threshold){
         return false;
       }
       return true;

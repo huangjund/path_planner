@@ -32,6 +32,7 @@ set(SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/common/Heuristic.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/common/hRRTx.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/common/hRScurve.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/common/hAStar.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/geometry/Planner.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/geometry/hybridastar/HAstar.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/geometry/RRTxstatic/RRTXstatic.cpp
@@ -53,6 +54,7 @@ set(HEADERS
     ${CMAKE_CURRENT_SOURCE_DIR}/common/Heuristic.h
     ${CMAKE_CURRENT_SOURCE_DIR}/common/hRRTx.h
     ${CMAKE_CURRENT_SOURCE_DIR}/common/hRScurve.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/common/hAStar.h
     ${CMAKE_CURRENT_SOURCE_DIR}/geometry/Planner.h
     ${CMAKE_CURRENT_SOURCE_DIR}/geometry/hybridastar/HAstar.h
     ${CMAKE_CURRENT_SOURCE_DIR}/geometry/RRTxstatic/RRTXstatic.h

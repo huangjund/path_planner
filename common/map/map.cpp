@@ -8,6 +8,19 @@ namespace Common {
     setMap(map);
   }
   
+  // TODO: this should be enabled
+  // read HAstar constructor
+  // template <class T>
+  // Map<T>::RawMap& Map<T>::RawMap::operator=(const RawMap& rhs) {
+  //   this->width = rhs.width;
+  //   this->height = rhs.height;
+  //   this->resolution = rhs.resolution;
+  //   this->planResolution = rhs.planResolution;
+  //   this->data = rhs.data;
+
+  //   return *this
+  // }
+
   template <class T>
   void Map<T>::setMap(const nav_msgs::OccupancyGrid::Ptr map) {
     info_.width = map->info.width;
@@ -25,7 +38,7 @@ namespace Common {
     int pheight = info_.height*info_.resolution/info_.planResolution;
     // TODO: needs to be fixed
     if(temp.getDimensions() == 2)
-      statespace = std::vector<T>(pwidth*pwidth, T(info_.resolution,0.087266));
+      statespace = std::vector<T>(pwidth*pheight, T(info_.resolution,0.087266));
     else
       statespace = std::vector<T>(pwidth*pheight*72, T(info_.planResolution,0.087266));
     hasStateSpace_ = true;
@@ -49,7 +62,7 @@ namespace Common {
   //   return statespace;
   // }
 
-  //template class Map<GridState>;
+  template class Map<GridState>;
   template class Map<SE2State>;
 } // namespace Common
 } // namespace HybridAStar

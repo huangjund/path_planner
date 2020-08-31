@@ -11,6 +11,7 @@
 #include "common/statespace/GridState.h"
 #include "common/map/map.h"
 #include "common/hRRTx.h"
+//#include "common/hAStar.h"
 #include "common/hRScurve.h"
 #include "common/collision/clsDetection.h"
 
@@ -27,6 +28,7 @@ namespace Geometry {
   using Common::CollisionDetection;
   using Common::hRScurve;
   using Common::hRRTx;
+  // using Common::hAStar;
   using Common::Map;
 
   class HAstar : Planner {
@@ -36,12 +38,13 @@ namespace Geometry {
     shared_ptr<CollisionDetection> configSpace_;
     unique_ptr<hRScurve> rsPlanner_;
     unique_ptr<hRRTx> rrtxPlanner_;
+    //unique_ptr<hAStar> aStarPlanner_;
     shared_ptr<Map<SE2State>> pMap_;  // map used for planning
     // TODO: set this as a parameter
     int defaultIter = 3000;
   public:
     HAstar() = default;
-    explicit HAstar(std::shared_ptr<SE2State>,SE2State &,shared_ptr<Map<SE2State>>,CollisionDetection &);
+    explicit HAstar(std::shared_ptr<SE2State>,SE2State &,shared_ptr<Map<SE2State>>,std::shared_ptr<CollisionDetection>&);
     ~HAstar() = default;
 
     HAstar(const HAstar &) = delete;
