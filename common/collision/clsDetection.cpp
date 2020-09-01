@@ -120,6 +120,71 @@ namespace Common{
 
   template bool CollisionDetection::isTraversable<SE2State>(const SE2State*,const bool);
 
+  bool CollisionDetection::fastSearch(double* s1, double* s2) {
+    float csize = grid_->info.resolution;
+    int width = grid_->info.width;
+    int height = grid_->info.height;
+    float start[] = {s1[0]/csize, s1[1]/csize}; // relative point [unit: cell]
+    float goal[] = {s2[0]/csize, s2[1]/csize};
+
+    float dx = goal[0] - start[0];
+    float dy = goal[1] - start[1];
+    auto stepX = sign(dx);
+    auto stepY = sign(dy);
+    float tDeltaX,tDeltaY;
+    double tMaxX, tMaxY;
+    int X = static_cast<int>(start[0]);
+    int Y = static_cast<int>(start[1]);
+
+    // width and height normalized by t
+    if (dx != 0) {
+      tDeltaX = 1.f / std::abs(dx);
+    } else {
+      tDeltaX = std::numeric_limits<double>::max();
+    }
+    if (dy != 0) {
+      tDeltaY = 1.f / std::abs(dy);
+    } else {
+      tDeltaY = std::numeric_limits<double>::max();
+    }
+
+    // set maximum traversal values
+    if (stepX > 0) {
+      tMaxX = tDeltaX * (1 - (start[0] - (long)start[0]));
+    } else {
+      tMaxX = tDeltaX * (start[0] - (long)start[0]);
+    }
+
+    if (stepY > 0) {
+      tMaxY = tDeltaY * (1 - (start[1] - (long)start[1]));
+    } else {
+      tMaxY = tDeltaY * (start[1] - (long)start[1]);
+    }
+
+    while ((int)goal[0] != X || (int)goal[1] != Y) {
+      // only increment x if the t length is smaller and the result will be closer to the goal
+      if (tMaxX < tMaxY && std::abs(X + stepX - (int)goal[0]) < std::abs(X - (int)goal[0])) {
+        tMaxX = tMaxX + tDeltaX;
+        X = X + stepX;
+        // only increment y if the t length is smaller and the result will be closer to the goal
+      } else if (tMaxY < tMaxX && std::abs(Y + stepY - (int)goal[1]) < std::abs(Y - (int)goal[1])) {
+        tMaxY = tMaxY + tDeltaY;
+        Y = Y + stepY;
+      } else if (2 >= std::abs(X - (int)goal[0]) + std::abs(Y - (int)goal[1])) {
+        if (std::abs(X - (int)goal[0]) > std::abs(Y - (int)goal[1])) {
+          X = X + stepX;
+        } else {
+          Y = Y + stepY;
+        }
+      } else {
+        // this SHOULD NOT happen
+        std::cout << "\n--->tie occured, please check for error in script\n";
+        return false;
+      }
+      if(grid_->data[Y*width + X]) return false;
+    }
+    return true;
+  }
 
   bool CollisionDetection::configinCFree(float x, float y, float t) {
     int X = (int)(x/grid_->info.resolution); // [unit:collision cell]

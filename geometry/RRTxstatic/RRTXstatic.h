@@ -289,6 +289,7 @@ namespace ompl
 
         protected:
             class Motion;
+            bool treeConstructionMode_;
 
             /** \brief Defines the operator to compare motions */
             struct MotionCompare

@@ -18,8 +18,8 @@ namespace Geometry{
     }
   };
 
-  HAstar::HAstar(std::shared_ptr<SE2State> start,SE2State &goal,
-                shared_ptr<Map<SE2State>> pmap,std::shared_ptr<CollisionDetection> &configSpace): 
+  HAstar::HAstar(shared_ptr<SE2State> start,SE2State &goal,
+                shared_ptr<Map<SE2State>> pmap,shared_ptr<CollisionDetection> &configSpace): 
                 Planner(start,goal),start_(start),goal_(goal),configSpace_(configSpace), 
                 rsPlanner_(std::make_unique<hRScurve>(*start_,goal_)),
                 rrtxPlanner_(std::make_unique<hRRTx>(*start_,goal_,
@@ -165,6 +165,8 @@ namespace Geometry{
     if (reed_shepp_generator->ShortestRSP(startNode, goalNode,
                                            optimal_path) == false) {
       std::cout << "RS path generation failed!" << std::endl;
+      std::shared_ptr<SE2State> temp;
+      return temp;
     }
 
     const int samplSize = optimal_path.x.size();

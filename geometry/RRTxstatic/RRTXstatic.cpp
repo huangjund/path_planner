@@ -52,8 +52,8 @@
 #include <visualization_msgs/MarkerArray.h>
 
 // TODO: set this to parameter server
-#define DISTANCE 3
-// #define DEBUG
+#define DISTANCE 1.5
+//#define DEBUG
 
 ompl::geometric::RRTXstatic::Visualizer::Visualizer() {
     pubPath = n.advertise<visualization_msgs::Marker>("/rrtxPath",1);
@@ -64,6 +64,7 @@ ompl::geometric::RRTXstatic::RRTXstatic(const base::SpaceInformationPtr &si)
   , mc_(opt_, pdef_)
   , q_(mc_)
 {
+    treeConstructionMode_ = true;
     specs_.approximateSolutions = true;
     specs_.optimizingPaths = true;
     specs_.canReportIntermediateSolutions = true;
@@ -168,28 +169,8 @@ void ompl::geometric::RRTXstatic::clear()
 ompl::base::PlannerStatus ompl::geometric::RRTXstatic::solve(const base::PlannerTerminationCondition &ptc)
 {
     checkValidity();
-    bool goal_equ_flag = true;
-    static auto pre_goalx = pdef_->getGoal()->as<base::GoalState>()->getState()->as<base::RealVectorStateSpace::StateType>()->values[0];
-    static auto pre_goaly = pdef_->getGoal()->as<base::GoalState>()->getState()->as<base::RealVectorStateSpace::StateType>()->values[1];
     base::Goal *goal = pdef_->getGoal().get();
     auto *goal_s = dynamic_cast<base::GoalSampleableRegion *>(goal);
-
-    // if the previous goal equals current one, set falgs
-    if ( std::abs(pre_goalx-goal->as<base::GoalState>()->getState()->as<base::RealVectorStateSpace::StateType>()->values[0]) < 1e-6 &&
-        std::abs(pre_goaly-goal->as<base::GoalState>()->getState()->as<base::RealVectorStateSpace::StateType>()->values[1]) < 1e-6){
-    #ifdef DEBUG
-        OMPL_INFORM("we have got a SAME goal");
-    #endif
-        goal_equ_flag = true;
-    } else {
-    #ifdef DEBUG
-        OMPL_INFORM("we have got a DIFFERENT goal");
-    #endif
-        goal_equ_flag = false;
-    }
-    pre_goalx = goal->as<base::GoalState>()->getState()->as<base::RealVectorStateSpace::StateType>()->values[0];
-    pre_goaly = goal->as<base::GoalState>()->getState()->as<base::RealVectorStateSpace::StateType>()->values[1];
-
 
     // if there are no start in the graph
     if(nn_->size() == 0)
@@ -281,7 +262,7 @@ ompl::base::PlannerStatus ompl::geometric::RRTXstatic::solve(const base::Planner
         // sample random state (with goal biasing)
         // Goal samples are only sampled until maxSampleCount() goals are in the tree, to prohibit duplicate goal
         // states.
-        if (!goal_equ_flag || goal_s && goalMotions_.size() < goal_s->maxSampleCount() && rng_.uniform01() < goalBias_ &&
+        if (!treeConstructionMode_ || goal_s && goalMotions_.size() < goal_s->maxSampleCount() && rng_.uniform01() < goalBias_ &&
             goal_s->canSample()){
             goal_s->sampleGoal(rstate);
             if(goalMotions_.size()!= 0) goalMotions_.erase(goalMotions_.begin());
@@ -518,11 +499,10 @@ ompl::base::PlannerStatus ompl::geometric::RRTXstatic::solve(const base::Planner
                         solution = goalMotion;
                         updatedSolution = true;
                     }
-                    else if (!goal_equ_flag) 
+                    else if (!treeConstructionMode_) 
                     {
                         solution = goalMotion;
                         updatedSolution = true;
-                        goal_equ_flag = true;
                     }
                 }
 
@@ -607,9 +587,8 @@ ompl::base::PlannerStatus ompl::geometric::RRTXstatic::solve(const base::Planner
 
     // FOR VISUALIZATION
     {   // only print the tree that constructed the first time
-        static bool once = true;
-        if(goal_equ_flag && once){
-            once = false;
+        if(treeConstructionMode_){
+            treeConstructionMode_ = false;
             std::vector<Motion*> data;
             visualization_msgs::Marker marker;
             geometry_msgs::Point p_start,p_end;

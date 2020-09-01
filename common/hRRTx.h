@@ -10,6 +10,7 @@
 #include <ompl/base/spaces/SE2StateSpace.h>
 #include <ompl/base/spaces/RealVectorStateSpace.h>
 #include <ompl/base/PlannerTerminationCondition.h>
+#include <ompl/base/MotionValidator.h>
 
 #include <memory>
 #include <iostream>
@@ -40,6 +41,16 @@ namespace Common {
         bool checker_(const ob::State*) const;
     };
 
+    class rrtMotionChecker : public ob::MotionValidator {
+      private:
+        std::shared_ptr<CollisionDetection> config_;
+      public:
+        rrtMotionChecker(const ob::SpaceInformationPtr& si, std::shared_ptr<CollisionDetection>& config) :
+          ob::MotionValidator(si), config_(config) {}
+        virtual bool checkMotion(const ob::State*, const ob::State*) const;
+        virtual bool checkMotion(const ob::State *s1, const ob::State *s2, std::pair<ob::State *, double> &lastValid) const;
+    };
+    
     std::shared_ptr<ob::RealVectorStateSpace> r2Space_;
     std::shared_ptr<ob::SpaceInformation> spaceInfo_;
     std::shared_ptr<ob::ProblemDefinition> problemDef_;

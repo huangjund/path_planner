@@ -42,7 +42,7 @@ namespace HybridAStar{
     nav_msgs::OccupancyGrid::Ptr grid_;
     std::shared_ptr<Map<SE2State>> planningMap;
     std::shared_ptr<CollisionDetection> configSpace;
-    std::shared_ptr<HAstar> planner_;
+    std::unique_ptr<HAstar> planner_;
     Visualize visualizer_;
     Path path_;
     Path smoothedPath_ = Path(true);/// The path smoothed and ready for the controller
@@ -63,6 +63,6 @@ namespace HybridAStar{
     bool outputAutomata(Action);
     bool setAllOutput();
     void setStartOutput();
-    void simulate(std::shared_ptr<Map<SE2State>>, std::shared_ptr<HAstar>);
+    void simulate(std::shared_ptr<Map<SE2State>>);
   };
 }

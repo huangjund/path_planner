@@ -69,6 +69,8 @@ namespace Common {
     template <class T>
     bool isTraversable(const T*, const bool) ;  // when it is rrtx
 
+    bool fastSearch(double*, double*); // search if it is traversable for a line
+
     bool configinCFree(float x, float y, float t) ;
     
     void makeClsLookup();

@@ -117,7 +117,7 @@ Visualization Manager:
       Name: MarkerArray
       Namespaces:
         "": true
-      Queue Size: 100
+      Queue Size: 1000
       Value: true
     - Alpha: 1
       Buffer Length: 1
@@ -148,7 +148,7 @@ Visualization Manager:
       Marker Topic: /rrtxPath
       Name: Marker
       Namespaces:
-        {}
+        tree: true
       Queue Size: 100
       Value: true
     - Class: rviz/MarkerArray
@@ -210,7 +210,7 @@ Visualization Manager:
   Value: true
   Views:
     Current:
-      Angle: 12.565001487731934
+      Angle: 21.97998809814453
       Class: rviz/TopDownOrtho
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
@@ -220,10 +220,10 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Scale: 17.990535736083984
+      Scale: -29.187667846679688
       Target Frame: <Fixed Frame>
-      X: 37.488285064697266
-      Y: 15.116870880126953
+      X: 33.96834182739258
+      Y: 13.778387069702148
     Saved: ~
 Window Geometry:
   Displays:

@@ -33,7 +33,7 @@ namespace Geometry {
 
   class HAstar : Planner {
   private:
-    std::shared_ptr<SE2State> start_;
+    shared_ptr<SE2State> start_;
     SE2State goal_;
     shared_ptr<CollisionDetection> configSpace_;
     unique_ptr<hRScurve> rsPlanner_;
@@ -44,17 +44,17 @@ namespace Geometry {
     int defaultIter = 3000;
   public:
     HAstar() = default;
-    explicit HAstar(std::shared_ptr<SE2State>,SE2State &,shared_ptr<Map<SE2State>>,std::shared_ptr<CollisionDetection>&);
+    explicit HAstar(shared_ptr<SE2State>,SE2State &,shared_ptr<Map<SE2State>>,shared_ptr<CollisionDetection>&);
     ~HAstar() = default;
 
     HAstar(const HAstar &) = delete;
     HAstar &operator=(const HAstar &) = delete;
 
     // TODO: return some prompts
-    std::shared_ptr<SE2State> solve();
+    shared_ptr<SE2State> solve();
     void updateHeuristic(SE2State &,SE2State &);
-    std::shared_ptr<SE2State> dubinsShot(std::shared_ptr<SE2State>, const SE2State&);
-    std::shared_ptr<SE2State> ReedsShepp(std::shared_ptr<SE2State>, const SE2State&);
+    shared_ptr<SE2State> dubinsShot(shared_ptr<SE2State>, const SE2State&);
+    shared_ptr<SE2State> ReedsShepp(shared_ptr<SE2State>, const SE2State&);
     
     SE2State &getStart();
     SE2State &getGoal();

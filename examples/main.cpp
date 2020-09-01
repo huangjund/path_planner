@@ -9,7 +9,7 @@ namespace HybridAStar{
   Interface::Interface():automata_(initial),
     planningMap(std::make_shared<Map<SE2State>>()),
     configSpace(std::make_shared<CollisionDetection>()),
-    planner_(std::make_shared<HAstar>())
+    planner_(std::make_unique<HAstar>())
   {
     isStartvalid_ = false;
     isGoalvalid_ = false;
@@ -74,7 +74,7 @@ namespace HybridAStar{
       if (hasMap_ && isStartvalid_ && isGoalvalid_){
         automata_ = plan;
         setAllOutput();
-        simulate(planningMap,planner_);
+        simulate(planningMap);
         automata_ = planned;
       }
       break;
@@ -94,7 +94,7 @@ namespace HybridAStar{
       break;
     case replan:
       setStartOutput();
-      simulate(planningMap,planner_);
+      simulate(planningMap);
       automata_ = planned;
       break;
     default:
@@ -122,24 +122,22 @@ namespace HybridAStar{
     start->setT(Utils::normalizeHeadingRad(tf::getYaw(start_.pose.pose.orientation)));
     goal.setT(Utils::normalizeHeadingRad(tf::getYaw(goal_.pose.orientation)));
     // TODO: extract this planner into a specified class
-    auto a = planner_.use_count();
-    planner_ = std::make_shared<HAstar>(start,goal,planningMap,configSpace);
+    planner_.reset(std::make_unique<HAstar>(start,goal,planningMap,configSpace).release());
 
     return true;
   }
 
-  void Interface::simulate(std::shared_ptr<Map<SE2State>> pmap,
-                          std::shared_ptr<HAstar> planner) {
+  void Interface::simulate(std::shared_ptr<Map<SE2State>> pmap) {
     // retrieve start point and goal point
-    auto nStart = planner->getStart();
-    auto nGoal = planner->getGoal();
+    auto nStart = planner_->getStart();
+    auto nGoal = planner_->getGoal();
     
     visualizer_.clear();
     path_.clear();
     smoothedPath_.clear();
 
     auto t0 = ros::Time::now();
-    auto nSolution = planner->solve(); auto t1 = ros::Time::now();
+    auto nSolution = planner_->solve(); auto t1 = ros::Time::now();
     smoother_.tracePath(nSolution);
     path_.updatePath(smoother_.getPath());
     smoother_.smoothPath(voronoiDiagram_); auto t4 = ros::Time::now();

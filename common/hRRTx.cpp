@@ -4,7 +4,8 @@
 
 namespace HybridAStar  {
 namespace Common {
-  hRRTx::hRRTx(SE2State &start, SE2State &goal,const double &mapwidth,const double &mapheight,std::shared_ptr<CollisionDetection>& config): 
+  hRRTx::hRRTx(SE2State &start, SE2State &goal,const double &mapwidth,
+              const double &mapheight,std::shared_ptr<CollisionDetection>& config): 
   start_(start), goal_(goal),
   r2Space_(std::make_shared<ob::RealVectorStateSpace>(2)),
   spaceInfo_(std::make_shared<ob::SpaceInformation>(r2Space_)),
@@ -18,6 +19,7 @@ namespace Common {
     bounds.setHigh(1,mapheight);
     r2Space_->setBounds(bounds);
 
+    spaceInfo_->setMotionValidator(std::make_shared<rrtMotionChecker>(spaceInfo_, config));
     spaceInfo_->setStateValidityChecker(std::make_shared<rrtValidityChecker>(spaceInfo_,config));
 
     ob::ScopedState<ob::RealVectorStateSpace> inception(r2Space_);
@@ -70,6 +72,17 @@ namespace Common {
     return config_->isTraversable<SE2State>(node.get(), true);;
   }
 
+  bool hRRTx::rrtMotionChecker::checkMotion(const ob::State* s1, const ob::State* s2) const {
+    auto r2state1 = s1->as<ob::RealVectorStateSpace::StateType>()->values;
+    auto r2state2 = s2->as<ob::RealVectorStateSpace::StateType>()->values;
+
+    return config_->fastSearch(r2state1,r2state2);
+  }
+
+  bool hRRTx::rrtMotionChecker::checkMotion(const ob::State *s1, const ob::State *s2, std::pair<ob::State *, double>&) const {
+    return this->checkMotion(s1, s2);
+  }
+
   double hRRTx::getDistance() {
     problemDef_->clearSolutionPaths();
     ob::ScopedState<ob::RealVectorStateSpace> goal(r2Space_);
@@ -87,7 +100,7 @@ namespace Common {
     if(problemDef_->hasSolution())
       return problemDef_->getSolutionPath()->length();
     else
-      std::cerr << "in problem definition, there is no solution path " << std::endl;
+      std::cerr << "there is no solution path: "<< isTreeconstructed() << std::endl;
 
 
   }
