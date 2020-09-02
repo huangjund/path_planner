@@ -1,0 +1,77 @@
+
+\begin{DoxyItemize}
+\item \href{\#characteristics}{\texttt{ Characteristics}}
+\item \href{\#videos}{\texttt{ Videos}}
+\item \href{\#images}{\texttt{ Images}}
+\item \href{\#dependencies}{\texttt{ Dependencies}}
+\item \href{\#setup}{\texttt{ Setup}}
+\item \href{\#visualization}{\texttt{ Visualization}}
+\item \href{\#citation}{\texttt{ Citation}}
+\end{DoxyItemize}
+
+The code in this repository is the result of my master\textquotesingle{}s thesis which I have written at the Integrated Research Lab (I\+T\+RL) at K\+TH Royal Institute of Technology (2016). The code is documented \href{http://karlkurzer.github.io/path_planner}{\texttt{ here}} and the associated thesis can be found \href{http://urn.kb.se/resolve?urn=urn:nbn:se:kth:diva-198534}{\texttt{ here}}.
+
+The goal of the thesis and hence this code is to create a real-\/time path planning algorithm for the nonholonomic Research Concept Vehicle (R\+CV). The algorithm uses a binary obstacle map as an input, generated using L\+I\+D\+AR mounted on top of the vehicle. The algorithm is being developed using C++ due to real-\/time requirements in combination with R\+OS to ensure modularity and portability as well as using R\+Viz as a visualization/simulation environment.\hypertarget{md_README_autotoc_md1}{}\doxyparagraph{$<$a name=\char`\"{}characteristics\char`\"{}$>$$<$/a$>$\+Key Characteristics}\label{md_README_autotoc_md1}
+
+\begin{DoxyItemize}
+\item Sampling in continuous space with 72 different headings per cell (5° discretization)
+\item Constrained Heuristic -\/ {\itshape nonholonomic without obstacles}
+\item Unconstrained Heuristic -\/ {\itshape holonomic with obstacles}
+\item Dubin\textquotesingle{}s Shot
+\item C++ real-\/time implementation ($\sim$10 Hz)
+\end{DoxyItemize}
+
+Large parts of the implementation are closely related to the hybrid A$\ast$ algorithm developed by Dmitri Dolgov and Sebastian Thrun ({\itshape Path Planning for Autonomous Vehicles in Unknown Semi-\/structured Environments} D\+OI\+: 10.\+1177/0278364909359210)\hypertarget{md_README_autotoc_md2}{}\doxyparagraph{$<$a name=\char`\"{}videos\char`\"{}$>$$<$/a$>$\+Videos}\label{md_README_autotoc_md2}
+
+\begin{DoxyItemize}
+\item \href{https://www.youtube.com/watch?v=1WZEQtg8ZZ4}{\texttt{ Path Planning with Search Visualization}}
+\item \href{https://www.youtube.com/watch?v=VNo9fU6XEGE}{\texttt{ Dubin\textquotesingle{}s Path -\/ Constrained Heuristic}}
+\item \href{https://www.youtube.com/watch?v=Ip2iUrVoFXc}{\texttt{ 2D A$\ast$ Search -\/ Unconstrained Heuristic}}
+\item \href{https://www.youtube.com/watch?v=GwIU00jukO4}{\texttt{ Open Loop Path Planning using Sensor Fusion}}
+\end{DoxyItemize}\hypertarget{md_README_autotoc_md3}{}\doxyparagraph{$<$a name=\char`\"{}images\char`\"{}$>$$<$/a$>$\+Images}\label{md_README_autotoc_md3}
+  \hypertarget{md_README_autotoc_md4}{}\doxysubsubsection{$<$a name=\char`\"{}dependencies\char`\"{}$>$$<$/a$>$\+Dependencies}\label{md_README_autotoc_md4}
+
+\begin{DoxyItemize}
+\item \href{http://ompl.kavrakilab.org/}{\texttt{ Open Motion Planning Library (O\+M\+PL)}}
+\item \href{http://wiki.ros.org/map_server}{\texttt{ ros\+\_\+map\+\_\+server}}
+\end{DoxyItemize}\hypertarget{md_README_autotoc_md5}{}\doxysubsubsection{$<$a name=\char`\"{}setup\char`\"{}$>$$<$/a$>$\+Setup}\label{md_README_autotoc_md5}
+Run the following command to clone, build, and launch the package (requires a sources R\+OS environment)\+:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{sudo apt install libompl-\/dev \(\backslash\)}
+\DoxyCodeLine{\&\& mkdir -\/p \string~/catkin\_ws/src \(\backslash\)}
+\DoxyCodeLine{\&\& cd \string~/catkin\_ws/src \(\backslash\)}
+\DoxyCodeLine{\&\& git clone https://github.com/karlkurzer/path\_planner.git  \(\backslash\)}
+\DoxyCodeLine{\&\& cd .. \(\backslash\)}
+\DoxyCodeLine{\&\& catkin\_make \(\backslash\)}
+\DoxyCodeLine{\&\& source devel/setup.bash \(\backslash\)}
+\DoxyCodeLine{\&\& rospack profile \(\backslash\)}
+\DoxyCodeLine{\&\& roslaunch hybrid\_astar manual.launch}
+\end{DoxyCode}
+\hypertarget{md_README_autotoc_md6}{}\doxysubsubsection{$<$a name=\char`\"{}visualization\char`\"{}$>$$<$/a$>$\+Visualization (\+Rviz)}\label{md_README_autotoc_md6}
+
+\begin{DoxyEnumerate}
+\item Add -\/$>$ By Topic -\/$>$ {\ttfamily /map}, {\ttfamily /path}, {\ttfamily /path\+Vehicle}, ({\ttfamily /visualize\+Node2\+D\+Poses})
+\item Click 2D Pose Estimate to set a start point on the map ({\ttfamily p})
+\item Click 2D Nav Goal to set a goal point on the map ({\ttfamily g})
+\item Wait for the path being searched! (this process can be visualized \mbox{[}optional\mbox{]})
+\end{DoxyEnumerate}\hypertarget{md_README_autotoc_md7}{}\doxysubsubsection{$<$a name=\char`\"{}citation\char`\"{}$>$$<$/a$>$\+Citation}\label{md_README_autotoc_md7}
+I would appreciate if you cite my work, in case you are using it for your work. Thank you \+:-\/)
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{@mastersthesis\{Kurzer1057261,}
+\DoxyCodeLine{   author = \{Kurzer, Karl\},}
+\DoxyCodeLine{   institution = \{KTH, Integrated Transport Research Lab, ITRL\},}
+\DoxyCodeLine{   pages = \{63\},}
+\DoxyCodeLine{   school = \{KTH, Integrated Transport Research Lab, ITRL\},}
+\DoxyCodeLine{   title = \{Path Planning in Unstructured Environments : A Real-\/time Hybrid A* Implementation for Fast and Deterministic Path Generation for the KTH Research Concept Vehicle\},}
+\DoxyCodeLine{   series = \{TRITA-\/AVE\},}
+\DoxyCodeLine{   ISSN = \{1651-\/7660\},}
+\DoxyCodeLine{   number = \{2016:41\},}
+\DoxyCodeLine{   abstract = \{On the way to fully autonomously driving vehicles a multitude of challenges have to be overcome. One common problem is the navigation of the vehicle from a start pose to a goal pose in an environment that does not provide any specic structure (no preferred ways of movement). Typical examples of such environments are parking lots or construction sites; in these scenarios the vehicle needs to navigate safely around obstacles ideally using the optimal (with regard to a specied parameter) path between the start and the goal pose. The work conducted throughout this master's thesis focuses on the development of a suitable path planning algorithm for the Research Concept Vehicle (RCV) of the Integrated Transport Research Lab (ITRL) at KTH Royal Institute of Technology, in Stockholm, Sweden. The development of the path planner requires more than just the pure algorithm, as the code needs to be tested and respective results evaluated. In addition, the resulting algorithm needs to be wrapped in a way that it can be deployed easily and interfaced with di erent other systems on the research vehicle. Thus the thesis also tries to gives insights into ways of achieving realtime capabilities necessary for experimental testing as well as on how to setup a visualization environment for simulation and debugging. \},}
+\DoxyCodeLine{   year = \{2016\}}
+\DoxyCodeLine{\}}
+\end{DoxyCode}
+ 

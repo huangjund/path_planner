@@ -23,6 +23,10 @@ namespace HybridAStar{
   using HybridAStar::Common::Map;
   using HybridAStar::Geometry::HAstar;
   using HybridAStar::Multibody::SingleForkLiftPlant;
+  /**
+   * @brief the interface class is a whole block that connect each planning components
+   *        with each other
+   */
   class Interface
   {
   private:
@@ -56,10 +60,46 @@ namespace HybridAStar{
     Interface(const Interface &) = delete;
     Interface &operator=(const Interface&) = delete;
 
-    void makeStart(const geometry_msgs::PoseWithCovarianceStamped::ConstPtr& );
-    void makeGoal(const geometry_msgs::PoseStamped::ConstPtr& );
+    /**
+     * @brief Set the goal point for planning. triggered by a subscriber. When there is a new start being published by rviz topic, 
+     *        the subscriber will fetch that start message and trigger this method
+     * 
+     * @param  start            the start message published by rviz topic
+     */
+    void makeStart(const geometry_msgs::PoseWithCovarianceStamped::ConstPtr& start);
+
+    /**
+     * @brief Set the start point for planning. Triggered by a subscriber. When there is a 
+     *        new goal being published by rviz topic, 
+     *        the subscriber will fetch that goal message and trigger this method
+     * 
+     * @param  goal             the goal message published by rviz topic
+     */
+    void makeGoal(const geometry_msgs::PoseStamped::ConstPtr& goal);
+
+    /**
+     * @brief Set the Map object. Raw grid/pixel map for the whole planning. Triggered by a subscriber.
+     *        When there is a new map published by rviz topic, the subscriber will fetch it and trigger
+     *        this method
+     * 
+     * @param  map              the map published by map server
+     */
     void setMap(const nav_msgs::OccupancyGrid::Ptr map);
+
+    /**
+     * @brief clear \p isStartvalid_ and \p isGoalvalid_ two flags. With any one of these two flags turned to
+     *        be \b false , planning cannot proceed
+     * 
+     */
     void clearStartandGoal();
+
+    /**
+     * @brief 
+     * 
+     * @param \p Action       Actions input to the automata
+     * @return true 
+     * @return false 
+     */
     bool outputAutomata(Action);
     bool setAllOutput();
     void setStartOutput();

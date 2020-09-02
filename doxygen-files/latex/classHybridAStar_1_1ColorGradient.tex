@@ -1,0 +1,92 @@
+\hypertarget{classHybridAStar_1_1ColorGradient}{}\doxysection{Hybrid\+A\+Star\+::Color\+Gradient Class Reference}
+\label{classHybridAStar_1_1ColorGradient}\index{HybridAStar::ColorGradient@{HybridAStar::ColorGradient}}
+
+
+A color gradient class for visualizing the cost of nodes.  
+
+
+
+
+{\ttfamily \#include $<$gradient.\+h$>$}
+
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structHybridAStar_1_1ColorGradient_1_1ColorPoint}{Color\+Point}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classHybridAStar_1_1ColorGradient_a3cca7dabd4ed57b26d3c38422a4c600c}{Color\+Gradient}} ()
+\item 
+void \mbox{\hyperlink{classHybridAStar_1_1ColorGradient_a051c8018999461980b99b114c510b18c}{add\+Color\+Point}} (float red, float green, float blue, float value)
+\item 
+void \mbox{\hyperlink{classHybridAStar_1_1ColorGradient_a09bef92d54ad4f35dbe4ddbab06d7ce9}{clear\+Gradient}} ()
+\item 
+void \mbox{\hyperlink{classHybridAStar_1_1ColorGradient_a2aa0fe7239a5120f7bc07e1e86651f2c}{create\+Default\+Heat\+Map\+Gradient}} ()
+\item 
+void \mbox{\hyperlink{classHybridAStar_1_1ColorGradient_ab98132555e2fb5359db18b6745c50fec}{get\+Color\+At\+Value}} (const float value, float \&red, float \&green, float \&blue)
+\end{DoxyCompactItemize}
+\doxysubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+vector$<$ \mbox{\hyperlink{structHybridAStar_1_1ColorGradient_1_1ColorPoint}{Color\+Point}} $>$ \mbox{\hyperlink{classHybridAStar_1_1ColorGradient_a104794a3c0fa2095a24e6033eff2934a}{color}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+A color gradient class for visualizing the cost of nodes. 
+
+It has been copied from \href{http://www.andrewnoske.com/wiki/Code_-_heatmaps_and_color_gradients}{\texttt{ http\+://www.\+andrewnoske.\+com/wiki/\+Code\+\_\+-\/\+\_\+heatmaps\+\_\+and\+\_\+color\+\_\+gradients}} under the W\+T\+F\+PL. Please refer to the author in case of questions. \begin{DoxyAuthor}{Author}
+Andrew Noske 
+\end{DoxyAuthor}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classHybridAStar_1_1ColorGradient_a3cca7dabd4ed57b26d3c38422a4c600c}\label{classHybridAStar_1_1ColorGradient_a3cca7dabd4ed57b26d3c38422a4c600c}} 
+\index{HybridAStar::ColorGradient@{HybridAStar::ColorGradient}!ColorGradient@{ColorGradient}}
+\index{ColorGradient@{ColorGradient}!HybridAStar::ColorGradient@{HybridAStar::ColorGradient}}
+\doxysubsubsection{\texorpdfstring{ColorGradient()}{ColorGradient()}}
+{\footnotesize\ttfamily Hybrid\+A\+Star\+::\+Color\+Gradient\+::\+Color\+Gradient (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classHybridAStar_1_1ColorGradient_a051c8018999461980b99b114c510b18c}\label{classHybridAStar_1_1ColorGradient_a051c8018999461980b99b114c510b18c}} 
+\index{HybridAStar::ColorGradient@{HybridAStar::ColorGradient}!addColorPoint@{addColorPoint}}
+\index{addColorPoint@{addColorPoint}!HybridAStar::ColorGradient@{HybridAStar::ColorGradient}}
+\doxysubsubsection{\texorpdfstring{addColorPoint()}{addColorPoint()}}
+{\footnotesize\ttfamily void Hybrid\+A\+Star\+::\+Color\+Gradient\+::add\+Color\+Point (\begin{DoxyParamCaption}\item[{float}]{red,  }\item[{float}]{green,  }\item[{float}]{blue,  }\item[{float}]{value }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classHybridAStar_1_1ColorGradient_a09bef92d54ad4f35dbe4ddbab06d7ce9}\label{classHybridAStar_1_1ColorGradient_a09bef92d54ad4f35dbe4ddbab06d7ce9}} 
+\index{HybridAStar::ColorGradient@{HybridAStar::ColorGradient}!clearGradient@{clearGradient}}
+\index{clearGradient@{clearGradient}!HybridAStar::ColorGradient@{HybridAStar::ColorGradient}}
+\doxysubsubsection{\texorpdfstring{clearGradient()}{clearGradient()}}
+{\footnotesize\ttfamily void Hybrid\+A\+Star\+::\+Color\+Gradient\+::clear\+Gradient (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classHybridAStar_1_1ColorGradient_a2aa0fe7239a5120f7bc07e1e86651f2c}\label{classHybridAStar_1_1ColorGradient_a2aa0fe7239a5120f7bc07e1e86651f2c}} 
+\index{HybridAStar::ColorGradient@{HybridAStar::ColorGradient}!createDefaultHeatMapGradient@{createDefaultHeatMapGradient}}
+\index{createDefaultHeatMapGradient@{createDefaultHeatMapGradient}!HybridAStar::ColorGradient@{HybridAStar::ColorGradient}}
+\doxysubsubsection{\texorpdfstring{createDefaultHeatMapGradient()}{createDefaultHeatMapGradient()}}
+{\footnotesize\ttfamily void Hybrid\+A\+Star\+::\+Color\+Gradient\+::create\+Default\+Heat\+Map\+Gradient (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classHybridAStar_1_1ColorGradient_ab98132555e2fb5359db18b6745c50fec}\label{classHybridAStar_1_1ColorGradient_ab98132555e2fb5359db18b6745c50fec}} 
+\index{HybridAStar::ColorGradient@{HybridAStar::ColorGradient}!getColorAtValue@{getColorAtValue}}
+\index{getColorAtValue@{getColorAtValue}!HybridAStar::ColorGradient@{HybridAStar::ColorGradient}}
+\doxysubsubsection{\texorpdfstring{getColorAtValue()}{getColorAtValue()}}
+{\footnotesize\ttfamily void Hybrid\+A\+Star\+::\+Color\+Gradient\+::get\+Color\+At\+Value (\begin{DoxyParamCaption}\item[{const float}]{value,  }\item[{float \&}]{red,  }\item[{float \&}]{green,  }\item[{float \&}]{blue }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{classHybridAStar_1_1ColorGradient_a104794a3c0fa2095a24e6033eff2934a}\label{classHybridAStar_1_1ColorGradient_a104794a3c0fa2095a24e6033eff2934a}} 
+\index{HybridAStar::ColorGradient@{HybridAStar::ColorGradient}!color@{color}}
+\index{color@{color}!HybridAStar::ColorGradient@{HybridAStar::ColorGradient}}
+\doxysubsubsection{\texorpdfstring{color}{color}}
+{\footnotesize\ttfamily vector$<$\mbox{\hyperlink{structHybridAStar_1_1ColorGradient_1_1ColorPoint}{Color\+Point}}$>$ Hybrid\+A\+Star\+::\+Color\+Gradient\+::color\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+math/\mbox{\hyperlink{gradient_8h}{gradient.\+h}}\end{DoxyCompactItemize}

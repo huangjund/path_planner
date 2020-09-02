@@ -1,0 +1,288 @@
+\hypertarget{classHybridAStar_1_1Smoother}{}\doxysection{Hybrid\+A\+Star\+::Smoother Class Reference}
+\label{classHybridAStar_1_1Smoother}\index{HybridAStar::Smoother@{HybridAStar::Smoother}}
+
+
+This class takes a path object and smoothes the nodes of the path.  
+
+
+
+
+{\ttfamily \#include $<$smoother.\+h$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classHybridAStar_1_1Smoother_acb3e753ce8a599aa1b75d9990148d319}{Smoother}} ()
+\item 
+void \mbox{\hyperlink{classHybridAStar_1_1Smoother_ad859d1e05295caf5cc9f3768e4c2a33f}{smooth\+Path}} (\mbox{\hyperlink{classHybridAStar_1_1DynamicVoronoi}{Dynamic\+Voronoi}} \&\mbox{\hyperlink{classHybridAStar_1_1Smoother_a0955242f5939a16b69e476d9f54ef86e}{voronoi}})
+\begin{DoxyCompactList}\small\item\em This function takes a path consisting of nodes and attempts to iteratively smooth the same using gradient descent. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classHybridAStar_1_1Smoother_a8f37822211c9159e484221a53e0fe381}{trace\+Path}} (const std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classHybridAStar_1_1Common_1_1SE2State}{Common\+::\+S\+E2\+State}} $>$ node, int i=0, std\+::vector$<$ \mbox{\hyperlink{classHybridAStar_1_1Common_1_1SE2State}{Common\+::\+S\+E2\+State}} $>$ \mbox{\hyperlink{classHybridAStar_1_1Smoother_ad7000799cc755b946a5c4f83183eda53}{path}}=std\+::vector$<$ \mbox{\hyperlink{classHybridAStar_1_1Common_1_1SE2State}{Common\+::\+S\+E2\+State}} $>$())
+\begin{DoxyCompactList}\small\item\em Given a node pointer the path to the root node will be traced recursively. \end{DoxyCompactList}\item 
+std\+::vector$<$ \mbox{\hyperlink{classHybridAStar_1_1Common_1_1SE2State}{Common\+::\+S\+E2\+State}} $>$ \mbox{\hyperlink{classHybridAStar_1_1Smoother_a7da77e1abb151eaf7b8368da5251ef89}{get\+Path}} ()
+\begin{DoxyCompactList}\small\item\em returns the path of the smoother object \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classHybridAStar_1_1Vector2D}{Vector2D}} \mbox{\hyperlink{classHybridAStar_1_1Smoother_af1efa7946694cc04a28f49479e45635a}{obstacle\+Term}} (\mbox{\hyperlink{classHybridAStar_1_1Vector2D}{Vector2D}} xi)
+\begin{DoxyCompactList}\small\item\em obstacle\+Cost -\/ pushes the path away from obstacles \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classHybridAStar_1_1Vector2D}{Vector2D}} \mbox{\hyperlink{classHybridAStar_1_1Smoother_ac3d386dc51841355080042f958c8ece7}{curvature\+Term}} (\mbox{\hyperlink{classHybridAStar_1_1Vector2D}{Vector2D}} xi0, \mbox{\hyperlink{classHybridAStar_1_1Vector2D}{Vector2D}} xi1, \mbox{\hyperlink{classHybridAStar_1_1Vector2D}{Vector2D}} xi2)
+\begin{DoxyCompactList}\small\item\em curvature\+Cost -\/ forces a maximum curvature of 1/R along the path ensuring drivability \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classHybridAStar_1_1Vector2D}{Vector2D}} \mbox{\hyperlink{classHybridAStar_1_1Smoother_a1c064e16d606534fac46b5636f3ebee0}{smoothness\+Term}} (\mbox{\hyperlink{classHybridAStar_1_1Vector2D}{Vector2D}} xim2, \mbox{\hyperlink{classHybridAStar_1_1Vector2D}{Vector2D}} xim1, \mbox{\hyperlink{classHybridAStar_1_1Vector2D}{Vector2D}} xi, \mbox{\hyperlink{classHybridAStar_1_1Vector2D}{Vector2D}} xip1, \mbox{\hyperlink{classHybridAStar_1_1Vector2D}{Vector2D}} xip2)
+\begin{DoxyCompactList}\small\item\em smoothness\+Cost -\/ attempts to spread nodes equidistantly and with the same orientation \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classHybridAStar_1_1Smoother_a9d05cdce88da7d6ea2ea50b8e6a80654}{is\+On\+Grid}} (\mbox{\hyperlink{classHybridAStar_1_1Vector2D}{Vector2D}} vec)
+\begin{DoxyCompactList}\small\item\em voronoi\+Cost -\/ trade off between path length and closeness to obstaclesg \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+std\+::unique\+\_\+ptr$<$ \mbox{\hyperlink{classHybridAStar_1_1Multibody_1_1SingleForkLiftPlant}{Multibody\+::\+Single\+Fork\+Lift\+Plant}} $>$ \mbox{\hyperlink{classHybridAStar_1_1Smoother_a07b7c0d826500d4d81b4a2090fb26614}{car\+Plant\+\_\+}}
+\item 
+float \mbox{\hyperlink{classHybridAStar_1_1Smoother_aedad086b1fec41dade8793ca02552d31}{kappa\+Max}} = 1.f / \mbox{\hyperlink{classHybridAStar_1_1Smoother_a07b7c0d826500d4d81b4a2090fb26614}{car\+Plant\+\_\+}}-\/$>$rad\+\_\+
+\begin{DoxyCompactList}\small\item\em maximum possible curvature of the non-\/holonomic vehicle \end{DoxyCompactList}\item 
+float \mbox{\hyperlink{classHybridAStar_1_1Smoother_ab43d288f2ac9391b399e0f4fc2a9cb57}{obs\+D\+Max}} = 1
+\begin{DoxyCompactList}\small\item\em maximum distance to obstacles that is penalized \end{DoxyCompactList}\item 
+float \mbox{\hyperlink{classHybridAStar_1_1Smoother_a6d652167fcea0a8152efd7963690c7a7}{vor\+Obs\+D\+Max}} = 1
+\begin{DoxyCompactList}\small\item\em maximum distance for obstacles to influence the voronoi field \end{DoxyCompactList}\item 
+float \mbox{\hyperlink{classHybridAStar_1_1Smoother_a4b090e5da2a6b9fdc2aeac9fc62423f6}{alpha}} = 0.\+1
+\begin{DoxyCompactList}\small\item\em falloff rate for the voronoi field \end{DoxyCompactList}\item 
+float \mbox{\hyperlink{classHybridAStar_1_1Smoother_a5c98e2aa003567300d55f40e423fa34a}{w\+Obstacle}} = 0.\+2
+\begin{DoxyCompactList}\small\item\em weight for the obstacle term \end{DoxyCompactList}\item 
+float \mbox{\hyperlink{classHybridAStar_1_1Smoother_a80d873fdacb1b882f115a56c54f0cde3}{w\+Voronoi}} = 0
+\begin{DoxyCompactList}\small\item\em weight for the voronoi term \end{DoxyCompactList}\item 
+float \mbox{\hyperlink{classHybridAStar_1_1Smoother_a46eb5127c0236cc4d574d830856ad073}{w\+Curvature}} = 0
+\begin{DoxyCompactList}\small\item\em weight for the curvature term \end{DoxyCompactList}\item 
+float \mbox{\hyperlink{classHybridAStar_1_1Smoother_a878ab4beae55fd8b028a2cc2e9b758e0}{w\+Smoothness}} = 0.\+2
+\begin{DoxyCompactList}\small\item\em weight for the smoothness term \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classHybridAStar_1_1DynamicVoronoi}{Dynamic\+Voronoi}} \mbox{\hyperlink{classHybridAStar_1_1Smoother_a0955242f5939a16b69e476d9f54ef86e}{voronoi}}
+\begin{DoxyCompactList}\small\item\em voronoi diagram describing the topology of the map \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{classHybridAStar_1_1Smoother_a168df43c9140de4fea83856160096ee8}{width}}
+\begin{DoxyCompactList}\small\item\em width of the map \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{classHybridAStar_1_1Smoother_afa72350b9ededc7124794fb44e387258}{height}}
+\begin{DoxyCompactList}\small\item\em height of the map \end{DoxyCompactList}\item 
+std\+::vector$<$ \mbox{\hyperlink{classHybridAStar_1_1Common_1_1SE2State}{Common\+::\+S\+E2\+State}} $>$ \mbox{\hyperlink{classHybridAStar_1_1Smoother_ad7000799cc755b946a5c4f83183eda53}{path}}
+\begin{DoxyCompactList}\small\item\em path to be smoothed \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+This class takes a path object and smoothes the nodes of the path. 
+
+It also uses the Voronoi diagram as well as the configuration space. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classHybridAStar_1_1Smoother_acb3e753ce8a599aa1b75d9990148d319}\label{classHybridAStar_1_1Smoother_acb3e753ce8a599aa1b75d9990148d319}} 
+\index{HybridAStar::Smoother@{HybridAStar::Smoother}!Smoother@{Smoother}}
+\index{Smoother@{Smoother}!HybridAStar::Smoother@{HybridAStar::Smoother}}
+\doxysubsubsection{\texorpdfstring{Smoother()}{Smoother()}}
+{\footnotesize\ttfamily Smoother\+::\+Smoother (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classHybridAStar_1_1Smoother_ac3d386dc51841355080042f958c8ece7}\label{classHybridAStar_1_1Smoother_ac3d386dc51841355080042f958c8ece7}} 
+\index{HybridAStar::Smoother@{HybridAStar::Smoother}!curvatureTerm@{curvatureTerm}}
+\index{curvatureTerm@{curvatureTerm}!HybridAStar::Smoother@{HybridAStar::Smoother}}
+\doxysubsubsection{\texorpdfstring{curvatureTerm()}{curvatureTerm()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classHybridAStar_1_1Vector2D}{Vector2D}} Smoother\+::curvature\+Term (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classHybridAStar_1_1Vector2D}{Vector2D}}}]{xi0,  }\item[{\mbox{\hyperlink{classHybridAStar_1_1Vector2D}{Vector2D}}}]{xi1,  }\item[{\mbox{\hyperlink{classHybridAStar_1_1Vector2D}{Vector2D}}}]{xi2 }\end{DoxyParamCaption})}
+
+
+
+curvature\+Cost -\/ forces a maximum curvature of 1/R along the path ensuring drivability 
+
+\mbox{\Hypertarget{classHybridAStar_1_1Smoother_a7da77e1abb151eaf7b8368da5251ef89}\label{classHybridAStar_1_1Smoother_a7da77e1abb151eaf7b8368da5251ef89}} 
+\index{HybridAStar::Smoother@{HybridAStar::Smoother}!getPath@{getPath}}
+\index{getPath@{getPath}!HybridAStar::Smoother@{HybridAStar::Smoother}}
+\doxysubsubsection{\texorpdfstring{getPath()}{getPath()}}
+{\footnotesize\ttfamily std\+::vector$<$\mbox{\hyperlink{classHybridAStar_1_1Common_1_1SE2State}{Common\+::\+S\+E2\+State}}$>$ Hybrid\+A\+Star\+::\+Smoother\+::get\+Path (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+returns the path of the smoother object 
+
+\mbox{\Hypertarget{classHybridAStar_1_1Smoother_a9d05cdce88da7d6ea2ea50b8e6a80654}\label{classHybridAStar_1_1Smoother_a9d05cdce88da7d6ea2ea50b8e6a80654}} 
+\index{HybridAStar::Smoother@{HybridAStar::Smoother}!isOnGrid@{isOnGrid}}
+\index{isOnGrid@{isOnGrid}!HybridAStar::Smoother@{HybridAStar::Smoother}}
+\doxysubsubsection{\texorpdfstring{isOnGrid()}{isOnGrid()}}
+{\footnotesize\ttfamily bool Hybrid\+A\+Star\+::\+Smoother\+::is\+On\+Grid (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classHybridAStar_1_1Vector2D}{Vector2D}}}]{vec }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+voronoi\+Cost -\/ trade off between path length and closeness to obstaclesg 
+
+a boolean test, whether vector is on the grid or not \mbox{\Hypertarget{classHybridAStar_1_1Smoother_af1efa7946694cc04a28f49479e45635a}\label{classHybridAStar_1_1Smoother_af1efa7946694cc04a28f49479e45635a}} 
+\index{HybridAStar::Smoother@{HybridAStar::Smoother}!obstacleTerm@{obstacleTerm}}
+\index{obstacleTerm@{obstacleTerm}!HybridAStar::Smoother@{HybridAStar::Smoother}}
+\doxysubsubsection{\texorpdfstring{obstacleTerm()}{obstacleTerm()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classHybridAStar_1_1Vector2D}{Vector2D}} Smoother\+::obstacle\+Term (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classHybridAStar_1_1Vector2D}{Vector2D}}}]{xi }\end{DoxyParamCaption})}
+
+
+
+obstacle\+Cost -\/ pushes the path away from obstacles 
+
+\mbox{\Hypertarget{classHybridAStar_1_1Smoother_a1c064e16d606534fac46b5636f3ebee0}\label{classHybridAStar_1_1Smoother_a1c064e16d606534fac46b5636f3ebee0}} 
+\index{HybridAStar::Smoother@{HybridAStar::Smoother}!smoothnessTerm@{smoothnessTerm}}
+\index{smoothnessTerm@{smoothnessTerm}!HybridAStar::Smoother@{HybridAStar::Smoother}}
+\doxysubsubsection{\texorpdfstring{smoothnessTerm()}{smoothnessTerm()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classHybridAStar_1_1Vector2D}{Vector2D}} Smoother\+::smoothness\+Term (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classHybridAStar_1_1Vector2D}{Vector2D}}}]{xim2,  }\item[{\mbox{\hyperlink{classHybridAStar_1_1Vector2D}{Vector2D}}}]{xim1,  }\item[{\mbox{\hyperlink{classHybridAStar_1_1Vector2D}{Vector2D}}}]{xi,  }\item[{\mbox{\hyperlink{classHybridAStar_1_1Vector2D}{Vector2D}}}]{xip1,  }\item[{\mbox{\hyperlink{classHybridAStar_1_1Vector2D}{Vector2D}}}]{xip2 }\end{DoxyParamCaption})}
+
+
+
+smoothness\+Cost -\/ attempts to spread nodes equidistantly and with the same orientation 
+
+\mbox{\Hypertarget{classHybridAStar_1_1Smoother_ad859d1e05295caf5cc9f3768e4c2a33f}\label{classHybridAStar_1_1Smoother_ad859d1e05295caf5cc9f3768e4c2a33f}} 
+\index{HybridAStar::Smoother@{HybridAStar::Smoother}!smoothPath@{smoothPath}}
+\index{smoothPath@{smoothPath}!HybridAStar::Smoother@{HybridAStar::Smoother}}
+\doxysubsubsection{\texorpdfstring{smoothPath()}{smoothPath()}}
+{\footnotesize\ttfamily void Smoother\+::smooth\+Path (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classHybridAStar_1_1DynamicVoronoi}{Dynamic\+Voronoi}} \&}]{voronoi }\end{DoxyParamCaption})}
+
+
+
+This function takes a path consisting of nodes and attempts to iteratively smooth the same using gradient descent. 
+
+During the different interations the following cost are being calculated obstacle\+Cost curvature\+Cost smoothness\+Cost voronoi\+Cost \mbox{\Hypertarget{classHybridAStar_1_1Smoother_a8f37822211c9159e484221a53e0fe381}\label{classHybridAStar_1_1Smoother_a8f37822211c9159e484221a53e0fe381}} 
+\index{HybridAStar::Smoother@{HybridAStar::Smoother}!tracePath@{tracePath}}
+\index{tracePath@{tracePath}!HybridAStar::Smoother@{HybridAStar::Smoother}}
+\doxysubsubsection{\texorpdfstring{tracePath()}{tracePath()}}
+{\footnotesize\ttfamily void Smoother\+::trace\+Path (\begin{DoxyParamCaption}\item[{const std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classHybridAStar_1_1Common_1_1SE2State}{Common\+::\+S\+E2\+State}} $>$}]{node,  }\item[{int}]{i = {\ttfamily 0},  }\item[{std\+::vector$<$ \mbox{\hyperlink{classHybridAStar_1_1Common_1_1SE2State}{Common\+::\+S\+E2\+State}} $>$}]{path = {\ttfamily std\+:\+:vector$<$\mbox{\hyperlink{classHybridAStar_1_1Common_1_1SE2State}{Common\+::\+S\+E2\+State}}$>$()} }\end{DoxyParamCaption})}
+
+
+
+Given a node pointer the path to the root node will be traced recursively. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em node} & a 3D node, usually the goal node \\
+\hline
+{\em i} & a parameter for counting the number of nodes \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{classHybridAStar_1_1Smoother_a4b090e5da2a6b9fdc2aeac9fc62423f6}\label{classHybridAStar_1_1Smoother_a4b090e5da2a6b9fdc2aeac9fc62423f6}} 
+\index{HybridAStar::Smoother@{HybridAStar::Smoother}!alpha@{alpha}}
+\index{alpha@{alpha}!HybridAStar::Smoother@{HybridAStar::Smoother}}
+\doxysubsubsection{\texorpdfstring{alpha}{alpha}}
+{\footnotesize\ttfamily float Hybrid\+A\+Star\+::\+Smoother\+::alpha = 0.\+1\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+falloff rate for the voronoi field 
+
+\mbox{\Hypertarget{classHybridAStar_1_1Smoother_a07b7c0d826500d4d81b4a2090fb26614}\label{classHybridAStar_1_1Smoother_a07b7c0d826500d4d81b4a2090fb26614}} 
+\index{HybridAStar::Smoother@{HybridAStar::Smoother}!carPlant\_@{carPlant\_}}
+\index{carPlant\_@{carPlant\_}!HybridAStar::Smoother@{HybridAStar::Smoother}}
+\doxysubsubsection{\texorpdfstring{carPlant\_}{carPlant\_}}
+{\footnotesize\ttfamily std\+::unique\+\_\+ptr$<$\mbox{\hyperlink{classHybridAStar_1_1Multibody_1_1SingleForkLiftPlant}{Multibody\+::\+Single\+Fork\+Lift\+Plant}}$>$ Hybrid\+A\+Star\+::\+Smoother\+::car\+Plant\+\_\+\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classHybridAStar_1_1Smoother_afa72350b9ededc7124794fb44e387258}\label{classHybridAStar_1_1Smoother_afa72350b9ededc7124794fb44e387258}} 
+\index{HybridAStar::Smoother@{HybridAStar::Smoother}!height@{height}}
+\index{height@{height}!HybridAStar::Smoother@{HybridAStar::Smoother}}
+\doxysubsubsection{\texorpdfstring{height}{height}}
+{\footnotesize\ttfamily int Hybrid\+A\+Star\+::\+Smoother\+::height\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+height of the map 
+
+\mbox{\Hypertarget{classHybridAStar_1_1Smoother_aedad086b1fec41dade8793ca02552d31}\label{classHybridAStar_1_1Smoother_aedad086b1fec41dade8793ca02552d31}} 
+\index{HybridAStar::Smoother@{HybridAStar::Smoother}!kappaMax@{kappaMax}}
+\index{kappaMax@{kappaMax}!HybridAStar::Smoother@{HybridAStar::Smoother}}
+\doxysubsubsection{\texorpdfstring{kappaMax}{kappaMax}}
+{\footnotesize\ttfamily float Hybrid\+A\+Star\+::\+Smoother\+::kappa\+Max = 1.f / \mbox{\hyperlink{classHybridAStar_1_1Smoother_a07b7c0d826500d4d81b4a2090fb26614}{car\+Plant\+\_\+}}-\/$>$rad\+\_\+\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+maximum possible curvature of the non-\/holonomic vehicle 
+
+\mbox{\Hypertarget{classHybridAStar_1_1Smoother_ab43d288f2ac9391b399e0f4fc2a9cb57}\label{classHybridAStar_1_1Smoother_ab43d288f2ac9391b399e0f4fc2a9cb57}} 
+\index{HybridAStar::Smoother@{HybridAStar::Smoother}!obsDMax@{obsDMax}}
+\index{obsDMax@{obsDMax}!HybridAStar::Smoother@{HybridAStar::Smoother}}
+\doxysubsubsection{\texorpdfstring{obsDMax}{obsDMax}}
+{\footnotesize\ttfamily float Hybrid\+A\+Star\+::\+Smoother\+::obs\+D\+Max = 1\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+maximum distance to obstacles that is penalized 
+
+\mbox{\Hypertarget{classHybridAStar_1_1Smoother_ad7000799cc755b946a5c4f83183eda53}\label{classHybridAStar_1_1Smoother_ad7000799cc755b946a5c4f83183eda53}} 
+\index{HybridAStar::Smoother@{HybridAStar::Smoother}!path@{path}}
+\index{path@{path}!HybridAStar::Smoother@{HybridAStar::Smoother}}
+\doxysubsubsection{\texorpdfstring{path}{path}}
+{\footnotesize\ttfamily std\+::vector$<$\mbox{\hyperlink{classHybridAStar_1_1Common_1_1SE2State}{Common\+::\+S\+E2\+State}}$>$ Hybrid\+A\+Star\+::\+Smoother\+::path\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+path to be smoothed 
+
+\mbox{\Hypertarget{classHybridAStar_1_1Smoother_a6d652167fcea0a8152efd7963690c7a7}\label{classHybridAStar_1_1Smoother_a6d652167fcea0a8152efd7963690c7a7}} 
+\index{HybridAStar::Smoother@{HybridAStar::Smoother}!vorObsDMax@{vorObsDMax}}
+\index{vorObsDMax@{vorObsDMax}!HybridAStar::Smoother@{HybridAStar::Smoother}}
+\doxysubsubsection{\texorpdfstring{vorObsDMax}{vorObsDMax}}
+{\footnotesize\ttfamily float Hybrid\+A\+Star\+::\+Smoother\+::vor\+Obs\+D\+Max = 1\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+maximum distance for obstacles to influence the voronoi field 
+
+\mbox{\Hypertarget{classHybridAStar_1_1Smoother_a0955242f5939a16b69e476d9f54ef86e}\label{classHybridAStar_1_1Smoother_a0955242f5939a16b69e476d9f54ef86e}} 
+\index{HybridAStar::Smoother@{HybridAStar::Smoother}!voronoi@{voronoi}}
+\index{voronoi@{voronoi}!HybridAStar::Smoother@{HybridAStar::Smoother}}
+\doxysubsubsection{\texorpdfstring{voronoi}{voronoi}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classHybridAStar_1_1DynamicVoronoi}{Dynamic\+Voronoi}} Hybrid\+A\+Star\+::\+Smoother\+::voronoi\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+voronoi diagram describing the topology of the map 
+
+\mbox{\Hypertarget{classHybridAStar_1_1Smoother_a46eb5127c0236cc4d574d830856ad073}\label{classHybridAStar_1_1Smoother_a46eb5127c0236cc4d574d830856ad073}} 
+\index{HybridAStar::Smoother@{HybridAStar::Smoother}!wCurvature@{wCurvature}}
+\index{wCurvature@{wCurvature}!HybridAStar::Smoother@{HybridAStar::Smoother}}
+\doxysubsubsection{\texorpdfstring{wCurvature}{wCurvature}}
+{\footnotesize\ttfamily float Hybrid\+A\+Star\+::\+Smoother\+::w\+Curvature = 0\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+weight for the curvature term 
+
+\mbox{\Hypertarget{classHybridAStar_1_1Smoother_a168df43c9140de4fea83856160096ee8}\label{classHybridAStar_1_1Smoother_a168df43c9140de4fea83856160096ee8}} 
+\index{HybridAStar::Smoother@{HybridAStar::Smoother}!width@{width}}
+\index{width@{width}!HybridAStar::Smoother@{HybridAStar::Smoother}}
+\doxysubsubsection{\texorpdfstring{width}{width}}
+{\footnotesize\ttfamily int Hybrid\+A\+Star\+::\+Smoother\+::width\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+width of the map 
+
+\mbox{\Hypertarget{classHybridAStar_1_1Smoother_a5c98e2aa003567300d55f40e423fa34a}\label{classHybridAStar_1_1Smoother_a5c98e2aa003567300d55f40e423fa34a}} 
+\index{HybridAStar::Smoother@{HybridAStar::Smoother}!wObstacle@{wObstacle}}
+\index{wObstacle@{wObstacle}!HybridAStar::Smoother@{HybridAStar::Smoother}}
+\doxysubsubsection{\texorpdfstring{wObstacle}{wObstacle}}
+{\footnotesize\ttfamily float Hybrid\+A\+Star\+::\+Smoother\+::w\+Obstacle = 0.\+2\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+weight for the obstacle term 
+
+\mbox{\Hypertarget{classHybridAStar_1_1Smoother_a878ab4beae55fd8b028a2cc2e9b758e0}\label{classHybridAStar_1_1Smoother_a878ab4beae55fd8b028a2cc2e9b758e0}} 
+\index{HybridAStar::Smoother@{HybridAStar::Smoother}!wSmoothness@{wSmoothness}}
+\index{wSmoothness@{wSmoothness}!HybridAStar::Smoother@{HybridAStar::Smoother}}
+\doxysubsubsection{\texorpdfstring{wSmoothness}{wSmoothness}}
+{\footnotesize\ttfamily float Hybrid\+A\+Star\+::\+Smoother\+::w\+Smoothness = 0.\+2\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+weight for the smoothness term 
+
+\mbox{\Hypertarget{classHybridAStar_1_1Smoother_a80d873fdacb1b882f115a56c54f0cde3}\label{classHybridAStar_1_1Smoother_a80d873fdacb1b882f115a56c54f0cde3}} 
+\index{HybridAStar::Smoother@{HybridAStar::Smoother}!wVoronoi@{wVoronoi}}
+\index{wVoronoi@{wVoronoi}!HybridAStar::Smoother@{HybridAStar::Smoother}}
+\doxysubsubsection{\texorpdfstring{wVoronoi}{wVoronoi}}
+{\footnotesize\ttfamily float Hybrid\+A\+Star\+::\+Smoother\+::w\+Voronoi = 0\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+weight for the voronoi term 
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+math/\mbox{\hyperlink{smoother_8h}{smoother.\+h}}\item 
+math/\mbox{\hyperlink{smoother_8cpp}{smoother.\+cpp}}\end{DoxyCompactItemize}

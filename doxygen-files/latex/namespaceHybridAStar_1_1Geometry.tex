@@ -1,0 +1,344 @@
+\hypertarget{namespaceHybridAStar_1_1Geometry}{}\doxysection{Hybrid\+A\+Star\+::Geometry Namespace Reference}
+\label{namespaceHybridAStar_1_1Geometry}\index{HybridAStar::Geometry@{HybridAStar::Geometry}}
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structHybridAStar_1_1Geometry_1_1CompareNodes}{Compare\+Nodes}}
+\item 
+struct \mbox{\hyperlink{structHybridAStar_1_1Geometry_1_1DubinsPath}{Dubins\+Path}}
+\item 
+class \mbox{\hyperlink{classHybridAStar_1_1Geometry_1_1HAstar}{H\+Astar}}
+\item 
+class \mbox{\hyperlink{classHybridAStar_1_1Geometry_1_1Node}{Node}}
+\item 
+class \mbox{\hyperlink{classHybridAStar_1_1Geometry_1_1Node3d}{Node3d}}
+\item 
+class \mbox{\hyperlink{classHybridAStar_1_1Geometry_1_1Planner}{Planner}}
+\item 
+class \mbox{\hyperlink{classHybridAStar_1_1Geometry_1_1ReedShepp}{Reed\+Shepp}}
+\item 
+struct \mbox{\hyperlink{structHybridAStar_1_1Geometry_1_1ReedSheppPath}{Reed\+Shepp\+Path}}
+\item 
+struct \mbox{\hyperlink{structHybridAStar_1_1Geometry_1_1RSPParam}{R\+S\+P\+Param}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef int($\ast$ \mbox{\hyperlink{namespaceHybridAStar_1_1Geometry_a58ad2ca5c9d27694b17c5b4d00864254}{Dubins\+Word}}) (double, double, double, double $\ast$)
+\item 
+typedef int($\ast$ \mbox{\hyperlink{namespaceHybridAStar_1_1Geometry_a2b0ab992af36f3887f23fcb305ef53f3}{Dubins\+Path\+Sampling\+Callback}}) (double q\mbox{[}3\mbox{]}, double t, void $\ast$user\+\_\+data)
+\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+double \mbox{\hyperlink{namespaceHybridAStar_1_1Geometry_a5122cb1c3ad4804835213f6f25c9fe63}{fmodr}} (double x, double y)
+\item 
+double \mbox{\hyperlink{namespaceHybridAStar_1_1Geometry_a1662876dc24dc4a33bf940525bf34bfe}{mod2pi}} (double theta)
+\item 
+int \mbox{\hyperlink{namespaceHybridAStar_1_1Geometry_aeb4ee651585789116e35157e435a5c06}{dubins\+\_\+init\+\_\+normalised}} (double alpha, double beta, double d, \mbox{\hyperlink{structHybridAStar_1_1Geometry_1_1DubinsPath}{Dubins\+Path}} $\ast$path)
+\item 
+int \mbox{\hyperlink{namespaceHybridAStar_1_1Geometry_a7b15097851e57a943c6cd2a60b023882}{dubins\+\_\+init}} (double q0\mbox{[}3\mbox{]}, double q1\mbox{[}3\mbox{]}, double rho, \mbox{\hyperlink{structHybridAStar_1_1Geometry_1_1DubinsPath}{Dubins\+Path}} $\ast$path)
+\item 
+int \mbox{\hyperlink{namespaceHybridAStar_1_1Geometry_ae204d1bb0b5046f5df28d3dfde4262fa}{dubins\+\_\+\+L\+SL}} (double alpha, double beta, double d, double $\ast$outputs)
+\item 
+int \mbox{\hyperlink{namespaceHybridAStar_1_1Geometry_af6662357f2eb8e1cc22f5ed7b8282fef}{dubins\+\_\+\+R\+SR}} (double alpha, double beta, double d, double $\ast$outputs)
+\item 
+int \mbox{\hyperlink{namespaceHybridAStar_1_1Geometry_af912e41701151b8a0aa2b43f96680793}{dubins\+\_\+\+L\+SR}} (double alpha, double beta, double d, double $\ast$outputs)
+\item 
+int \mbox{\hyperlink{namespaceHybridAStar_1_1Geometry_af45023864203a27209a17b1149ba869e}{dubins\+\_\+\+R\+SL}} (double alpha, double beta, double d, double $\ast$outputs)
+\item 
+int \mbox{\hyperlink{namespaceHybridAStar_1_1Geometry_a300835eb27683e3cbdd1bb735ee6ad9b}{dubins\+\_\+\+R\+LR}} (double alpha, double beta, double d, double $\ast$outputs)
+\item 
+int \mbox{\hyperlink{namespaceHybridAStar_1_1Geometry_af9ab56b8167c43b19b2e9b6e3a0cf0e6}{dubins\+\_\+\+L\+RL}} (double alpha, double beta, double d, double $\ast$outputs)
+\item 
+double \mbox{\hyperlink{namespaceHybridAStar_1_1Geometry_ae069eda31dff8a9011f96bfa93132d51}{dubins\+\_\+path\+\_\+length}} (\mbox{\hyperlink{structHybridAStar_1_1Geometry_1_1DubinsPath}{Dubins\+Path}} $\ast$path)
+\item 
+int \mbox{\hyperlink{namespaceHybridAStar_1_1Geometry_a33d71f02775b75c472c0d5bf3db1ef48}{dubins\+\_\+path\+\_\+type}} (\mbox{\hyperlink{structHybridAStar_1_1Geometry_1_1DubinsPath}{Dubins\+Path}} $\ast$path)
+\item 
+void \mbox{\hyperlink{namespaceHybridAStar_1_1Geometry_a7d0817237dce49f50ff608e215916e33}{dubins\+\_\+segment}} (double t, double qi\mbox{[}3\mbox{]}, double qt\mbox{[}3\mbox{]}, int type)
+\item 
+int \mbox{\hyperlink{namespaceHybridAStar_1_1Geometry_aa501ede96f9b1e75929e9fc1bb1fd6e3}{dubins\+\_\+path\+\_\+sample}} (\mbox{\hyperlink{structHybridAStar_1_1Geometry_1_1DubinsPath}{Dubins\+Path}} $\ast$path, double t, double q\mbox{[}3\mbox{]})
+\item 
+int \mbox{\hyperlink{namespaceHybridAStar_1_1Geometry_a842e0cbf7ba8ca3582dc086a39594e11}{dubins\+\_\+path\+\_\+sample\+\_\+many}} (\mbox{\hyperlink{structHybridAStar_1_1Geometry_1_1DubinsPath}{Dubins\+Path}} $\ast$path, \mbox{\hyperlink{namespaceHybridAStar_1_1Geometry_a2b0ab992af36f3887f23fcb305ef53f3}{Dubins\+Path\+Sampling\+Callback}} cb, double step\+Size, void $\ast$user\+\_\+data)
+\item 
+int \mbox{\hyperlink{namespaceHybridAStar_1_1Geometry_a9ef3444c2f3879049ed10cb666cf119c}{dubins\+\_\+path\+\_\+endpoint}} (\mbox{\hyperlink{structHybridAStar_1_1Geometry_1_1DubinsPath}{Dubins\+Path}} $\ast$path, double q\mbox{[}3\mbox{]})
+\item 
+int \mbox{\hyperlink{namespaceHybridAStar_1_1Geometry_a450bbabc483f12e62080ca26729e7857}{dubins\+\_\+extract\+\_\+subpath}} (\mbox{\hyperlink{structHybridAStar_1_1Geometry_1_1DubinsPath}{Dubins\+Path}} $\ast$path, double t, \mbox{\hyperlink{structHybridAStar_1_1Geometry_1_1DubinsPath}{Dubins\+Path}} $\ast$newpath)
+\item 
+double \mbox{\hyperlink{namespaceHybridAStar_1_1Geometry_aab062a1d7c406e3167a2d3189394d46a}{Normalize\+Angle}} (const double angle)
+\item 
+std\+::pair$<$ double, double $>$ \mbox{\hyperlink{namespaceHybridAStar_1_1Geometry_ad9b592692fb9e4cc541cdcc56033a012}{Cartesian2\+Polar}} (double x, double y)
+\end{DoxyCompactItemize}
+\doxysubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+const int \mbox{\hyperlink{namespaceHybridAStar_1_1Geometry_a742564fdd1a03b42417e054c66de0f7a}{D\+I\+R\+D\+A\+TA}} \mbox{[}$\,$\mbox{]}\mbox{[}3\mbox{]}
+\item 
+\mbox{\hyperlink{namespaceHybridAStar_1_1Geometry_a58ad2ca5c9d27694b17c5b4d00864254}{Dubins\+Word}} \mbox{\hyperlink{namespaceHybridAStar_1_1Geometry_a92ebe139fb690f9bdc782ce7485df41b}{dubins\+\_\+words}} \mbox{[}$\,$\mbox{]}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Typedef Documentation}
+\mbox{\Hypertarget{namespaceHybridAStar_1_1Geometry_a2b0ab992af36f3887f23fcb305ef53f3}\label{namespaceHybridAStar_1_1Geometry_a2b0ab992af36f3887f23fcb305ef53f3}} 
+\index{HybridAStar::Geometry@{HybridAStar::Geometry}!DubinsPathSamplingCallback@{DubinsPathSamplingCallback}}
+\index{DubinsPathSamplingCallback@{DubinsPathSamplingCallback}!HybridAStar::Geometry@{HybridAStar::Geometry}}
+\doxysubsubsection{\texorpdfstring{DubinsPathSamplingCallback}{DubinsPathSamplingCallback}}
+{\footnotesize\ttfamily typedef int($\ast$ Hybrid\+A\+Star\+::\+Geometry\+::\+Dubins\+Path\+Sampling\+Callback) (double q\mbox{[}3\mbox{]}, double t, void $\ast$user\+\_\+data)}
+
+Callback function for path sampling
+
+\begin{DoxyNote}{Note}
+the q parameter is a configuration 
+
+the t parameter is the distance along the path 
+
+the user\+\_\+data parameter is forwarded from the caller 
+
+return non-\/zero to denote sampling should be stopped 
+\end{DoxyNote}
+\mbox{\Hypertarget{namespaceHybridAStar_1_1Geometry_a58ad2ca5c9d27694b17c5b4d00864254}\label{namespaceHybridAStar_1_1Geometry_a58ad2ca5c9d27694b17c5b4d00864254}} 
+\index{HybridAStar::Geometry@{HybridAStar::Geometry}!DubinsWord@{DubinsWord}}
+\index{DubinsWord@{DubinsWord}!HybridAStar::Geometry@{HybridAStar::Geometry}}
+\doxysubsubsection{\texorpdfstring{DubinsWord}{DubinsWord}}
+{\footnotesize\ttfamily typedef int($\ast$ Hybrid\+A\+Star\+::\+Geometry\+::\+Dubins\+Word) (double, double, double, double $\ast$)}
+
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{namespaceHybridAStar_1_1Geometry_ad9b592692fb9e4cc541cdcc56033a012}\label{namespaceHybridAStar_1_1Geometry_ad9b592692fb9e4cc541cdcc56033a012}} 
+\index{HybridAStar::Geometry@{HybridAStar::Geometry}!Cartesian2Polar@{Cartesian2Polar}}
+\index{Cartesian2Polar@{Cartesian2Polar}!HybridAStar::Geometry@{HybridAStar::Geometry}}
+\doxysubsubsection{\texorpdfstring{Cartesian2Polar()}{Cartesian2Polar()}}
+{\footnotesize\ttfamily std\+::pair$<$double, double$>$ Hybrid\+A\+Star\+::\+Geometry\+::\+Cartesian2\+Polar (\begin{DoxyParamCaption}\item[{double}]{x,  }\item[{double}]{y }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{namespaceHybridAStar_1_1Geometry_a450bbabc483f12e62080ca26729e7857}\label{namespaceHybridAStar_1_1Geometry_a450bbabc483f12e62080ca26729e7857}} 
+\index{HybridAStar::Geometry@{HybridAStar::Geometry}!dubins\_extract\_subpath@{dubins\_extract\_subpath}}
+\index{dubins\_extract\_subpath@{dubins\_extract\_subpath}!HybridAStar::Geometry@{HybridAStar::Geometry}}
+\doxysubsubsection{\texorpdfstring{dubins\_extract\_subpath()}{dubins\_extract\_subpath()}}
+{\footnotesize\ttfamily int Hybrid\+A\+Star\+::\+Geometry\+::dubins\+\_\+extract\+\_\+subpath (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structHybridAStar_1_1Geometry_1_1DubinsPath}{Dubins\+Path}} $\ast$}]{path,  }\item[{double}]{t,  }\item[{\mbox{\hyperlink{structHybridAStar_1_1Geometry_1_1DubinsPath}{Dubins\+Path}} $\ast$}]{newpath }\end{DoxyParamCaption})}
+
+Convenience function to extract a subset of a path
+
+
+\begin{DoxyParams}{Parameters}
+{\em path} & -\/ an initialised path \\
+\hline
+{\em t} & -\/ a length measure, where 0 $<$ t $<$ dubins\+\_\+path\+\_\+length(path) \\
+\hline
+{\em newpath} & -\/ the resultant path \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{namespaceHybridAStar_1_1Geometry_a7b15097851e57a943c6cd2a60b023882}\label{namespaceHybridAStar_1_1Geometry_a7b15097851e57a943c6cd2a60b023882}} 
+\index{HybridAStar::Geometry@{HybridAStar::Geometry}!dubins\_init@{dubins\_init}}
+\index{dubins\_init@{dubins\_init}!HybridAStar::Geometry@{HybridAStar::Geometry}}
+\doxysubsubsection{\texorpdfstring{dubins\_init()}{dubins\_init()}}
+{\footnotesize\ttfamily int Hybrid\+A\+Star\+::\+Geometry\+::dubins\+\_\+init (\begin{DoxyParamCaption}\item[{double}]{q0\mbox{[}3\mbox{]},  }\item[{double}]{q1\mbox{[}3\mbox{]},  }\item[{double}]{rho,  }\item[{\mbox{\hyperlink{structHybridAStar_1_1Geometry_1_1DubinsPath}{Dubins\+Path}} $\ast$}]{path }\end{DoxyParamCaption})}
+
+Generate a path from an initial configuration to a target configuration, with a specified maximum turning radii
+
+A configuration is (x, y, theta), where theta is in radians, with zero along the line x = 0, and counter-\/clockwise is positive
+
+
+\begin{DoxyParams}{Parameters}
+{\em q0} & -\/ a configuration specified as an array of x, y, theta \\
+\hline
+{\em q1} & -\/ a configuration specified as an array of x, y, theta \\
+\hline
+{\em rho} & -\/ turning radius of the vehicle (forward velocity divided by maximum angular velocity) \\
+\hline
+{\em path} & -\/ the resultant path \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+-\/ non-\/zero on error 
+\end{DoxyReturn}
+\mbox{\Hypertarget{namespaceHybridAStar_1_1Geometry_aeb4ee651585789116e35157e435a5c06}\label{namespaceHybridAStar_1_1Geometry_aeb4ee651585789116e35157e435a5c06}} 
+\index{HybridAStar::Geometry@{HybridAStar::Geometry}!dubins\_init\_normalised@{dubins\_init\_normalised}}
+\index{dubins\_init\_normalised@{dubins\_init\_normalised}!HybridAStar::Geometry@{HybridAStar::Geometry}}
+\doxysubsubsection{\texorpdfstring{dubins\_init\_normalised()}{dubins\_init\_normalised()}}
+{\footnotesize\ttfamily int Hybrid\+A\+Star\+::\+Geometry\+::dubins\+\_\+init\+\_\+normalised (\begin{DoxyParamCaption}\item[{double}]{alpha,  }\item[{double}]{beta,  }\item[{double}]{d,  }\item[{\mbox{\hyperlink{structHybridAStar_1_1Geometry_1_1DubinsPath}{Dubins\+Path}} $\ast$}]{path }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{namespaceHybridAStar_1_1Geometry_af9ab56b8167c43b19b2e9b6e3a0cf0e6}\label{namespaceHybridAStar_1_1Geometry_af9ab56b8167c43b19b2e9b6e3a0cf0e6}} 
+\index{HybridAStar::Geometry@{HybridAStar::Geometry}!dubins\_LRL@{dubins\_LRL}}
+\index{dubins\_LRL@{dubins\_LRL}!HybridAStar::Geometry@{HybridAStar::Geometry}}
+\doxysubsubsection{\texorpdfstring{dubins\_LRL()}{dubins\_LRL()}}
+{\footnotesize\ttfamily int Hybrid\+A\+Star\+::\+Geometry\+::dubins\+\_\+\+L\+RL (\begin{DoxyParamCaption}\item[{double}]{alpha,  }\item[{double}]{beta,  }\item[{double}]{d,  }\item[{double $\ast$}]{outputs }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{namespaceHybridAStar_1_1Geometry_ae204d1bb0b5046f5df28d3dfde4262fa}\label{namespaceHybridAStar_1_1Geometry_ae204d1bb0b5046f5df28d3dfde4262fa}} 
+\index{HybridAStar::Geometry@{HybridAStar::Geometry}!dubins\_LSL@{dubins\_LSL}}
+\index{dubins\_LSL@{dubins\_LSL}!HybridAStar::Geometry@{HybridAStar::Geometry}}
+\doxysubsubsection{\texorpdfstring{dubins\_LSL()}{dubins\_LSL()}}
+{\footnotesize\ttfamily int Hybrid\+A\+Star\+::\+Geometry\+::dubins\+\_\+\+L\+SL (\begin{DoxyParamCaption}\item[{double}]{alpha,  }\item[{double}]{beta,  }\item[{double}]{d,  }\item[{double $\ast$}]{outputs }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{namespaceHybridAStar_1_1Geometry_af912e41701151b8a0aa2b43f96680793}\label{namespaceHybridAStar_1_1Geometry_af912e41701151b8a0aa2b43f96680793}} 
+\index{HybridAStar::Geometry@{HybridAStar::Geometry}!dubins\_LSR@{dubins\_LSR}}
+\index{dubins\_LSR@{dubins\_LSR}!HybridAStar::Geometry@{HybridAStar::Geometry}}
+\doxysubsubsection{\texorpdfstring{dubins\_LSR()}{dubins\_LSR()}}
+{\footnotesize\ttfamily int Hybrid\+A\+Star\+::\+Geometry\+::dubins\+\_\+\+L\+SR (\begin{DoxyParamCaption}\item[{double}]{alpha,  }\item[{double}]{beta,  }\item[{double}]{d,  }\item[{double $\ast$}]{outputs }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{namespaceHybridAStar_1_1Geometry_a9ef3444c2f3879049ed10cb666cf119c}\label{namespaceHybridAStar_1_1Geometry_a9ef3444c2f3879049ed10cb666cf119c}} 
+\index{HybridAStar::Geometry@{HybridAStar::Geometry}!dubins\_path\_endpoint@{dubins\_path\_endpoint}}
+\index{dubins\_path\_endpoint@{dubins\_path\_endpoint}!HybridAStar::Geometry@{HybridAStar::Geometry}}
+\doxysubsubsection{\texorpdfstring{dubins\_path\_endpoint()}{dubins\_path\_endpoint()}}
+{\footnotesize\ttfamily int Hybrid\+A\+Star\+::\+Geometry\+::dubins\+\_\+path\+\_\+endpoint (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structHybridAStar_1_1Geometry_1_1DubinsPath}{Dubins\+Path}} $\ast$}]{path,  }\item[{double}]{q\mbox{[}3\mbox{]} }\end{DoxyParamCaption})}
+
+Convenience function to identify the endpoint of a path
+
+
+\begin{DoxyParams}{Parameters}
+{\em path} & -\/ an initialised path \\
+\hline
+{\em q} & -\/ the configuration result \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{namespaceHybridAStar_1_1Geometry_ae069eda31dff8a9011f96bfa93132d51}\label{namespaceHybridAStar_1_1Geometry_ae069eda31dff8a9011f96bfa93132d51}} 
+\index{HybridAStar::Geometry@{HybridAStar::Geometry}!dubins\_path\_length@{dubins\_path\_length}}
+\index{dubins\_path\_length@{dubins\_path\_length}!HybridAStar::Geometry@{HybridAStar::Geometry}}
+\doxysubsubsection{\texorpdfstring{dubins\_path\_length()}{dubins\_path\_length()}}
+{\footnotesize\ttfamily double Hybrid\+A\+Star\+::\+Geometry\+::dubins\+\_\+path\+\_\+length (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structHybridAStar_1_1Geometry_1_1DubinsPath}{Dubins\+Path}} $\ast$}]{path }\end{DoxyParamCaption})}
+
+Calculate the length of an initialised path
+
+
+\begin{DoxyParams}{Parameters}
+{\em path} & -\/ the path to find the length of \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{namespaceHybridAStar_1_1Geometry_aa501ede96f9b1e75929e9fc1bb1fd6e3}\label{namespaceHybridAStar_1_1Geometry_aa501ede96f9b1e75929e9fc1bb1fd6e3}} 
+\index{HybridAStar::Geometry@{HybridAStar::Geometry}!dubins\_path\_sample@{dubins\_path\_sample}}
+\index{dubins\_path\_sample@{dubins\_path\_sample}!HybridAStar::Geometry@{HybridAStar::Geometry}}
+\doxysubsubsection{\texorpdfstring{dubins\_path\_sample()}{dubins\_path\_sample()}}
+{\footnotesize\ttfamily int Hybrid\+A\+Star\+::\+Geometry\+::dubins\+\_\+path\+\_\+sample (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structHybridAStar_1_1Geometry_1_1DubinsPath}{Dubins\+Path}} $\ast$}]{path,  }\item[{double}]{t,  }\item[{double}]{q\mbox{[}3\mbox{]} }\end{DoxyParamCaption})}
+
+Calculate the configuration along the path, using the parameter t
+
+
+\begin{DoxyParams}{Parameters}
+{\em path} & -\/ an initialised path \\
+\hline
+{\em t} & -\/ a length measure, where 0 $<$= t $<$ dubins\+\_\+path\+\_\+length(path) \\
+\hline
+{\em q} & -\/ the configuration result \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+-\/ non-\/zero if \textquotesingle{}t\textquotesingle{} is not in the correct range 
+\end{DoxyReturn}
+\mbox{\Hypertarget{namespaceHybridAStar_1_1Geometry_a842e0cbf7ba8ca3582dc086a39594e11}\label{namespaceHybridAStar_1_1Geometry_a842e0cbf7ba8ca3582dc086a39594e11}} 
+\index{HybridAStar::Geometry@{HybridAStar::Geometry}!dubins\_path\_sample\_many@{dubins\_path\_sample\_many}}
+\index{dubins\_path\_sample\_many@{dubins\_path\_sample\_many}!HybridAStar::Geometry@{HybridAStar::Geometry}}
+\doxysubsubsection{\texorpdfstring{dubins\_path\_sample\_many()}{dubins\_path\_sample\_many()}}
+{\footnotesize\ttfamily int Hybrid\+A\+Star\+::\+Geometry\+::dubins\+\_\+path\+\_\+sample\+\_\+many (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structHybridAStar_1_1Geometry_1_1DubinsPath}{Dubins\+Path}} $\ast$}]{path,  }\item[{\mbox{\hyperlink{namespaceHybridAStar_1_1Geometry_a2b0ab992af36f3887f23fcb305ef53f3}{Dubins\+Path\+Sampling\+Callback}}}]{cb,  }\item[{double}]{step\+Size,  }\item[{void $\ast$}]{user\+\_\+data }\end{DoxyParamCaption})}
+
+Walk along the path at a fixed sampling interval, calling the callback function at each interval
+
+
+\begin{DoxyParams}{Parameters}
+{\em path} & -\/ the path to sample \\
+\hline
+{\em cb} & -\/ the callback function to call for each sample \\
+\hline
+{\em user\+\_\+data} & -\/ optional information to pass on to the callback \\
+\hline
+{\em step\+Size} & -\/ the distance along the path for subsequent samples \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{namespaceHybridAStar_1_1Geometry_a33d71f02775b75c472c0d5bf3db1ef48}\label{namespaceHybridAStar_1_1Geometry_a33d71f02775b75c472c0d5bf3db1ef48}} 
+\index{HybridAStar::Geometry@{HybridAStar::Geometry}!dubins\_path\_type@{dubins\_path\_type}}
+\index{dubins\_path\_type@{dubins\_path\_type}!HybridAStar::Geometry@{HybridAStar::Geometry}}
+\doxysubsubsection{\texorpdfstring{dubins\_path\_type()}{dubins\_path\_type()}}
+{\footnotesize\ttfamily int Hybrid\+A\+Star\+::\+Geometry\+::dubins\+\_\+path\+\_\+type (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structHybridAStar_1_1Geometry_1_1DubinsPath}{Dubins\+Path}} $\ast$}]{path }\end{DoxyParamCaption})}
+
+Extract an integer that represents which path type was used
+
+
+\begin{DoxyParams}{Parameters}
+{\em path} & -\/ an initialised path \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+-\/ one of L\+SL, L\+SR, R\+SL, R\+SR, R\+LR or L\+RL (ie/ 0-\/5 inclusive) 
+\end{DoxyReturn}
+\mbox{\Hypertarget{namespaceHybridAStar_1_1Geometry_a300835eb27683e3cbdd1bb735ee6ad9b}\label{namespaceHybridAStar_1_1Geometry_a300835eb27683e3cbdd1bb735ee6ad9b}} 
+\index{HybridAStar::Geometry@{HybridAStar::Geometry}!dubins\_RLR@{dubins\_RLR}}
+\index{dubins\_RLR@{dubins\_RLR}!HybridAStar::Geometry@{HybridAStar::Geometry}}
+\doxysubsubsection{\texorpdfstring{dubins\_RLR()}{dubins\_RLR()}}
+{\footnotesize\ttfamily int Hybrid\+A\+Star\+::\+Geometry\+::dubins\+\_\+\+R\+LR (\begin{DoxyParamCaption}\item[{double}]{alpha,  }\item[{double}]{beta,  }\item[{double}]{d,  }\item[{double $\ast$}]{outputs }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{namespaceHybridAStar_1_1Geometry_af45023864203a27209a17b1149ba869e}\label{namespaceHybridAStar_1_1Geometry_af45023864203a27209a17b1149ba869e}} 
+\index{HybridAStar::Geometry@{HybridAStar::Geometry}!dubins\_RSL@{dubins\_RSL}}
+\index{dubins\_RSL@{dubins\_RSL}!HybridAStar::Geometry@{HybridAStar::Geometry}}
+\doxysubsubsection{\texorpdfstring{dubins\_RSL()}{dubins\_RSL()}}
+{\footnotesize\ttfamily int Hybrid\+A\+Star\+::\+Geometry\+::dubins\+\_\+\+R\+SL (\begin{DoxyParamCaption}\item[{double}]{alpha,  }\item[{double}]{beta,  }\item[{double}]{d,  }\item[{double $\ast$}]{outputs }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{namespaceHybridAStar_1_1Geometry_af6662357f2eb8e1cc22f5ed7b8282fef}\label{namespaceHybridAStar_1_1Geometry_af6662357f2eb8e1cc22f5ed7b8282fef}} 
+\index{HybridAStar::Geometry@{HybridAStar::Geometry}!dubins\_RSR@{dubins\_RSR}}
+\index{dubins\_RSR@{dubins\_RSR}!HybridAStar::Geometry@{HybridAStar::Geometry}}
+\doxysubsubsection{\texorpdfstring{dubins\_RSR()}{dubins\_RSR()}}
+{\footnotesize\ttfamily int Hybrid\+A\+Star\+::\+Geometry\+::dubins\+\_\+\+R\+SR (\begin{DoxyParamCaption}\item[{double}]{alpha,  }\item[{double}]{beta,  }\item[{double}]{d,  }\item[{double $\ast$}]{outputs }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{namespaceHybridAStar_1_1Geometry_a7d0817237dce49f50ff608e215916e33}\label{namespaceHybridAStar_1_1Geometry_a7d0817237dce49f50ff608e215916e33}} 
+\index{HybridAStar::Geometry@{HybridAStar::Geometry}!dubins\_segment@{dubins\_segment}}
+\index{dubins\_segment@{dubins\_segment}!HybridAStar::Geometry@{HybridAStar::Geometry}}
+\doxysubsubsection{\texorpdfstring{dubins\_segment()}{dubins\_segment()}}
+{\footnotesize\ttfamily void Hybrid\+A\+Star\+::\+Geometry\+::dubins\+\_\+segment (\begin{DoxyParamCaption}\item[{double}]{t,  }\item[{double}]{qi\mbox{[}3\mbox{]},  }\item[{double}]{qt\mbox{[}3\mbox{]},  }\item[{int}]{type }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{namespaceHybridAStar_1_1Geometry_a5122cb1c3ad4804835213f6f25c9fe63}\label{namespaceHybridAStar_1_1Geometry_a5122cb1c3ad4804835213f6f25c9fe63}} 
+\index{HybridAStar::Geometry@{HybridAStar::Geometry}!fmodr@{fmodr}}
+\index{fmodr@{fmodr}!HybridAStar::Geometry@{HybridAStar::Geometry}}
+\doxysubsubsection{\texorpdfstring{fmodr()}{fmodr()}}
+{\footnotesize\ttfamily double Hybrid\+A\+Star\+::\+Geometry\+::fmodr (\begin{DoxyParamCaption}\item[{double}]{x,  }\item[{double}]{y }\end{DoxyParamCaption})}
+
+Floating point modulus suitable for rings
+
+fmod doesn\textquotesingle{}t behave correctly for angular quantities, this function does \mbox{\Hypertarget{namespaceHybridAStar_1_1Geometry_a1662876dc24dc4a33bf940525bf34bfe}\label{namespaceHybridAStar_1_1Geometry_a1662876dc24dc4a33bf940525bf34bfe}} 
+\index{HybridAStar::Geometry@{HybridAStar::Geometry}!mod2pi@{mod2pi}}
+\index{mod2pi@{mod2pi}!HybridAStar::Geometry@{HybridAStar::Geometry}}
+\doxysubsubsection{\texorpdfstring{mod2pi()}{mod2pi()}}
+{\footnotesize\ttfamily double Hybrid\+A\+Star\+::\+Geometry\+::mod2pi (\begin{DoxyParamCaption}\item[{double}]{theta }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{namespaceHybridAStar_1_1Geometry_aab062a1d7c406e3167a2d3189394d46a}\label{namespaceHybridAStar_1_1Geometry_aab062a1d7c406e3167a2d3189394d46a}} 
+\index{HybridAStar::Geometry@{HybridAStar::Geometry}!NormalizeAngle@{NormalizeAngle}}
+\index{NormalizeAngle@{NormalizeAngle}!HybridAStar::Geometry@{HybridAStar::Geometry}}
+\doxysubsubsection{\texorpdfstring{NormalizeAngle()}{NormalizeAngle()}}
+{\footnotesize\ttfamily double Hybrid\+A\+Star\+::\+Geometry\+::\+Normalize\+Angle (\begin{DoxyParamCaption}\item[{const double}]{angle }\end{DoxyParamCaption})}
+
+
+
+\doxysubsection{Variable Documentation}
+\mbox{\Hypertarget{namespaceHybridAStar_1_1Geometry_a742564fdd1a03b42417e054c66de0f7a}\label{namespaceHybridAStar_1_1Geometry_a742564fdd1a03b42417e054c66de0f7a}} 
+\index{HybridAStar::Geometry@{HybridAStar::Geometry}!DIRDATA@{DIRDATA}}
+\index{DIRDATA@{DIRDATA}!HybridAStar::Geometry@{HybridAStar::Geometry}}
+\doxysubsubsection{\texorpdfstring{DIRDATA}{DIRDATA}}
+{\footnotesize\ttfamily const int Hybrid\+A\+Star\+::\+Geometry\+::\+D\+I\+R\+D\+A\+TA\mbox{[}$\,$\mbox{]}\mbox{[}3\mbox{]}}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{= \{}
+\DoxyCodeLine{    \{ \mbox{\hyperlink{dubins_8cpp_a93b9b75cd5b0e2af3a22b226348c9a96}{L\_SEG}}, \mbox{\hyperlink{dubins_8cpp_a784df059edce81c57016001a192cf56f}{S\_SEG}}, \mbox{\hyperlink{dubins_8cpp_a93b9b75cd5b0e2af3a22b226348c9a96}{L\_SEG}} \},}
+\DoxyCodeLine{    \{ \mbox{\hyperlink{dubins_8cpp_a93b9b75cd5b0e2af3a22b226348c9a96}{L\_SEG}}, \mbox{\hyperlink{dubins_8cpp_a784df059edce81c57016001a192cf56f}{S\_SEG}}, \mbox{\hyperlink{dubins_8cpp_a6691cd3d19c6fffbc9002200baf2c01f}{R\_SEG}} \},}
+\DoxyCodeLine{    \{ \mbox{\hyperlink{dubins_8cpp_a6691cd3d19c6fffbc9002200baf2c01f}{R\_SEG}}, \mbox{\hyperlink{dubins_8cpp_a784df059edce81c57016001a192cf56f}{S\_SEG}}, \mbox{\hyperlink{dubins_8cpp_a93b9b75cd5b0e2af3a22b226348c9a96}{L\_SEG}} \},}
+\DoxyCodeLine{    \{ \mbox{\hyperlink{dubins_8cpp_a6691cd3d19c6fffbc9002200baf2c01f}{R\_SEG}}, \mbox{\hyperlink{dubins_8cpp_a784df059edce81c57016001a192cf56f}{S\_SEG}}, \mbox{\hyperlink{dubins_8cpp_a6691cd3d19c6fffbc9002200baf2c01f}{R\_SEG}} \},}
+\DoxyCodeLine{    \{ \mbox{\hyperlink{dubins_8cpp_a6691cd3d19c6fffbc9002200baf2c01f}{R\_SEG}}, \mbox{\hyperlink{dubins_8cpp_a93b9b75cd5b0e2af3a22b226348c9a96}{L\_SEG}}, \mbox{\hyperlink{dubins_8cpp_a6691cd3d19c6fffbc9002200baf2c01f}{R\_SEG}} \},}
+\DoxyCodeLine{    \{ \mbox{\hyperlink{dubins_8cpp_a93b9b75cd5b0e2af3a22b226348c9a96}{L\_SEG}}, \mbox{\hyperlink{dubins_8cpp_a6691cd3d19c6fffbc9002200baf2c01f}{R\_SEG}}, \mbox{\hyperlink{dubins_8cpp_a93b9b75cd5b0e2af3a22b226348c9a96}{L\_SEG}} \}}
+\DoxyCodeLine{\}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{namespaceHybridAStar_1_1Geometry_a92ebe139fb690f9bdc782ce7485df41b}\label{namespaceHybridAStar_1_1Geometry_a92ebe139fb690f9bdc782ce7485df41b}} 
+\index{HybridAStar::Geometry@{HybridAStar::Geometry}!dubins\_words@{dubins\_words}}
+\index{dubins\_words@{dubins\_words}!HybridAStar::Geometry@{HybridAStar::Geometry}}
+\doxysubsubsection{\texorpdfstring{dubins\_words}{dubins\_words}}
+{\footnotesize\ttfamily \mbox{\hyperlink{namespaceHybridAStar_1_1Geometry_a58ad2ca5c9d27694b17c5b4d00864254}{Dubins\+Word}} Hybrid\+A\+Star\+::\+Geometry\+::dubins\+\_\+words}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{= \{}
+\DoxyCodeLine{    \mbox{\hyperlink{namespaceHybridAStar_1_1Geometry_ae204d1bb0b5046f5df28d3dfde4262fa}{dubins\_LSL}},}
+\DoxyCodeLine{    \mbox{\hyperlink{namespaceHybridAStar_1_1Geometry_af912e41701151b8a0aa2b43f96680793}{dubins\_LSR}},}
+\DoxyCodeLine{    \mbox{\hyperlink{namespaceHybridAStar_1_1Geometry_af45023864203a27209a17b1149ba869e}{dubins\_RSL}},}
+\DoxyCodeLine{    \mbox{\hyperlink{namespaceHybridAStar_1_1Geometry_af6662357f2eb8e1cc22f5ed7b8282fef}{dubins\_RSR}},}
+\DoxyCodeLine{    \mbox{\hyperlink{namespaceHybridAStar_1_1Geometry_a300835eb27683e3cbdd1bb735ee6ad9b}{dubins\_RLR}},}
+\DoxyCodeLine{    \mbox{\hyperlink{namespaceHybridAStar_1_1Geometry_af9ab56b8167c43b19b2e9b6e3a0cf0e6}{dubins\_LRL}},}
+\DoxyCodeLine{\}}
+
+\end{DoxyCode}

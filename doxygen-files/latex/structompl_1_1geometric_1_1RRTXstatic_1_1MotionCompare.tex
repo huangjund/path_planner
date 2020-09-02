@@ -1,0 +1,106 @@
+\hypertarget{structompl_1_1geometric_1_1RRTXstatic_1_1MotionCompare}{}\doxysection{ompl\+::geometric\+::R\+R\+T\+Xstatic\+::Motion\+Compare Struct Reference}
+\label{structompl_1_1geometric_1_1RRTXstatic_1_1MotionCompare}\index{ompl::geometric::RRTXstatic::MotionCompare@{ompl::geometric::RRTXstatic::MotionCompare}}
+
+
+Defines the operator to compare motions.  
+
+
+
+
+{\ttfamily \#include $<$R\+R\+T\+Xstatic.\+h$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{structompl_1_1geometric_1_1RRTXstatic_1_1MotionCompare_aff47c084b254275d43c25afb7e72ec6e}{Motion\+Compare}} (base\+::\+Optimization\+Objective\+Ptr opt, base\+::\+Problem\+Definition\+Ptr pdef)
+\begin{DoxyCompactList}\small\item\em Constructor. \end{DoxyCompactList}\item 
+base\+::\+Cost \mbox{\hyperlink{structompl_1_1geometric_1_1RRTXstatic_1_1MotionCompare_aea4749936f241938b93f4df86821c398}{cost\+Plus\+Heuristic}} (const \mbox{\hyperlink{classompl_1_1geometric_1_1RRTXstatic_1_1Motion}{Motion}} $\ast$m) const
+\begin{DoxyCompactList}\small\item\em Combines the current cost of a motion and the heuritic to the goal. \end{DoxyCompactList}\item 
+base\+::\+Cost \mbox{\hyperlink{structompl_1_1geometric_1_1RRTXstatic_1_1MotionCompare_af4a36494992869075c5e110061d23c05}{alpha\+Cost\+Plus\+Heuristic}} (const \mbox{\hyperlink{classompl_1_1geometric_1_1RRTXstatic_1_1Motion}{Motion}} $\ast$m, double alpha) const
+\begin{DoxyCompactList}\small\item\em Combines the current cost of a motion, weighted by alpha, and the heuritic to the goal. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{structompl_1_1geometric_1_1RRTXstatic_1_1MotionCompare_a2f08eced16a9b09c352dffe2fa365bd7}{operator()}} (const \mbox{\hyperlink{classompl_1_1geometric_1_1RRTXstatic_1_1Motion}{Motion}} $\ast$m1, const \mbox{\hyperlink{classompl_1_1geometric_1_1RRTXstatic_1_1Motion}{Motion}} $\ast$m2) const
+\begin{DoxyCompactList}\small\item\em Ordering of motions. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+base\+::\+Optimization\+Objective\+Ptr \mbox{\hyperlink{structompl_1_1geometric_1_1RRTXstatic_1_1MotionCompare_a90449f27c78f073961e6367ef784b10c}{opt\+\_\+}}
+\begin{DoxyCompactList}\small\item\em Pointer to the Optimization Objective. \end{DoxyCompactList}\item 
+base\+::\+Problem\+Definition\+Ptr \mbox{\hyperlink{structompl_1_1geometric_1_1RRTXstatic_1_1MotionCompare_a5c9d024ca57899b9082fe66f65168a51}{pdef\+\_\+}}
+\begin{DoxyCompactList}\small\item\em Pointer to the Problem Definition. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Defines the operator to compare motions. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{structompl_1_1geometric_1_1RRTXstatic_1_1MotionCompare_aff47c084b254275d43c25afb7e72ec6e}\label{structompl_1_1geometric_1_1RRTXstatic_1_1MotionCompare_aff47c084b254275d43c25afb7e72ec6e}} 
+\index{ompl::geometric::RRTXstatic::MotionCompare@{ompl::geometric::RRTXstatic::MotionCompare}!MotionCompare@{MotionCompare}}
+\index{MotionCompare@{MotionCompare}!ompl::geometric::RRTXstatic::MotionCompare@{ompl::geometric::RRTXstatic::MotionCompare}}
+\doxysubsubsection{\texorpdfstring{MotionCompare()}{MotionCompare()}}
+{\footnotesize\ttfamily ompl\+::geometric\+::\+R\+R\+T\+Xstatic\+::\+Motion\+Compare\+::\+Motion\+Compare (\begin{DoxyParamCaption}\item[{base\+::\+Optimization\+Objective\+Ptr}]{opt,  }\item[{base\+::\+Problem\+Definition\+Ptr}]{pdef }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Constructor. 
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{structompl_1_1geometric_1_1RRTXstatic_1_1MotionCompare_af4a36494992869075c5e110061d23c05}\label{structompl_1_1geometric_1_1RRTXstatic_1_1MotionCompare_af4a36494992869075c5e110061d23c05}} 
+\index{ompl::geometric::RRTXstatic::MotionCompare@{ompl::geometric::RRTXstatic::MotionCompare}!alphaCostPlusHeuristic@{alphaCostPlusHeuristic}}
+\index{alphaCostPlusHeuristic@{alphaCostPlusHeuristic}!ompl::geometric::RRTXstatic::MotionCompare@{ompl::geometric::RRTXstatic::MotionCompare}}
+\doxysubsubsection{\texorpdfstring{alphaCostPlusHeuristic()}{alphaCostPlusHeuristic()}}
+{\footnotesize\ttfamily base\+::\+Cost ompl\+::geometric\+::\+R\+R\+T\+Xstatic\+::\+Motion\+Compare\+::alpha\+Cost\+Plus\+Heuristic (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classompl_1_1geometric_1_1RRTXstatic_1_1Motion}{Motion}} $\ast$}]{m,  }\item[{double}]{alpha }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Combines the current cost of a motion, weighted by alpha, and the heuritic to the goal. 
+
+\mbox{\Hypertarget{structompl_1_1geometric_1_1RRTXstatic_1_1MotionCompare_aea4749936f241938b93f4df86821c398}\label{structompl_1_1geometric_1_1RRTXstatic_1_1MotionCompare_aea4749936f241938b93f4df86821c398}} 
+\index{ompl::geometric::RRTXstatic::MotionCompare@{ompl::geometric::RRTXstatic::MotionCompare}!costPlusHeuristic@{costPlusHeuristic}}
+\index{costPlusHeuristic@{costPlusHeuristic}!ompl::geometric::RRTXstatic::MotionCompare@{ompl::geometric::RRTXstatic::MotionCompare}}
+\doxysubsubsection{\texorpdfstring{costPlusHeuristic()}{costPlusHeuristic()}}
+{\footnotesize\ttfamily base\+::\+Cost ompl\+::geometric\+::\+R\+R\+T\+Xstatic\+::\+Motion\+Compare\+::cost\+Plus\+Heuristic (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classompl_1_1geometric_1_1RRTXstatic_1_1Motion}{Motion}} $\ast$}]{m }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Combines the current cost of a motion and the heuritic to the goal. 
+
+\mbox{\Hypertarget{structompl_1_1geometric_1_1RRTXstatic_1_1MotionCompare_a2f08eced16a9b09c352dffe2fa365bd7}\label{structompl_1_1geometric_1_1RRTXstatic_1_1MotionCompare_a2f08eced16a9b09c352dffe2fa365bd7}} 
+\index{ompl::geometric::RRTXstatic::MotionCompare@{ompl::geometric::RRTXstatic::MotionCompare}!operator()@{operator()}}
+\index{operator()@{operator()}!ompl::geometric::RRTXstatic::MotionCompare@{ompl::geometric::RRTXstatic::MotionCompare}}
+\doxysubsubsection{\texorpdfstring{operator()()}{operator()()}}
+{\footnotesize\ttfamily bool ompl\+::geometric\+::\+R\+R\+T\+Xstatic\+::\+Motion\+Compare\+::operator() (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classompl_1_1geometric_1_1RRTXstatic_1_1Motion}{Motion}} $\ast$}]{m1,  }\item[{const \mbox{\hyperlink{classompl_1_1geometric_1_1RRTXstatic_1_1Motion}{Motion}} $\ast$}]{m2 }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Ordering of motions. 
+
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{structompl_1_1geometric_1_1RRTXstatic_1_1MotionCompare_a90449f27c78f073961e6367ef784b10c}\label{structompl_1_1geometric_1_1RRTXstatic_1_1MotionCompare_a90449f27c78f073961e6367ef784b10c}} 
+\index{ompl::geometric::RRTXstatic::MotionCompare@{ompl::geometric::RRTXstatic::MotionCompare}!opt\_@{opt\_}}
+\index{opt\_@{opt\_}!ompl::geometric::RRTXstatic::MotionCompare@{ompl::geometric::RRTXstatic::MotionCompare}}
+\doxysubsubsection{\texorpdfstring{opt\_}{opt\_}}
+{\footnotesize\ttfamily base\+::\+Optimization\+Objective\+Ptr ompl\+::geometric\+::\+R\+R\+T\+Xstatic\+::\+Motion\+Compare\+::opt\+\_\+}
+
+
+
+Pointer to the Optimization Objective. 
+
+\mbox{\Hypertarget{structompl_1_1geometric_1_1RRTXstatic_1_1MotionCompare_a5c9d024ca57899b9082fe66f65168a51}\label{structompl_1_1geometric_1_1RRTXstatic_1_1MotionCompare_a5c9d024ca57899b9082fe66f65168a51}} 
+\index{ompl::geometric::RRTXstatic::MotionCompare@{ompl::geometric::RRTXstatic::MotionCompare}!pdef\_@{pdef\_}}
+\index{pdef\_@{pdef\_}!ompl::geometric::RRTXstatic::MotionCompare@{ompl::geometric::RRTXstatic::MotionCompare}}
+\doxysubsubsection{\texorpdfstring{pdef\_}{pdef\_}}
+{\footnotesize\ttfamily base\+::\+Problem\+Definition\+Ptr ompl\+::geometric\+::\+R\+R\+T\+Xstatic\+::\+Motion\+Compare\+::pdef\+\_\+}
+
+
+
+Pointer to the Problem Definition. 
+
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+geometry/\+R\+R\+Txstatic/\mbox{\hyperlink{RRTXstatic_8h}{R\+R\+T\+Xstatic.\+h}}\end{DoxyCompactItemize}

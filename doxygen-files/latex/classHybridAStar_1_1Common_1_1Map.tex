@@ -1,0 +1,143 @@
+\hypertarget{classHybridAStar_1_1Common_1_1Map}{}\doxysection{Hybrid\+A\+Star\+::Common\+::Map$<$ T $>$ Class Template Reference}
+\label{classHybridAStar_1_1Common_1_1Map}\index{HybridAStar::Common::Map$<$ T $>$@{HybridAStar::Common::Map$<$ T $>$}}
+
+
+{\ttfamily \#include $<$map.\+h$>$}
+
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structHybridAStar_1_1Common_1_1Map_1_1RawMap}{Raw\+Map}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classHybridAStar_1_1Common_1_1Map_aa8837992a8871b8287b40dca7418e488}{Map}} (const \mbox{\hyperlink{classHybridAStar_1_1Common_1_1Map}{Map}} \&)=delete
+\item 
+\mbox{\hyperlink{classHybridAStar_1_1Common_1_1Map}{Map}} \& \mbox{\hyperlink{classHybridAStar_1_1Common_1_1Map_a52a58408d4d6c36332da0bc818d46912}{operator=}} (const \mbox{\hyperlink{classHybridAStar_1_1Common_1_1Map}{Map}} \&)=delete
+\item 
+\mbox{\hyperlink{classHybridAStar_1_1Common_1_1Map_a4c1f71f6f3923a99ef4d59da4538945b}{Map}} ()=default
+\item 
+\mbox{\hyperlink{classHybridAStar_1_1Common_1_1Map_af301337473bf93b087db050bc1584309}{Map}} (const nav\+\_\+msgs\+::\+Occupancy\+Grid\+::\+Ptr map)
+\item 
+virtual \mbox{\hyperlink{classHybridAStar_1_1Common_1_1Map_a2e4d92ae860c75af410dc87c2e49cd38}{$\sim$\+Map}} ()=default
+\item 
+void \mbox{\hyperlink{classHybridAStar_1_1Common_1_1Map_ae7b87bb4fc1fda1eaef06c3a7c627627}{set\+Map}} (const nav\+\_\+msgs\+::\+Occupancy\+Grid\+::\+Ptr map)
+\item 
+void \mbox{\hyperlink{classHybridAStar_1_1Common_1_1Map_a0492469a7ebccc9902c6d6514721dd88}{set\+SS}} ()
+\item 
+void \mbox{\hyperlink{classHybridAStar_1_1Common_1_1Map_ab9b2764b777affb7639ff78a4db4cb39}{reset\+SS}} ()
+\item 
+const bool \mbox{\hyperlink{classHybridAStar_1_1Common_1_1Map_aabd2ee6112801e6d94836a7bf2872b93}{has\+State\+Space}} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structHybridAStar_1_1Common_1_1Map_1_1RawMap}{Hybrid\+A\+Star\+::\+Common\+::\+Map\+::\+Raw\+Map}} \mbox{\hyperlink{classHybridAStar_1_1Common_1_1Map_a9dbc28e75bf2581551c3192106c24aae}{info\+\_\+}}
+\item 
+std\+::vector$<$ T $>$ \mbox{\hyperlink{classHybridAStar_1_1Common_1_1Map_a8d1906f3aad2c2492696f71eb76d0155}{statespace}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+bool \mbox{\hyperlink{classHybridAStar_1_1Common_1_1Map_af724513311c4a39017f74725f495348b}{has\+State\+Space\+\_\+}} = false
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classHybridAStar_1_1Common_1_1Map_aa8837992a8871b8287b40dca7418e488}\label{classHybridAStar_1_1Common_1_1Map_aa8837992a8871b8287b40dca7418e488}} 
+\index{HybridAStar::Common::Map$<$ T $>$@{HybridAStar::Common::Map$<$ T $>$}!Map@{Map}}
+\index{Map@{Map}!HybridAStar::Common::Map$<$ T $>$@{HybridAStar::Common::Map$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{Map()}{Map()}\hspace{0.1cm}{\footnotesize\ttfamily [1/3]}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+\mbox{\hyperlink{classHybridAStar_1_1Common_1_1Map}{Hybrid\+A\+Star\+::\+Common\+::\+Map}}$<$ T $>$\+::\mbox{\hyperlink{classHybridAStar_1_1Common_1_1Map}{Map}} (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classHybridAStar_1_1Common_1_1Map}{Map}}$<$ T $>$ \&}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [delete]}}
+
+\mbox{\Hypertarget{classHybridAStar_1_1Common_1_1Map_a4c1f71f6f3923a99ef4d59da4538945b}\label{classHybridAStar_1_1Common_1_1Map_a4c1f71f6f3923a99ef4d59da4538945b}} 
+\index{HybridAStar::Common::Map$<$ T $>$@{HybridAStar::Common::Map$<$ T $>$}!Map@{Map}}
+\index{Map@{Map}!HybridAStar::Common::Map$<$ T $>$@{HybridAStar::Common::Map$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{Map()}{Map()}\hspace{0.1cm}{\footnotesize\ttfamily [2/3]}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+\mbox{\hyperlink{classHybridAStar_1_1Common_1_1Map}{Hybrid\+A\+Star\+::\+Common\+::\+Map}}$<$ T $>$\+::\mbox{\hyperlink{classHybridAStar_1_1Common_1_1Map}{Map}} (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [default]}}
+
+\mbox{\Hypertarget{classHybridAStar_1_1Common_1_1Map_af301337473bf93b087db050bc1584309}\label{classHybridAStar_1_1Common_1_1Map_af301337473bf93b087db050bc1584309}} 
+\index{HybridAStar::Common::Map$<$ T $>$@{HybridAStar::Common::Map$<$ T $>$}!Map@{Map}}
+\index{Map@{Map}!HybridAStar::Common::Map$<$ T $>$@{HybridAStar::Common::Map$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{Map()}{Map()}\hspace{0.1cm}{\footnotesize\ttfamily [3/3]}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+\mbox{\hyperlink{classHybridAStar_1_1Common_1_1Map}{Hybrid\+A\+Star\+::\+Common\+::\+Map}}$<$ T $>$\+::\mbox{\hyperlink{classHybridAStar_1_1Common_1_1Map}{Map}} (\begin{DoxyParamCaption}\item[{const nav\+\_\+msgs\+::\+Occupancy\+Grid\+::\+Ptr}]{map }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [explicit]}}
+
+\mbox{\Hypertarget{classHybridAStar_1_1Common_1_1Map_a2e4d92ae860c75af410dc87c2e49cd38}\label{classHybridAStar_1_1Common_1_1Map_a2e4d92ae860c75af410dc87c2e49cd38}} 
+\index{HybridAStar::Common::Map$<$ T $>$@{HybridAStar::Common::Map$<$ T $>$}!````~Map@{$\sim$Map}}
+\index{````~Map@{$\sim$Map}!HybridAStar::Common::Map$<$ T $>$@{HybridAStar::Common::Map$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{$\sim$Map()}{~Map()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+virtual \mbox{\hyperlink{classHybridAStar_1_1Common_1_1Map}{Hybrid\+A\+Star\+::\+Common\+::\+Map}}$<$ T $>$\+::$\sim$\mbox{\hyperlink{classHybridAStar_1_1Common_1_1Map}{Map}} (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}, {\ttfamily [default]}}
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classHybridAStar_1_1Common_1_1Map_aabd2ee6112801e6d94836a7bf2872b93}\label{classHybridAStar_1_1Common_1_1Map_aabd2ee6112801e6d94836a7bf2872b93}} 
+\index{HybridAStar::Common::Map$<$ T $>$@{HybridAStar::Common::Map$<$ T $>$}!hasStateSpace@{hasStateSpace}}
+\index{hasStateSpace@{hasStateSpace}!HybridAStar::Common::Map$<$ T $>$@{HybridAStar::Common::Map$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{hasStateSpace()}{hasStateSpace()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+const bool \mbox{\hyperlink{classHybridAStar_1_1Common_1_1Map}{Hybrid\+A\+Star\+::\+Common\+::\+Map}}$<$ T $>$\+::has\+State\+Space (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classHybridAStar_1_1Common_1_1Map_a52a58408d4d6c36332da0bc818d46912}\label{classHybridAStar_1_1Common_1_1Map_a52a58408d4d6c36332da0bc818d46912}} 
+\index{HybridAStar::Common::Map$<$ T $>$@{HybridAStar::Common::Map$<$ T $>$}!operator=@{operator=}}
+\index{operator=@{operator=}!HybridAStar::Common::Map$<$ T $>$@{HybridAStar::Common::Map$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{operator=()}{operator=()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+\mbox{\hyperlink{classHybridAStar_1_1Common_1_1Map}{Map}}\& \mbox{\hyperlink{classHybridAStar_1_1Common_1_1Map}{Hybrid\+A\+Star\+::\+Common\+::\+Map}}$<$ T $>$\+::operator= (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classHybridAStar_1_1Common_1_1Map}{Map}}$<$ T $>$ \&}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [delete]}}
+
+\mbox{\Hypertarget{classHybridAStar_1_1Common_1_1Map_ab9b2764b777affb7639ff78a4db4cb39}\label{classHybridAStar_1_1Common_1_1Map_ab9b2764b777affb7639ff78a4db4cb39}} 
+\index{HybridAStar::Common::Map$<$ T $>$@{HybridAStar::Common::Map$<$ T $>$}!resetSS@{resetSS}}
+\index{resetSS@{resetSS}!HybridAStar::Common::Map$<$ T $>$@{HybridAStar::Common::Map$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{resetSS()}{resetSS()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+void \mbox{\hyperlink{classHybridAStar_1_1Common_1_1Map}{Hybrid\+A\+Star\+::\+Common\+::\+Map}}$<$ T $>$\+::reset\+SS}
+
+\mbox{\Hypertarget{classHybridAStar_1_1Common_1_1Map_ae7b87bb4fc1fda1eaef06c3a7c627627}\label{classHybridAStar_1_1Common_1_1Map_ae7b87bb4fc1fda1eaef06c3a7c627627}} 
+\index{HybridAStar::Common::Map$<$ T $>$@{HybridAStar::Common::Map$<$ T $>$}!setMap@{setMap}}
+\index{setMap@{setMap}!HybridAStar::Common::Map$<$ T $>$@{HybridAStar::Common::Map$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{setMap()}{setMap()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+void \mbox{\hyperlink{classHybridAStar_1_1Common_1_1Map}{Hybrid\+A\+Star\+::\+Common\+::\+Map}}$<$ T $>$\+::set\+Map (\begin{DoxyParamCaption}\item[{const nav\+\_\+msgs\+::\+Occupancy\+Grid\+::\+Ptr}]{map }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classHybridAStar_1_1Common_1_1Map_a0492469a7ebccc9902c6d6514721dd88}\label{classHybridAStar_1_1Common_1_1Map_a0492469a7ebccc9902c6d6514721dd88}} 
+\index{HybridAStar::Common::Map$<$ T $>$@{HybridAStar::Common::Map$<$ T $>$}!setSS@{setSS}}
+\index{setSS@{setSS}!HybridAStar::Common::Map$<$ T $>$@{HybridAStar::Common::Map$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{setSS()}{setSS()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+void \mbox{\hyperlink{classHybridAStar_1_1Common_1_1Map}{Hybrid\+A\+Star\+::\+Common\+::\+Map}}$<$ T $>$\+::set\+SS}
+
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{classHybridAStar_1_1Common_1_1Map_af724513311c4a39017f74725f495348b}\label{classHybridAStar_1_1Common_1_1Map_af724513311c4a39017f74725f495348b}} 
+\index{HybridAStar::Common::Map$<$ T $>$@{HybridAStar::Common::Map$<$ T $>$}!hasStateSpace\_@{hasStateSpace\_}}
+\index{hasStateSpace\_@{hasStateSpace\_}!HybridAStar::Common::Map$<$ T $>$@{HybridAStar::Common::Map$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{hasStateSpace\_}{hasStateSpace\_}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+bool \mbox{\hyperlink{classHybridAStar_1_1Common_1_1Map}{Hybrid\+A\+Star\+::\+Common\+::\+Map}}$<$ T $>$\+::has\+State\+Space\+\_\+ = false\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classHybridAStar_1_1Common_1_1Map_a9dbc28e75bf2581551c3192106c24aae}\label{classHybridAStar_1_1Common_1_1Map_a9dbc28e75bf2581551c3192106c24aae}} 
+\index{HybridAStar::Common::Map$<$ T $>$@{HybridAStar::Common::Map$<$ T $>$}!info\_@{info\_}}
+\index{info\_@{info\_}!HybridAStar::Common::Map$<$ T $>$@{HybridAStar::Common::Map$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{info\_}{info\_}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+struct \mbox{\hyperlink{structHybridAStar_1_1Common_1_1Map_1_1RawMap}{Hybrid\+A\+Star\+::\+Common\+::\+Map\+::\+Raw\+Map}} \mbox{\hyperlink{classHybridAStar_1_1Common_1_1Map}{Hybrid\+A\+Star\+::\+Common\+::\+Map}}$<$ T $>$\+::info\+\_\+}
+
+\mbox{\Hypertarget{classHybridAStar_1_1Common_1_1Map_a8d1906f3aad2c2492696f71eb76d0155}\label{classHybridAStar_1_1Common_1_1Map_a8d1906f3aad2c2492696f71eb76d0155}} 
+\index{HybridAStar::Common::Map$<$ T $>$@{HybridAStar::Common::Map$<$ T $>$}!statespace@{statespace}}
+\index{statespace@{statespace}!HybridAStar::Common::Map$<$ T $>$@{HybridAStar::Common::Map$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{statespace}{statespace}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+std\+::vector$<$T$>$ \mbox{\hyperlink{classHybridAStar_1_1Common_1_1Map}{Hybrid\+A\+Star\+::\+Common\+::\+Map}}$<$ T $>$\+::statespace}
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+common/map/\mbox{\hyperlink{map_8h}{map.\+h}}\item 
+common/map/\mbox{\hyperlink{map_8cpp}{map.\+cpp}}\end{DoxyCompactItemize}

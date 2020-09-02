@@ -1,0 +1,544 @@
+\hypertarget{classHybridAStar_1_1Common_1_1GridState}{}\doxysection{Hybrid\+A\+Star\+::Common\+::Grid\+State Class Reference}
+\label{classHybridAStar_1_1Common_1_1GridState}\index{HybridAStar::Common::GridState@{HybridAStar::Common::GridState}}
+
+
+Grid \mbox{\hyperlink{classHybridAStar_1_1Common_1_1State}{State}} is a Rn discrete coordinate state class.  
+
+
+
+
+{\ttfamily \#include $<$Grid\+State.\+h$>$}
+
+Inheritance diagram for Hybrid\+A\+Star\+::Common\+::Grid\+State\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classHybridAStar_1_1Common_1_1GridState}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classHybridAStar_1_1Common_1_1GridState_a95da214d3e51d116b8e76a76f6631403}{Grid\+State}} ()
+\item 
+\mbox{\hyperlink{classHybridAStar_1_1Common_1_1GridState_aa2da038b1e487baba572a81cbf2ca940}{Grid\+State}} (float, float)
+\item 
+\mbox{\hyperlink{classHybridAStar_1_1Common_1_1GridState_a59b382ae5f75652eaf3c370889b3ced4}{Grid\+State}} (int x, int y, float g, float h, std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classHybridAStar_1_1Common_1_1GridState}{Grid\+State}} $>$ pred, float cellsize)
+\item 
+\mbox{\hyperlink{classHybridAStar_1_1Common_1_1GridState_ab9b5be892f2e39288f25dfef72bc6ffe}{Grid\+State}} (const \mbox{\hyperlink{classHybridAStar_1_1Common_1_1GridState}{Grid\+State}} \&)
+\item 
+\mbox{\hyperlink{classHybridAStar_1_1Common_1_1GridState}{Grid\+State}} \& \mbox{\hyperlink{classHybridAStar_1_1Common_1_1GridState_a2b83dbc9eb06d27ea59be7f37c015c67}{operator=}} (const \mbox{\hyperlink{classHybridAStar_1_1Common_1_1GridState}{Grid\+State}} \&)
+\item 
+\mbox{\hyperlink{classHybridAStar_1_1Common_1_1GridState_ad36669a5be515e1542b5b833aae7e3be}{$\sim$\+Grid\+State}} ()=default
+\item 
+void \mbox{\hyperlink{classHybridAStar_1_1Common_1_1GridState_a1ccf58d704d260c342736bbccaa07493}{free\+State}} (\mbox{\hyperlink{classHybridAStar_1_1Common_1_1State}{State}} $\ast$state) const
+\item 
+int \mbox{\hyperlink{classHybridAStar_1_1Common_1_1GridState_aa7e0d3f6b88ef5ec9e779979bf8b7856}{getX}} () const
+\begin{DoxyCompactList}\small\item\em get the x position \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{classHybridAStar_1_1Common_1_1GridState_aa5cbff3d8fd471ed10f0abbb6fd23e25}{getY}} () const
+\begin{DoxyCompactList}\small\item\em get the y position \end{DoxyCompactList}\item 
+float \mbox{\hyperlink{classHybridAStar_1_1Common_1_1GridState_ae249762c4176319e2cd44e05be10b60e}{getG}} () const
+\begin{DoxyCompactList}\small\item\em get the cost-\/so-\/far (real value) \end{DoxyCompactList}\item 
+float \mbox{\hyperlink{classHybridAStar_1_1Common_1_1GridState_aaed42fa3395cb3739f6c557afcfdd2a6}{getH}} () const
+\begin{DoxyCompactList}\small\item\em get the cost-\/to-\/come (heuristic value) \end{DoxyCompactList}\item 
+float \mbox{\hyperlink{classHybridAStar_1_1Common_1_1GridState_aec3764652a053eb48e0417f317322c2a}{getC}} () const
+\begin{DoxyCompactList}\small\item\em get the total estimated cost \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{classHybridAStar_1_1Common_1_1GridState_a90249f5745dd1d4bc42647f751dbd699}{get\+Idx}} () const
+\begin{DoxyCompactList}\small\item\em get the index of the node in the 2D array \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classHybridAStar_1_1Common_1_1GridState_a364f8687b26e112a62f29eab98334212}{is\+Open}} () const
+\begin{DoxyCompactList}\small\item\em determine whether the node is open \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classHybridAStar_1_1Common_1_1GridState_a3d809478c580d37636e72344475071b8}{is\+Closed}} () const
+\begin{DoxyCompactList}\small\item\em determine whether the node is closed \end{DoxyCompactList}\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classHybridAStar_1_1Common_1_1GridState}{Grid\+State}} $>$ \mbox{\hyperlink{classHybridAStar_1_1Common_1_1GridState_a48114736d985a9d2da9256f8d7f5e40d}{get\+Pred}} () const
+\begin{DoxyCompactList}\small\item\em get a pointer to the predecessor \end{DoxyCompactList}\item 
+unsigned int \mbox{\hyperlink{classHybridAStar_1_1Common_1_1GridState_a2071f3ba6a76f64b881e83c1dcb3568e}{get\+Dimensions}} () const
+\item 
+void \mbox{\hyperlink{classHybridAStar_1_1Common_1_1GridState_a6b5abf5945cdee5fb4a0fd3d3b97d14c}{setX}} (const int \&x)
+\begin{DoxyCompactList}\small\item\em set the x position \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classHybridAStar_1_1Common_1_1GridState_acc6c5741f42314bf637f4d787562a411}{setY}} (const int \&y)
+\begin{DoxyCompactList}\small\item\em set the y position \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classHybridAStar_1_1Common_1_1GridState_aa3f3c092f37df480f3213941270ec3ea}{setG}} (const float \&\mbox{\hyperlink{classHybridAStar_1_1Common_1_1GridState_af7d73fc419b91e78a751276af9af3c9d}{g\+\_\+}})
+\begin{DoxyCompactList}\small\item\em set the cost-\/so-\/far (real value) \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classHybridAStar_1_1Common_1_1GridState_a61800d2a270a3a82b4a7ef1deab04da8}{setH}} (const float \&\mbox{\hyperlink{classHybridAStar_1_1Common_1_1GridState_a8501828999250c5ec80c97bf8461bb46}{h\+\_\+}})
+\begin{DoxyCompactList}\small\item\em set the cost-\/to-\/come (heuristic value) \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{classHybridAStar_1_1Common_1_1GridState_adc3cfc4a10a4fa6dd19b1d7e31e833bc}{set\+Idx}} (int width)
+\begin{DoxyCompactList}\small\item\em set and get the index of the node in the 2D array \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classHybridAStar_1_1Common_1_1GridState_a3312ef6ad2c37173eb986a43d16c3d31}{open}} ()
+\begin{DoxyCompactList}\small\item\em open the node \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classHybridAStar_1_1Common_1_1GridState_a10efca9ac441fd9c12d73d22290e29c7}{close}} ()
+\begin{DoxyCompactList}\small\item\em close the node \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classHybridAStar_1_1Common_1_1GridState_add46ebde6c7f67dfc65580f135a22019}{reset}} ()
+\begin{DoxyCompactList}\small\item\em set the node neither open nor closed \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classHybridAStar_1_1Common_1_1GridState_acacef48dedbc86f795ed62c38b022bb7}{set\+Pred}} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classHybridAStar_1_1Common_1_1GridState}{Grid\+State}} $>$ pred)
+\begin{DoxyCompactList}\small\item\em set a pointer to the predecessor of the node \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classHybridAStar_1_1Common_1_1GridState}{Grid\+State}} $\ast$ \mbox{\hyperlink{classHybridAStar_1_1Common_1_1GridState_ade7a0457e1fdec482bfeb63da87af376}{create\+Successor}} (const int i, std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classHybridAStar_1_1Common_1_1GridState}{Grid\+State}} $>$ \&)
+\item 
+void \mbox{\hyperlink{classHybridAStar_1_1Common_1_1GridState_abbe1f07214cc4ca3ba9fea5554dede04}{updateG}} ()
+\begin{DoxyCompactList}\small\item\em Updates the cost-\/so-\/far for the node x\textquotesingle{} coming from its predecessor. It also discovers the node. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classHybridAStar_1_1Common_1_1GridState_a91f1467f39a80710f71d556fab7e302b}{updateH}} (const \mbox{\hyperlink{classHybridAStar_1_1Common_1_1GridState}{Grid\+State}} \&goal)
+\begin{DoxyCompactList}\small\item\em Updates the cost-\/to-\/go for the node x\textquotesingle{} to the goal node. \end{DoxyCompactList}\item 
+float \mbox{\hyperlink{classHybridAStar_1_1Common_1_1GridState_aa86483f417c630017aa22e58fcc464f3}{movement\+Cost}} (const \mbox{\hyperlink{classHybridAStar_1_1Common_1_1GridState}{Grid\+State}} \&pred) const
+\begin{DoxyCompactList}\small\item\em The heuristic as well as the cost measure. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classHybridAStar_1_1Common_1_1GridState_aaa34b26253c74d515ff28115fd47d258}{is\+On\+Grid}} (const int width, const int height) const
+\begin{DoxyCompactList}\small\item\em Validity check to test, whether the node is in the 2D array. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classHybridAStar_1_1Common_1_1GridState_a6aeebf22eae20fb237d146718c87f880}{clear}} ()
+\item 
+bool \mbox{\hyperlink{classHybridAStar_1_1Common_1_1GridState_a8191c715b07d6c6e127cfc6c05b4a4c8}{operator==}} (const \mbox{\hyperlink{classHybridAStar_1_1Common_1_1GridState}{Grid\+State}} \&rhs) const
+\begin{DoxyCompactList}\small\item\em Creates a successor on a eight-\/connected grid. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+static const unsigned int \mbox{\hyperlink{classHybridAStar_1_1Common_1_1GridState_a8307aa7db912052d79f6faad1bbb3216}{dimension}} = 2
+\end{DoxyCompactItemize}
+\doxysubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{classHybridAStar_1_1Common_1_1GridState_a41990a7c69f876db14a47b1abfbae53b}{x\+\_\+}}
+\item 
+int \mbox{\hyperlink{classHybridAStar_1_1Common_1_1GridState_abdbb0bbd098d4729ddf9651c52ca54a2}{y\+\_\+}}
+\item 
+float \mbox{\hyperlink{classHybridAStar_1_1Common_1_1GridState_af7d73fc419b91e78a751276af9af3c9d}{g\+\_\+}}
+\begin{DoxyCompactList}\small\item\em the cost-\/so-\/far \end{DoxyCompactList}\item 
+float \mbox{\hyperlink{classHybridAStar_1_1Common_1_1GridState_a8501828999250c5ec80c97bf8461bb46}{h\+\_\+}}
+\begin{DoxyCompactList}\small\item\em the cost-\/to-\/go \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{classHybridAStar_1_1Common_1_1GridState_a4087b1ac5eae8781da3ad0aac9e2f030}{idx\+\_\+}}
+\begin{DoxyCompactList}\small\item\em the index of the node in the 2D array \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classHybridAStar_1_1Common_1_1GridState_a335e6768c042538e48dd65c53b12a8a3}{o\+\_\+}}
+\begin{DoxyCompactList}\small\item\em the open value \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classHybridAStar_1_1Common_1_1GridState_abac7f0f3e91bfc7908bfd50a524d6a05}{c\+\_\+}}
+\begin{DoxyCompactList}\small\item\em the closed value \end{DoxyCompactList}\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classHybridAStar_1_1Common_1_1GridState}{Grid\+State}} $>$ \mbox{\hyperlink{classHybridAStar_1_1Common_1_1GridState_a7c828ff25ab686156097796f62ced5a2}{pred\+\_\+}}
+\begin{DoxyCompactList}\small\item\em the predecessor pointer \end{DoxyCompactList}\item 
+float \mbox{\hyperlink{classHybridAStar_1_1Common_1_1GridState_a8b0204a7695a4296fb354f617f785165}{cell\+Size\+\_\+}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Static Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+static const int \mbox{\hyperlink{classHybridAStar_1_1Common_1_1GridState_a86dd1e77fe0dcb42fe7c2dd2e292200a}{dir}} = 8
+\begin{DoxyCompactList}\small\item\em Number of possible directions. \end{DoxyCompactList}\item 
+static const int \mbox{\hyperlink{classHybridAStar_1_1Common_1_1GridState_a5d38092b8c858f0863a124714c52d1c5}{dx}} \mbox{[}$\,$\mbox{]} = \{ -\/1, -\/1, 0, 1, 1, 1, 0, -\/1 \}
+\begin{DoxyCompactList}\small\item\em Possible movements in the x direction. \end{DoxyCompactList}\item 
+static const int \mbox{\hyperlink{classHybridAStar_1_1Common_1_1GridState_ad3e1885b94cd0fc3116867b0858a6ae7}{dy}} \mbox{[}$\,$\mbox{]} = \{ 0, 1, 1, 1, 0, -\/1, -\/1, -\/1 \}
+\begin{DoxyCompactList}\small\item\em Possible movements in the y direction. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Additional Inherited Members}
+
+
+\doxysubsection{Detailed Description}
+Grid \mbox{\hyperlink{classHybridAStar_1_1Common_1_1State}{State}} is a Rn discrete coordinate state class. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classHybridAStar_1_1Common_1_1GridState_a95da214d3e51d116b8e76a76f6631403}\label{classHybridAStar_1_1Common_1_1GridState_a95da214d3e51d116b8e76a76f6631403}} 
+\index{HybridAStar::Common::GridState@{HybridAStar::Common::GridState}!GridState@{GridState}}
+\index{GridState@{GridState}!HybridAStar::Common::GridState@{HybridAStar::Common::GridState}}
+\doxysubsubsection{\texorpdfstring{GridState()}{GridState()}\hspace{0.1cm}{\footnotesize\ttfamily [1/4]}}
+{\footnotesize\ttfamily Hybrid\+A\+Star\+::\+Common\+::\+Grid\+State\+::\+Grid\+State (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [explicit]}}
+
+\mbox{\Hypertarget{classHybridAStar_1_1Common_1_1GridState_aa2da038b1e487baba572a81cbf2ca940}\label{classHybridAStar_1_1Common_1_1GridState_aa2da038b1e487baba572a81cbf2ca940}} 
+\index{HybridAStar::Common::GridState@{HybridAStar::Common::GridState}!GridState@{GridState}}
+\index{GridState@{GridState}!HybridAStar::Common::GridState@{HybridAStar::Common::GridState}}
+\doxysubsubsection{\texorpdfstring{GridState()}{GridState()}\hspace{0.1cm}{\footnotesize\ttfamily [2/4]}}
+{\footnotesize\ttfamily Hybrid\+A\+Star\+::\+Common\+::\+Grid\+State\+::\+Grid\+State (\begin{DoxyParamCaption}\item[{float}]{cellsize,  }\item[{float}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [explicit]}}
+
+\mbox{\Hypertarget{classHybridAStar_1_1Common_1_1GridState_a59b382ae5f75652eaf3c370889b3ced4}\label{classHybridAStar_1_1Common_1_1GridState_a59b382ae5f75652eaf3c370889b3ced4}} 
+\index{HybridAStar::Common::GridState@{HybridAStar::Common::GridState}!GridState@{GridState}}
+\index{GridState@{GridState}!HybridAStar::Common::GridState@{HybridAStar::Common::GridState}}
+\doxysubsubsection{\texorpdfstring{GridState()}{GridState()}\hspace{0.1cm}{\footnotesize\ttfamily [3/4]}}
+{\footnotesize\ttfamily Hybrid\+A\+Star\+::\+Common\+::\+Grid\+State\+::\+Grid\+State (\begin{DoxyParamCaption}\item[{int}]{x,  }\item[{int}]{y,  }\item[{float}]{g,  }\item[{float}]{h,  }\item[{std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classHybridAStar_1_1Common_1_1GridState}{Grid\+State}} $>$}]{pred,  }\item[{float}]{cellsize }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [explicit]}}
+
+\mbox{\Hypertarget{classHybridAStar_1_1Common_1_1GridState_ab9b5be892f2e39288f25dfef72bc6ffe}\label{classHybridAStar_1_1Common_1_1GridState_ab9b5be892f2e39288f25dfef72bc6ffe}} 
+\index{HybridAStar::Common::GridState@{HybridAStar::Common::GridState}!GridState@{GridState}}
+\index{GridState@{GridState}!HybridAStar::Common::GridState@{HybridAStar::Common::GridState}}
+\doxysubsubsection{\texorpdfstring{GridState()}{GridState()}\hspace{0.1cm}{\footnotesize\ttfamily [4/4]}}
+{\footnotesize\ttfamily Hybrid\+A\+Star\+::\+Common\+::\+Grid\+State\+::\+Grid\+State (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classHybridAStar_1_1Common_1_1GridState}{Grid\+State}} \&}]{cp }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classHybridAStar_1_1Common_1_1GridState_ad36669a5be515e1542b5b833aae7e3be}\label{classHybridAStar_1_1Common_1_1GridState_ad36669a5be515e1542b5b833aae7e3be}} 
+\index{HybridAStar::Common::GridState@{HybridAStar::Common::GridState}!````~GridState@{$\sim$GridState}}
+\index{````~GridState@{$\sim$GridState}!HybridAStar::Common::GridState@{HybridAStar::Common::GridState}}
+\doxysubsubsection{\texorpdfstring{$\sim$GridState()}{~GridState()}}
+{\footnotesize\ttfamily Hybrid\+A\+Star\+::\+Common\+::\+Grid\+State\+::$\sim$\+Grid\+State (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [default]}}
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classHybridAStar_1_1Common_1_1GridState_a6aeebf22eae20fb237d146718c87f880}\label{classHybridAStar_1_1Common_1_1GridState_a6aeebf22eae20fb237d146718c87f880}} 
+\index{HybridAStar::Common::GridState@{HybridAStar::Common::GridState}!clear@{clear}}
+\index{clear@{clear}!HybridAStar::Common::GridState@{HybridAStar::Common::GridState}}
+\doxysubsubsection{\texorpdfstring{clear()}{clear()}}
+{\footnotesize\ttfamily void Hybrid\+A\+Star\+::\+Common\+::\+Grid\+State\+::clear (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classHybridAStar_1_1Common_1_1GridState_a10efca9ac441fd9c12d73d22290e29c7}\label{classHybridAStar_1_1Common_1_1GridState_a10efca9ac441fd9c12d73d22290e29c7}} 
+\index{HybridAStar::Common::GridState@{HybridAStar::Common::GridState}!close@{close}}
+\index{close@{close}!HybridAStar::Common::GridState@{HybridAStar::Common::GridState}}
+\doxysubsubsection{\texorpdfstring{close()}{close()}}
+{\footnotesize\ttfamily void Hybrid\+A\+Star\+::\+Common\+::\+Grid\+State\+::close (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+close the node 
+
+\mbox{\Hypertarget{classHybridAStar_1_1Common_1_1GridState_ade7a0457e1fdec482bfeb63da87af376}\label{classHybridAStar_1_1Common_1_1GridState_ade7a0457e1fdec482bfeb63da87af376}} 
+\index{HybridAStar::Common::GridState@{HybridAStar::Common::GridState}!createSuccessor@{createSuccessor}}
+\index{createSuccessor@{createSuccessor}!HybridAStar::Common::GridState@{HybridAStar::Common::GridState}}
+\doxysubsubsection{\texorpdfstring{createSuccessor()}{createSuccessor()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classHybridAStar_1_1Common_1_1GridState}{Grid\+State}} $\ast$ Hybrid\+A\+Star\+::\+Common\+::\+Grid\+State\+::create\+Successor (\begin{DoxyParamCaption}\item[{const int}]{i,  }\item[{std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classHybridAStar_1_1Common_1_1GridState}{Grid\+State}} $>$ \&}]{self }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classHybridAStar_1_1Common_1_1GridState_a1ccf58d704d260c342736bbccaa07493}\label{classHybridAStar_1_1Common_1_1GridState_a1ccf58d704d260c342736bbccaa07493}} 
+\index{HybridAStar::Common::GridState@{HybridAStar::Common::GridState}!freeState@{freeState}}
+\index{freeState@{freeState}!HybridAStar::Common::GridState@{HybridAStar::Common::GridState}}
+\doxysubsubsection{\texorpdfstring{freeState()}{freeState()}}
+{\footnotesize\ttfamily void Hybrid\+A\+Star\+::\+Common\+::\+Grid\+State\+::free\+State (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classHybridAStar_1_1Common_1_1State}{State}} $\ast$}]{state }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{classHybridAStar_1_1Common_1_1GridState_aec3764652a053eb48e0417f317322c2a}\label{classHybridAStar_1_1Common_1_1GridState_aec3764652a053eb48e0417f317322c2a}} 
+\index{HybridAStar::Common::GridState@{HybridAStar::Common::GridState}!getC@{getC}}
+\index{getC@{getC}!HybridAStar::Common::GridState@{HybridAStar::Common::GridState}}
+\doxysubsubsection{\texorpdfstring{getC()}{getC()}}
+{\footnotesize\ttfamily float Hybrid\+A\+Star\+::\+Common\+::\+Grid\+State\+::getC (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+get the total estimated cost 
+
+\mbox{\Hypertarget{classHybridAStar_1_1Common_1_1GridState_a2071f3ba6a76f64b881e83c1dcb3568e}\label{classHybridAStar_1_1Common_1_1GridState_a2071f3ba6a76f64b881e83c1dcb3568e}} 
+\index{HybridAStar::Common::GridState@{HybridAStar::Common::GridState}!getDimensions@{getDimensions}}
+\index{getDimensions@{getDimensions}!HybridAStar::Common::GridState@{HybridAStar::Common::GridState}}
+\doxysubsubsection{\texorpdfstring{getDimensions()}{getDimensions()}}
+{\footnotesize\ttfamily unsigned int Hybrid\+A\+Star\+::\+Common\+::\+Grid\+State\+::get\+Dimensions (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classHybridAStar_1_1Common_1_1GridState_ae249762c4176319e2cd44e05be10b60e}\label{classHybridAStar_1_1Common_1_1GridState_ae249762c4176319e2cd44e05be10b60e}} 
+\index{HybridAStar::Common::GridState@{HybridAStar::Common::GridState}!getG@{getG}}
+\index{getG@{getG}!HybridAStar::Common::GridState@{HybridAStar::Common::GridState}}
+\doxysubsubsection{\texorpdfstring{getG()}{getG()}}
+{\footnotesize\ttfamily float Hybrid\+A\+Star\+::\+Common\+::\+Grid\+State\+::getG (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+get the cost-\/so-\/far (real value) 
+
+\mbox{\Hypertarget{classHybridAStar_1_1Common_1_1GridState_aaed42fa3395cb3739f6c557afcfdd2a6}\label{classHybridAStar_1_1Common_1_1GridState_aaed42fa3395cb3739f6c557afcfdd2a6}} 
+\index{HybridAStar::Common::GridState@{HybridAStar::Common::GridState}!getH@{getH}}
+\index{getH@{getH}!HybridAStar::Common::GridState@{HybridAStar::Common::GridState}}
+\doxysubsubsection{\texorpdfstring{getH()}{getH()}}
+{\footnotesize\ttfamily float Hybrid\+A\+Star\+::\+Common\+::\+Grid\+State\+::getH (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+get the cost-\/to-\/come (heuristic value) 
+
+\mbox{\Hypertarget{classHybridAStar_1_1Common_1_1GridState_a90249f5745dd1d4bc42647f751dbd699}\label{classHybridAStar_1_1Common_1_1GridState_a90249f5745dd1d4bc42647f751dbd699}} 
+\index{HybridAStar::Common::GridState@{HybridAStar::Common::GridState}!getIdx@{getIdx}}
+\index{getIdx@{getIdx}!HybridAStar::Common::GridState@{HybridAStar::Common::GridState}}
+\doxysubsubsection{\texorpdfstring{getIdx()}{getIdx()}}
+{\footnotesize\ttfamily int Hybrid\+A\+Star\+::\+Common\+::\+Grid\+State\+::get\+Idx (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+get the index of the node in the 2D array 
+
+\mbox{\Hypertarget{classHybridAStar_1_1Common_1_1GridState_a48114736d985a9d2da9256f8d7f5e40d}\label{classHybridAStar_1_1Common_1_1GridState_a48114736d985a9d2da9256f8d7f5e40d}} 
+\index{HybridAStar::Common::GridState@{HybridAStar::Common::GridState}!getPred@{getPred}}
+\index{getPred@{getPred}!HybridAStar::Common::GridState@{HybridAStar::Common::GridState}}
+\doxysubsubsection{\texorpdfstring{getPred()}{getPred()}}
+{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$\mbox{\hyperlink{classHybridAStar_1_1Common_1_1GridState}{Grid\+State}}$>$ Hybrid\+A\+Star\+::\+Common\+::\+Grid\+State\+::get\+Pred (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+get a pointer to the predecessor 
+
+\mbox{\Hypertarget{classHybridAStar_1_1Common_1_1GridState_aa7e0d3f6b88ef5ec9e779979bf8b7856}\label{classHybridAStar_1_1Common_1_1GridState_aa7e0d3f6b88ef5ec9e779979bf8b7856}} 
+\index{HybridAStar::Common::GridState@{HybridAStar::Common::GridState}!getX@{getX}}
+\index{getX@{getX}!HybridAStar::Common::GridState@{HybridAStar::Common::GridState}}
+\doxysubsubsection{\texorpdfstring{getX()}{getX()}}
+{\footnotesize\ttfamily int Hybrid\+A\+Star\+::\+Common\+::\+Grid\+State\+::getX (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+get the x position 
+
+\mbox{\Hypertarget{classHybridAStar_1_1Common_1_1GridState_aa5cbff3d8fd471ed10f0abbb6fd23e25}\label{classHybridAStar_1_1Common_1_1GridState_aa5cbff3d8fd471ed10f0abbb6fd23e25}} 
+\index{HybridAStar::Common::GridState@{HybridAStar::Common::GridState}!getY@{getY}}
+\index{getY@{getY}!HybridAStar::Common::GridState@{HybridAStar::Common::GridState}}
+\doxysubsubsection{\texorpdfstring{getY()}{getY()}}
+{\footnotesize\ttfamily int Hybrid\+A\+Star\+::\+Common\+::\+Grid\+State\+::getY (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+get the y position 
+
+\mbox{\Hypertarget{classHybridAStar_1_1Common_1_1GridState_a3d809478c580d37636e72344475071b8}\label{classHybridAStar_1_1Common_1_1GridState_a3d809478c580d37636e72344475071b8}} 
+\index{HybridAStar::Common::GridState@{HybridAStar::Common::GridState}!isClosed@{isClosed}}
+\index{isClosed@{isClosed}!HybridAStar::Common::GridState@{HybridAStar::Common::GridState}}
+\doxysubsubsection{\texorpdfstring{isClosed()}{isClosed()}}
+{\footnotesize\ttfamily bool Hybrid\+A\+Star\+::\+Common\+::\+Grid\+State\+::is\+Closed (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+determine whether the node is closed 
+
+\mbox{\Hypertarget{classHybridAStar_1_1Common_1_1GridState_aaa34b26253c74d515ff28115fd47d258}\label{classHybridAStar_1_1Common_1_1GridState_aaa34b26253c74d515ff28115fd47d258}} 
+\index{HybridAStar::Common::GridState@{HybridAStar::Common::GridState}!isOnGrid@{isOnGrid}}
+\index{isOnGrid@{isOnGrid}!HybridAStar::Common::GridState@{HybridAStar::Common::GridState}}
+\doxysubsubsection{\texorpdfstring{isOnGrid()}{isOnGrid()}}
+{\footnotesize\ttfamily bool Hybrid\+A\+Star\+::\+Common\+::\+Grid\+State\+::is\+On\+Grid (\begin{DoxyParamCaption}\item[{const int}]{width,  }\item[{const int}]{height }\end{DoxyParamCaption}) const}
+
+
+
+Validity check to test, whether the node is in the 2D array. 
+
+\mbox{\Hypertarget{classHybridAStar_1_1Common_1_1GridState_a364f8687b26e112a62f29eab98334212}\label{classHybridAStar_1_1Common_1_1GridState_a364f8687b26e112a62f29eab98334212}} 
+\index{HybridAStar::Common::GridState@{HybridAStar::Common::GridState}!isOpen@{isOpen}}
+\index{isOpen@{isOpen}!HybridAStar::Common::GridState@{HybridAStar::Common::GridState}}
+\doxysubsubsection{\texorpdfstring{isOpen()}{isOpen()}}
+{\footnotesize\ttfamily bool Hybrid\+A\+Star\+::\+Common\+::\+Grid\+State\+::is\+Open (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+determine whether the node is open 
+
+\mbox{\Hypertarget{classHybridAStar_1_1Common_1_1GridState_aa86483f417c630017aa22e58fcc464f3}\label{classHybridAStar_1_1Common_1_1GridState_aa86483f417c630017aa22e58fcc464f3}} 
+\index{HybridAStar::Common::GridState@{HybridAStar::Common::GridState}!movementCost@{movementCost}}
+\index{movementCost@{movementCost}!HybridAStar::Common::GridState@{HybridAStar::Common::GridState}}
+\doxysubsubsection{\texorpdfstring{movementCost()}{movementCost()}}
+{\footnotesize\ttfamily float Hybrid\+A\+Star\+::\+Common\+::\+Grid\+State\+::movement\+Cost (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classHybridAStar_1_1Common_1_1GridState}{Grid\+State}} \&}]{pred }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+The heuristic as well as the cost measure. 
+
+\mbox{\Hypertarget{classHybridAStar_1_1Common_1_1GridState_a3312ef6ad2c37173eb986a43d16c3d31}\label{classHybridAStar_1_1Common_1_1GridState_a3312ef6ad2c37173eb986a43d16c3d31}} 
+\index{HybridAStar::Common::GridState@{HybridAStar::Common::GridState}!open@{open}}
+\index{open@{open}!HybridAStar::Common::GridState@{HybridAStar::Common::GridState}}
+\doxysubsubsection{\texorpdfstring{open()}{open()}}
+{\footnotesize\ttfamily void Hybrid\+A\+Star\+::\+Common\+::\+Grid\+State\+::open (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+open the node 
+
+\mbox{\Hypertarget{classHybridAStar_1_1Common_1_1GridState_a2b83dbc9eb06d27ea59be7f37c015c67}\label{classHybridAStar_1_1Common_1_1GridState_a2b83dbc9eb06d27ea59be7f37c015c67}} 
+\index{HybridAStar::Common::GridState@{HybridAStar::Common::GridState}!operator=@{operator=}}
+\index{operator=@{operator=}!HybridAStar::Common::GridState@{HybridAStar::Common::GridState}}
+\doxysubsubsection{\texorpdfstring{operator=()}{operator=()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classHybridAStar_1_1Common_1_1GridState}{Grid\+State}} \& Hybrid\+A\+Star\+::\+Common\+::\+Grid\+State\+::operator= (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classHybridAStar_1_1Common_1_1GridState}{Grid\+State}} \&}]{rhs }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classHybridAStar_1_1Common_1_1GridState_a8191c715b07d6c6e127cfc6c05b4a4c8}\label{classHybridAStar_1_1Common_1_1GridState_a8191c715b07d6c6e127cfc6c05b4a4c8}} 
+\index{HybridAStar::Common::GridState@{HybridAStar::Common::GridState}!operator==@{operator==}}
+\index{operator==@{operator==}!HybridAStar::Common::GridState@{HybridAStar::Common::GridState}}
+\doxysubsubsection{\texorpdfstring{operator==()}{operator==()}}
+{\footnotesize\ttfamily bool Hybrid\+A\+Star\+::\+Common\+::\+Grid\+State\+::operator== (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classHybridAStar_1_1Common_1_1GridState}{Grid\+State}} \&}]{rhs }\end{DoxyParamCaption}) const}
+
+
+
+Creates a successor on a eight-\/connected grid. 
+
+\mbox{\Hypertarget{classHybridAStar_1_1Common_1_1GridState_add46ebde6c7f67dfc65580f135a22019}\label{classHybridAStar_1_1Common_1_1GridState_add46ebde6c7f67dfc65580f135a22019}} 
+\index{HybridAStar::Common::GridState@{HybridAStar::Common::GridState}!reset@{reset}}
+\index{reset@{reset}!HybridAStar::Common::GridState@{HybridAStar::Common::GridState}}
+\doxysubsubsection{\texorpdfstring{reset()}{reset()}}
+{\footnotesize\ttfamily void Hybrid\+A\+Star\+::\+Common\+::\+Grid\+State\+::reset (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+set the node neither open nor closed 
+
+\mbox{\Hypertarget{classHybridAStar_1_1Common_1_1GridState_aa3f3c092f37df480f3213941270ec3ea}\label{classHybridAStar_1_1Common_1_1GridState_aa3f3c092f37df480f3213941270ec3ea}} 
+\index{HybridAStar::Common::GridState@{HybridAStar::Common::GridState}!setG@{setG}}
+\index{setG@{setG}!HybridAStar::Common::GridState@{HybridAStar::Common::GridState}}
+\doxysubsubsection{\texorpdfstring{setG()}{setG()}}
+{\footnotesize\ttfamily void Hybrid\+A\+Star\+::\+Common\+::\+Grid\+State\+::setG (\begin{DoxyParamCaption}\item[{const float \&}]{g\+\_\+ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+set the cost-\/so-\/far (real value) 
+
+\mbox{\Hypertarget{classHybridAStar_1_1Common_1_1GridState_a61800d2a270a3a82b4a7ef1deab04da8}\label{classHybridAStar_1_1Common_1_1GridState_a61800d2a270a3a82b4a7ef1deab04da8}} 
+\index{HybridAStar::Common::GridState@{HybridAStar::Common::GridState}!setH@{setH}}
+\index{setH@{setH}!HybridAStar::Common::GridState@{HybridAStar::Common::GridState}}
+\doxysubsubsection{\texorpdfstring{setH()}{setH()}}
+{\footnotesize\ttfamily void Hybrid\+A\+Star\+::\+Common\+::\+Grid\+State\+::setH (\begin{DoxyParamCaption}\item[{const float \&}]{h\+\_\+ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+set the cost-\/to-\/come (heuristic value) 
+
+\mbox{\Hypertarget{classHybridAStar_1_1Common_1_1GridState_adc3cfc4a10a4fa6dd19b1d7e31e833bc}\label{classHybridAStar_1_1Common_1_1GridState_adc3cfc4a10a4fa6dd19b1d7e31e833bc}} 
+\index{HybridAStar::Common::GridState@{HybridAStar::Common::GridState}!setIdx@{setIdx}}
+\index{setIdx@{setIdx}!HybridAStar::Common::GridState@{HybridAStar::Common::GridState}}
+\doxysubsubsection{\texorpdfstring{setIdx()}{setIdx()}}
+{\footnotesize\ttfamily int Hybrid\+A\+Star\+::\+Common\+::\+Grid\+State\+::set\+Idx (\begin{DoxyParamCaption}\item[{int}]{width }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+set and get the index of the node in the 2D array 
+
+\mbox{\Hypertarget{classHybridAStar_1_1Common_1_1GridState_acacef48dedbc86f795ed62c38b022bb7}\label{classHybridAStar_1_1Common_1_1GridState_acacef48dedbc86f795ed62c38b022bb7}} 
+\index{HybridAStar::Common::GridState@{HybridAStar::Common::GridState}!setPred@{setPred}}
+\index{setPred@{setPred}!HybridAStar::Common::GridState@{HybridAStar::Common::GridState}}
+\doxysubsubsection{\texorpdfstring{setPred()}{setPred()}}
+{\footnotesize\ttfamily void Hybrid\+A\+Star\+::\+Common\+::\+Grid\+State\+::set\+Pred (\begin{DoxyParamCaption}\item[{std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classHybridAStar_1_1Common_1_1GridState}{Grid\+State}} $>$}]{pred }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+set a pointer to the predecessor of the node 
+
+\mbox{\Hypertarget{classHybridAStar_1_1Common_1_1GridState_a6b5abf5945cdee5fb4a0fd3d3b97d14c}\label{classHybridAStar_1_1Common_1_1GridState_a6b5abf5945cdee5fb4a0fd3d3b97d14c}} 
+\index{HybridAStar::Common::GridState@{HybridAStar::Common::GridState}!setX@{setX}}
+\index{setX@{setX}!HybridAStar::Common::GridState@{HybridAStar::Common::GridState}}
+\doxysubsubsection{\texorpdfstring{setX()}{setX()}}
+{\footnotesize\ttfamily void Hybrid\+A\+Star\+::\+Common\+::\+Grid\+State\+::setX (\begin{DoxyParamCaption}\item[{const int \&}]{x }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+set the x position 
+
+\mbox{\Hypertarget{classHybridAStar_1_1Common_1_1GridState_acc6c5741f42314bf637f4d787562a411}\label{classHybridAStar_1_1Common_1_1GridState_acc6c5741f42314bf637f4d787562a411}} 
+\index{HybridAStar::Common::GridState@{HybridAStar::Common::GridState}!setY@{setY}}
+\index{setY@{setY}!HybridAStar::Common::GridState@{HybridAStar::Common::GridState}}
+\doxysubsubsection{\texorpdfstring{setY()}{setY()}}
+{\footnotesize\ttfamily void Hybrid\+A\+Star\+::\+Common\+::\+Grid\+State\+::setY (\begin{DoxyParamCaption}\item[{const int \&}]{y }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+set the y position 
+
+\mbox{\Hypertarget{classHybridAStar_1_1Common_1_1GridState_abbe1f07214cc4ca3ba9fea5554dede04}\label{classHybridAStar_1_1Common_1_1GridState_abbe1f07214cc4ca3ba9fea5554dede04}} 
+\index{HybridAStar::Common::GridState@{HybridAStar::Common::GridState}!updateG@{updateG}}
+\index{updateG@{updateG}!HybridAStar::Common::GridState@{HybridAStar::Common::GridState}}
+\doxysubsubsection{\texorpdfstring{updateG()}{updateG()}}
+{\footnotesize\ttfamily void Hybrid\+A\+Star\+::\+Common\+::\+Grid\+State\+::updateG (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Updates the cost-\/so-\/far for the node x\textquotesingle{} coming from its predecessor. It also discovers the node. 
+
+\mbox{\Hypertarget{classHybridAStar_1_1Common_1_1GridState_a91f1467f39a80710f71d556fab7e302b}\label{classHybridAStar_1_1Common_1_1GridState_a91f1467f39a80710f71d556fab7e302b}} 
+\index{HybridAStar::Common::GridState@{HybridAStar::Common::GridState}!updateH@{updateH}}
+\index{updateH@{updateH}!HybridAStar::Common::GridState@{HybridAStar::Common::GridState}}
+\doxysubsubsection{\texorpdfstring{updateH()}{updateH()}}
+{\footnotesize\ttfamily void Hybrid\+A\+Star\+::\+Common\+::\+Grid\+State\+::updateH (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classHybridAStar_1_1Common_1_1GridState}{Grid\+State}} \&}]{goal }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Updates the cost-\/to-\/go for the node x\textquotesingle{} to the goal node. 
+
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{classHybridAStar_1_1Common_1_1GridState_abac7f0f3e91bfc7908bfd50a524d6a05}\label{classHybridAStar_1_1Common_1_1GridState_abac7f0f3e91bfc7908bfd50a524d6a05}} 
+\index{HybridAStar::Common::GridState@{HybridAStar::Common::GridState}!c\_@{c\_}}
+\index{c\_@{c\_}!HybridAStar::Common::GridState@{HybridAStar::Common::GridState}}
+\doxysubsubsection{\texorpdfstring{c\_}{c\_}}
+{\footnotesize\ttfamily bool Hybrid\+A\+Star\+::\+Common\+::\+Grid\+State\+::c\+\_\+\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+the closed value 
+
+\mbox{\Hypertarget{classHybridAStar_1_1Common_1_1GridState_a8b0204a7695a4296fb354f617f785165}\label{classHybridAStar_1_1Common_1_1GridState_a8b0204a7695a4296fb354f617f785165}} 
+\index{HybridAStar::Common::GridState@{HybridAStar::Common::GridState}!cellSize\_@{cellSize\_}}
+\index{cellSize\_@{cellSize\_}!HybridAStar::Common::GridState@{HybridAStar::Common::GridState}}
+\doxysubsubsection{\texorpdfstring{cellSize\_}{cellSize\_}}
+{\footnotesize\ttfamily float Hybrid\+A\+Star\+::\+Common\+::\+Grid\+State\+::cell\+Size\+\_\+\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classHybridAStar_1_1Common_1_1GridState_a8307aa7db912052d79f6faad1bbb3216}\label{classHybridAStar_1_1Common_1_1GridState_a8307aa7db912052d79f6faad1bbb3216}} 
+\index{HybridAStar::Common::GridState@{HybridAStar::Common::GridState}!dimension@{dimension}}
+\index{dimension@{dimension}!HybridAStar::Common::GridState@{HybridAStar::Common::GridState}}
+\doxysubsubsection{\texorpdfstring{dimension}{dimension}}
+{\footnotesize\ttfamily const unsigned int Hybrid\+A\+Star\+::\+Common\+::\+Grid\+State\+::dimension = 2\hspace{0.3cm}{\ttfamily [static]}}
+
+\mbox{\Hypertarget{classHybridAStar_1_1Common_1_1GridState_a86dd1e77fe0dcb42fe7c2dd2e292200a}\label{classHybridAStar_1_1Common_1_1GridState_a86dd1e77fe0dcb42fe7c2dd2e292200a}} 
+\index{HybridAStar::Common::GridState@{HybridAStar::Common::GridState}!dir@{dir}}
+\index{dir@{dir}!HybridAStar::Common::GridState@{HybridAStar::Common::GridState}}
+\doxysubsubsection{\texorpdfstring{dir}{dir}}
+{\footnotesize\ttfamily const int Hybrid\+A\+Star\+::\+Common\+::\+Grid\+State\+::dir = 8\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [private]}}
+
+
+
+Number of possible directions. 
+
+\mbox{\Hypertarget{classHybridAStar_1_1Common_1_1GridState_a5d38092b8c858f0863a124714c52d1c5}\label{classHybridAStar_1_1Common_1_1GridState_a5d38092b8c858f0863a124714c52d1c5}} 
+\index{HybridAStar::Common::GridState@{HybridAStar::Common::GridState}!dx@{dx}}
+\index{dx@{dx}!HybridAStar::Common::GridState@{HybridAStar::Common::GridState}}
+\doxysubsubsection{\texorpdfstring{dx}{dx}}
+{\footnotesize\ttfamily const int Hybrid\+A\+Star\+::\+Common\+::\+Grid\+State\+::dx = \{ -\/1, -\/1, 0, 1, 1, 1, 0, -\/1 \}\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [private]}}
+
+
+
+Possible movements in the x direction. 
+
+\mbox{\Hypertarget{classHybridAStar_1_1Common_1_1GridState_ad3e1885b94cd0fc3116867b0858a6ae7}\label{classHybridAStar_1_1Common_1_1GridState_ad3e1885b94cd0fc3116867b0858a6ae7}} 
+\index{HybridAStar::Common::GridState@{HybridAStar::Common::GridState}!dy@{dy}}
+\index{dy@{dy}!HybridAStar::Common::GridState@{HybridAStar::Common::GridState}}
+\doxysubsubsection{\texorpdfstring{dy}{dy}}
+{\footnotesize\ttfamily const int Hybrid\+A\+Star\+::\+Common\+::\+Grid\+State\+::dy = \{ 0, 1, 1, 1, 0, -\/1, -\/1, -\/1 \}\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [private]}}
+
+
+
+Possible movements in the y direction. 
+
+\mbox{\Hypertarget{classHybridAStar_1_1Common_1_1GridState_af7d73fc419b91e78a751276af9af3c9d}\label{classHybridAStar_1_1Common_1_1GridState_af7d73fc419b91e78a751276af9af3c9d}} 
+\index{HybridAStar::Common::GridState@{HybridAStar::Common::GridState}!g\_@{g\_}}
+\index{g\_@{g\_}!HybridAStar::Common::GridState@{HybridAStar::Common::GridState}}
+\doxysubsubsection{\texorpdfstring{g\_}{g\_}}
+{\footnotesize\ttfamily float Hybrid\+A\+Star\+::\+Common\+::\+Grid\+State\+::g\+\_\+\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+the cost-\/so-\/far 
+
+\mbox{\Hypertarget{classHybridAStar_1_1Common_1_1GridState_a8501828999250c5ec80c97bf8461bb46}\label{classHybridAStar_1_1Common_1_1GridState_a8501828999250c5ec80c97bf8461bb46}} 
+\index{HybridAStar::Common::GridState@{HybridAStar::Common::GridState}!h\_@{h\_}}
+\index{h\_@{h\_}!HybridAStar::Common::GridState@{HybridAStar::Common::GridState}}
+\doxysubsubsection{\texorpdfstring{h\_}{h\_}}
+{\footnotesize\ttfamily float Hybrid\+A\+Star\+::\+Common\+::\+Grid\+State\+::h\+\_\+\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+the cost-\/to-\/go 
+
+\mbox{\Hypertarget{classHybridAStar_1_1Common_1_1GridState_a4087b1ac5eae8781da3ad0aac9e2f030}\label{classHybridAStar_1_1Common_1_1GridState_a4087b1ac5eae8781da3ad0aac9e2f030}} 
+\index{HybridAStar::Common::GridState@{HybridAStar::Common::GridState}!idx\_@{idx\_}}
+\index{idx\_@{idx\_}!HybridAStar::Common::GridState@{HybridAStar::Common::GridState}}
+\doxysubsubsection{\texorpdfstring{idx\_}{idx\_}}
+{\footnotesize\ttfamily int Hybrid\+A\+Star\+::\+Common\+::\+Grid\+State\+::idx\+\_\+\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+the index of the node in the 2D array 
+
+\mbox{\Hypertarget{classHybridAStar_1_1Common_1_1GridState_a335e6768c042538e48dd65c53b12a8a3}\label{classHybridAStar_1_1Common_1_1GridState_a335e6768c042538e48dd65c53b12a8a3}} 
+\index{HybridAStar::Common::GridState@{HybridAStar::Common::GridState}!o\_@{o\_}}
+\index{o\_@{o\_}!HybridAStar::Common::GridState@{HybridAStar::Common::GridState}}
+\doxysubsubsection{\texorpdfstring{o\_}{o\_}}
+{\footnotesize\ttfamily bool Hybrid\+A\+Star\+::\+Common\+::\+Grid\+State\+::o\+\_\+\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+the open value 
+
+\mbox{\Hypertarget{classHybridAStar_1_1Common_1_1GridState_a7c828ff25ab686156097796f62ced5a2}\label{classHybridAStar_1_1Common_1_1GridState_a7c828ff25ab686156097796f62ced5a2}} 
+\index{HybridAStar::Common::GridState@{HybridAStar::Common::GridState}!pred\_@{pred\_}}
+\index{pred\_@{pred\_}!HybridAStar::Common::GridState@{HybridAStar::Common::GridState}}
+\doxysubsubsection{\texorpdfstring{pred\_}{pred\_}}
+{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$\mbox{\hyperlink{classHybridAStar_1_1Common_1_1GridState}{Grid\+State}}$>$ Hybrid\+A\+Star\+::\+Common\+::\+Grid\+State\+::pred\+\_\+\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+the predecessor pointer 
+
+\mbox{\Hypertarget{classHybridAStar_1_1Common_1_1GridState_a41990a7c69f876db14a47b1abfbae53b}\label{classHybridAStar_1_1Common_1_1GridState_a41990a7c69f876db14a47b1abfbae53b}} 
+\index{HybridAStar::Common::GridState@{HybridAStar::Common::GridState}!x\_@{x\_}}
+\index{x\_@{x\_}!HybridAStar::Common::GridState@{HybridAStar::Common::GridState}}
+\doxysubsubsection{\texorpdfstring{x\_}{x\_}}
+{\footnotesize\ttfamily int Hybrid\+A\+Star\+::\+Common\+::\+Grid\+State\+::x\+\_\+\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classHybridAStar_1_1Common_1_1GridState_abdbb0bbd098d4729ddf9651c52ca54a2}\label{classHybridAStar_1_1Common_1_1GridState_abdbb0bbd098d4729ddf9651c52ca54a2}} 
+\index{HybridAStar::Common::GridState@{HybridAStar::Common::GridState}!y\_@{y\_}}
+\index{y\_@{y\_}!HybridAStar::Common::GridState@{HybridAStar::Common::GridState}}
+\doxysubsubsection{\texorpdfstring{y\_}{y\_}}
+{\footnotesize\ttfamily int Hybrid\+A\+Star\+::\+Common\+::\+Grid\+State\+::y\+\_\+\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+common/statespace/\mbox{\hyperlink{GridState_8h}{Grid\+State.\+h}}\item 
+common/statespace/\mbox{\hyperlink{GridState_8cpp}{Grid\+State.\+cpp}}\end{DoxyCompactItemize}

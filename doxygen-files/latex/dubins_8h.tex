@@ -1,0 +1,157 @@
+\hypertarget{dubins_8h}{}\doxysection{geometry/dubins/dubins.h File Reference}
+\label{dubins_8h}\index{geometry/dubins/dubins.h@{geometry/dubins/dubins.h}}
+
+
+A dubins path class for finding analytical solutions to the problem of the shortest path.  
+
+
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structHybridAStar_1_1Geometry_1_1DubinsPath}{Hybrid\+A\+Star\+::\+Geometry\+::\+Dubins\+Path}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+ \mbox{\hyperlink{namespaceHybridAStar}{Hybrid\+A\+Star}}
+\item 
+ \mbox{\hyperlink{namespaceHybridAStar_1_1Geometry}{Hybrid\+A\+Star\+::\+Geometry}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{dubins_8h_a1fa9cca4505abaccefdc8acccb4c51c8}{L\+SL}}~(0)
+\item 
+\#define \mbox{\hyperlink{dubins_8h_ad51d51aee21f6cc77d4955221aee3dcb}{L\+SR}}~(1)
+\item 
+\#define \mbox{\hyperlink{dubins_8h_acad86e8fe6b05da3d654dd62fbd4bee8}{R\+SL}}~(2)
+\item 
+\#define \mbox{\hyperlink{dubins_8h_a751dd0771f92839a65ba7db01985fbd2}{R\+SR}}~(3)
+\item 
+\#define \mbox{\hyperlink{dubins_8h_aa01ecbbdfbf03a3f59060aa9811e6024}{R\+LR}}~(4)
+\item 
+\#define \mbox{\hyperlink{dubins_8h_af1e71e72806e7bbec70d39977e4ca2fe}{L\+RL}}~(5)
+\item 
+\#define \mbox{\hyperlink{dubins_8h_accb4315ae86689e8eb5c1e0ba325bc6f}{E\+D\+U\+B\+OK}}~(0)
+\item 
+\#define \mbox{\hyperlink{dubins_8h_a697854590c1f1c577f3b2c228b2be425}{E\+D\+U\+B\+C\+O\+C\+O\+N\+F\+I\+GS}}~(1)
+\item 
+\#define \mbox{\hyperlink{dubins_8h_a6ab2ef4179b79cdb63457b975c27810a}{E\+D\+U\+B\+P\+A\+R\+AM}}~(2)
+\item 
+\#define \mbox{\hyperlink{dubins_8h_a28cc9f549e9a4f6bfaec274f2e7c0644}{E\+D\+U\+B\+B\+A\+D\+R\+HO}}~(3)
+\item 
+\#define \mbox{\hyperlink{dubins_8h_a7137f12da70f2c42801a13f309da4717}{E\+D\+U\+B\+N\+O\+P\+A\+TH}}~(4)
+\end{DoxyCompactItemize}
+\doxysubsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef int($\ast$ \mbox{\hyperlink{namespaceHybridAStar_1_1Geometry_a58ad2ca5c9d27694b17c5b4d00864254}{Hybrid\+A\+Star\+::\+Geometry\+::\+Dubins\+Word}}) (double, double, double, double $\ast$)
+\item 
+typedef int($\ast$ \mbox{\hyperlink{namespaceHybridAStar_1_1Geometry_a2b0ab992af36f3887f23fcb305ef53f3}{Hybrid\+A\+Star\+::\+Geometry\+::\+Dubins\+Path\+Sampling\+Callback}}) (double q\mbox{[}3\mbox{]}, double t, void $\ast$user\+\_\+data)
+\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{namespaceHybridAStar_1_1Geometry_a7b15097851e57a943c6cd2a60b023882}{Hybrid\+A\+Star\+::\+Geometry\+::dubins\+\_\+init}} (double q0\mbox{[}3\mbox{]}, double q1\mbox{[}3\mbox{]}, double rho, Dubins\+Path $\ast$path)
+\item 
+double \mbox{\hyperlink{namespaceHybridAStar_1_1Geometry_ae069eda31dff8a9011f96bfa93132d51}{Hybrid\+A\+Star\+::\+Geometry\+::dubins\+\_\+path\+\_\+length}} (Dubins\+Path $\ast$path)
+\item 
+int \mbox{\hyperlink{namespaceHybridAStar_1_1Geometry_a33d71f02775b75c472c0d5bf3db1ef48}{Hybrid\+A\+Star\+::\+Geometry\+::dubins\+\_\+path\+\_\+type}} (Dubins\+Path $\ast$path)
+\item 
+int \mbox{\hyperlink{namespaceHybridAStar_1_1Geometry_aa501ede96f9b1e75929e9fc1bb1fd6e3}{Hybrid\+A\+Star\+::\+Geometry\+::dubins\+\_\+path\+\_\+sample}} (Dubins\+Path $\ast$path, double t, double q\mbox{[}3\mbox{]})
+\item 
+int \mbox{\hyperlink{namespaceHybridAStar_1_1Geometry_a842e0cbf7ba8ca3582dc086a39594e11}{Hybrid\+A\+Star\+::\+Geometry\+::dubins\+\_\+path\+\_\+sample\+\_\+many}} (Dubins\+Path $\ast$path, Dubins\+Path\+Sampling\+Callback cb, double step\+Size, void $\ast$user\+\_\+data)
+\item 
+int \mbox{\hyperlink{namespaceHybridAStar_1_1Geometry_a9ef3444c2f3879049ed10cb666cf119c}{Hybrid\+A\+Star\+::\+Geometry\+::dubins\+\_\+path\+\_\+endpoint}} (Dubins\+Path $\ast$path, double q\mbox{[}3\mbox{]})
+\item 
+int \mbox{\hyperlink{namespaceHybridAStar_1_1Geometry_a450bbabc483f12e62080ca26729e7857}{Hybrid\+A\+Star\+::\+Geometry\+::dubins\+\_\+extract\+\_\+subpath}} (Dubins\+Path $\ast$path, double t, Dubins\+Path $\ast$newpath)
+\item 
+int \mbox{\hyperlink{namespaceHybridAStar_1_1Geometry_ae204d1bb0b5046f5df28d3dfde4262fa}{Hybrid\+A\+Star\+::\+Geometry\+::dubins\+\_\+\+L\+SL}} (double alpha, double beta, double d, double $\ast$outputs)
+\item 
+int \mbox{\hyperlink{namespaceHybridAStar_1_1Geometry_af6662357f2eb8e1cc22f5ed7b8282fef}{Hybrid\+A\+Star\+::\+Geometry\+::dubins\+\_\+\+R\+SR}} (double alpha, double beta, double d, double $\ast$outputs)
+\item 
+int \mbox{\hyperlink{namespaceHybridAStar_1_1Geometry_af912e41701151b8a0aa2b43f96680793}{Hybrid\+A\+Star\+::\+Geometry\+::dubins\+\_\+\+L\+SR}} (double alpha, double beta, double d, double $\ast$outputs)
+\item 
+int \mbox{\hyperlink{namespaceHybridAStar_1_1Geometry_af45023864203a27209a17b1149ba869e}{Hybrid\+A\+Star\+::\+Geometry\+::dubins\+\_\+\+R\+SL}} (double alpha, double beta, double d, double $\ast$outputs)
+\item 
+int \mbox{\hyperlink{namespaceHybridAStar_1_1Geometry_af9ab56b8167c43b19b2e9b6e3a0cf0e6}{Hybrid\+A\+Star\+::\+Geometry\+::dubins\+\_\+\+L\+RL}} (double alpha, double beta, double d, double $\ast$outputs)
+\item 
+int \mbox{\hyperlink{namespaceHybridAStar_1_1Geometry_a300835eb27683e3cbdd1bb735ee6ad9b}{Hybrid\+A\+Star\+::\+Geometry\+::dubins\+\_\+\+R\+LR}} (double alpha, double beta, double d, double $\ast$outputs)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+A dubins path class for finding analytical solutions to the problem of the shortest path. 
+
+It has been copied from \href{https://github.com/AndrewWalker/Dubins-Curves/}{\texttt{ https\+://github.\+com/\+Andrew\+Walker/\+Dubins-\/\+Curves/}} under the W\+T\+F\+PL. Please refer to the author in case of questions. \begin{DoxyAuthor}{Author}
+Andrew Walker 
+\end{DoxyAuthor}
+
+
+\doxysubsection{Macro Definition Documentation}
+\mbox{\Hypertarget{dubins_8h_a28cc9f549e9a4f6bfaec274f2e7c0644}\label{dubins_8h_a28cc9f549e9a4f6bfaec274f2e7c0644}} 
+\index{dubins.h@{dubins.h}!EDUBBADRHO@{EDUBBADRHO}}
+\index{EDUBBADRHO@{EDUBBADRHO}!dubins.h@{dubins.h}}
+\doxysubsubsection{\texorpdfstring{EDUBBADRHO}{EDUBBADRHO}}
+{\footnotesize\ttfamily \#define E\+D\+U\+B\+B\+A\+D\+R\+HO~(3)}
+
+\mbox{\Hypertarget{dubins_8h_a697854590c1f1c577f3b2c228b2be425}\label{dubins_8h_a697854590c1f1c577f3b2c228b2be425}} 
+\index{dubins.h@{dubins.h}!EDUBCOCONFIGS@{EDUBCOCONFIGS}}
+\index{EDUBCOCONFIGS@{EDUBCOCONFIGS}!dubins.h@{dubins.h}}
+\doxysubsubsection{\texorpdfstring{EDUBCOCONFIGS}{EDUBCOCONFIGS}}
+{\footnotesize\ttfamily \#define E\+D\+U\+B\+C\+O\+C\+O\+N\+F\+I\+GS~(1)}
+
+\mbox{\Hypertarget{dubins_8h_a7137f12da70f2c42801a13f309da4717}\label{dubins_8h_a7137f12da70f2c42801a13f309da4717}} 
+\index{dubins.h@{dubins.h}!EDUBNOPATH@{EDUBNOPATH}}
+\index{EDUBNOPATH@{EDUBNOPATH}!dubins.h@{dubins.h}}
+\doxysubsubsection{\texorpdfstring{EDUBNOPATH}{EDUBNOPATH}}
+{\footnotesize\ttfamily \#define E\+D\+U\+B\+N\+O\+P\+A\+TH~(4)}
+
+\mbox{\Hypertarget{dubins_8h_accb4315ae86689e8eb5c1e0ba325bc6f}\label{dubins_8h_accb4315ae86689e8eb5c1e0ba325bc6f}} 
+\index{dubins.h@{dubins.h}!EDUBOK@{EDUBOK}}
+\index{EDUBOK@{EDUBOK}!dubins.h@{dubins.h}}
+\doxysubsubsection{\texorpdfstring{EDUBOK}{EDUBOK}}
+{\footnotesize\ttfamily \#define E\+D\+U\+B\+OK~(0)}
+
+\mbox{\Hypertarget{dubins_8h_a6ab2ef4179b79cdb63457b975c27810a}\label{dubins_8h_a6ab2ef4179b79cdb63457b975c27810a}} 
+\index{dubins.h@{dubins.h}!EDUBPARAM@{EDUBPARAM}}
+\index{EDUBPARAM@{EDUBPARAM}!dubins.h@{dubins.h}}
+\doxysubsubsection{\texorpdfstring{EDUBPARAM}{EDUBPARAM}}
+{\footnotesize\ttfamily \#define E\+D\+U\+B\+P\+A\+R\+AM~(2)}
+
+\mbox{\Hypertarget{dubins_8h_af1e71e72806e7bbec70d39977e4ca2fe}\label{dubins_8h_af1e71e72806e7bbec70d39977e4ca2fe}} 
+\index{dubins.h@{dubins.h}!LRL@{LRL}}
+\index{LRL@{LRL}!dubins.h@{dubins.h}}
+\doxysubsubsection{\texorpdfstring{LRL}{LRL}}
+{\footnotesize\ttfamily \#define L\+RL~(5)}
+
+\mbox{\Hypertarget{dubins_8h_a1fa9cca4505abaccefdc8acccb4c51c8}\label{dubins_8h_a1fa9cca4505abaccefdc8acccb4c51c8}} 
+\index{dubins.h@{dubins.h}!LSL@{LSL}}
+\index{LSL@{LSL}!dubins.h@{dubins.h}}
+\doxysubsubsection{\texorpdfstring{LSL}{LSL}}
+{\footnotesize\ttfamily \#define L\+SL~(0)}
+
+\mbox{\Hypertarget{dubins_8h_ad51d51aee21f6cc77d4955221aee3dcb}\label{dubins_8h_ad51d51aee21f6cc77d4955221aee3dcb}} 
+\index{dubins.h@{dubins.h}!LSR@{LSR}}
+\index{LSR@{LSR}!dubins.h@{dubins.h}}
+\doxysubsubsection{\texorpdfstring{LSR}{LSR}}
+{\footnotesize\ttfamily \#define L\+SR~(1)}
+
+\mbox{\Hypertarget{dubins_8h_aa01ecbbdfbf03a3f59060aa9811e6024}\label{dubins_8h_aa01ecbbdfbf03a3f59060aa9811e6024}} 
+\index{dubins.h@{dubins.h}!RLR@{RLR}}
+\index{RLR@{RLR}!dubins.h@{dubins.h}}
+\doxysubsubsection{\texorpdfstring{RLR}{RLR}}
+{\footnotesize\ttfamily \#define R\+LR~(4)}
+
+\mbox{\Hypertarget{dubins_8h_acad86e8fe6b05da3d654dd62fbd4bee8}\label{dubins_8h_acad86e8fe6b05da3d654dd62fbd4bee8}} 
+\index{dubins.h@{dubins.h}!RSL@{RSL}}
+\index{RSL@{RSL}!dubins.h@{dubins.h}}
+\doxysubsubsection{\texorpdfstring{RSL}{RSL}}
+{\footnotesize\ttfamily \#define R\+SL~(2)}
+
+\mbox{\Hypertarget{dubins_8h_a751dd0771f92839a65ba7db01985fbd2}\label{dubins_8h_a751dd0771f92839a65ba7db01985fbd2}} 
+\index{dubins.h@{dubins.h}!RSR@{RSR}}
+\index{RSR@{RSR}!dubins.h@{dubins.h}}
+\doxysubsubsection{\texorpdfstring{RSR}{RSR}}
+{\footnotesize\ttfamily \#define R\+SR~(3)}
+
