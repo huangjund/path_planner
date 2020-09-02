@@ -105,14 +105,28 @@ namespace HybridAStar{
 
   bool** Interface::makeBinMap() {
     bool **p = new bool*[grid_->info.width];
+    for(size_t i = 0; i<grid_->info.width; ++i) {
+      p[i] = new bool[grid_->info.height];
+    }
+
+    for (size_t i = 0; i<grid_->info.width; ++i) {
+      for (size_t j = 0; j<grid_->info.height; ++j) {
+        p[i][j] = grid_->data[j*grid_->info.width+i] ? true : false;
+      }
+    }
+
+    return p;
   }
 
   bool Interface::setAllOutput() {
+    // destructe those dyanmic memory in voronoi diagram
+    voronoiDiagram_.~DynamicVoronoi();
     // output to map object
-    //auto collisionMap = std::make_unique<Map<GridState>>(grid_);
     planningMap->setMap(grid_);
     configSpace->setGrid(grid_); // set the grid for configuration space
     configSpace->makeClsLookup();  // make up look up table in configuration space
+
+    // TODO: change this binary map to a special deleter smart pointer
     voronoiDiagram_.initializeMap(grid_->info.width,grid_->info.height,makeBinMap());
     voronoiDiagram_.update();
     voronoiDiagram_.visualize();
