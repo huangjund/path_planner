@@ -8,12 +8,12 @@ using namespace HybridAStar;
 //###################################################
 
 void Path::clear() {
-  Common::SE2State node;
+  std::shared_ptr<Common::SE2State> node;
   path.poses.clear();
   pathNodes.markers.clear();
   pathVehicles.markers.clear();
-  addNode(node, 0);
-  addVehicle(node, 1);
+  // addNode(node, 0);
+  // addVehicle(node, 1);
   publishPath();
   publishPathNodes();
   publishPathVehicles();
@@ -45,27 +45,25 @@ void Path::clear() {
 //###################################################
 // __________
 // TRACE PATH
-void Path::updatePath(std::vector<Common::SE2State> nodePath) {
+void Path::updatePath(std::vector<std::shared_ptr<Common::SE2State>> nodePath) {
   path.header.stamp = ros::Time::now();
   int k = 0;
 
-  for (size_t i = 0; i < nodePath.size(); ++i) {
-    addSegment(nodePath[i]);
-    addNode(nodePath[i], k);
+  for (auto i = nodePath.cbegin(); i != nodePath.cend(); ++i) {
+    addSegment(*i);
+    addNode(*i, k);
     k++;
-    addVehicle(nodePath[i], k);
+    addVehicle(*i, k);
     k++;
   }
-
-  return;
 }
 // ___________
 // ADD SEGMENT
-void Path::addSegment(const Common::SE2State& node) {
+void Path::addSegment(const std::shared_ptr<Common::SE2State>& node) {
   geometry_msgs::PoseStamped vertex;
   // TODO: should this x multiply a collision cell size
-  vertex.pose.position.x = node.getX();
-  vertex.pose.position.y = node.getY();
+  vertex.pose.position.x = node->getX();
+  vertex.pose.position.y = node->getY();
   vertex.pose.position.z = 0;
   vertex.pose.orientation.x = 0;
   vertex.pose.orientation.y = 0;
@@ -76,7 +74,7 @@ void Path::addSegment(const Common::SE2State& node) {
 
 // ________
 // ADD NODE
-void Path::addNode(const Common::SE2State& node, int i) {
+void Path::addNode(const std::shared_ptr<Common::SE2State>& node, int i) {
   visualization_msgs::Marker pathNode;
 
   // delete all previous markers
@@ -103,12 +101,12 @@ void Path::addNode(const Common::SE2State& node, int i) {
     pathNode.color.b = Constants::purple.blue;
   }
 
-  pathNode.pose.position.x = node.getX();
-  pathNode.pose.position.y = node.getY();
+  pathNode.pose.position.x = node->getX();
+  pathNode.pose.position.y = node->getY();
   pathNodes.markers.push_back(pathNode);
 }
 
-void Path::addVehicle(const Common::SE2State& node, int i) {
+void Path::addVehicle(const std::shared_ptr<Common::SE2State>& node, int i) {
   visualization_msgs::Marker pathVehicle;
 
   // delete all previous markersg
@@ -135,8 +133,8 @@ void Path::addVehicle(const Common::SE2State& node, int i) {
     pathVehicle.color.b = Constants::teal.blue;
   }
 
-  pathVehicle.pose.position.x = node.getX();
-  pathVehicle.pose.position.y = node.getY();
-  pathVehicle.pose.orientation = tf::createQuaternionMsgFromYaw(node.getT());
+  pathVehicle.pose.position.x = node->getX();
+  pathVehicle.pose.position.y = node->getY();
+  pathVehicle.pose.orientation = tf::createQuaternionMsgFromYaw(node->getT());
   pathVehicles.markers.push_back(pathVehicle);
 }

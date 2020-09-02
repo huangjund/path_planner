@@ -59,24 +59,24 @@ class Path {
      \param node a 3D node, usually the goal node
      \param i a parameter for counting the number of nodes
   */
-  void updatePath(std::vector<Common::SE2State> nodePath);
+  void updatePath(std::vector<std::shared_ptr<Common::SE2State>> nodePath);
   /*!
      \brief Adds a segment to the path
      \param node a 3D node
   */
-  void addSegment(const Common::SE2State& node);
+  void addSegment(const std::shared_ptr<Common::SE2State>& node);
   /*!
      \brief Adds a node to the path
      \param node a 3D node
      \param i a parameter for counting the number of nodes
   */
-  void addNode(const Common::SE2State& node, int i);
+  void addNode(const std::shared_ptr<Common::SE2State>& node, int i);
   /*!
      \brief Adds a vehicle shape to the path
      \param node a 3D node
      \param i a parameter for counting the number of nodes
   */
-  void addVehicle(const Common::SE2State& node, int i);
+  void addVehicle(const std::shared_ptr<Common::SE2State>& node, int i);
 
   // ______________
   // PUBLISH METHODS

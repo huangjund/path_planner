@@ -6,35 +6,39 @@ Smoother::Smoother():carPlant_(std::make_unique<Multibody::SingleForkLiftPlant>(
 //###################################################
 //                                     CUSP DETECTION
 //###################################################
-inline bool isCusp(std::vector<Common::SE2State> path, int i) {
-  bool revim2 = path[i - 2].getPrim() > 3 ? true : false;
-  bool revim1 = path[i - 1].getPrim() > 3 ? true : false;
-  bool revi   = path[i].getPrim() > 3 ? true : false;
-  bool revip1 = path[i + 1].getPrim() > 3 ? true : false;
+inline bool isCusp(std::vector<std::shared_ptr<Common::SE2State>>& path, int i) {
+  bool revim2 = path[i - 2]->getPrim() > 3 ? true : false;
+  bool revim1 = path[i - 1]->getPrim() > 3 ? true : false;
+  bool revi   = path[i]->getPrim() > 3 ? true : false;
+  bool revip1 = path[i + 1]->getPrim() > 3 ? true : false;
   //  bool revip2 = path[i + 2].getPrim() > 3 ? true : false;
 
   if (revim2 != revim1 || revim1 != revi || revi != revip1) { return true; }
 
   return false;
 }
+
+void Smoother::clearPath() {
+  path_.clear();
+}
+
 //###################################################
 //                                SMOOTHING ALGORITHM
 //###################################################
-void Smoother::smoothPath(DynamicVoronoi& voronoi) {
+void Smoother::smoothPath(DynamicVoronoi& voronoi, float width, float height) {
   // load the current voronoi diagram into the smoother
   this->voronoi = voronoi;
-  this->width = voronoi.getSizeX(); // collision map width
-  this->height = voronoi.getSizeY(); // collision map height
+  this->width = width; // collision map width
+  this->height = height; // collision map height
   // current number of iterations of the gradient descent smoother
   int iterations = 0;
   // the maximum iterations for the GD smoother
-  int maxIterations = 500;
+  int maxIterations = 100;
   // the length of the path in number of nodes
   int pathLength = 0;
 
   // path objects with all nodes oldPath the original, newPath the resulting smoothed path
-  pathLength = path.size();
-  std::vector<Common::SE2State> newPath = path;
+  pathLength = path_.size();
 
   // descent along the gradient untill the maximum number of iterations has been reached
   // TODO: can be upgrade
@@ -45,22 +49,21 @@ void Smoother::smoothPath(DynamicVoronoi& voronoi) {
     // choose the first three nodes of the path
     for (int i = 2; i < pathLength - 2; ++i) {
 
-      Vector2D xim2(newPath[i - 2].getX(), newPath[i - 2].getY());
-      Vector2D xim1(newPath[i - 1].getX(), newPath[i - 1].getY());
-      Vector2D xi(newPath[i].getX(), newPath[i].getY());
-      Vector2D xip1(newPath[i + 1].getX(), newPath[i + 1].getY());
-      Vector2D xip2(newPath[i + 2].getX(), newPath[i + 2].getY());
+      Vector2D xim2(path_[i - 2]->getX(), path_[i - 2]->getY());
+      Vector2D xim1(path_[i - 1]->getX(), path_[i - 1]->getY());
+      Vector2D xi(path_[i]->getX(), path_[i]->getY());
+      Vector2D xip1(path_[i + 1]->getX(), path_[i + 1]->getY());
+      Vector2D xip2(path_[i + 2]->getX(), path_[i + 2]->getY());
       Vector2D correction;
-
 
       // the following points shall not be smoothed
       // keep these points fixed if they are a cusp point or adjacent to one
-      if (isCusp(newPath, i)) { continue; }
+      if (isCusp(path_, i)) { continue; }
 
       correction = correction - obstacleTerm(xi);
       if (!isOnGrid(xi + correction)) { continue; }
 
-      //todo not implemented yet
+      // TODO: Voronoi Diagram not implemented yet
       // voronoiTerm(); 
 
       // ensure that it is on the grid
@@ -74,25 +77,22 @@ void Smoother::smoothPath(DynamicVoronoi& voronoi) {
       // ensure that it is on the grid
 
       xi = xi + alpha * correction/totalWeight;
-      newPath[i].setX(xi.getX());
-      newPath[i].setY(xi.getY());
+      path_[i]->setX(xi.getX());
+      path_[i]->setY(xi.getY());
       Vector2D Dxi = xi - xim1;
-      newPath[i - 1].setT(std::atan2(Dxi.getY(), Dxi.getX()));
+      path_[i - 1]->setT(std::atan2(Dxi.getY(), Dxi.getX()));
     }
 
     iterations++;
   }
-
-  path = newPath;
 }
 
-void Smoother::tracePath(const std::shared_ptr<Common::SE2State> node, int i, std::vector<Common::SE2State> path) {
-  const Common::SE2State *waypoint = node.get();
+void Smoother::tracePath(const std::shared_ptr<Common::SE2State> node) {
+  auto waypoint = node;
   while (waypoint!=nullptr){
-    path.push_back(*waypoint);
-    waypoint = (waypoint->getPred().get());
+    path_.push_back(waypoint);
+    waypoint = waypoint->getPred();
   }
-  this->path = path;
 }
 
 //###################################################

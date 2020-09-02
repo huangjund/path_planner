@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <limits.h>
 #include <queue>
+#include <memory>
 
 #include "../utils/bucketedqueue.h"
 

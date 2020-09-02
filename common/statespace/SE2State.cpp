@@ -8,7 +8,7 @@ namespace Common {
   const float SE2State::dx[] = { 0.7,   0.6577848,   0.6577848};
   const float SE2State::dt[] = { 0,         0.34906585,   -0.34906585};
 
-  const float SE2State::collisionMapCellSize = 1;
+  const float SE2State::collisionMapCellSize = 0.01;
 
   SE2State::SE2State():SE2State(0,0,0,0,0,nullptr,0.5,0.08726646,0){}
 

@@ -103,12 +103,19 @@ namespace HybridAStar{
     }
   }
 
+  bool** Interface::makeBinMap() {
+    bool **p = new bool*[grid_->info.width];
+  }
+
   bool Interface::setAllOutput() {
     // output to map object
     //auto collisionMap = std::make_unique<Map<GridState>>(grid_);
     planningMap->setMap(grid_);
     configSpace->setGrid(grid_); // set the grid for configuration space
     configSpace->makeClsLookup();  // make up look up table in configuration space
+    voronoiDiagram_.initializeMap(grid_->info.width,grid_->info.height,makeBinMap());
+    voronoiDiagram_.update();
+    voronoiDiagram_.visualize();
 
     // output to planner
     // initialize using planning map resolution
@@ -131,8 +138,11 @@ namespace HybridAStar{
     // retrieve start point and goal point
     auto nStart = planner_->getStart();
     auto nGoal = planner_->getGoal();
+    float cwidth = pmap->info_.width*pmap->info_.resolution;
+    float cheight = pmap->info_.height*pmap->info_.resolution;
     
     visualizer_.clear();
+    smoother_.clearPath();
     path_.clear();
     smoothedPath_.clear();
 
@@ -140,7 +150,7 @@ namespace HybridAStar{
     auto nSolution = planner_->solve(); auto t1 = ros::Time::now();
     smoother_.tracePath(nSolution);
     path_.updatePath(smoother_.getPath());
-    smoother_.smoothPath(voronoiDiagram_); auto t4 = ros::Time::now();
+    smoother_.smoothPath(voronoiDiagram_,cwidth, cheight); auto t4 = ros::Time::now();
     smoothedPath_.updatePath(smoother_.getPath());
     ros::Duration d1(t1 - t0);
     ros::Duration d2(t4 - t1);

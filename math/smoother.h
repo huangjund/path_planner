@@ -29,17 +29,17 @@ class Smoother {
      smoothnessCost
      voronoiCost
   */
-  void smoothPath(DynamicVoronoi& voronoi);
+  void smoothPath(DynamicVoronoi& voronoi, float width, float height);
 
   /*!
      \brief Given a node pointer the path to the root node will be traced recursively
      \param node a 3D node, usually the goal node
      \param i a parameter for counting the number of nodes
   */
-  void tracePath(const std::shared_ptr<Common::SE2State> node, int i = 0, std::vector<Common::SE2State> path = std::vector<Common::SE2State>());
+  void tracePath(const std::shared_ptr<Common::SE2State> node);
 
   /// returns the path of the smoother object
-  std::vector<Common::SE2State> getPath() {return path;}
+  std::vector<std::shared_ptr<Common::SE2State>> getPath() {return path_;}
 
   /// obstacleCost - pushes the path away from obstacles
   Vector2D obstacleTerm(Vector2D xi);
@@ -61,6 +61,8 @@ class Smoother {
     }
     return false;
   }
+
+  void clearPath();
 
  private:
   std::unique_ptr<Multibody::SingleForkLiftPlant> carPlant_;
@@ -93,7 +95,7 @@ class Smoother {
   // collision map height
   int height;
   /// path to be smoothed
-  std::vector<Common::SE2State> path;
+  std::vector<std::shared_ptr<Common::SE2State>> path_;
 };
 }
 #endif // SMOOTHER_H
