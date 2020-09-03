@@ -17,8 +17,8 @@ BucketPrioQueue::BucketPrioQueue() {
   nextBucket = INT_MAX;
     
   // now create the buckets
-  //    buckets = std::vector<MyQueue2<INTPOINT> >(numBuckets);
-  buckets = std::vector<std::queue<INTPOINT> >(numBuckets);
+  std::queue<INTPOINT> temp;
+  buckets = std::vector<std::queue<INTPOINT>>(numBuckets,temp);
 
   // reset element counter 
   count = 0;
@@ -64,9 +64,6 @@ INTPOINT BucketPrioQueue::pop() {
 
 
 void BucketPrioQueue::initSqrIndices() {
-  //    std::cout << "BUCKETQUEUE Starting to build the index array...\n";
-  //  std::set<int> sqrNumbers;
-
   sqrIndices = std::vector<int>(2*MAXDIST*MAXDIST+1, -1);
 
   int count=0;
@@ -77,5 +74,4 @@ void BucketPrioQueue::initSqrIndices() {
     }
   }
   numBuckets = count;
-  //    std::cout << "BUCKETQUEUE Done with building the index arrays.\n";
 }

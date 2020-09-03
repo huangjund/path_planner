@@ -60,6 +60,7 @@ class DynamicVoronoi {
     int obstY;
     bool needsRaise;
     int sqdist;
+    dataCell& operator=(const dataCell& rhs);
   };
 
   typedef enum {voronoiKeep = -4, freeQueued = -3, voronoiRetry = -2, voronoiPrune = -1, free = 0, occupied = 1} State;
@@ -86,7 +87,7 @@ class DynamicVoronoi {
   std::queue<INTPOINT> pruneQueue;
 
   std::vector<INTPOINT> removeList;
-  std::vector<INTPOINT> addList;
+  std::vector<INTPOINT> addList;    // obstacle threshold
   std::vector<INTPOINT> lastObstacles;
 
   // maps

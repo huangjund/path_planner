@@ -83,7 +83,7 @@ class Smoother {
   /// weight for the voronoi term
   float wVoronoi = 0;
   /// weight for the curvature term
-  float wCurvature = 0;
+  float wCurvature = 0.2;
   /// weight for the smoothness term
   float wSmoothness = 0.2;
   /// voronoi diagram describing the topology of the map

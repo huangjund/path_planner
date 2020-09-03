@@ -9,6 +9,8 @@ DynamicVoronoi::DynamicVoronoi() {
   sqrt2 = sqrt(2.0);
   data = NULL;
   gridMap = NULL;
+  sizeX = 0;
+  sizeY = 0;
 }
 
 DynamicVoronoi::~DynamicVoronoi() {
@@ -20,6 +22,17 @@ DynamicVoronoi::~DynamicVoronoi() {
     for (int x=0; x<sizeX; x++) delete[] gridMap[x];
     delete[] gridMap;
   }
+}
+
+DynamicVoronoi::dataCell& DynamicVoronoi::dataCell::operator=(const DynamicVoronoi::dataCell& rhs) {
+  dist = rhs.dist;
+  voronoi = rhs.voronoi;
+  queueing = rhs.queueing;
+  obstX = rhs.obstX;
+  obstY = rhs.obstY;
+  needsRaise = rhs.needsRaise;
+  sqdist = rhs.sqdist;
+  return *this;
 }
 
 void DynamicVoronoi::initializeEmpty(int _sizeX, int _sizeY, bool initGridMap) {
@@ -65,9 +78,8 @@ void DynamicVoronoi::initializeMap(int _sizeX, int _sizeY, bool** _gridMap) {
 
   for (int x=0; x<sizeX; x++) {
     for (int y=0; y<sizeY; y++) {
-      if (gridMap[x][y]) {
-        dataCell c = data[x][y];
-        if (!isOccupied(x,y,c)) {
+      if (gridMap[x][y]) {  /// if this position has obstacle
+        if (!isOccupied(x,y,data[x][y])) { /// if this position is not freshed, searching for its surrounding
           
           bool isSurrounded = true;
           for (int dx=-1; dx<=1; dx++) {
@@ -78,20 +90,22 @@ void DynamicVoronoi::initializeMap(int _sizeX, int _sizeY, bool** _gridMap) {
               int ny = y+dy;
               if (ny<=0 || ny>=sizeY-1) continue;
 
-              if (!gridMap[nx][ny]) {
+              if (!gridMap[nx][ny]) { /// if this position is not absolutely surrounded
                 isSurrounded = false;
                 break;
               }
             }
           }
+          /* if this position is absolutely surrounded by obstacles,
+             set data in this position. Else, only set the position as
+             a normal obstacle, which is actually obstacle threshold */
           if (isSurrounded) {
-            c.obstX = x;
-            c.obstY = y;
-            c.sqdist = 0;
-            c.dist=0;
-            c.voronoi=occupied;
-            c.queueing = fwProcessed;
-            data[x][y] = c;
+            data[x][y].obstX = x;
+            data[x][y].obstY = y;
+            data[x][y].sqdist = 0;
+            data[x][y].dist=0;
+            data[x][y].voronoi=occupied;
+            data[x][y].queueing = fwProcessed;
           } else setObstacle(x,y);
         }
       }
@@ -109,13 +123,11 @@ void DynamicVoronoi::clearCell(int x, int y) {
 }
 
 void DynamicVoronoi::setObstacle(int x, int y) {
-  dataCell c = data[x][y];
-  if(isOccupied(x,y,c)) return;
+  if(isOccupied(x,y,data[x][y])) return;
   
   addList.push_back(INTPOINT(x,y));
-  c.obstX = x;
-  c.obstY = y;
-  data[x][y] = c;
+  data[x][y].obstX = x;
+  data[x][y].obstY = y;
 }
 
 void DynamicVoronoi::removeObstacle(int x, int y) {
@@ -258,16 +270,14 @@ void DynamicVoronoi::commitAndColorize(bool updateRealDist) {
     INTPOINT p = addList[i];
     int x = p.x;
     int y = p.y;
-    dataCell c = data[x][y];
 
-    if(c.queueing != fwQueued){
-      if (updateRealDist) c.dist = 0;
-      c.sqdist = 0;
-      c.obstX = x;
-      c.obstY = y;
-      c.queueing = fwQueued;
-      c.voronoi = occupied;
-      data[x][y] = c;
+    if(data[x][y].queueing != fwQueued){
+      if (updateRealDist) data[x][y].dist = 0;
+      data[x][y].sqdist = 0;
+      data[x][y].obstX = x;
+      data[x][y].obstY = y;
+      data[x][y].queueing = fwQueued;
+      data[x][y].voronoi = occupied;
       open.push(0, INTPOINT(x,y));
     }
   }
