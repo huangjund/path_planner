@@ -13,7 +13,7 @@
 #include "geometry/hybridastar/HAstar.h"
 #include "aux/visualize.h"
 #include "geometry/path.h"
-#include "geometry/dynamicvoronoi.h"
+//#include "geometry/dynamicvoronoi.h"
 #include "math/smoother.h"
 
 namespace HybridAStar{
@@ -51,7 +51,6 @@ namespace HybridAStar{
     Path path_;
     Path smoothedPath_ = Path(true);/// The path smoothed and ready for the controller
     Smoother smoother_;/// The smoother used for optimizing the path
-    DynamicVoronoi voronoiDiagram_;
     std::unique_ptr<Multibody::SingleForkLiftPlant> carPlant_;
   public:
     explicit Interface();

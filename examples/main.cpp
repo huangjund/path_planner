@@ -124,10 +124,6 @@ namespace HybridAStar{
     configSpace->setGrid(grid_); // set the grid for configuration space
     configSpace->makeClsLookup();  // make up look up table in configuration space
 
-    // TODO: change this binary map to a special deleter smart pointer
-    voronoiDiagram_.initializeMap(grid_->info.width,grid_->info.height,makeBinMap());
-    voronoiDiagram_.update();
-    voronoiDiagram_.visualize();
 
     // output to planner
     // initialize using planning map resolution
@@ -160,10 +156,7 @@ namespace HybridAStar{
     auto nSolution = planner_->solve(); auto t1 = ros::Time::now();
     smoother_.tracePath(nSolution);
     path_.updatePath(smoother_.getPath());
-    path_.publishPath();
-    path_.publishPathNodes();
-    path_.publishPathVehicles();
-    smoother_.smoothPath(voronoiDiagram_,pmap->info_.width, pmap->info_.height); 
+    smoother_.smoothPath(pmap->info_.width, pmap->info_.height); 
     auto t4 = ros::Time::now();
     smoothedPath_.updatePath(smoother_.getPath());
     ros::Duration d1(t1 - t0);
@@ -171,7 +164,9 @@ namespace HybridAStar{
 
     std::cout << "TIME in ms:" << d1*1000 << '\t' << d2*1000 << std::endl;
 
-    
+    path_.publishPath();
+    path_.publishPathNodes();
+    path_.publishPathVehicles();
     smoothedPath_.publishPath();
     smoothedPath_.publishPathNodes();
     smoothedPath_.publishPathVehicles();

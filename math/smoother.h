@@ -4,7 +4,7 @@
 #include <cmath>
 #include <vector>
 
-#include "../geometry/dynamicvoronoi.h"
+//#include "../geometry/dynamicvoronoi.h"
 #include "../common/statespace/SE2State.h"
 #include "../utils/Helper.h"
 #include "../math/vector2d.h"
@@ -29,7 +29,7 @@ class Smoother {
      smoothnessCost
      voronoiCost
   */
-  void smoothPath(DynamicVoronoi& voronoi, float width, float height);
+  void smoothPath(float width, float height);
 
   /*!
      \brief Given a node pointer the path to the root node will be traced recursively
@@ -86,8 +86,6 @@ class Smoother {
   float wCurvature = 0.2;
   /// weight for the smoothness term
   float wSmoothness = 0.2;
-  /// voronoi diagram describing the topology of the map
-  DynamicVoronoi voronoi;
   /// width of the map
   // collision map width
   int width; 

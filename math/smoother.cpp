@@ -25,9 +25,8 @@ void Smoother::clearPath() {
 //###################################################
 //                                SMOOTHING ALGORITHM
 //###################################################
-void Smoother::smoothPath(DynamicVoronoi& voronoi, float width, float height) {
+void Smoother::smoothPath(float width, float height) {
   // load the current voronoi diagram into the smoother
-  this->voronoi = voronoi;
   this->width = width; // collision map width
   this->height = height; // collision map height
   // current number of iterations of the gradient descent smoother
@@ -59,9 +58,6 @@ void Smoother::smoothPath(DynamicVoronoi& voronoi, float width, float height) {
       // the following points shall not be smoothed
       // keep these points fixed if they are a cusp point or adjacent to one
       if (isCusp(path_, i)) { continue; }
-
-      correction = correction - obstacleTerm(xi);
-      if (!isOnGrid(xi + correction)) { continue; }
 
       // TODO: Voronoi Diagram not implemented yet
       // voronoiTerm(); 
@@ -95,30 +91,30 @@ void Smoother::tracePath(const std::shared_ptr<Common::SE2State> node) {
   }
 }
 
-//###################################################
-//                                      OBSTACLE TERM
-//###################################################
-Vector2D Smoother::obstacleTerm(Vector2D xi) {
-  Vector2D gradient;
-  // the distance to the closest obstacle from the current node
-  float tempColCellx = xi.getX()/Common::SE2State::collisionMapCellSize;
-  float tempColCelly = xi.getY()/Common::SE2State::collisionMapCellSize;
-  float obsDst = voronoi.getDistance(tempColCellx, tempColCelly);
-  // the vector determining where the obstacle is
-  int x = (int)tempColCellx;
-  int y = (int)tempColCelly;
-  // if the node is within the map
-  if (x < width && x >= 0 && y < height && y >= 0) {
-    Vector2D obsVct(tempColCellx - voronoi.data[(int)tempColCellx][(int)tempColCelly].obstX,
-                    tempColCelly - voronoi.data[(int)tempColCellx][(int)tempColCelly].obstY);
+// //###################################################
+// //                                      OBSTACLE TERM
+// //###################################################
+// Vector2D Smoother::obstacleTerm(Vector2D xi) {
+//   Vector2D gradient;
+//   // the distance to the closest obstacle from the current node
+//   float tempColCellx = xi.getX()/Common::SE2State::collisionMapCellSize;
+//   float tempColCelly = xi.getY()/Common::SE2State::collisionMapCellSize;
+//   float obsDst = voronoi.getDistance(tempColCellx, tempColCelly);
+//   // the vector determining where the obstacle is
+//   int x = (int)tempColCellx;
+//   int y = (int)tempColCelly;
+//   // if the node is within the map
+//   if (x < width && x >= 0 && y < height && y >= 0) {
+//     Vector2D obsVct(tempColCellx - voronoi.data[(int)tempColCellx][(int)tempColCelly].obstX,
+//                     tempColCelly - voronoi.data[(int)tempColCellx][(int)tempColCelly].obstY);
 
-    // the closest obstacle is closer than desired correct the path for that
-    if (obsDst < obsDMax) {
-      return gradient = wObstacle * 2 * (obsDst - obsDMax) * obsVct / obsDst;
-    }
-  }
-  return gradient;
-}
+//     // the closest obstacle is closer than desired correct the path for that
+//     if (obsDst < obsDMax) {
+//       return gradient = wObstacle * 2 * (obsDst - obsDMax) * obsVct / obsDst;
+//     }
+//   }
+//   return gradient;
+// }
 
 //###################################################
 //                                       VORONOI TERM
