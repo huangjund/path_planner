@@ -6,14 +6,14 @@ Smoother::Smoother():carPlant_(std::make_unique<Multibody::SingleForkLiftPlant>(
 //###################################################
 //                                     CUSP DETECTION
 //###################################################
-inline bool isCusp(std::vector<std::shared_ptr<Common::SE2State>>& path, int i) {
-  bool revim2 = path[i - 2]->getPrim() > 3 ? true : false;
-  bool revim1 = path[i - 1]->getPrim() > 3 ? true : false;
-  bool revi   = path[i]->getPrim() > 3 ? true : false;
-  bool revip1 = path[i + 1]->getPrim() > 3 ? true : false;
-  //  bool revip2 = path[i + 2].getPrim() > 3 ? true : false;
+bool Smoother::isCusp(int i) {
+  // bool revim2 = path_[i - 2]->getPrim() < 3 ? true : false;
+  // bool revim1 = path_[i - 1]->getPrim() < 3 ? true : false;
+  bool revi   = path_[i]->getPrim() < 3 ? true : false;
+  bool revip1 = path_[i + 1]->getPrim() < 3 ? true : false;
+  //  bool revip2 = path_[i + 2].getPrim() < 3 ? true : false;
 
-  if (revim2 != revim1 || revim1 != revi || revi != revip1) { return true; }
+  if (revi != revip1) { return true; }
 
   return false;
 }
@@ -46,7 +46,7 @@ void Smoother::smoothPath(float width, float height) {
   while (iterations < maxIterations) {
 
     // choose the first three nodes of the path
-    for (int i = 2; i < pathLength - 2; ++i) {
+    for (int i = 0; i < pathLength-1; ++i) {
 
       Vector2D xim2(path_[i - 2]->getX(), path_[i - 2]->getY());
       Vector2D xim1(path_[i - 1]->getX(), path_[i - 1]->getY());
@@ -57,7 +57,7 @@ void Smoother::smoothPath(float width, float height) {
 
       // the following points shall not be smoothed
       // keep these points fixed if they are a cusp point or adjacent to one
-      if (isCusp(path_, i)) { continue; }
+      if (isCusp(i)) { continue; }
 
       // TODO: Voronoi Diagram not implemented yet
       // voronoiTerm(); 

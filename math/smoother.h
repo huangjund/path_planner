@@ -19,6 +19,7 @@ namespace HybridAStar {
 class Smoother {
  public:
   Smoother();
+  virtual ~Smoother();
 
   /*!
      \brief This function takes a path consisting of nodes and attempts to iteratively smooth the same using gradient descent.
@@ -29,14 +30,16 @@ class Smoother {
      smoothnessCost
      voronoiCost
   */
-  void smoothPath(float width, float height);
+  virtual void smoothPath(float width, float height);
 
   /*!
      \brief Given a node pointer the path to the root node will be traced recursively
      \param node a 3D node, usually the goal node
      \param i a parameter for counting the number of nodes
   */
-  void tracePath(const std::shared_ptr<Common::SE2State> node);
+  virtual void tracePath(const std::shared_ptr<Common::SE2State> node);
+
+	bool isCusp(int i);
 
   /// returns the path of the smoother object
   std::vector<std::shared_ptr<Common::SE2State>> getPath() {return path_;}
@@ -63,6 +66,10 @@ class Smoother {
   }
 
   void clearPath();
+
+ protected:
+ /// path to be smoothed
+  std::vector<std::shared_ptr<Common::SE2State>> path_;
 
  private:
   std::unique_ptr<Multibody::SingleForkLiftPlant> carPlant_;
@@ -92,8 +99,6 @@ class Smoother {
   /// height of the map
   // collision map height
   int height;
-  /// path to be smoothed
-  std::vector<std::shared_ptr<Common::SE2State>> path_;
 };
 }
 #endif // SMOOTHER_H

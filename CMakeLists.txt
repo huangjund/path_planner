@@ -43,6 +43,8 @@ set(SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/utils/Helper.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/utils/bucketedqueue.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/math/smoother.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/math/bspline.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/math/bsplinebasis.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/aux/visualize.cpp
     )
 set(HEADERS
@@ -69,6 +71,8 @@ set(HEADERS
     ${CMAKE_CURRENT_SOURCE_DIR}/utils/bucketedqueue.h
     ${CMAKE_CURRENT_SOURCE_DIR}/aux/visualize.h
     ${CMAKE_CURRENT_SOURCE_DIR}/math/smoother.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/math/bspline.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/math/bsplinebasis.h
     ${CMAKE_CURRENT_SOURCE_DIR}/math/vector2d.h
     ${CMAKE_CURRENT_SOURCE_DIR}/examples/main.h
     )

@@ -21,6 +21,7 @@ class Vector2D {
   inline Vector2D operator - (const Vector2D& b) const { return Vector2D(x - b.x, y - b.y); }
   /// a method to negate a vector
   inline Vector2D operator - () const  {return Vector2D(-x, -y);}
+  float &operator[](const int i) {if(i == 0) return x; else if(i == 1) return y; else exit(0);}
   /// a convenience method to print a vector
   friend std::ostream& operator<<(std::ostream& os, const Vector2D& b) {os << "(" << b.x << "|" << b.y << ")"; return os; }
   /// a method to calculate the length of the vector
