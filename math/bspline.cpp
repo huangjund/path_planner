@@ -4,6 +4,11 @@ using namespace HybridAStar;
 
 BSpline::BSpline():Smoother(){}
 
+BSpline::~BSpline() {
+  ctrlPointSet.clear();
+  trajPointSet.clear();
+  splineOrder.clear();
+}
 
 void BSpline::tracePath(const std::shared_ptr<Common::SE2State> node) {
   Smoother::tracePath(node);  // trace a whole path

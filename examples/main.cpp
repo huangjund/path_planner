@@ -156,9 +156,9 @@ namespace HybridAStar{
     auto nSolution = planner_->solve(); auto t1 = ros::Time::now();
     smoother_.tracePath(nSolution);
     path_.updatePath(smoother_.getPath());
-    smoother_.smoothPath(pmap->info_.width, pmap->info_.height); 
+    //smoother_.smoothPath(pmap->info_.width, pmap->info_.height); 
     auto t4 = ros::Time::now();
-    smoothedPath_.updatePath(smoother_.getPath());
+    //smoothedPath_.updatePath(smoother_.getPath());
     ros::Duration d1(t1 - t0);
     ros::Duration d2(t4 - t1);
 
@@ -167,9 +167,9 @@ namespace HybridAStar{
     path_.publishPath();
     path_.publishPathNodes();
     path_.publishPathVehicles();
-    smoothedPath_.publishPath();
-    smoothedPath_.publishPathNodes();
-    smoothedPath_.publishPathVehicles();
+    //smoothedPath_.publishPath();
+    //smoothedPath_.publishPathNodes();
+    //smoothedPath_.publishPathVehicles();
     visualizer_.publishNode3DCosts(pmap);
   }
 

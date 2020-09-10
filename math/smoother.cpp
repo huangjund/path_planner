@@ -3,6 +3,16 @@ using namespace HybridAStar;
 
 Smoother::Smoother():carPlant_(std::make_unique<Multibody::SingleForkLiftPlant>()){}
 
+Smoother::~Smoother() {
+  carPlant_->~SingleForkLiftPlant();
+  carPlant_.reset();
+  for (auto i = path_.begin(); i != path_.end(); i++)
+  {
+    (*i)->~SE2State();
+    i->reset();
+  }
+  
+}
 //###################################################
 //                                     CUSP DETECTION
 //###################################################
@@ -46,7 +56,7 @@ void Smoother::smoothPath(float width, float height) {
   while (iterations < maxIterations) {
 
     // choose the first three nodes of the path
-    for (int i = 0; i < pathLength-1; ++i) {
+    for (int i = 2; i < pathLength-2; ++i) {
 
       Vector2D xim2(path_[i - 2]->getX(), path_[i - 2]->getY());
       Vector2D xim1(path_[i - 1]->getX(), path_[i - 1]->getY());
