@@ -42,7 +42,7 @@ void Smoother::smoothPath(float width, float height) {
   // current number of iterations of the gradient descent smoother
   int iterations = 0;
   // the maximum iterations for the GD smoother
-  int maxIterations = 100;
+  int maxIterations = 50;
   // the length of the path in number of nodes
   int pathLength = 0;
 
@@ -233,6 +233,7 @@ Vector2D Smoother::curvatureTerm(Vector2D xim1, Vector2D xi, Vector2D xip1) {
 //                                    SMOOTHNESS TERM
 //###################################################
 Vector2D Smoother::smoothnessTerm(Vector2D xim2, Vector2D xim1, Vector2D xi, Vector2D xip1, Vector2D xip2) {
-  return wSmoothness * (xim2 - 4 * xim1 + 6 * xi - 4 * xip1 + xip2);
+  auto temp = wSmoothness * (xim2 - 4 * xim1 + 6 * xi - 4 * xip1 + xip2);
+  return temp;
 }
 
