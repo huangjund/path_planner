@@ -79,11 +79,11 @@ class Smoother {
   /// falloff rate for the voronoi field
   float alpha = 0.1;
   /// weight for the obstacle term
-  float wObstacle = 0.2;
+  float wObstacle = 0;
   /// weight for the voronoi term
   float wVoronoi = 0;
   /// weight for the curvature term
-  float wCurvature = 0.2;
+  float wCurvature = 0;
   /// weight for the smoothness term
   float wSmoothness = 0.2;
   /// width of the map

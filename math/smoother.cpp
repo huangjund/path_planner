@@ -7,10 +7,10 @@ Smoother::Smoother():carPlant_(std::make_unique<Multibody::SingleForkLiftPlant>(
 //                                     CUSP DETECTION
 //###################################################
 inline bool isCusp(std::vector<std::shared_ptr<Common::SE2State>>& path, int i) {
-  bool revim2 = path[i - 2]->getPrim() > 3 ? true : false;
-  bool revim1 = path[i - 1]->getPrim() > 3 ? true : false;
-  bool revi   = path[i]->getPrim() > 3 ? true : false;
-  bool revip1 = path[i + 1]->getPrim() > 3 ? true : false;
+  bool revim2 = path[i - 2]->getPrim() < 3 ? true : false;
+  bool revim1 = path[i - 1]->getPrim() < 3 ? true : false;
+  bool revi   = path[i]->getPrim() < 3 ? true : false;
+  bool revip1 = path[i + 1]->getPrim() < 3 ? true : false;
   //  bool revip2 = path[i + 2].getPrim() > 3 ? true : false;
 
   if (revim2 != revim1 || revim1 != revi || revi != revip1) { return true; }
@@ -32,7 +32,7 @@ void Smoother::smoothPath(float width, float height) {
   // current number of iterations of the gradient descent smoother
   int iterations = 0;
   // the maximum iterations for the GD smoother
-  int maxIterations = 100;
+  int maxIterations = 50;
   // the length of the path in number of nodes
   int pathLength = 0;
 
@@ -46,7 +46,7 @@ void Smoother::smoothPath(float width, float height) {
   while (iterations < maxIterations) {
 
     // choose the first three nodes of the path
-    for (int i = 2; i < pathLength - 2; ++i) {
+    for (int i = 2; i < pathLength - 2; i++) {
 
       Vector2D xim2(path_[i - 2]->getX(), path_[i - 2]->getY());
       Vector2D xim1(path_[i - 1]->getX(), path_[i - 1]->getY());
@@ -223,6 +223,7 @@ Vector2D Smoother::curvatureTerm(Vector2D xim1, Vector2D xi, Vector2D xip1) {
 //                                    SMOOTHNESS TERM
 //###################################################
 Vector2D Smoother::smoothnessTerm(Vector2D xim2, Vector2D xim1, Vector2D xi, Vector2D xip1, Vector2D xip2) {
-  return wSmoothness * (xim2 - 4 * xim1 + 6 * xi - 4 * xip1 + xip2);
+  auto temp = wSmoothness * (xim2 - 4 * xim1 + 6 * xi - 4 * xip1 + xip2);
+  return temp;
 }
 
