@@ -16,14 +16,16 @@ Smoother::~Smoother() {
 //###################################################
 //                                     CUSP DETECTION
 //###################################################
+// TODO: in RS curve piece, this function cannot extrapolate
+// the changing of direction
 bool Smoother::isCusp(int i) {
-  // bool revim2 = path_[i - 2]->getPrim() < 3 ? true : false;
-  // bool revim1 = path_[i - 1]->getPrim() < 3 ? true : false;
+  bool revim2 = path_[i - 2]->getPrim() < 3 ? true : false;
+  bool revim1 = path_[i - 1]->getPrim() < 3 ? true : false;
   bool revi   = path_[i]->getPrim() < 3 ? true : false;
   bool revip1 = path_[i + 1]->getPrim() < 3 ? true : false;
   //  bool revip2 = path_[i + 2].getPrim() < 3 ? true : false;
 
-  if (revi != revip1) { return true; }
+  if (revim2 != revim1 || revim1 != revi || revi != revip1) { return true; }
 
   return false;
 }

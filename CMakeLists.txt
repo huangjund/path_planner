@@ -18,6 +18,7 @@ else()
 endif()
 
 find_package(catkin REQUIRED COMPONENTS
+    interactive_markers
     roscpp
     rospy
     std_msgs
@@ -107,6 +108,13 @@ add_executable(hybrid_astar examples/main.cpp ${HEADERS} ${SOURCES})
 target_link_libraries(hybrid_astar ${catkin_LIBRARIES})
 target_link_libraries(hybrid_astar ${OMPL_LIBRARIES})
 target_link_libraries(hybrid_astar ${GFLAGS_LIBRARIES})
+
+add_executable(interactionUI simulation/interaction_box.cpp)
+target_link_libraries(interactionUI ${catkin_LIBRARIES})
+
+add_executable(simple_tf simulation/simple_tf.cpp)
+target_link_libraries(simple_tf ${catkin_LIBRARIES})
+
 
 install(TARGETS ${PROJECT_NAME} tf_broadcaster
     ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}

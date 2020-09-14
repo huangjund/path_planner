@@ -32,7 +32,8 @@ void BSpline::tracePath(const std::shared_ptr<Common::SE2State> node) {
   trajPointSet.push_back(traj); // push back the last piece of trajectory
 }
 
-void BSpline::setSplineOrder(bool autogen) {
+// automatically set the base spline order to 3 or 2
+void BSpline::initializeSplineOrders(bool autogen) {
   unsigned int order = 3;
   auto size = trajPointSet.size();
   while (size--) {
@@ -40,25 +41,36 @@ void BSpline::setSplineOrder(bool autogen) {
   }
 }
 
+// set control points for quasi-uniform b spline
 void BSpline::setCtrlPoints(bool autogen) {
   auto size = trajPointSet.size();
   for (size_t i = 0; i < size; ++i)
   {
-    auto n = trajPointSet[i].size();
+    auto n = trajPointSet[i].size() - 1;
     auto &k = splineOrder[i];
-    if(n < k-1) 
-      k = n+1;  // constraint for asym-equality distributed control points
-    auto ctrlpSize = n + k + 1;
+    if(n < k){
+      assert(n==2);
+      k = n;  // constraint for quasi-uniform distributed control points, at least 3 points
+    }
+    auto ctrlpSize = n - k + 2; // size for quasi-uniform b spline
 
     // set control points for one piece of trajectory
+    ctrlPoint temp;
     for (size_t j = 0; j < ctrlpSize; ++j)
     {
-      if(j < k)
-        ctrlPointSet[i].push_back(0);
-      else if(j >= n+1)
-        ctrlPointSet[i].push_back(10);
-      else
-        ctrlPointSet[i].push_back((n-k+2)*(j-k+1)/10);
+      if(j == 0) {  // if at the first point
+        temp.value = 0;
+        temp.multiplicity = k+1;
+      }
+      else if(j == ctrlpSize-1) { // if at the last point
+        temp.value = ctrlpSize-1;
+        temp.multiplicity = k+1;
+      }
+      else {  // if at the medium points
+        temp.value = j;
+        temp.multiplicity = 1;
+      }
+      ctrlPointSet[i].push_back(temp);
     }
   }
   
