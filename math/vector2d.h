@@ -40,6 +40,8 @@ class Vector2D {
   }
   inline float getX() { return x; }
   inline float getY() { return y; }
+  inline void setX(float x) {this->x = x;}
+  inline void setY(float y) {this->y = y;}
   //  void setT(float t) { this->t = t; }
   //  float getT() { return t; }
  private:

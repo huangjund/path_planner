@@ -39,7 +39,7 @@ class Smoother {
   */
   virtual void tracePath(const std::shared_ptr<Common::SE2State> node);
 
-	bool isCusp(int i);
+	virtual bool isCusp(int i);
 
   /// returns the path of the smoother object
   std::vector<std::shared_ptr<Common::SE2State>> getPath() {return path_;}
@@ -56,6 +56,10 @@ class Smoother {
   /// voronoiCost - trade off between path length and closeness to obstaclesg
   //   Vector2D voronoiTerm(Vector2D xi);
 
+  void setWidthHeight(const float& width, const float& height) {
+    this->width = width;
+    this->height = height;
+  }
   /// a boolean test, whether vector is on the grid or not
   bool isOnGrid(Vector2D vec) {
     if (vec.getX() >= 0 && vec.getX() < width &&
@@ -65,12 +69,21 @@ class Smoother {
     return false;
   }
 
-  void clearPath();
+  virtual void clearPath();
 
  protected:
  /// path to be smoothed
   std::vector<std::shared_ptr<Common::SE2State>> path_;
-
+  /// falloff rate for the voronoi field
+  float alpha = 0.1;
+  /// weight for the obstacle term
+  float wObstacle = 0;
+  /// weight for the voronoi term
+  float wVoronoi = 0;
+  /// weight for the curvature term
+  float wCurvature = 0;
+  /// weight for the smoothness term
+  float wSmoothness = 0.2;
  private:
   std::unique_ptr<Multibody::SingleForkLiftPlant> carPlant_;
   /// maximum possible curvature of the non-holonomic vehicle
@@ -83,16 +96,6 @@ class Smoother {
   /// maximum distance for obstacles to influence the voronoi field
   // [m] --- The minimum width of a safe road for the vehicle at hand
   float vorObsDMax = 1;
-  /// falloff rate for the voronoi field
-  float alpha = 0.1;
-  /// weight for the obstacle term
-  float wObstacle = 0;
-  /// weight for the voronoi term
-  float wVoronoi = 0;
-  /// weight for the curvature term
-  float wCurvature = 0;
-  /// weight for the smoothness term
-  float wSmoothness = 0.2;
   /// width of the map
   // collision map width
   int width; 

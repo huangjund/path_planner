@@ -26,6 +26,9 @@ class BSpline : public Smoother {
     virtual ~BSpline();
     
     virtual void tracePath(const std::shared_ptr<Common::SE2State> node);
+    virtual void smoothPath(float width, float height);
+    virtual bool isCusp(int i);
+    virtual void clearPath();
     void initializeSplineOrders(bool autogen = true);
     void setCtrlPoints(bool autogen = true);
 }; // class bspline

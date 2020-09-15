@@ -14,7 +14,7 @@
 #include "aux/visualize.h"
 #include "geometry/path.h"
 //#include "geometry/dynamicvoronoi.h"
-#include "math/smoother.h"
+#include "math/bspline.h"
 
 namespace HybridAStar{
   using HybridAStar::Common::CollisionDetection;
@@ -50,7 +50,7 @@ namespace HybridAStar{
     Visualize visualizer_;
     Path path_;
     Path smoothedPath_ = Path(true);/// The path smoothed and ready for the controller
-    Smoother smoother_;/// The smoother used for optimizing the path
+    BSpline smoother_;/// The smoother used for optimizing the path and create b spline
     std::unique_ptr<Multibody::SingleForkLiftPlant> carPlant_;
   public:
     explicit Interface();
