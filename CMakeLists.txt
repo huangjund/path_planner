@@ -17,6 +17,7 @@ else()
     message(STATUS "The compiler ${CMAKE_CXX_COMPILER} has no C++11 support. Please use a different C++ compiler.")
 endif()
 
+
 find_package(catkin REQUIRED COMPONENTS
     interactive_markers
     roscpp
@@ -79,12 +80,24 @@ set(HEADERS
     )
 add_library(HYAS ${SOURCES} ${HEADERS})
 
+## TODO: switch this gtest into a subdirectory
+set(GTESTSRC
+    ${CMAKE_CURRENT_SOURCE_DIR}/test/bsplineTEST.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/math/bsplinebasis.cpp
+    )
+set(GTESTHDR
+    ${CMAKE_CURRENT_SOURCE_DIR}/math/bsplinebasis.h
+    )
+add_library(TEST ${GTESTSRC} ${GTESTHDR})
+
 ## Declare a catkin package
 catkin_package()
 
 ## OPEN MOTION PLANNING LIBRARY
 find_package(ompl REQUIRED)
 find_package(gflags REQUIRED)
+find_package(GTest REQUIRED)
+find_package(PythonLibs REQUIRED)
 
 if(NOT OMPL_FOUND)
     message(AUTHOR_WARNING,"Open Motion Planning Library not found")
@@ -94,12 +107,21 @@ if(NOT GFLAGS_FOUND)
     message(AUTHOR_WARNING,"gflags not found")
 endif(NOT GFLAGS_FOUND)
 
+if(NOT GTEST_FOUND)
+    message(AUTHOR_WARNING,"gtest not found")
+endif(NOT GTEST_FOUND)
+
+if(NOT PYTHONLIBS_FOUND)
+    message(AUTHOR_WARNING,"python libs not found")
+endif(NOT PYTHONLIBS_FOUND)
+
 
 include_directories(include ${catkin_INCLUDE_DIRS})
 include_directories(include ${OMPL_INCLUDE_DIRS})
 include_directories(include ${GFLAGS_INCLUDE_DIRS})
 include_directories(include ${CMAKE_CURRENT_SOURCE_DIR})
 include_directories(include include)
+include_directories(${PYTHON_INCLUDE_DIRS})
 
 add_executable(tf_broadcaster examples/tf_broadcaster.cpp)
 target_link_libraries(tf_broadcaster ${catkin_LIBRARIES})
@@ -115,6 +137,9 @@ target_link_libraries(interactionUI ${catkin_LIBRARIES})
 add_executable(simple_tf simulation/simple_tf.cpp)
 target_link_libraries(simple_tf ${catkin_LIBRARIES})
 
+# add_executable(gtest_navision ${GTESTSRC} ${GTESTHDR})
+# target_link_libraries(gtest_navision ${GTEST_LIBRARIES} pthread)
+# target_link_libraries(gtest_navision ${PYTHON_LIBRARIES})
 
 install(TARGETS ${PROJECT_NAME} tf_broadcaster
     ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}

@@ -12,6 +12,8 @@ namespace Common {
 
   SE2State::SE2State():SE2State(0,0,0,0,0,nullptr,0.5,0.08726646,0){}
 
+  SE2State::SE2State(float x, float y, float t):SE2State(x,y,t,0,0,nullptr,0.5,0.08726646,0) {}
+
   SE2State::SE2State(float cellsize, float anglesize):SE2State(0,0,0,0,0,nullptr,cellsize,anglesize,0){}
 
   SE2State::SE2State(float x, float y, float t, float g, float h,

@@ -2,12 +2,17 @@
 
 using namespace HybridAStar;
 
-BSpline::BSpline():Smoother(){}
+BSpline::BSpline():Smoother(){
+  // visualization
+  pub = n.advertise<nav_msgs::Path>("/bspline",1);
+  path.header.frame_id = "path";
+}
 
 BSpline::~BSpline() {
   ctrlPointSet.clear();
   trajPointSet.clear();
   splineOrder.clear();
+  bpath_.clear();
 }
 
 bool BSpline::isCusp(int i) {
@@ -20,6 +25,8 @@ bool BSpline::isCusp(int i) {
   return false;
 }
 
+// complete function
+// TODO: if the path didn't find, this function can have problems
 void BSpline::tracePath(const std::shared_ptr<Common::SE2State> node) {
   Smoother::tracePath(node);  // trace a whole path
   auto pathlength = path_.size();
@@ -43,6 +50,7 @@ void BSpline::tracePath(const std::shared_ptr<Common::SE2State> node) {
   trajPointSet.push_back(traj); // push back the last piece of trajectory
 }
 
+// complete function
 void BSpline::smoothPath(float width, float height) {
   setWidthHeight(width,height);
   unsigned int iter = 0;
@@ -85,12 +93,18 @@ void BSpline::smoothPath(float width, float height) {
 }
 
 // automatically set the base spline order to 3 or 2
+// for quasi-uniform b spline
 void BSpline::initializeSplineOrders(bool autogen) {
-  unsigned int order = 3;
   auto size = trajPointSet.size();
-  while (size--) {
-    splineOrder.push_back(order);
-  }
+  for (size_t i = 0; i < size; i++) {
+    auto num = trajPointSet[i].size();
+    assert(num>=2);
+    if (num == 2) // this piece of trajectory will not generate spline
+      splineOrder.push_back(0);
+    else if(num == 3)  // trajectory with 3 points will generate a 2 order spline
+      splineOrder.push_back(2);
+    else                // trajectory with more than 3 points will generate a 3 order spline
+      splineOrder.push_back(3);   }
 }
 
 // set control points for quasi-uniform b spline
@@ -100,30 +114,32 @@ void BSpline::setCtrlPoints(bool autogen) {
   {
     auto n = trajPointSet[i].size() - 1;
     auto &k = splineOrder[i];
-    if(n < k){
-      assert(n>=2);
-      k = n;  // constraint for quasi-uniform distributed control points, at least 3 points
-    }
+
     auto ctrlpSize = n - k + 2; // size for quasi-uniform b spline
 
-    // set control points for one piece of trajectory
+    // set control points for b spline generation
+    // from one piece of trajectory
     ctrlPoint temp;
-    for (size_t j = 0; j < ctrlpSize; ++j)
-    {
-      if(j == 0) {  // if at the first point
-        temp.value = 0;
-        temp.multiplicity = k+1;
+    std::vector<ctrlPoint> vtemp;
+    if (k != 0) {
+      for (size_t j = 0; j < ctrlpSize; ++j)
+      {
+        if(j == 0) {  // if at the first point
+          temp.value = 0;
+          temp.multiplicity = k+1;
+        }
+        else if(j == ctrlpSize-1) { // if at the last point
+          temp.value = ctrlpSize-1;
+          temp.multiplicity = k+1;
+        }
+        else {  // if at the medium points
+          temp.value = j;
+          temp.multiplicity = 1;
+        }
+        vtemp.push_back(temp);
       }
-      else if(j == ctrlpSize-1) { // if at the last point
-        temp.value = ctrlpSize-1;
-        temp.multiplicity = k+1;
-      }
-      else {  // if at the medium points
-        temp.value = j;
-        temp.multiplicity = 1;
-      }
-      ctrlPointSet[i].push_back(temp);
     }
+    ctrlPointSet.push_back(std::move(vtemp));
   }
   
 }
@@ -133,4 +149,32 @@ void BSpline::clearPath() {
   splineOrder.clear();
   ctrlPointSet.clear();
   trajPointSet.clear();
+  bpath_.clear();
+}
+
+void BSpline::interpolate() {
+  // initialization
+  initializeSplineOrders();
+  setCtrlPoints();
+
+  auto trajpieces = trajPointSet.size();
+  for (size_t i = 0; i < trajpieces; i++) {
+    auto splineorder = splineOrder[i];
+    if (splineorder != 0){  // if the spline order > 0
+      bsplinebasis c(trajPointSet[i],splineorder);
+      
+      double t = 0;
+      double steplen = 0.1;
+      double len = ctrlPointSet[i].size()-1;
+      while (t < len) {
+        auto v = c.compute(t);
+        bpath_.push_back(std::make_shared<Common::SE2State>(v.getX(),v.getY(),0));
+        t += steplen;
+      }
+    } else {  // else
+      // bpath_.push_back(std::make_shared<Common::SE2State>(
+      //                  trajPointSet[i][0].getX(),trajPointSet[i][0].getY(),0));
+      ;
+    }
+  }
 }

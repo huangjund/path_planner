@@ -8,6 +8,11 @@
 
 #include <vector>
 #include <cassert>
+#include <memory>
+
+#include <ros/ros.h>
+#include <nav_msgs/Path.h>
+#include <visualization_msgs/MarkerArray.h>
 
 namespace HybridAStar
 {
@@ -16,11 +21,17 @@ class BSpline : public Smoother {
     struct ctrlPoint {
       double value;
       int multiplicity = 1;
+      ctrlPoint() = default;
+      ctrlPoint(const ctrlPoint& c):value(c.value),multiplicity(c.multiplicity){}
+      ctrlPoint& operator=(const ctrlPoint& c) {value = c.value;  multiplicity = c.multiplicity; return *this;}
     };
+
   private:
-    std::vector<std::vector<ctrlPoint>> ctrlPointSet;
+    std::vector<std::vector<ctrlPoint>> ctrlPointSet; // the size should equal trajPointSet size equal splineOrder size
     std::vector<std::vector<Vector2D>> trajPointSet;
     std::vector<unsigned int> splineOrder;
+    std::vector<std::shared_ptr<Common::SE2State>> bpath_;
+
   public:
     BSpline();
     virtual ~BSpline();
@@ -31,6 +42,36 @@ class BSpline : public Smoother {
     virtual void clearPath();
     void initializeSplineOrders(bool autogen = true);
     void setCtrlPoints(bool autogen = true);
+    
+    //visualization
+  private:
+  ros::NodeHandle n;
+  ros::Publisher pub;
+  nav_msgs::Path path;
+
+  public:
+  void interpolate();
+  void splinePub() {
+    path.poses.clear();
+    bpath_.clear();
+    interpolate();
+
+    path.header.stamp = ros::Time::now();
+    for (auto i = bpath_.cbegin(); i != bpath_.end(); i++)
+    {
+      geometry_msgs::PoseStamped vertex;
+      vertex.pose.position.x = (*i)->getX();
+      vertex.pose.position.y = (*i)->getY();
+      vertex.pose.position.z = 0;
+      vertex.pose.orientation.w = 1;
+      vertex.pose.orientation.x = 0;
+      vertex.pose.orientation.y = 0;
+      vertex.pose.orientation.z = 0;
+      path.poses.push_back(vertex);
+    }
+
+    pub.publish(path);
+  }
 }; // class bspline
 } // namespace HybridAStar
 

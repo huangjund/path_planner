@@ -171,6 +171,8 @@ namespace HybridAStar{
     smoothedPath_.publishPathNodes();
     smoothedPath_.publishPathVehicles();
     visualizer_.publishNode3DCosts(pmap);
+
+    smoother_.splinePub();
   }
 
   void Interface::setStartOutput(){

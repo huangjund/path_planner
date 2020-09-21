@@ -2,6 +2,7 @@
 #define VECTOR2D
 
 #include <iostream>
+#include <cmath>
 namespace HybridAStar {
 //###################################################
 //                                            VECTOR2

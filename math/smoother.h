@@ -41,6 +41,8 @@ class Smoother {
 
 	virtual bool isCusp(int i);
 
+  virtual void clearPath();
+  
   /// returns the path of the smoother object
   std::vector<std::shared_ptr<Common::SE2State>> getPath() {return path_;}
 
@@ -68,8 +70,6 @@ class Smoother {
     }
     return false;
   }
-
-  virtual void clearPath();
 
  protected:
  /// path to be smoothed

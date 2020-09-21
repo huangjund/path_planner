@@ -3,7 +3,6 @@
 
 #include <vector>
 #include <utility>
-#include "bspline.h"
 #include "vector2d.h"
 
 namespace HybridAStar
@@ -21,6 +20,7 @@ namespace HybridAStar
     Vector2D compute(double glb_value);
     Vector2D pieceiValue(const double loc,const unsigned int piece);
     void setOrder(const int& order);
+    size_t trajSize() const {return trajPoints.size();}
   private:
     // order 2
     double n2i2[3][3] ={1 , 0 , 0,

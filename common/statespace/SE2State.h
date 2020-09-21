@@ -55,6 +55,7 @@ namespace Common {
 	  static const float collisionMapCellSize;
   public:
     SE2State();
+    explicit SE2State(float x, float y, float t);
     explicit SE2State(float cellsize, float anglesize);
     explicit SE2State(float x, float y, float t, float g, float h,
                      std::shared_ptr<SE2State> pred, float cellsize, float anglesize, int prim);
