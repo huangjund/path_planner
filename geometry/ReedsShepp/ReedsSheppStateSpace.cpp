@@ -1,40 +1,4 @@
-/*********************************************************************
-* Software License Agreement (BSD License)
-*
-*  Copyright (c) 2010, Rice University
-*  All rights reserved.
-*
-*  Redistribution and use in source and binary forms, with or without
-*  modification, are permitted provided that the following conditions
-*  are met:
-*
-*   * Redistributions of source code must retain the above copyright
-*     notice, this list of conditions and the following disclaimer.
-*   * Redistributions in binary form must reproduce the above
-*     copyright notice, this list of conditions and the following
-*     disclaimer in the documentation and/or other materials provided
-*     with the distribution.
-*   * Neither the name of the Rice University nor the names of its
-*     contributors may be used to endorse or promote products derived
-*     from this software without specific prior written permission.
-*
-*  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-*  "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-*  LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
-*  FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
-*  COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-*  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
-*  BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-*  LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-*  CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
-*  LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
-*  ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
-*  POSSIBILITY OF SUCH DAMAGE.
-*********************************************************************/
-
-/* Author: Mark Moll */
-
-#include "ompl/base/spaces/ReedsSheppStateSpace.h"
+#include "ReedsSheppStateSpace.h"
 #include "ompl/base/SpaceInformation.h"
 #include "ompl/util/Exception.h"
 #include <queue>
@@ -48,9 +12,9 @@ namespace
 
     const double pi = boost::math::constants::pi<double>();
     const double twopi = 2. * pi;
-#ifndef NDEBUG
+ #ifndef NDEBUG
     const double RS_EPS = 1e-6;
-#endif
+ #endif
     const double ZERO = 10 * std::numeric_limits<double>::epsilon();
 
     inline double mod2pi(double x)
@@ -112,52 +76,61 @@ namespace
         }
         return false;
     }
-    void CSC(double x, double y, double phi, ReedsSheppStateSpace::ReedsSheppPath &path)
+    void CSC(double x, double y, double phi, HybridAStar::ReedsSheppStateSpace::ReedsSheppPath &path)
     {
         double t, u, v, Lmin = path.length(), L;
         if (LpSpLp(x, y, phi, t, u, v) && Lmin > (L = fabs(t) + fabs(u) + fabs(v)))
         {
-            path = ReedsSheppStateSpace::ReedsSheppPath(ReedsSheppStateSpace::reedsSheppPathType[14], t, u, v);
+            path = HybridAStar::ReedsSheppStateSpace::ReedsSheppPath(
+                    HybridAStar::ReedsSheppStateSpace::reedsSheppPathType[14], t, u, v);
             Lmin = L;
         }
         if (LpSpLp(-x, y, -phi, t, u, v) && Lmin > (L = fabs(t) + fabs(u) + fabs(v)))  // timeflip
         {
-            path = ReedsSheppStateSpace::ReedsSheppPath(ReedsSheppStateSpace::reedsSheppPathType[14], -t, -u, -v);
+            path = HybridAStar::ReedsSheppStateSpace::ReedsSheppPath(
+                    HybridAStar::ReedsSheppStateSpace::reedsSheppPathType[14], -t, -u, -v);
             Lmin = L;
         }
         if (LpSpLp(x, -y, -phi, t, u, v) && Lmin > (L = fabs(t) + fabs(u) + fabs(v)))  // reflect
         {
-            path = ReedsSheppStateSpace::ReedsSheppPath(ReedsSheppStateSpace::reedsSheppPathType[15], t, u, v);
+            path = HybridAStar::ReedsSheppStateSpace::ReedsSheppPath(
+                    HybridAStar::ReedsSheppStateSpace::reedsSheppPathType[15], t, u, v);
             Lmin = L;
         }
         if (LpSpLp(-x, -y, phi, t, u, v) && Lmin > (L = fabs(t) + fabs(u) + fabs(v)))  // timeflip + reflect
         {
-            path = ReedsSheppStateSpace::ReedsSheppPath(ReedsSheppStateSpace::reedsSheppPathType[15], -t, -u, -v);
+            path = HybridAStar::ReedsSheppStateSpace::ReedsSheppPath(
+                    HybridAStar::ReedsSheppStateSpace::reedsSheppPathType[15], -t, -u, -v);
             Lmin = L;
         }
         if (LpSpRp(x, y, phi, t, u, v) && Lmin > (L = fabs(t) + fabs(u) + fabs(v)))
         {
-            path = ReedsSheppStateSpace::ReedsSheppPath(ReedsSheppStateSpace::reedsSheppPathType[12], t, u, v);
+            path = HybridAStar::ReedsSheppStateSpace::ReedsSheppPath(
+                    HybridAStar::ReedsSheppStateSpace::reedsSheppPathType[12], t, u, v);
             Lmin = L;
         }
         if (LpSpRp(-x, y, -phi, t, u, v) && Lmin > (L = fabs(t) + fabs(u) + fabs(v)))  // timeflip
         {
-            path = ReedsSheppStateSpace::ReedsSheppPath(ReedsSheppStateSpace::reedsSheppPathType[12], -t, -u, -v);
+            path = HybridAStar::ReedsSheppStateSpace::ReedsSheppPath(
+                    HybridAStar::ReedsSheppStateSpace::reedsSheppPathType[12], -t, -u, -v);
             Lmin = L;
         }
         if (LpSpRp(x, -y, -phi, t, u, v) && Lmin > (L = fabs(t) + fabs(u) + fabs(v)))  // reflect
         {
-            path = ReedsSheppStateSpace::ReedsSheppPath(ReedsSheppStateSpace::reedsSheppPathType[13], t, u, v);
+            path = HybridAStar::ReedsSheppStateSpace::ReedsSheppPath(
+                    HybridAStar::ReedsSheppStateSpace::reedsSheppPathType[13], t, u, v);
             Lmin = L;
         }
         if (LpSpRp(-x, -y, phi, t, u, v) && Lmin > (L = fabs(t) + fabs(u) + fabs(v)))  // timeflip + reflect
-            path = ReedsSheppStateSpace::ReedsSheppPath(ReedsSheppStateSpace::reedsSheppPathType[13], -t, -u, -v);
+            path = HybridAStar::ReedsSheppStateSpace::ReedsSheppPath(
+                    HybridAStar::ReedsSheppStateSpace::reedsSheppPathType[13], -t, -u, -v);
     }
     // formula 8.3 / 8.4  *** TYPO IN PAPER ***
     inline bool LpRmL(double x, double y, double phi, double &t, double &u, double &v)
     {
         double xi = x - sin(phi), eta = y - 1. + cos(phi), u1, theta;
         polar(xi, eta, u1, theta);
+        u1 = u1 * u1;
         if (u1 <= 4.)
         {
             u = -2. * asin(.25 * u1);
@@ -170,27 +143,31 @@ namespace
         }
         return false;
     }
-    void CCC(double x, double y, double phi, ReedsSheppStateSpace::ReedsSheppPath &path)
+    void CCC(double x, double y, double phi, HybridAStar::ReedsSheppStateSpace::ReedsSheppPath &path)
     {
         double t, u, v, Lmin = path.length(), L;
         if (LpRmL(x, y, phi, t, u, v) && Lmin > (L = fabs(t) + fabs(u) + fabs(v)))
         {
-            path = ReedsSheppStateSpace::ReedsSheppPath(ReedsSheppStateSpace::reedsSheppPathType[0], t, u, v);
+            path = HybridAStar::ReedsSheppStateSpace::ReedsSheppPath(
+                    HybridAStar::ReedsSheppStateSpace::reedsSheppPathType[0], t, u, v);
             Lmin = L;
         }
         if (LpRmL(-x, y, -phi, t, u, v) && Lmin > (L = fabs(t) + fabs(u) + fabs(v)))  // timeflip
         {
-            path = ReedsSheppStateSpace::ReedsSheppPath(ReedsSheppStateSpace::reedsSheppPathType[0], -t, -u, -v);
+            path = HybridAStar::ReedsSheppStateSpace::ReedsSheppPath(
+                    HybridAStar::ReedsSheppStateSpace::reedsSheppPathType[0], -t, -u, -v);
             Lmin = L;
         }
         if (LpRmL(x, -y, -phi, t, u, v) && Lmin > (L = fabs(t) + fabs(u) + fabs(v)))  // reflect
         {
-            path = ReedsSheppStateSpace::ReedsSheppPath(ReedsSheppStateSpace::reedsSheppPathType[1], t, u, v);
+            path = HybridAStar::ReedsSheppStateSpace::ReedsSheppPath(
+                    HybridAStar::ReedsSheppStateSpace::reedsSheppPathType[1], t, u, v);
             Lmin = L;
         }
         if (LpRmL(-x, -y, phi, t, u, v) && Lmin > (L = fabs(t) + fabs(u) + fabs(v)))  // timeflip + reflect
         {
-            path = ReedsSheppStateSpace::ReedsSheppPath(ReedsSheppStateSpace::reedsSheppPathType[1], -t, -u, -v);
+            path = HybridAStar::ReedsSheppStateSpace::ReedsSheppPath(
+                    HybridAStar::ReedsSheppStateSpace::reedsSheppPathType[1], -t, -u, -v);
             Lmin = L;
         }
 
@@ -198,21 +175,25 @@ namespace
         double xb = x * cos(phi) + y * sin(phi), yb = x * sin(phi) - y * cos(phi);
         if (LpRmL(xb, yb, phi, t, u, v) && Lmin > (L = fabs(t) + fabs(u) + fabs(v)))
         {
-            path = ReedsSheppStateSpace::ReedsSheppPath(ReedsSheppStateSpace::reedsSheppPathType[0], v, u, t);
+            path = HybridAStar::ReedsSheppStateSpace::ReedsSheppPath(
+                    HybridAStar::ReedsSheppStateSpace::reedsSheppPathType[0], v, u, t);
             Lmin = L;
         }
         if (LpRmL(-xb, yb, -phi, t, u, v) && Lmin > (L = fabs(t) + fabs(u) + fabs(v)))  // timeflip
         {
-            path = ReedsSheppStateSpace::ReedsSheppPath(ReedsSheppStateSpace::reedsSheppPathType[0], -v, -u, -t);
+            path = HybridAStar::ReedsSheppStateSpace::ReedsSheppPath(
+                    HybridAStar::ReedsSheppStateSpace::reedsSheppPathType[0], -v, -u, -t);
             Lmin = L;
         }
         if (LpRmL(xb, -yb, -phi, t, u, v) && Lmin > (L = fabs(t) + fabs(u) + fabs(v)))  // reflect
         {
-            path = ReedsSheppStateSpace::ReedsSheppPath(ReedsSheppStateSpace::reedsSheppPathType[1], v, u, t);
+            path = HybridAStar::ReedsSheppStateSpace::ReedsSheppPath(
+                    HybridAStar::ReedsSheppStateSpace::reedsSheppPathType[1], v, u, t);
             Lmin = L;
         }
         if (LpRmL(-xb, -yb, phi, t, u, v) && Lmin > (L = fabs(t) + fabs(u) + fabs(v)))  // timeflip + reflect
-            path = ReedsSheppStateSpace::ReedsSheppPath(ReedsSheppStateSpace::reedsSheppPathType[1], -v, -u, -t);
+            path = HybridAStar::ReedsSheppStateSpace::ReedsSheppPath(
+                    HybridAStar::ReedsSheppStateSpace::reedsSheppPathType[1], -v, -u, -t);
     }
     // formula 8.7
     inline bool LpRupLumRm(double x, double y, double phi, double &t, double &u, double &v)
@@ -247,47 +228,55 @@ namespace
         }
         return false;
     }
-    void CCCC(double x, double y, double phi, ReedsSheppStateSpace::ReedsSheppPath &path)
+    void CCCC(double x, double y, double phi, HybridAStar::ReedsSheppStateSpace::ReedsSheppPath &path)
     {
         double t, u, v, Lmin = path.length(), L;
         if (LpRupLumRm(x, y, phi, t, u, v) && Lmin > (L = fabs(t) + 2. * fabs(u) + fabs(v)))
         {
-            path = ReedsSheppStateSpace::ReedsSheppPath(ReedsSheppStateSpace::reedsSheppPathType[2], t, u, -u, v);
+            path = HybridAStar::ReedsSheppStateSpace::ReedsSheppPath(
+                    HybridAStar::ReedsSheppStateSpace::reedsSheppPathType[2], t, u, -u, v);
             Lmin = L;
         }
         if (LpRupLumRm(-x, y, -phi, t, u, v) && Lmin > (L = fabs(t) + 2. * fabs(u) + fabs(v)))  // timeflip
         {
-            path = ReedsSheppStateSpace::ReedsSheppPath(ReedsSheppStateSpace::reedsSheppPathType[2], -t, -u, u, -v);
+            path = HybridAStar::ReedsSheppStateSpace::ReedsSheppPath(
+                    HybridAStar::ReedsSheppStateSpace::reedsSheppPathType[2], -t, -u, u, -v);
             Lmin = L;
         }
         if (LpRupLumRm(x, -y, -phi, t, u, v) && Lmin > (L = fabs(t) + 2. * fabs(u) + fabs(v)))  // reflect
         {
-            path = ReedsSheppStateSpace::ReedsSheppPath(ReedsSheppStateSpace::reedsSheppPathType[3], t, u, -u, v);
+            path = HybridAStar::ReedsSheppStateSpace::ReedsSheppPath(
+                    HybridAStar::ReedsSheppStateSpace::reedsSheppPathType[3], t, u, -u, v);
             Lmin = L;
         }
         if (LpRupLumRm(-x, -y, phi, t, u, v) && Lmin > (L = fabs(t) + 2. * fabs(u) + fabs(v)))  // timeflip + reflect
         {
-            path = ReedsSheppStateSpace::ReedsSheppPath(ReedsSheppStateSpace::reedsSheppPathType[3], -t, -u, u, -v);
+            path = HybridAStar::ReedsSheppStateSpace::ReedsSheppPath(
+                    HybridAStar::ReedsSheppStateSpace::reedsSheppPathType[3], -t, -u, u, -v);
             Lmin = L;
         }
 
         if (LpRumLumRp(x, y, phi, t, u, v) && Lmin > (L = fabs(t) + 2. * fabs(u) + fabs(v)))
         {
-            path = ReedsSheppStateSpace::ReedsSheppPath(ReedsSheppStateSpace::reedsSheppPathType[2], t, u, u, v);
+            path = HybridAStar::ReedsSheppStateSpace::ReedsSheppPath(
+                    HybridAStar::ReedsSheppStateSpace::reedsSheppPathType[2], t, u, u, v);
             Lmin = L;
         }
         if (LpRumLumRp(-x, y, -phi, t, u, v) && Lmin > (L = fabs(t) + 2. * fabs(u) + fabs(v)))  // timeflip
         {
-            path = ReedsSheppStateSpace::ReedsSheppPath(ReedsSheppStateSpace::reedsSheppPathType[2], -t, -u, -u, -v);
+            path = HybridAStar::ReedsSheppStateSpace::ReedsSheppPath(
+                    HybridAStar::ReedsSheppStateSpace::reedsSheppPathType[2], -t, -u, -u, -v);
             Lmin = L;
         }
         if (LpRumLumRp(x, -y, -phi, t, u, v) && Lmin > (L = fabs(t) + 2. * fabs(u) + fabs(v)))  // reflect
         {
-            path = ReedsSheppStateSpace::ReedsSheppPath(ReedsSheppStateSpace::reedsSheppPathType[3], t, u, u, v);
+            path = HybridAStar::ReedsSheppStateSpace::ReedsSheppPath(
+                    HybridAStar::ReedsSheppStateSpace::reedsSheppPathType[3], t, u, u, v);
             Lmin = L;
         }
         if (LpRumLumRp(-x, -y, phi, t, u, v) && Lmin > (L = fabs(t) + 2. * fabs(u) + fabs(v)))  // timeflip + reflect
-            path = ReedsSheppStateSpace::ReedsSheppPath(ReedsSheppStateSpace::reedsSheppPathType[3], -t, -u, -u, -v);
+            path = HybridAStar::ReedsSheppStateSpace::ReedsSheppPath(
+                    HybridAStar::ReedsSheppStateSpace::reedsSheppPathType[3], -t, -u, -u, -v);
     }
     // formula 8.9
     inline bool LpRmSmLm(double x, double y, double phi, double &t, double &u, double &v)
@@ -324,52 +313,60 @@ namespace
         }
         return false;
     }
-    void CCSC(double x, double y, double phi, ReedsSheppStateSpace::ReedsSheppPath &path)
+    void CCSC(double x, double y, double phi, HybridAStar::ReedsSheppStateSpace::ReedsSheppPath &path)
     {
         double t, u, v, Lmin = path.length() - .5 * pi, L;
         if (LpRmSmLm(x, y, phi, t, u, v) && Lmin > (L = fabs(t) + fabs(u) + fabs(v)))
         {
-            path = ReedsSheppStateSpace::ReedsSheppPath(ReedsSheppStateSpace::reedsSheppPathType[4], t, -.5 * pi, u, v);
+            path = HybridAStar::ReedsSheppStateSpace::ReedsSheppPath(
+                    HybridAStar::ReedsSheppStateSpace::reedsSheppPathType[4], t, -.5 * pi, u, v);
             Lmin = L;
         }
         if (LpRmSmLm(-x, y, -phi, t, u, v) && Lmin > (L = fabs(t) + fabs(u) + fabs(v)))  // timeflip
         {
             path =
-                ReedsSheppStateSpace::ReedsSheppPath(ReedsSheppStateSpace::reedsSheppPathType[4], -t, .5 * pi, -u, -v);
+                HybridAStar::ReedsSheppStateSpace::ReedsSheppPath(
+                    HybridAStar::ReedsSheppStateSpace::reedsSheppPathType[4], -t, .5 * pi, -u, -v);
             Lmin = L;
         }
         if (LpRmSmLm(x, -y, -phi, t, u, v) && Lmin > (L = fabs(t) + fabs(u) + fabs(v)))  // reflect
         {
-            path = ReedsSheppStateSpace::ReedsSheppPath(ReedsSheppStateSpace::reedsSheppPathType[5], t, -.5 * pi, u, v);
+            path = HybridAStar::ReedsSheppStateSpace::ReedsSheppPath(
+                    HybridAStar::ReedsSheppStateSpace::reedsSheppPathType[5], t, -.5 * pi, u, v);
             Lmin = L;
         }
         if (LpRmSmLm(-x, -y, phi, t, u, v) && Lmin > (L = fabs(t) + fabs(u) + fabs(v)))  // timeflip + reflect
         {
             path =
-                ReedsSheppStateSpace::ReedsSheppPath(ReedsSheppStateSpace::reedsSheppPathType[5], -t, .5 * pi, -u, -v);
+                HybridAStar::ReedsSheppStateSpace::ReedsSheppPath(
+                    HybridAStar::ReedsSheppStateSpace::reedsSheppPathType[5], -t, .5 * pi, -u, -v);
             Lmin = L;
         }
 
         if (LpRmSmRm(x, y, phi, t, u, v) && Lmin > (L = fabs(t) + fabs(u) + fabs(v)))
         {
-            path = ReedsSheppStateSpace::ReedsSheppPath(ReedsSheppStateSpace::reedsSheppPathType[8], t, -.5 * pi, u, v);
+            path = HybridAStar::ReedsSheppStateSpace::ReedsSheppPath(
+                    HybridAStar::ReedsSheppStateSpace::reedsSheppPathType[8], t, -.5 * pi, u, v);
             Lmin = L;
         }
         if (LpRmSmRm(-x, y, -phi, t, u, v) && Lmin > (L = fabs(t) + fabs(u) + fabs(v)))  // timeflip
         {
             path =
-                ReedsSheppStateSpace::ReedsSheppPath(ReedsSheppStateSpace::reedsSheppPathType[8], -t, .5 * pi, -u, -v);
+                HybridAStar::ReedsSheppStateSpace::ReedsSheppPath(
+                  HybridAStar::ReedsSheppStateSpace::reedsSheppPathType[8], -t, .5 * pi, -u, -v);
             Lmin = L;
         }
         if (LpRmSmRm(x, -y, -phi, t, u, v) && Lmin > (L = fabs(t) + fabs(u) + fabs(v)))  // reflect
         {
-            path = ReedsSheppStateSpace::ReedsSheppPath(ReedsSheppStateSpace::reedsSheppPathType[9], t, -.5 * pi, u, v);
+            path = HybridAStar::ReedsSheppStateSpace::ReedsSheppPath(
+                    HybridAStar::ReedsSheppStateSpace::reedsSheppPathType[9], t, -.5 * pi, u, v);
             Lmin = L;
         }
         if (LpRmSmRm(-x, -y, phi, t, u, v) && Lmin > (L = fabs(t) + fabs(u) + fabs(v)))  // timeflip + reflect
         {
             path =
-                ReedsSheppStateSpace::ReedsSheppPath(ReedsSheppStateSpace::reedsSheppPathType[9], -t, .5 * pi, -u, -v);
+                HybridAStar::ReedsSheppStateSpace::ReedsSheppPath(
+                    HybridAStar::ReedsSheppStateSpace::reedsSheppPathType[9], -t, .5 * pi, -u, -v);
             Lmin = L;
         }
 
@@ -377,48 +374,56 @@ namespace
         double xb = x * cos(phi) + y * sin(phi), yb = x * sin(phi) - y * cos(phi);
         if (LpRmSmLm(xb, yb, phi, t, u, v) && Lmin > (L = fabs(t) + fabs(u) + fabs(v)))
         {
-            path = ReedsSheppStateSpace::ReedsSheppPath(ReedsSheppStateSpace::reedsSheppPathType[6], v, u, -.5 * pi, t);
+            path = HybridAStar::ReedsSheppStateSpace::ReedsSheppPath(
+                    HybridAStar::ReedsSheppStateSpace::reedsSheppPathType[6], v, u, -.5 * pi, t);
             Lmin = L;
         }
         if (LpRmSmLm(-xb, yb, -phi, t, u, v) && Lmin > (L = fabs(t) + fabs(u) + fabs(v)))  // timeflip
         {
             path =
-                ReedsSheppStateSpace::ReedsSheppPath(ReedsSheppStateSpace::reedsSheppPathType[6], -v, -u, .5 * pi, -t);
+                HybridAStar::ReedsSheppStateSpace::ReedsSheppPath(
+                    HybridAStar::ReedsSheppStateSpace::reedsSheppPathType[6], -v, -u, .5 * pi, -t);
             Lmin = L;
         }
         if (LpRmSmLm(xb, -yb, -phi, t, u, v) && Lmin > (L = fabs(t) + fabs(u) + fabs(v)))  // reflect
         {
-            path = ReedsSheppStateSpace::ReedsSheppPath(ReedsSheppStateSpace::reedsSheppPathType[7], v, u, -.5 * pi, t);
+            path = HybridAStar::ReedsSheppStateSpace::ReedsSheppPath(
+                    HybridAStar::ReedsSheppStateSpace::reedsSheppPathType[7], v, u, -.5 * pi, t);
             Lmin = L;
         }
         if (LpRmSmLm(-xb, -yb, phi, t, u, v) && Lmin > (L = fabs(t) + fabs(u) + fabs(v)))  // timeflip + reflect
         {
             path =
-                ReedsSheppStateSpace::ReedsSheppPath(ReedsSheppStateSpace::reedsSheppPathType[7], -v, -u, .5 * pi, -t);
+                HybridAStar::ReedsSheppStateSpace::ReedsSheppPath(
+                    HybridAStar::ReedsSheppStateSpace::reedsSheppPathType[7], -v, -u, .5 * pi, -t);
             Lmin = L;
         }
 
         if (LpRmSmRm(xb, yb, phi, t, u, v) && Lmin > (L = fabs(t) + fabs(u) + fabs(v)))
         {
             path =
-                ReedsSheppStateSpace::ReedsSheppPath(ReedsSheppStateSpace::reedsSheppPathType[10], v, u, -.5 * pi, t);
+                HybridAStar::ReedsSheppStateSpace::ReedsSheppPath(
+                    HybridAStar::ReedsSheppStateSpace::reedsSheppPathType[10], v, u, -.5 * pi, t);
             Lmin = L;
         }
         if (LpRmSmRm(-xb, yb, -phi, t, u, v) && Lmin > (L = fabs(t) + fabs(u) + fabs(v)))  // timeflip
         {
             path =
-                ReedsSheppStateSpace::ReedsSheppPath(ReedsSheppStateSpace::reedsSheppPathType[10], -v, -u, .5 * pi, -t);
+                HybridAStar::ReedsSheppStateSpace::ReedsSheppPath(
+                    HybridAStar::ReedsSheppStateSpace::reedsSheppPathType[10], -v, -u, .5 * pi, -t);
             Lmin = L;
         }
         if (LpRmSmRm(xb, -yb, -phi, t, u, v) && Lmin > (L = fabs(t) + fabs(u) + fabs(v)))  // reflect
         {
             path =
-                ReedsSheppStateSpace::ReedsSheppPath(ReedsSheppStateSpace::reedsSheppPathType[11], v, u, -.5 * pi, t);
+                HybridAStar::ReedsSheppStateSpace::ReedsSheppPath(
+                    HybridAStar::ReedsSheppStateSpace::reedsSheppPathType[11], v, u, -.5 * pi, t);
             Lmin = L;
         }
         if (LpRmSmRm(-xb, -yb, phi, t, u, v) && Lmin > (L = fabs(t) + fabs(u) + fabs(v)))  // timeflip + reflect
             path =
-                ReedsSheppStateSpace::ReedsSheppPath(ReedsSheppStateSpace::reedsSheppPathType[11], -v, -u, .5 * pi, -t);
+                HybridAStar::ReedsSheppStateSpace::ReedsSheppPath(
+                    HybridAStar::ReedsSheppStateSpace::reedsSheppPathType[11], -v, -u, .5 * pi, -t);
     }
     // formula 8.11 *** TYPO IN PAPER ***
     inline bool LpRmSLmRp(double x, double y, double phi, double &t, double &u, double &v)
@@ -440,35 +445,35 @@ namespace
         }
         return false;
     }
-    void CCSCC(double x, double y, double phi, ReedsSheppStateSpace::ReedsSheppPath &path)
+    void CCSCC(double x, double y, double phi, HybridAStar::ReedsSheppStateSpace::ReedsSheppPath &path)
     {
         double t, u, v, Lmin = path.length() - pi, L;
         if (LpRmSLmRp(x, y, phi, t, u, v) && Lmin > (L = fabs(t) + fabs(u) + fabs(v)))
         {
-            path = ReedsSheppStateSpace::ReedsSheppPath(ReedsSheppStateSpace::reedsSheppPathType[16], t, -.5 * pi, u,
-                                                        -.5 * pi, v);
+            path = HybridAStar::ReedsSheppStateSpace::ReedsSheppPath(
+                    HybridAStar::ReedsSheppStateSpace::reedsSheppPathType[16], t, -.5 * pi, u, -.5 * pi, v);
             Lmin = L;
         }
         if (LpRmSLmRp(-x, y, -phi, t, u, v) && Lmin > (L = fabs(t) + fabs(u) + fabs(v)))  // timeflip
         {
-            path = ReedsSheppStateSpace::ReedsSheppPath(ReedsSheppStateSpace::reedsSheppPathType[16], -t, .5 * pi, -u,
-                                                        .5 * pi, -v);
+            path = HybridAStar::ReedsSheppStateSpace::ReedsSheppPath(
+                    HybridAStar::ReedsSheppStateSpace::reedsSheppPathType[16], -t, .5 * pi, -u, .5 * pi, -v);
             Lmin = L;
         }
         if (LpRmSLmRp(x, -y, -phi, t, u, v) && Lmin > (L = fabs(t) + fabs(u) + fabs(v)))  // reflect
         {
-            path = ReedsSheppStateSpace::ReedsSheppPath(ReedsSheppStateSpace::reedsSheppPathType[17], t, -.5 * pi, u,
-                                                        -.5 * pi, v);
+            path = HybridAStar::ReedsSheppStateSpace::ReedsSheppPath(
+                    HybridAStar::ReedsSheppStateSpace::reedsSheppPathType[17], t, -.5 * pi, u, -.5 * pi, v);
             Lmin = L;
         }
         if (LpRmSLmRp(-x, -y, phi, t, u, v) && Lmin > (L = fabs(t) + fabs(u) + fabs(v)))  // timeflip + reflect
-            path = ReedsSheppStateSpace::ReedsSheppPath(ReedsSheppStateSpace::reedsSheppPathType[17], -t, .5 * pi, -u,
-                                                        .5 * pi, -v);
+            path = HybridAStar::ReedsSheppStateSpace::ReedsSheppPath(
+                    HybridAStar::ReedsSheppStateSpace::reedsSheppPathType[17], -t, .5 * pi, -u, .5 * pi, -v);
     }
 
-    ReedsSheppStateSpace::ReedsSheppPath reedsShepp(double x, double y, double phi)
+    HybridAStar::ReedsSheppStateSpace::ReedsSheppPath reedsShepp(double x, double y, double phi)
     {
-        ReedsSheppStateSpace::ReedsSheppPath path;
+        HybridAStar::ReedsSheppStateSpace::ReedsSheppPath path;
         CSC(x, y, phi, path);
         CCC(x, y, phi, path);
         CCCC(x, y, phi, path);
@@ -478,8 +483,8 @@ namespace
     }
 }
 
-const ompl::base::ReedsSheppStateSpace::ReedsSheppPathSegmentType
-    ompl::base::ReedsSheppStateSpace::reedsSheppPathType[18][5] = {
+const HybridAStar::ReedsSheppStateSpace::ReedsSheppPathSegmentType
+    HybridAStar::ReedsSheppStateSpace::reedsSheppPathType[18][5] = {
         {RS_LEFT, RS_RIGHT, RS_LEFT, RS_NOP, RS_NOP},         // 0
         {RS_RIGHT, RS_LEFT, RS_RIGHT, RS_NOP, RS_NOP},        // 1
         {RS_LEFT, RS_RIGHT, RS_LEFT, RS_RIGHT, RS_NOP},       // 2
@@ -500,7 +505,7 @@ const ompl::base::ReedsSheppStateSpace::ReedsSheppPathSegmentType
         {RS_RIGHT, RS_LEFT, RS_STRAIGHT, RS_RIGHT, RS_LEFT}   // 17
 };
 
-ompl::base::ReedsSheppStateSpace::ReedsSheppPath::ReedsSheppPath(const ReedsSheppPathSegmentType *type, double t,
+HybridAStar::ReedsSheppStateSpace::ReedsSheppPath::ReedsSheppPath(const ReedsSheppPathSegmentType *type, double t,
                                                                  double u, double v, double w, double x)
   : type_(type)
 {
@@ -512,12 +517,12 @@ ompl::base::ReedsSheppStateSpace::ReedsSheppPath::ReedsSheppPath(const ReedsShep
     totalLength_ = fabs(t) + fabs(u) + fabs(v) + fabs(w) + fabs(x);
 }
 
-double ompl::base::ReedsSheppStateSpace::distance(const State *state1, const State *state2) const
+double HybridAStar::ReedsSheppStateSpace::distance(const State *state1, const State *state2) const
 {
     return rho_ * reedsShepp(state1, state2).length();
 }
 
-void ompl::base::ReedsSheppStateSpace::interpolate(const State *from, const State *to, const double t,
+void HybridAStar::ReedsSheppStateSpace::interpolate(const State *from, const State *to, const double t,
                                                    State *state) const
 {
     bool firstTime = true;
@@ -525,7 +530,7 @@ void ompl::base::ReedsSheppStateSpace::interpolate(const State *from, const Stat
     interpolate(from, to, t, firstTime, path, state);
 }
 
-void ompl::base::ReedsSheppStateSpace::interpolate(const State *from, const State *to, const double t, bool &firstTime,
+void HybridAStar::ReedsSheppStateSpace::interpolate(const State *from, const State *to, const double t, bool &firstTime,
                                                    ReedsSheppPath &path, State *state) const
 {
     if (firstTime)
@@ -548,7 +553,7 @@ void ompl::base::ReedsSheppStateSpace::interpolate(const State *from, const Stat
     interpolate(from, path, t, state);
 }
 
-void ompl::base::ReedsSheppStateSpace::interpolate(const State *from, const ReedsSheppPath &path, double t,
+void HybridAStar::ReedsSheppStateSpace::interpolate(const State *from, const ReedsSheppPath &path, double t,
                                                    State *state) const
 {
     auto *s = allocState()->as<StateType>();
@@ -593,7 +598,7 @@ void ompl::base::ReedsSheppStateSpace::interpolate(const State *from, const Reed
     freeState(s);
 }
 
-ompl::base::ReedsSheppStateSpace::ReedsSheppPath ompl::base::ReedsSheppStateSpace::reedsShepp(const State *state1,
+HybridAStar::ReedsSheppStateSpace::ReedsSheppPath HybridAStar::ReedsSheppStateSpace::reedsShepp(const State *state1,
                                                                                               const State *state2) const
 {
     const auto *s1 = static_cast<const StateType *>(state1);
@@ -605,14 +610,14 @@ ompl::base::ReedsSheppStateSpace::ReedsSheppPath ompl::base::ReedsSheppStateSpac
     return ::reedsShepp(x / rho_, y / rho_, phi);
 }
 
-void ompl::base::ReedsSheppMotionValidator::defaultSettings()
+void HybridAStar::ReedsSheppMotionValidator::defaultSettings()
 {
     stateSpace_ = dynamic_cast<ReedsSheppStateSpace *>(si_->getStateSpace().get());
     if (stateSpace_ == nullptr)
-        throw Exception("No state space for motion validator");
+        throw ompl::Exception("No state space for motion validator");
 }
 
-bool ompl::base::ReedsSheppMotionValidator::checkMotion(const State *s1, const State *s2,
+bool HybridAStar::ReedsSheppMotionValidator::checkMotion(const State *s1, const State *s2,
                                                         std::pair<State *, double> &lastValid) const
 {
     /* assume motion starts in a valid configuration so s1 is valid */
@@ -658,7 +663,7 @@ bool ompl::base::ReedsSheppMotionValidator::checkMotion(const State *s1, const S
     return result;
 }
 
-bool ompl::base::ReedsSheppMotionValidator::checkMotion(const State *s1, const State *s2) const
+bool HybridAStar::ReedsSheppMotionValidator::checkMotion(const State *s1, const State *s2) const
 {
     /* assume motion starts in a valid configuration so s1 is valid */
     if (!si_->isValid(s2))

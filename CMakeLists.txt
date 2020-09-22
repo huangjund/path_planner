@@ -42,6 +42,8 @@ set(SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/geometry/dynamicvoronoi.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/geometry/path.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/geometry/ReedsShepp/ReedsSheppPath.cc
+    ${CMAKE_CURRENT_SOURCE_DIR}/geometry/ReedsShepp/RSPath4Fork.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/geometry/ReedsShepp/ReedsSheppStateSpace.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/utils/Helper.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/utils/bucketedqueue.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/math/smoother.cpp
@@ -66,8 +68,10 @@ set(HEADERS
     ${CMAKE_CURRENT_SOURCE_DIR}/geometry/dynamicvoronoi.h
     ${CMAKE_CURRENT_SOURCE_DIR}/geometry/path.h
     ${CMAKE_CURRENT_SOURCE_DIR}/geometry/ReedsShepp/ReedsSheppPath.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/geometry/ReedsShepp/RSPath4Fork.h
     ${CMAKE_CURRENT_SOURCE_DIR}/geometry/ReedsShepp/Node3d.h
     ${CMAKE_CURRENT_SOURCE_DIR}/geometry/ReedsShepp/Node.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/geometry/ReedsShepp/ReedsSheppStateSpace.h
     ${CMAKE_CURRENT_SOURCE_DIR}/multibody/SingleForkLiftPlant.h
     ${CMAKE_CURRENT_SOURCE_DIR}/utils/Helper.h
     ${CMAKE_CURRENT_SOURCE_DIR}/utils/bucketedqueue.h

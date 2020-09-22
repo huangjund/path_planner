@@ -274,19 +274,7 @@ namespace Geometry{
       // set index
       iPred = nPred->setIdx(pWidth, pHeight);
       iterations++;
-      // TODO: enable this
-      // // RViz visualization
-      // try
-      // {
-      //   visualization.publishNode3DPoses(*nPred);
-      //   visualization.publishNode3DPose(*nPred);
-      //   d.sleep();
-      // }
-      // catch(const std::exception& e)
-      // {
-      //   std::cerr << e.what() << '\n';
-      // }
-      
+
       // _____________________________
       // LAZY DELETION of rewired node
       // if there exists a pointer this node has already been expanded

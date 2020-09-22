@@ -18,7 +18,7 @@ namespace Common {
   }
 
   double hRScurve::getDistance() {
-    ompl::base::ReedsSheppStateSpace reedsSheppPath(carPlant_->rad_);
+    ReedsSheppStateSpace reedsSheppPath(carPlant_->rad_);
     std::unique_ptr<ompl::base::SE2StateSpace::StateType> rsStart(reedsSheppPath.allocState()->as<ompl::base::SE2StateSpace::StateType>());
     std::unique_ptr<ompl::base::SE2StateSpace::StateType> rsEnd(reedsSheppPath.allocState()->as<ompl::base::SE2StateSpace::StateType>());
     rsStart->setXY(start_.getX(), start_.getY());

@@ -39,8 +39,8 @@ class ReedShepp {
   // Pick the shortest path from all possible combination of movement primitives
   // by Reed Shepp
   bool ShortestRSP(const std::shared_ptr<Node3d> start_node,
-                   const std::shared_ptr<Node3d> end_node,
-                   ReedSheppPath& optimal_path);
+                  const std::shared_ptr<Node3d> end_node,
+                  ReedSheppPath& optimal_path);
 
  protected:
   // Generate all possible combination of movement primitives by Reed Shepp and
@@ -74,17 +74,17 @@ class ReedShepp {
                  std::vector<ReedSheppPath>* all_possible_paths, const int idx);
   // Six different combination of motion primitive in Reed Shepp path used in
   // GenerateRSP()
-  bool SCS(const double x, const double y, const double phi,
+  virtual bool SCS(const double x, const double y, const double phi,
            std::vector<ReedSheppPath>* all_possible_paths);
-  bool CSC(const double x, const double y, const double phi,
+  virtual bool CSC(const double x, const double y, const double phi,
            std::vector<ReedSheppPath>* all_possible_paths);
-  bool CCC(const double x, const double y, const double phi,
+  virtual bool CCC(const double x, const double y, const double phi,
            std::vector<ReedSheppPath>* all_possible_paths);
-  bool CCCC(const double x, const double y, const double phi,
+  virtual bool CCCC(const double x, const double y, const double phi,
             std::vector<ReedSheppPath>* all_possible_paths);
-  bool CCSC(const double x, const double y, const double phi,
+  virtual bool CCSC(const double x, const double y, const double phi,
             std::vector<ReedSheppPath>* all_possible_paths);
-  bool CCSCC(const double x, const double y, const double phi,
+  virtual bool CCSCC(const double x, const double y, const double phi,
              std::vector<ReedSheppPath>* all_possible_paths);
   // different options for different combination of motion primitives
   void LSL(const double x, const double y, const double phi, RSPParam* param);
