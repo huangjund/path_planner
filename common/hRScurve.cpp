@@ -18,15 +18,15 @@ namespace Common {
   }
 
   double hRScurve::getDistance() {
-    ReedsSheppStateSpace reedsSheppPath(carPlant_->rad_);
-    std::unique_ptr<ompl::base::SE2StateSpace::StateType> rsStart(reedsSheppPath.allocState()->as<ompl::base::SE2StateSpace::StateType>());
-    std::unique_ptr<ompl::base::SE2StateSpace::StateType> rsEnd(reedsSheppPath.allocState()->as<ompl::base::SE2StateSpace::StateType>());
-    rsStart->setXY(start_.getX(), start_.getY());
-    rsStart->setYaw(start_.getT());
-    rsEnd->setXY(goal_.getX(), goal_.getY());
-    rsEnd->setYaw(goal_.getT());
+    double step_size = 0.2;
+    Geometry::RSPath4Fork reedSheppPath(1/carPlant_->rad_, 0.1);
 
-    return reedsSheppPath.distance(rsStart.get(), rsEnd.get());
+    double xy_resolution = 0.5, phi_resolution = 2*M_PI/72;
+    std::vector<double> XYbound = {0,60,0,30};
+    auto start = std::make_shared<Geometry::Node3d>(start_.getX(),start_.getY(),start_.getT(),xy_resolution,phi_resolution,XYbound);
+    auto end = std::make_shared<Geometry::Node3d>(goal_.getX(),goal_.getY(),goal_.getT(),xy_resolution,phi_resolution,XYbound);
+
+    return reedSheppPath.ShortestRSPlength(start,end);
   }
 } // namespace Common
 } // namespace HybridAStar

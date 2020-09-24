@@ -3,7 +3,8 @@
 #include "Heuristic.h"
 #include "multibody/SingleForkLiftPlant.h"
 #include "common/statespace/SE2State.h"
-#include "geometry/ReedsShepp/ReedsSheppStateSpace.h"
+#include "geometry/ReedsShepp/RSPath4Fork.h"
+#include "geometry/ReedsShepp/Node3d.h"
 
 #include <ompl/base/State.h>
 #include <ompl/base/SpaceInformation.h>

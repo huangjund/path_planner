@@ -48,7 +48,6 @@ inline float normalizeHeadingRad(float t) {
 /*!
    \fn float clamp(float n, float lower, float upper)
    \brief Clamps a number between a lower and an upper bound
-   \param t heading in rad
 */
 inline float clamp(float n, float lower, float upper) {
   return std::max(lower, std::min(n, upper));

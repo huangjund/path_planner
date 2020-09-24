@@ -10,7 +10,7 @@ double RSPath4Fork::ShortestRSPlength(const std::shared_ptr<Node3d> start_node,
   std::vector<ReedSheppPath> all_possible_paths;
 
   if (!GenerateRSP(start_node, end_node, &all_possible_paths)) {
-    return false;
+    return 0; // if failed to find one feasible path, return length as 0
   }
 
   double optimal_path_length = std::numeric_limits<double>::infinity();
@@ -22,13 +22,26 @@ double RSPath4Fork::ShortestRSPlength(const std::shared_ptr<Node3d> start_node,
         all_possible_paths.at(i).total_length < 
           optimal_path_length) {  // add threshold 3
       optimal_path_index = i;
-      optimal_path_length = all_possible_paths.at(i).total_length;
+      optimal_path_length = all_possible_paths.at(i).total_length / max_kappa_;
     }
   }
 
   return optimal_path_length;
 }
 
+std::vector<ReedSheppPath> RSPath4Fork::possiblePath(const std::shared_ptr<Node3d> start_node,
+                                                    const std::shared_ptr<Node3d> end_node) {
+  std::vector<ReedSheppPath> all_possible_paths;
+
+  if(!GenerateRSP(start_node,end_node,&all_possible_paths)) {
+    all_possible_paths.clear();
+    std::cout << "no suitable paths" << std::endl;
+  }
+
+  return all_possible_paths;
+}
+
+// TODO
 bool RSPath4Fork::SCS(const double x, const double y, const double phi,
            std::vector<ReedSheppPath>* all_possible_paths) {
   RSPParam SLS_param;
@@ -110,7 +123,7 @@ bool RSPath4Fork::CCC(const double x, const double y, const double phi,
   }
 
   RSPParam LRL2_param;
-  LRL(-x, y, -phi, &LRL2_param);
+  LRL(-x, y, -phi, &LRL2_param);  // timeflip
   double LRL2_lengths[3] = {-LRL2_param.t, -LRL2_param.u, -LRL2_param.v};
   char LRL2_types[] = "LRL";
   if (LRL2_param.flag &&
@@ -120,7 +133,7 @@ bool RSPath4Fork::CCC(const double x, const double y, const double phi,
   }
 
   RSPParam LRL3_param;
-  LRL(x, -y, -phi, &LRL3_param);
+  LRL(x, -y, -phi, &LRL3_param);  // reflect
   double LRL3_lengths[3] = {LRL3_param.t, LRL3_param.u, LRL3_param.v};
   char LRL3_types[] = "RLR";
   if (LRL3_param.flag &&
@@ -130,7 +143,7 @@ bool RSPath4Fork::CCC(const double x, const double y, const double phi,
   }
 
   RSPParam LRL4_param;
-  LRL(-x, -y, phi, &LRL4_param);
+  LRL(-x, -y, phi, &LRL4_param);  // timeflip + reflect
   double LRL4_lengths[3] = {-LRL4_param.t, -LRL4_param.u, -LRL4_param.v};
   char LRL4_types[] = "RLR";
   if (LRL4_param.flag &&
@@ -279,19 +292,9 @@ bool RSPath4Fork::CCCC(const double x, const double y, const double phi,
 
 bool RSPath4Fork::CCSC(const double x, const double y, const double phi,
                      std::vector<ReedSheppPath>* all_possible_paths) {
-  RSPParam LRSL1_param;
-  LRLRn(x, y, phi, &LRSL1_param);
-  double LRSL1_lengths[4] = {LRSL1_param.t, -0.5 * M_PI, -LRSL1_param.u,
-                             LRSL1_param.v};
-  char LRSL1_types[] = "LRSL";
-  if (LRSL1_param.flag &&
-      !SetRSP(4, LRSL1_lengths, LRSL1_types, all_possible_paths)) {
-    std::cout << "Fail at SetRSP with LRSL1_param" << std::endl;
-    return false;
-  }
-
+  // Lt- R+ Su+ Lv+
   RSPParam LRSL2_param;
-  LRLRn(-x, y, -phi, &LRSL2_param);
+  LRSL(-x, y, -phi, &LRSL2_param);  // timeflip
   double LRSL2_lengths[4] = {-LRSL2_param.t, 0.5 * M_PI, -LRSL2_param.u,
                              -LRSL2_param.v};
   char LRSL2_types[] = "LRSL";
@@ -301,20 +304,10 @@ bool RSPath4Fork::CCSC(const double x, const double y, const double phi,
     return false;
   }
 
-  RSPParam LRSL3_param;
-  LRLRn(x, -y, -phi, &LRSL3_param);
-  double LRSL3_lengths[4] = {LRSL3_param.t, -0.5 * M_PI, LRSL3_param.u,
-                             LRSL3_param.v};
-  char LRSL3_types[] = "RLSR";
-  if (LRSL3_param.flag &&
-      !SetRSP(4, LRSL3_lengths, LRSL3_types, all_possible_paths)) {
-    std::cout << "Fail at SetRSP with LRSL3_param" << std::endl;
-    return false;
-  }
-
+  // Rt- L+ Su+ Rv+
   RSPParam LRSL4_param;
-  LRLRn(-x, -y, phi, &LRSL4_param);
-  double LRSL4_lengths[4] = {-LRSL4_param.t, -0.5 * M_PI, -LRSL4_param.u,
+  LRSL(-x, -y, phi, &LRSL4_param);  // timeflip + reflect
+  double LRSL4_lengths[4] = {-LRSL4_param.t, 0.5 * M_PI, -LRSL4_param.u,
                              -LRSL4_param.v};
   char LRSL4_types[] = "RLSR";
   if (LRSL4_param.flag &&
@@ -323,19 +316,9 @@ bool RSPath4Fork::CCSC(const double x, const double y, const double phi,
     return false;
   }
 
-  RSPParam LRSR1_param;
-  LRLRp(x, y, phi, &LRSR1_param);
-  double LRSR1_lengths[4] = {LRSR1_param.t, -0.5 * M_PI, LRSR1_param.u,
-                             LRSR1_param.v};
-  char LRSR1_types[] = "LRSR";
-  if (LRSR1_param.flag &&
-      !SetRSP(4, LRSR1_lengths, LRSR1_types, all_possible_paths)) {
-    std::cout << "Fail at SetRSP with LRSR1_param" << std::endl;
-    return false;
-  }
-
+  // Lt- R+ Su+ Rv+
   RSPParam LRSR2_param;
-  LRLRp(-x, y, -phi, &LRSR2_param);
+  LRSR(-x, y, -phi, &LRSR2_param);  // timeflip
   double LRSR2_lengths[4] = {-LRSR2_param.t, 0.5 * M_PI, -LRSR2_param.u,
                              -LRSR2_param.v};
   char LRSR2_types[] = "LRSR";
@@ -345,19 +328,9 @@ bool RSPath4Fork::CCSC(const double x, const double y, const double phi,
     return false;
   }
 
-  RSPParam LRSR3_param;
-  LRLRp(x, -y, -phi, &LRSR3_param);
-  double LRSR3_lengths[4] = {LRSR3_param.t, -0.5 * M_PI, LRSR3_param.u,
-                             LRSR3_param.v};
-  char LRSR3_types[] = "RLSL";
-  if (LRSR3_param.flag &&
-      !SetRSP(4, LRSR3_lengths, LRSR3_types, all_possible_paths)) {
-    std::cout << "Fail at SetRSP with LRSR3_param" << std::endl;
-    return false;
-  }
-
+  // Rt- L+ Su+ Lv+
   RSPParam LRSR4_param;
-  LRLRp(-x, -y, phi, &LRSR4_param);
+  LRSR(-x, -y, phi, &LRSR4_param);  // timeflip + reflect
   double LRSR4_lengths[4] = {-LRSR4_param.t, 0.5 * M_PI, -LRSR4_param.u,
                              -LRSR4_param.v};
   char LRSR4_types[] = "RLSL";
@@ -371,19 +344,9 @@ bool RSPath4Fork::CCSC(const double x, const double y, const double phi,
   double xb = x * std::cos(phi) + y * std::sin(phi);
   double yb = x * std::sin(phi) - y * std::cos(phi);
 
-  RSPParam LRSL5_param;
-  LRLRn(xb, yb, phi, &LRSL5_param);
-  double LRSL5_lengths[4] = {LRSL5_param.v, LRSL5_param.u, -0.5 * M_PI,
-                             LRSL5_param.t};
-  char LRSL5_types[] = "LSRL";
-  if (LRSL5_param.flag &&
-      !SetRSP(4, LRSL5_lengths, LRSL5_types, all_possible_paths)) {
-    std::cout << "Fail at SetRSP with LRLRn_param" << std::endl;
-    return false;
-  }
-
+  // Lt+ Su+ R+ Lv-
   RSPParam LRSL6_param;
-  LRLRn(-xb, yb, -phi, &LRSL6_param);
+  LRSL(-xb, yb, -phi, &LRSL6_param);  // timeflip
   double LRSL6_lengths[4] = {-LRSL6_param.v, -LRSL6_param.u, 0.5 * M_PI,
                              -LRSL6_param.t};
   char LRSL6_types[] = "LSRL";
@@ -393,19 +356,9 @@ bool RSPath4Fork::CCSC(const double x, const double y, const double phi,
     return false;
   }
 
-  RSPParam LRSL7_param;
-  LRLRn(xb, -yb, -phi, &LRSL7_param);
-  double LRSL7_lengths[4] = {LRSL7_param.v, LRSL7_param.u, -0.5 * M_PI,
-                             LRSL7_param.t};
-  char LRSL7_types[] = "RSLR";
-  if (LRSL7_param.flag &&
-      !SetRSP(4, LRSL7_lengths, LRSL7_types, all_possible_paths)) {
-    std::cout << "Fail at SetRSP with LRSL7_param" << std::endl;
-    return false;
-  }
-
+  // Rt+ Su+ L+ Rv-
   RSPParam LRSL8_param;
-  LRLRn(-xb, -yb, phi, &LRSL8_param);
+  LRSL(-xb, -yb, phi, &LRSL8_param);  // timeflip + reflect
   double LRSL8_lengths[4] = {-LRSL8_param.v, -LRSL8_param.u, 0.5 * M_PI,
                              -LRSL8_param.t};
   char LRSL8_types[] = "RSLR";
@@ -415,19 +368,9 @@ bool RSPath4Fork::CCSC(const double x, const double y, const double phi,
     return false;
   }
 
-  RSPParam LRSR5_param;
-  LRLRp(xb, yb, phi, &LRSR5_param);
-  double LRSR5_lengths[4] = {LRSR5_param.v, LRSR5_param.u, -0.5 * M_PI,
-                             LRSR5_param.t};
-  char LRSR5_types[] = "RSRL";
-  if (LRSR5_param.flag &&
-      !SetRSP(4, LRSR5_lengths, LRSR5_types, all_possible_paths)) {
-    std::cout << "Fail at SetRSP with LRSR5_param" << std::endl;
-    return false;
-  }
-
+  // Rt+ Su+ R+ Lv-
   RSPParam LRSR6_param;
-  LRLRp(-xb, yb, -phi, &LRSR6_param);
+  LRSR(-xb, yb, -phi, &LRSR6_param);  // timeflip
   double LRSR6_lengths[4] = {-LRSR6_param.v, -LRSR6_param.u, 0.5 * M_PI,
                              -LRSR6_param.t};
   char LRSR6_types[] = "RSRL";
@@ -437,19 +380,9 @@ bool RSPath4Fork::CCSC(const double x, const double y, const double phi,
     return false;
   }
 
-  RSPParam LRSR7_param;
-  LRLRp(xb, -yb, -phi, &LRSR7_param);
-  double LRSR7_lengths[4] = {LRSR7_param.v, LRSR7_param.u, -0.5 * M_PI,
-                             LRSR7_param.t};
-  char LRSR7_types[] = "LSLR";
-  if (LRSR7_param.flag &&
-      !SetRSP(4, LRSR7_lengths, LRSR7_types, all_possible_paths)) {
-    std::cout << "Fail at SetRSP with LRSR7_param" << std::endl;
-    return false;
-  }
-
+  // Lt+ Su+ L+ Rv-
   RSPParam LRSR8_param;
-  LRLRp(-xb, -yb, phi, &LRSR8_param);
+  LRSR(-xb, -yb, phi, &LRSR8_param);  // timeflip + reflect
   double LRSR8_lengths[4] = {-LRSR8_param.v, -LRSR8_param.u, 0.5 * M_PI,
                              -LRSR8_param.t};
   char LRSR8_types[] = "LSLR";
@@ -463,19 +396,9 @@ bool RSPath4Fork::CCSC(const double x, const double y, const double phi,
 
 bool RSPath4Fork::CCSCC(const double x, const double y, const double phi,
                       std::vector<ReedSheppPath>* all_possible_paths) {
-  RSPParam LRSLR1_param;
-  LRSLR(x, y, phi, &LRSLR1_param);
-  double LRSLR1_lengths[5] = {LRSLR1_param.t, -0.5 * M_PI, LRSLR1_param.u,
-                              -0.5 * M_PI, LRSLR1_param.v};
-  char LRSLR1_types[] = "LRSLR";
-  if (LRSLR1_param.flag &&
-      !SetRSP(5, LRSLR1_lengths, LRSLR1_types, all_possible_paths)) {
-    std::cout << "Fail at SetRSP with LRSLR1_param" << std::endl;
-    return false;
-  }
-
+  // Lt- R+ Su+ L+ Rv-
   RSPParam LRSLR2_param;
-  LRSLR(-x, y, -phi, &LRSLR2_param);
+  LRSLR(-x, y, -phi, &LRSLR2_param);  // timeflip
   double LRSLR2_lengths[5] = {-LRSLR2_param.t, 0.5 * M_PI, -LRSLR2_param.u,
                               0.5 * M_PI, -LRSLR2_param.v};
   char LRSLR2_types[] = "LRSLR";
@@ -485,19 +408,9 @@ bool RSPath4Fork::CCSCC(const double x, const double y, const double phi,
     return false;
   }
 
-  RSPParam LRSLR3_param;
-  LRSLR(x, -y, -phi, &LRSLR3_param);
-  double LRSLR3_lengths[5] = {LRSLR3_param.t, -0.5 * M_PI, LRSLR3_param.u,
-                              -0.5 * M_PI, LRSLR3_param.v};
-  char LRSLR3_types[] = "RLSRL";
-  if (LRSLR3_param.flag &&
-      !SetRSP(5, LRSLR3_lengths, LRSLR3_types, all_possible_paths)) {
-    std::cout << "Fail at SetRSP with LRSLR3_param" << std::endl;
-    return false;
-  }
-
+  // Rt- L+ Su+ R+ Lv-
   RSPParam LRSLR4_param;
-  LRSLR(-x, -y, phi, &LRSLR4_param);
+  LRSLR(-x, -y, phi, &LRSLR4_param);  // timeflip + reflect
   double LRSLR4_lengths[5] = {-LRSLR4_param.t, 0.5 * M_PI, -LRSLR4_param.u,
                               0.5 * M_PI, -LRSLR4_param.v};
   char LRSLR4_types[] = "RLSRL";

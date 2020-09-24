@@ -1,11 +1,9 @@
 #pragma once
 
-
-
 #include "geometry/Planner.h"
 #include "geometry/RRTxstatic/RRTXstatic.h"
 //#include "geometry/dubins/dubins.h"
-#include "geometry/ReedsShepp/ReedsSheppPath.h"
+#include "geometry/ReedsShepp/RSPath4Fork.h"
 #include "geometry/ReedsShepp/Node3d.h"
 #include "common/statespace/SE2State.h"
 #include "common/statespace/GridState.h"

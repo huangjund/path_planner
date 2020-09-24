@@ -75,11 +75,11 @@ void Smoother::smoothPath(float width, float height) {
       // voronoiTerm(); 
 
       // ensure that it is on the grid
-      correction = correction - smoothnessTerm(xim2, xim1, xi, xip1, xip2);
+      correction = correction - wSmoothness*smoothnessTerm(xim2, xim1, xi, xip1, xip2);
       if (!isOnGrid(xi + correction)) { continue; }
 
       // ensure that it is on the grid
-      correction = correction - curvatureTerm(xim1, xi, xip1);
+      correction = correction - wCurvature*curvatureTerm(xim1, xi, xip1);
       if (!isOnGrid(xi + correction)) { continue; }
 
       // ensure that it is on the grid
@@ -176,8 +176,8 @@ void Smoother::tracePath(const std::shared_ptr<Common::SE2State> node) {
 Vector2D Smoother::curvatureTerm(Vector2D xim1, Vector2D xi, Vector2D xip1) {
   Vector2D gradient;
   // the vectors between the nodes
-  Vector2D Dxi = xi - xim1;
-  Vector2D Dxip1 = xip1 - xi;
+  Vector2D Dxi = xi - xim1; // delta xi
+  Vector2D Dxip1 = xip1 - xi; // delta x(i plus 1)
   // orthogonal complements vector
   Vector2D p1, p2;
 
@@ -188,7 +188,7 @@ Vector2D Smoother::curvatureTerm(Vector2D xim1, Vector2D xi, Vector2D xip1) {
   // ensure that the absolute values are not null
   if (absDxi > 0 && absDxip1 > 0) {
     // the angular change at the node
-    float Dphi = std::acos(Utils::clamp(Dxi.dot(Dxip1) / (absDxi * absDxip1), -1, 1));
+    float Dphi = std::acos(Utils::clamp(Dxi.dot(Dxip1) / (absDxi * absDxip1),-1,1));
     float kappa = Dphi / absDxi;
 
     // if the curvature is smaller then the maximum do nothing
@@ -196,21 +196,20 @@ Vector2D Smoother::curvatureTerm(Vector2D xim1, Vector2D xi, Vector2D xip1) {
       Vector2D zeros;
       return zeros;
     } else {
-      float absDxi1Inv = 1 / absDxi;
-      float PDphi_PcosDphi = -1 / std::sqrt(1 - std::pow(std::cos(Dphi), 2));
-      float u = -absDxi1Inv * PDphi_PcosDphi;
+      if (-Dxip1.getX()*Dxi.getY()+Dxip1.getY()*Dxi.getX() < 0 )
+        Dphi = -Dphi;
+      float absDxiInv = 1 / absDxi;
+      float absDxip1Inv = 1/absDxip1;
+      float msinDphiInv = -1 / std::sin(Dphi);
+      float u = absDxiInv * msinDphiInv;
+      float v = Dphi*absDxiInv*absDxiInv;
       // calculate the p1 and p2 terms
-      p1 = xi.ort(-xip1) / (absDxi * absDxip1);
-      p2 = -xip1.ort(xi) / (absDxi * absDxip1);
-      // calculate the last terms
-      float s = Dphi / (absDxi * absDxi);
-      Vector2D ones(1, 1);
-      Vector2D ki = u * (-p1 - p2) - (s * ones);
-      Vector2D kim1 = u * p2 - (s * ones);
-      Vector2D kip1 = u * p1;
-
+      p1 = absDxiInv*absDxip1Inv*(xip1 - 2*xi + xim1) - 
+           Dxi.dot(Dxip1)*absDxiInv*absDxiInv*absDxip1Inv*absDxip1Inv*(
+             absDxip1*absDxiInv*(xi - xim1) + absDxi*absDxip1Inv*(xi - xip1));
+      p2 = absDxiInv*(xi - xim1);
       // calculate the gradient
-      gradient = wCurvature * (0.25 * kim1 + 0.5 * ki + 0.25 * kip1);
+      gradient = 2*(Dphi*absDxiInv - kappaMax)*(u*p1 - v*p2);
 
       if (std::isnan(gradient.getX()) || std::isnan(gradient.getY())) {
         std::cout << "nan values in curvature term" << std::endl;
@@ -235,7 +234,7 @@ Vector2D Smoother::curvatureTerm(Vector2D xim1, Vector2D xi, Vector2D xip1) {
 //                                    SMOOTHNESS TERM
 //###################################################
 Vector2D Smoother::smoothnessTerm(Vector2D xim2, Vector2D xim1, Vector2D xi, Vector2D xip1, Vector2D xip2) {
-  auto temp = wSmoothness * (xim2 - 4 * xim1 + 6 * xi - 4 * xip1 + xip2);
+  auto temp = (xim2 - 4 * xim1 + 6 * xi - 4 * xip1 + xip2);
   return temp;
 }
 

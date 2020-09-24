@@ -113,6 +113,9 @@ namespace Common {
     /// set and get the index of the node in the 3D grid
     int setIdx(int width, int height) { 
       idx_ = (int)(rt_) * width * height + (int)(ry_) * width + (int)(rx_); return idx_;}
+    
+    /// set the primitive. this method should not often be called
+    void setPrim(const int prim) {prim_ = prim;}
     /// open the node
     void open() { o_ = true; c_ = false;}
     /// close the node

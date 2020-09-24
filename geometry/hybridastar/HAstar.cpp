@@ -157,35 +157,35 @@ namespace Geometry{
 
     // TODO:change the last 0.5 to a carplant related value
     // should carplant class be an abstract base class and other class inherit from this class?
-    auto reed_shepp_generator = std::make_shared<ReedShepp>(1/carPlant_->rad_,0.5);
+    auto reed_shepp_generator = std::make_shared<RSPath4Fork>(1/carPlant_->rad_,0.2);
     ReedSheppPath optimal_path;
 
     // TODO: what if the algorithm really goes into this?
     // more robustness should be achieved
-    if (reed_shepp_generator->ShortestRSP(startNode, goalNode,
-                                           optimal_path) == false) {
-      std::cout << "RS path generation failed!" << std::endl;
+    if (!reed_shepp_generator->ShortestRSP(startNode, goalNode, optimal_path)) {
+      std::cout << "[NOT FATEL]RS path generation failed!" << std::endl;
       std::shared_ptr<SE2State> temp;
       return temp;
     }
 
-    const int samplSize = optimal_path.x.size();
+    const int samplSize = optimal_path.x.size() - 1;  // remove the start point, which is a repeated point
 
     // TODO : change to a smart pointer
+    // includes start and goal node
     auto RSNodes = std::vector<std::shared_ptr<SE2State>>(samplSize);
 
     int i;
     for (i = 0; i < samplSize; ++i) {
       // TODO: this angle resolution should be synthesized to a class
       auto temp = std::make_shared<SE2State>(pMap_->info_.planResolution, 0.087266);
-      temp->setX(optimal_path.x[i]);
-      temp->setY(optimal_path.y[i]);
-      temp->setT(Utils::normalizeHeadingRad(optimal_path.phi[i]));
+      temp->setX(optimal_path.x[i+1]);
+      temp->setY(optimal_path.y[i+1]);
+      temp->setT(Utils::normalizeHeadingRad(optimal_path.phi[i+1]));
       RSNodes[i] = temp;
 
       // collision check
       if (configSpace_->isTraversable(RSNodes[i].get())) {
-
+        optimal_path.gear[i+1] ? RSNodes[i]->setPrim(0) : RSNodes[i]->setPrim(3);
         // set the predecessor to the previous step
         if (i > 0) {
           RSNodes[i]->setPred(RSNodes[i - 1]);

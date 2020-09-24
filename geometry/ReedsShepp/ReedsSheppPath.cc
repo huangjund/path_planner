@@ -27,12 +27,7 @@ std::pair<double, double> ReedShepp::calc_tau_omega(const double u,
 
   double t1 = std::atan2(eta * A - xi * B, xi * A + eta * B);
   double t2 = 2.0 * (std::cos(delta) - std::cos(v) - std::cos(u)) + 3.0;
-  double tau = 0.0;
-  if (t2 < 0) {
-    tau = NormalizeAngle(t1 + M_PI);
-  } else {
-    tau = NormalizeAngle(t1);
-  }
+  double tau = t2 ? NormalizeAngle(t1 + M_PI) : NormalizeAngle(t1);
   double omega = NormalizeAngle(tau - u + v - phi);
   return std::make_pair(tau, omega);
 }
@@ -64,6 +59,7 @@ bool ReedShepp::ShortestRSP(const std::shared_ptr<Node3d> start_node,
     }
   }
 
+  // generate a scale-right piece of path
   if (!GenerateLocalConfigurations(start_node, end_node,
                                    &(all_possible_paths[optimal_path_index]))) {
     std::cout << "Fail to generate local configurations(x, y, phi) in SetRSP "
@@ -431,8 +427,8 @@ bool ReedShepp::CCCC(const double x, const double y, const double phi,
 bool ReedShepp::CCSC(const double x, const double y, const double phi,
                      std::vector<ReedSheppPath>* all_possible_paths) {
   RSPParam LRSL1_param;
-  LRLRn(x, y, phi, &LRSL1_param);
-  double LRSL1_lengths[4] = {LRSL1_param.t, -0.5 * M_PI, -LRSL1_param.u,
+  LRSL(x, y, phi, &LRSL1_param);
+  double LRSL1_lengths[4] = {LRSL1_param.t, -0.5 * M_PI, LRSL1_param.u,
                              LRSL1_param.v};
   char LRSL1_types[] = "LRSL";
   if (LRSL1_param.flag &&
@@ -442,7 +438,7 @@ bool ReedShepp::CCSC(const double x, const double y, const double phi,
   }
 
   RSPParam LRSL2_param;
-  LRLRn(-x, y, -phi, &LRSL2_param);
+  LRSL(-x, y, -phi, &LRSL2_param);  // timeflipped
   double LRSL2_lengths[4] = {-LRSL2_param.t, 0.5 * M_PI, -LRSL2_param.u,
                              -LRSL2_param.v};
   char LRSL2_types[] = "LRSL";
@@ -453,7 +449,7 @@ bool ReedShepp::CCSC(const double x, const double y, const double phi,
   }
 
   RSPParam LRSL3_param;
-  LRLRn(x, -y, -phi, &LRSL3_param);
+  LRSL(x, -y, -phi, &LRSL3_param); // reflect
   double LRSL3_lengths[4] = {LRSL3_param.t, -0.5 * M_PI, LRSL3_param.u,
                              LRSL3_param.v};
   char LRSL3_types[] = "RLSR";
@@ -464,8 +460,8 @@ bool ReedShepp::CCSC(const double x, const double y, const double phi,
   }
 
   RSPParam LRSL4_param;
-  LRLRn(-x, -y, phi, &LRSL4_param);
-  double LRSL4_lengths[4] = {-LRSL4_param.t, -0.5 * M_PI, -LRSL4_param.u,
+  LRSL(-x, -y, phi, &LRSL4_param);  // flipped + reflect
+  double LRSL4_lengths[4] = {-LRSL4_param.t, 0.5 * M_PI, -LRSL4_param.u,
                              -LRSL4_param.v};
   char LRSL4_types[] = "RLSR";
   if (LRSL4_param.flag &&
@@ -475,7 +471,7 @@ bool ReedShepp::CCSC(const double x, const double y, const double phi,
   }
 
   RSPParam LRSR1_param;
-  LRLRp(x, y, phi, &LRSR1_param);
+  LRSR(x, y, phi, &LRSR1_param);
   double LRSR1_lengths[4] = {LRSR1_param.t, -0.5 * M_PI, LRSR1_param.u,
                              LRSR1_param.v};
   char LRSR1_types[] = "LRSR";
@@ -486,7 +482,7 @@ bool ReedShepp::CCSC(const double x, const double y, const double phi,
   }
 
   RSPParam LRSR2_param;
-  LRLRp(-x, y, -phi, &LRSR2_param);
+  LRSR(-x, y, -phi, &LRSR2_param);   // flipped
   double LRSR2_lengths[4] = {-LRSR2_param.t, 0.5 * M_PI, -LRSR2_param.u,
                              -LRSR2_param.v};
   char LRSR2_types[] = "LRSR";
@@ -497,7 +493,7 @@ bool ReedShepp::CCSC(const double x, const double y, const double phi,
   }
 
   RSPParam LRSR3_param;
-  LRLRp(x, -y, -phi, &LRSR3_param);
+  LRSR(x, -y, -phi, &LRSR3_param);  // reflect
   double LRSR3_lengths[4] = {LRSR3_param.t, -0.5 * M_PI, LRSR3_param.u,
                              LRSR3_param.v};
   char LRSR3_types[] = "RLSL";
@@ -508,7 +504,7 @@ bool ReedShepp::CCSC(const double x, const double y, const double phi,
   }
 
   RSPParam LRSR4_param;
-  LRLRp(-x, -y, phi, &LRSR4_param);
+  LRSR(-x, -y, phi, &LRSR4_param);  // flipped + reflect
   double LRSR4_lengths[4] = {-LRSR4_param.t, 0.5 * M_PI, -LRSR4_param.u,
                              -LRSR4_param.v};
   char LRSR4_types[] = "RLSL";
@@ -523,7 +519,7 @@ bool ReedShepp::CCSC(const double x, const double y, const double phi,
   double yb = x * std::sin(phi) - y * std::cos(phi);
 
   RSPParam LRSL5_param;
-  LRLRn(xb, yb, phi, &LRSL5_param);
+  LRSL(xb, yb, phi, &LRSL5_param);
   double LRSL5_lengths[4] = {LRSL5_param.v, LRSL5_param.u, -0.5 * M_PI,
                              LRSL5_param.t};
   char LRSL5_types[] = "LSRL";
@@ -534,7 +530,7 @@ bool ReedShepp::CCSC(const double x, const double y, const double phi,
   }
 
   RSPParam LRSL6_param;
-  LRLRn(-xb, yb, -phi, &LRSL6_param);
+  LRSL(-xb, yb, -phi, &LRSL6_param);  // flipped
   double LRSL6_lengths[4] = {-LRSL6_param.v, -LRSL6_param.u, 0.5 * M_PI,
                              -LRSL6_param.t};
   char LRSL6_types[] = "LSRL";
@@ -545,7 +541,7 @@ bool ReedShepp::CCSC(const double x, const double y, const double phi,
   }
 
   RSPParam LRSL7_param;
-  LRLRn(xb, -yb, -phi, &LRSL7_param);
+  LRSL(xb, -yb, -phi, &LRSL7_param);  // reflect
   double LRSL7_lengths[4] = {LRSL7_param.v, LRSL7_param.u, -0.5 * M_PI,
                              LRSL7_param.t};
   char LRSL7_types[] = "RSLR";
@@ -556,7 +552,7 @@ bool ReedShepp::CCSC(const double x, const double y, const double phi,
   }
 
   RSPParam LRSL8_param;
-  LRLRn(-xb, -yb, phi, &LRSL8_param);
+  LRSL(-xb, -yb, phi, &LRSL8_param);  // flipeed + reflect
   double LRSL8_lengths[4] = {-LRSL8_param.v, -LRSL8_param.u, 0.5 * M_PI,
                              -LRSL8_param.t};
   char LRSL8_types[] = "RSLR";
@@ -567,7 +563,7 @@ bool ReedShepp::CCSC(const double x, const double y, const double phi,
   }
 
   RSPParam LRSR5_param;
-  LRLRp(xb, yb, phi, &LRSR5_param);
+  LRSR(xb, yb, phi, &LRSR5_param);
   double LRSR5_lengths[4] = {LRSR5_param.v, LRSR5_param.u, -0.5 * M_PI,
                              LRSR5_param.t};
   char LRSR5_types[] = "RSRL";
@@ -578,7 +574,7 @@ bool ReedShepp::CCSC(const double x, const double y, const double phi,
   }
 
   RSPParam LRSR6_param;
-  LRLRp(-xb, yb, -phi, &LRSR6_param);
+  LRSR(-xb, yb, -phi, &LRSR6_param);  // flipped
   double LRSR6_lengths[4] = {-LRSR6_param.v, -LRSR6_param.u, 0.5 * M_PI,
                              -LRSR6_param.t};
   char LRSR6_types[] = "RSRL";
@@ -589,7 +585,7 @@ bool ReedShepp::CCSC(const double x, const double y, const double phi,
   }
 
   RSPParam LRSR7_param;
-  LRLRp(xb, -yb, -phi, &LRSR7_param);
+  LRSR(xb, -yb, -phi, &LRSR7_param);  // reflect
   double LRSR7_lengths[4] = {LRSR7_param.v, LRSR7_param.u, -0.5 * M_PI,
                              LRSR7_param.t};
   char LRSR7_types[] = "LSLR";
@@ -600,7 +596,7 @@ bool ReedShepp::CCSC(const double x, const double y, const double phi,
   }
 
   RSPParam LRSR8_param;
-  LRLRp(-xb, -yb, phi, &LRSR8_param);
+  LRSR(-xb, -yb, phi, &LRSR8_param);  // flipped + reflect
   double LRSR8_lengths[4] = {-LRSR8_param.v, -LRSR8_param.u, 0.5 * M_PI,
                              -LRSR8_param.t};
   char LRSR8_types[] = "LSLR";
@@ -753,6 +749,7 @@ void ReedShepp::SLS(const double x, const double y, const double phi,
   }
 }
 
+// formula (8.7)
 void ReedShepp::LRLRn(const double x, const double y, const double phi,
                       RSPParam* param) {
   double xi = x + std::sin(phi);
@@ -773,6 +770,7 @@ void ReedShepp::LRLRn(const double x, const double y, const double phi,
   }
 }
 
+// formula (8.8)
 void ReedShepp::LRLRp(const double x, const double y, const double phi,
                       RSPParam* param) {
   double xi = x + std::sin(phi);
@@ -793,6 +791,36 @@ void ReedShepp::LRLRp(const double x, const double y, const double phi,
   }
 }
 
+// formula (8.9)
+// TODO: not sure if this is correct
+void ReedShepp::LRSL(const double x, const double y, const double phi,
+                     RSPParam* param) {
+  double xi = x + std::sin(phi);
+  double eta = y - 1.0 - std::cos(phi);
+  std::pair<double, double> polar = Cartesian2Polar(-eta, xi);
+  double rho = polar.first;
+  double theta = polar.second;
+  double r = 0.0;
+  double t = 0.0;
+  double u = 0.0;
+  double v = 0.0;
+
+  if (rho >= 2.0) {
+    r = std::sqrt(rho * rho - 4.0);
+    double theta1 = std::atan2(-2,r);
+    u = 2.0 - theta1;
+    t = NormalizeAngle(theta - theta1);
+    v = NormalizeAngle(phi - 0.5 * M_PI - t);
+    if (t >= 0.0 && u <= 0.0 && v <= 0.0) {
+      param->flag = true;
+      param->u = u;
+      param->t = t;
+      param->v = v;
+    }
+  }
+}
+
+// formula (8.10)
 void ReedShepp::LRSR(const double x, const double y, const double phi,
                      RSPParam* param) {
   double xi = x + std::sin(phi);
@@ -816,32 +844,9 @@ void ReedShepp::LRSR(const double x, const double y, const double phi,
   }
 }
 
-void ReedShepp::LRSL(const double x, const double y, const double phi,
-                     RSPParam* param) {
-  double xi = x - std::sin(phi);
-  double eta = y - 1.0 + std::cos(phi);
-  std::pair<double, double> polar = Cartesian2Polar(xi, eta);
-  double rho = polar.first;
-  double theta = polar.second;
-  double r = 0.0;
-  double t = 0.0;
-  double u = 0.0;
-  double v = 0.0;
 
-  if (rho >= 2.0) {
-    r = std::sqrt(rho * rho - 4.0);
-    u = 2.0 - r;
-    t = NormalizeAngle(theta + std::atan2(r, -2.0));
-    v = NormalizeAngle(phi - 0.5 * M_PI - t);
-    if (t >= 0.0 && u <= 0.0 && v <= 0.0) {
-      param->flag = true;
-      param->u = u;
-      param->t = t;
-      param->v = v;
-    }
-  }
-}
-
+// formula (8.11)
+// TODO: not sure if this is correct
 void ReedShepp::LRSLR(const double x, const double y, const double phi,
                       RSPParam* param) {
   double xi = x + std::sin(phi);
@@ -852,13 +857,11 @@ void ReedShepp::LRSLR(const double x, const double y, const double phi,
   double u = 0.0;
   double v = 0.0;
   if (rho >= 2.0) {
-    u = 4.0 - std::sqrt(rho * rho - 4.0);
-    if (u <= 0.0) {
-      t = NormalizeAngle(
-          atan2((4.0 - u) * xi - 2.0 * eta, -2.0 * xi + (u - 4.0) * eta));
+    t = NormalizeAngle(polar.second - std::acos(-2/rho));
+    if (t >= 0) {
+      u = 4 - (xi + 2*cos(t)/sin(t));
       v = NormalizeAngle(t - phi);
-
-      if (t >= 0.0 && v >= 0.0) {
+      if (u <= 0.0 && v >= 0.0) {
         param->flag = true;
         param->u = u;
         param->t = t;
@@ -893,15 +896,14 @@ bool ReedShepp::GenerateLocalConfigurations(
   double step_scaled = step_size_ * max_kappa_;
 
   size_t point_num = static_cast<size_t>(
-      std::floor(shortest_path->total_length / step_scaled) +
-      10);  // 最多5段,4个cusp
+      std::floor(shortest_path->total_length / step_scaled) + 10);  // at most 5 segments,4 cusps
   std::vector<double> px(point_num, 0.0);
   std::vector<double> py(point_num, 0.0);
   std::vector<double> pphi(point_num, 0.0);
   std::vector<bool> pgear(point_num, true);
-  int index = 1;
-  double d = 0.0;
-  double pd = 0.0;
+  int index = 0;
+  double d = 0.0; // sample interval
+  double pd = 0.0;  // passed distance
   double ll = 0.0;
 
   if (shortest_path->segs_lengths.at(0) > 0.0) {
@@ -911,7 +913,7 @@ bool ReedShepp::GenerateLocalConfigurations(
     pgear.at(0) = false;
     d = -step_scaled;
   }
-  pd = d;  // d为sample interval, pd为accumulated distance which has been passed
+  pd = d;
 
   for (size_t i = 0; i < shortest_path->segs_types.size(); ++i) {
     char m = shortest_path->segs_types.at(i);
@@ -924,10 +926,9 @@ bool ReedShepp::GenerateLocalConfigurations(
     double ox = px.at(index);
     double oy = py.at(index);
     double ophi = pphi.at(index);
-    index--;
+    //  if the path for this segment and last segment is toward the same direction
     if (i >= 1 && shortest_path->segs_lengths.at(i - 1) *
-                          shortest_path->segs_lengths.at(i) >
-                      0) {
+                  shortest_path->segs_lengths.at(i) > 0) {
       pd = -d - ll;
     } else {
       pd = d - ll;
@@ -968,7 +969,7 @@ bool ReedShepp::GenerateLocalConfigurations(
     shortest_path->segs_lengths.at(i) =
         shortest_path->segs_lengths.at(i) / max_kappa_;
   }
-  shortest_path->total_length = shortest_path->total_length / max_kappa_;
+  shortest_path->total_length = shortest_path->total_length / max_kappa_; // scale back
   return true;
 }
 
