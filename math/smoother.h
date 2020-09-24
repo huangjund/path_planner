@@ -75,15 +75,15 @@ class Smoother {
  /// path to be smoothed
   std::vector<std::shared_ptr<Common::SE2State>> path_;
   /// falloff rate for the voronoi field
-  float alpha = 0.1;
+  float alpha = 0.01;
   /// weight for the obstacle term
   float wObstacle = 0;
   /// weight for the voronoi term
   float wVoronoi = 0;
   /// weight for the curvature term
-  float wCurvature = 0.2;
+  float wCurvature = 0;
   /// weight for the smoothness term
-  float wSmoothness = 0.2;
+  float wSmoothness = 10;
  private:
   std::unique_ptr<Multibody::SingleForkLiftPlant> carPlant_;
   /// maximum possible curvature of the non-holonomic vehicle

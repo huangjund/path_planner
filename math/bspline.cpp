@@ -64,7 +64,7 @@ void BSpline::tracePath(const std::shared_ptr<Common::SE2State> node) {
 void BSpline::smoothPath(float width, float height) {
   setWidthHeight(width,height);
   unsigned int iter = 0;
-  unsigned int maxIter = 50;
+  unsigned int maxIter = 100;
   // for every piece of trajectories
   size_t i = path_.size()-1;
   for(auto traj = trajPointSet.begin(); traj != trajPointSet.end(); traj++) {
