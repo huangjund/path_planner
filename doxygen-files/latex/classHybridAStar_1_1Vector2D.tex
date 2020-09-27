@@ -1,0 +1,212 @@
+\hypertarget{classHybridAStar_1_1Vector2D}{}\doxysection{Hybrid\+A\+Star\+::Vector2D Class Reference}
+\label{classHybridAStar_1_1Vector2D}\index{HybridAStar::Vector2D@{HybridAStar::Vector2D}}
+
+
+A class describing a simple 2D vector.  
+
+
+
+
+{\ttfamily \#include $<$vector2d.\+h$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classHybridAStar_1_1Vector2D_a570172c4f5f0865bc44080a7a477582e}{Vector2D}} (const float \mbox{\hyperlink{classHybridAStar_1_1Vector2D_abb48ee697ec837d43719f64b14026457}{x}}=0, const float \mbox{\hyperlink{classHybridAStar_1_1Vector2D_ab775d484598797827c4a396b6420c43e}{y}}=0)
+\begin{DoxyCompactList}\small\item\em default constructor \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classHybridAStar_1_1Vector2D}{Vector2D}} \mbox{\hyperlink{classHybridAStar_1_1Vector2D_a7637c49e097509f5d72b3e512fe354f9}{operator$\ast$}} (const float k) const
+\begin{DoxyCompactList}\small\item\em a method to multiply a vector by a scalar \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classHybridAStar_1_1Vector2D}{Vector2D}} \mbox{\hyperlink{classHybridAStar_1_1Vector2D_a703030845c7f8e8a37ea230590e5ed90}{operator/}} (const float k) const
+\begin{DoxyCompactList}\small\item\em a method to divide a vector by a scalar \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classHybridAStar_1_1Vector2D}{Vector2D}} \mbox{\hyperlink{classHybridAStar_1_1Vector2D_aec766c0a356782535547580e38b3a143}{operator+}} (const \mbox{\hyperlink{classHybridAStar_1_1Vector2D}{Vector2D}} \&b) const
+\begin{DoxyCompactList}\small\item\em a method to add a vector to a vector \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classHybridAStar_1_1Vector2D}{Vector2D}} \mbox{\hyperlink{classHybridAStar_1_1Vector2D_af88319a49a21b14469ae8a1ca92e8db2}{operator-\/}} (const \mbox{\hyperlink{classHybridAStar_1_1Vector2D}{Vector2D}} \&b) const
+\begin{DoxyCompactList}\small\item\em a method to subtract a vector from a vector \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classHybridAStar_1_1Vector2D}{Vector2D}} \mbox{\hyperlink{classHybridAStar_1_1Vector2D_a856fddf2d2875b0f4bff112da609f147}{operator-\/}} () const
+\begin{DoxyCompactList}\small\item\em a method to negate a vector \end{DoxyCompactList}\item 
+float \mbox{\hyperlink{classHybridAStar_1_1Vector2D_a0ed575fea4e4a1b990fbee43e79f96d8}{length}} () const
+\begin{DoxyCompactList}\small\item\em a method to calculate the length of the vector \end{DoxyCompactList}\item 
+float \mbox{\hyperlink{classHybridAStar_1_1Vector2D_af3c1307bd25332ecb574858aad618c0a}{sqlength}} () const
+\begin{DoxyCompactList}\small\item\em a method to calculate the length of the vector \end{DoxyCompactList}\item 
+float \mbox{\hyperlink{classHybridAStar_1_1Vector2D_a4bbb065cac706033bce47caaad29de5e}{dot}} (\mbox{\hyperlink{classHybridAStar_1_1Vector2D}{Vector2D}} b)
+\begin{DoxyCompactList}\small\item\em a method to calculate the dot product of two vectors \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classHybridAStar_1_1Vector2D}{Vector2D}} \mbox{\hyperlink{classHybridAStar_1_1Vector2D_ae1cb947efadbb19b95f048dc9ab59c52}{ort}} (\mbox{\hyperlink{classHybridAStar_1_1Vector2D}{Vector2D}} b)
+\begin{DoxyCompactList}\small\item\em a method that returns the orthogonal complement of two vectors \end{DoxyCompactList}\item 
+float \mbox{\hyperlink{classHybridAStar_1_1Vector2D_ae0b1d2ecea1390dd4a2e456ebbc20a1c}{getX}} ()
+\item 
+float \mbox{\hyperlink{classHybridAStar_1_1Vector2D_a012267fbf64da9bf87ba23eba7241bf4}{getY}} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+float \mbox{\hyperlink{classHybridAStar_1_1Vector2D_abb48ee697ec837d43719f64b14026457}{x}}
+\begin{DoxyCompactList}\small\item\em the x part of the vector \end{DoxyCompactList}\item 
+float \mbox{\hyperlink{classHybridAStar_1_1Vector2D_ab775d484598797827c4a396b6420c43e}{y}}
+\begin{DoxyCompactList}\small\item\em the y part of the vector \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+std\+::ostream \& \mbox{\hyperlink{classHybridAStar_1_1Vector2D_a80cae6a3d6dab891414de43b66614db3}{operator$<$$<$}} (std\+::ostream \&os, const \mbox{\hyperlink{classHybridAStar_1_1Vector2D}{Vector2D}} \&b)
+\begin{DoxyCompactList}\small\item\em a convenience method to print a vector \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+A class describing a simple 2D vector. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classHybridAStar_1_1Vector2D_a570172c4f5f0865bc44080a7a477582e}\label{classHybridAStar_1_1Vector2D_a570172c4f5f0865bc44080a7a477582e}} 
+\index{HybridAStar::Vector2D@{HybridAStar::Vector2D}!Vector2D@{Vector2D}}
+\index{Vector2D@{Vector2D}!HybridAStar::Vector2D@{HybridAStar::Vector2D}}
+\doxysubsubsection{\texorpdfstring{Vector2D()}{Vector2D()}}
+{\footnotesize\ttfamily Hybrid\+A\+Star\+::\+Vector2\+D\+::\+Vector2D (\begin{DoxyParamCaption}\item[{const float}]{x = {\ttfamily 0},  }\item[{const float}]{y = {\ttfamily 0} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+default constructor 
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classHybridAStar_1_1Vector2D_a4bbb065cac706033bce47caaad29de5e}\label{classHybridAStar_1_1Vector2D_a4bbb065cac706033bce47caaad29de5e}} 
+\index{HybridAStar::Vector2D@{HybridAStar::Vector2D}!dot@{dot}}
+\index{dot@{dot}!HybridAStar::Vector2D@{HybridAStar::Vector2D}}
+\doxysubsubsection{\texorpdfstring{dot()}{dot()}}
+{\footnotesize\ttfamily float Hybrid\+A\+Star\+::\+Vector2\+D\+::dot (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classHybridAStar_1_1Vector2D}{Vector2D}}}]{b }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+a method to calculate the dot product of two vectors 
+
+\mbox{\Hypertarget{classHybridAStar_1_1Vector2D_ae0b1d2ecea1390dd4a2e456ebbc20a1c}\label{classHybridAStar_1_1Vector2D_ae0b1d2ecea1390dd4a2e456ebbc20a1c}} 
+\index{HybridAStar::Vector2D@{HybridAStar::Vector2D}!getX@{getX}}
+\index{getX@{getX}!HybridAStar::Vector2D@{HybridAStar::Vector2D}}
+\doxysubsubsection{\texorpdfstring{getX()}{getX()}}
+{\footnotesize\ttfamily float Hybrid\+A\+Star\+::\+Vector2\+D\+::getX (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classHybridAStar_1_1Vector2D_a012267fbf64da9bf87ba23eba7241bf4}\label{classHybridAStar_1_1Vector2D_a012267fbf64da9bf87ba23eba7241bf4}} 
+\index{HybridAStar::Vector2D@{HybridAStar::Vector2D}!getY@{getY}}
+\index{getY@{getY}!HybridAStar::Vector2D@{HybridAStar::Vector2D}}
+\doxysubsubsection{\texorpdfstring{getY()}{getY()}}
+{\footnotesize\ttfamily float Hybrid\+A\+Star\+::\+Vector2\+D\+::getY (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classHybridAStar_1_1Vector2D_a0ed575fea4e4a1b990fbee43e79f96d8}\label{classHybridAStar_1_1Vector2D_a0ed575fea4e4a1b990fbee43e79f96d8}} 
+\index{HybridAStar::Vector2D@{HybridAStar::Vector2D}!length@{length}}
+\index{length@{length}!HybridAStar::Vector2D@{HybridAStar::Vector2D}}
+\doxysubsubsection{\texorpdfstring{length()}{length()}}
+{\footnotesize\ttfamily float Hybrid\+A\+Star\+::\+Vector2\+D\+::length (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+a method to calculate the length of the vector 
+
+\mbox{\Hypertarget{classHybridAStar_1_1Vector2D_a7637c49e097509f5d72b3e512fe354f9}\label{classHybridAStar_1_1Vector2D_a7637c49e097509f5d72b3e512fe354f9}} 
+\index{HybridAStar::Vector2D@{HybridAStar::Vector2D}!operator$\ast$@{operator$\ast$}}
+\index{operator$\ast$@{operator$\ast$}!HybridAStar::Vector2D@{HybridAStar::Vector2D}}
+\doxysubsubsection{\texorpdfstring{operator$\ast$()}{operator*()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classHybridAStar_1_1Vector2D}{Vector2D}} Hybrid\+A\+Star\+::\+Vector2\+D\+::operator$\ast$ (\begin{DoxyParamCaption}\item[{const float}]{k }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+a method to multiply a vector by a scalar 
+
+\mbox{\Hypertarget{classHybridAStar_1_1Vector2D_aec766c0a356782535547580e38b3a143}\label{classHybridAStar_1_1Vector2D_aec766c0a356782535547580e38b3a143}} 
+\index{HybridAStar::Vector2D@{HybridAStar::Vector2D}!operator+@{operator+}}
+\index{operator+@{operator+}!HybridAStar::Vector2D@{HybridAStar::Vector2D}}
+\doxysubsubsection{\texorpdfstring{operator+()}{operator+()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classHybridAStar_1_1Vector2D}{Vector2D}} Hybrid\+A\+Star\+::\+Vector2\+D\+::operator+ (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classHybridAStar_1_1Vector2D}{Vector2D}} \&}]{b }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+a method to add a vector to a vector 
+
+\mbox{\Hypertarget{classHybridAStar_1_1Vector2D_a856fddf2d2875b0f4bff112da609f147}\label{classHybridAStar_1_1Vector2D_a856fddf2d2875b0f4bff112da609f147}} 
+\index{HybridAStar::Vector2D@{HybridAStar::Vector2D}!operator-\/@{operator-\/}}
+\index{operator-\/@{operator-\/}!HybridAStar::Vector2D@{HybridAStar::Vector2D}}
+\doxysubsubsection{\texorpdfstring{operator-\/()}{operator-()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classHybridAStar_1_1Vector2D}{Vector2D}} Hybrid\+A\+Star\+::\+Vector2\+D\+::operator-\/ (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+a method to negate a vector 
+
+\mbox{\Hypertarget{classHybridAStar_1_1Vector2D_af88319a49a21b14469ae8a1ca92e8db2}\label{classHybridAStar_1_1Vector2D_af88319a49a21b14469ae8a1ca92e8db2}} 
+\index{HybridAStar::Vector2D@{HybridAStar::Vector2D}!operator-\/@{operator-\/}}
+\index{operator-\/@{operator-\/}!HybridAStar::Vector2D@{HybridAStar::Vector2D}}
+\doxysubsubsection{\texorpdfstring{operator-\/()}{operator-()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classHybridAStar_1_1Vector2D}{Vector2D}} Hybrid\+A\+Star\+::\+Vector2\+D\+::operator-\/ (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classHybridAStar_1_1Vector2D}{Vector2D}} \&}]{b }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+a method to subtract a vector from a vector 
+
+\mbox{\Hypertarget{classHybridAStar_1_1Vector2D_a703030845c7f8e8a37ea230590e5ed90}\label{classHybridAStar_1_1Vector2D_a703030845c7f8e8a37ea230590e5ed90}} 
+\index{HybridAStar::Vector2D@{HybridAStar::Vector2D}!operator/@{operator/}}
+\index{operator/@{operator/}!HybridAStar::Vector2D@{HybridAStar::Vector2D}}
+\doxysubsubsection{\texorpdfstring{operator/()}{operator/()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classHybridAStar_1_1Vector2D}{Vector2D}} Hybrid\+A\+Star\+::\+Vector2\+D\+::operator/ (\begin{DoxyParamCaption}\item[{const float}]{k }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+a method to divide a vector by a scalar 
+
+\mbox{\Hypertarget{classHybridAStar_1_1Vector2D_ae1cb947efadbb19b95f048dc9ab59c52}\label{classHybridAStar_1_1Vector2D_ae1cb947efadbb19b95f048dc9ab59c52}} 
+\index{HybridAStar::Vector2D@{HybridAStar::Vector2D}!ort@{ort}}
+\index{ort@{ort}!HybridAStar::Vector2D@{HybridAStar::Vector2D}}
+\doxysubsubsection{\texorpdfstring{ort()}{ort()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classHybridAStar_1_1Vector2D}{Vector2D}} Hybrid\+A\+Star\+::\+Vector2\+D\+::ort (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classHybridAStar_1_1Vector2D}{Vector2D}}}]{b }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+a method that returns the orthogonal complement of two vectors 
+
+\mbox{\Hypertarget{classHybridAStar_1_1Vector2D_af3c1307bd25332ecb574858aad618c0a}\label{classHybridAStar_1_1Vector2D_af3c1307bd25332ecb574858aad618c0a}} 
+\index{HybridAStar::Vector2D@{HybridAStar::Vector2D}!sqlength@{sqlength}}
+\index{sqlength@{sqlength}!HybridAStar::Vector2D@{HybridAStar::Vector2D}}
+\doxysubsubsection{\texorpdfstring{sqlength()}{sqlength()}}
+{\footnotesize\ttfamily float Hybrid\+A\+Star\+::\+Vector2\+D\+::sqlength (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+a method to calculate the length of the vector 
+
+
+
+\doxysubsection{Friends And Related Function Documentation}
+\mbox{\Hypertarget{classHybridAStar_1_1Vector2D_a80cae6a3d6dab891414de43b66614db3}\label{classHybridAStar_1_1Vector2D_a80cae6a3d6dab891414de43b66614db3}} 
+\index{HybridAStar::Vector2D@{HybridAStar::Vector2D}!operator$<$$<$@{operator$<$$<$}}
+\index{operator$<$$<$@{operator$<$$<$}!HybridAStar::Vector2D@{HybridAStar::Vector2D}}
+\doxysubsubsection{\texorpdfstring{operator$<$$<$}{operator<<}}
+{\footnotesize\ttfamily std\+::ostream\& operator$<$$<$ (\begin{DoxyParamCaption}\item[{std\+::ostream \&}]{os,  }\item[{const \mbox{\hyperlink{classHybridAStar_1_1Vector2D}{Vector2D}} \&}]{b }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [friend]}}
+
+
+
+a convenience method to print a vector 
+
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{classHybridAStar_1_1Vector2D_abb48ee697ec837d43719f64b14026457}\label{classHybridAStar_1_1Vector2D_abb48ee697ec837d43719f64b14026457}} 
+\index{HybridAStar::Vector2D@{HybridAStar::Vector2D}!x@{x}}
+\index{x@{x}!HybridAStar::Vector2D@{HybridAStar::Vector2D}}
+\doxysubsubsection{\texorpdfstring{x}{x}}
+{\footnotesize\ttfamily float Hybrid\+A\+Star\+::\+Vector2\+D\+::x\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+the x part of the vector 
+
+\mbox{\Hypertarget{classHybridAStar_1_1Vector2D_ab775d484598797827c4a396b6420c43e}\label{classHybridAStar_1_1Vector2D_ab775d484598797827c4a396b6420c43e}} 
+\index{HybridAStar::Vector2D@{HybridAStar::Vector2D}!y@{y}}
+\index{y@{y}!HybridAStar::Vector2D@{HybridAStar::Vector2D}}
+\doxysubsubsection{\texorpdfstring{y}{y}}
+{\footnotesize\ttfamily float Hybrid\+A\+Star\+::\+Vector2\+D\+::y\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+the y part of the vector 
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+math/\mbox{\hyperlink{vector2d_8h}{vector2d.\+h}}\end{DoxyCompactItemize}

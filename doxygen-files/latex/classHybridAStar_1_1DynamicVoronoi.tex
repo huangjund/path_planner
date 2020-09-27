@@ -1,0 +1,497 @@
+\hypertarget{classHybridAStar_1_1DynamicVoronoi}{}\doxysection{Hybrid\+A\+Star\+::Dynamic\+Voronoi Class Reference}
+\label{classHybridAStar_1_1DynamicVoronoi}\index{HybridAStar::DynamicVoronoi@{HybridAStar::DynamicVoronoi}}
+
+
+A \mbox{\hyperlink{classHybridAStar_1_1DynamicVoronoi}{Dynamic\+Voronoi}} object computes and updates a distance map and Voronoi diagram.  
+
+
+
+
+{\ttfamily \#include $<$dynamicvoronoi.\+h$>$}
+
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structHybridAStar_1_1DynamicVoronoi_1_1dataCell}{data\+Cell}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+enum \mbox{\hyperlink{classHybridAStar_1_1DynamicVoronoi_a5516c47ad77b554fba6cccc37c53d9ec}{State}} \{ \newline
+\mbox{\hyperlink{classHybridAStar_1_1DynamicVoronoi_a5516c47ad77b554fba6cccc37c53d9eca01ab08155fbbf9f1d9ff9c4dc5bf6676}{voronoi\+Keep}} = -\/4, 
+\mbox{\hyperlink{classHybridAStar_1_1DynamicVoronoi_a5516c47ad77b554fba6cccc37c53d9eca31987e1be802b47e7206fc242bfcbc1b}{free\+Queued}} = -\/3, 
+\mbox{\hyperlink{classHybridAStar_1_1DynamicVoronoi_a5516c47ad77b554fba6cccc37c53d9ecacc3917b4100e1ab38252af2f2ab546dc}{voronoi\+Retry}} = -\/2, 
+\mbox{\hyperlink{classHybridAStar_1_1DynamicVoronoi_a5516c47ad77b554fba6cccc37c53d9eca1e4add218b7e25445c996252fb8396bc}{voronoi\+Prune}} = -\/1, 
+\newline
+\mbox{\hyperlink{classHybridAStar_1_1DynamicVoronoi_a5516c47ad77b554fba6cccc37c53d9ecafadb491e274cf08f1239c3e2a2227b35}{free}} = 0, 
+\mbox{\hyperlink{classHybridAStar_1_1DynamicVoronoi_a5516c47ad77b554fba6cccc37c53d9eca489676145c4fd15306748f826b771bf1}{occupied}} = 1
+ \}
+\item 
+enum \mbox{\hyperlink{classHybridAStar_1_1DynamicVoronoi_a2d1deb64aba9a9740dbf2be8ffa14146}{Queueing\+State}} \{ \newline
+\mbox{\hyperlink{classHybridAStar_1_1DynamicVoronoi_a2d1deb64aba9a9740dbf2be8ffa14146a999697a2537064ff31ebbf6d0bcb8dbc}{fw\+Not\+Queued}} = 1, 
+\mbox{\hyperlink{classHybridAStar_1_1DynamicVoronoi_a2d1deb64aba9a9740dbf2be8ffa14146ae439c14ef8d911824476ffbd42686217}{fw\+Queued}} = 2, 
+\mbox{\hyperlink{classHybridAStar_1_1DynamicVoronoi_a2d1deb64aba9a9740dbf2be8ffa14146a050e11b92218e5993608d8255d811d88}{fw\+Processed}} = 3, 
+\mbox{\hyperlink{classHybridAStar_1_1DynamicVoronoi_a2d1deb64aba9a9740dbf2be8ffa14146a843760555d100e0026357758395e2e0c}{bw\+Queued}} = 4, 
+\newline
+\mbox{\hyperlink{classHybridAStar_1_1DynamicVoronoi_a2d1deb64aba9a9740dbf2be8ffa14146a2d1a7fd6e20f132051ca9316c34c3e2e}{bw\+Processed}} = 1
+ \}
+\item 
+enum \mbox{\hyperlink{classHybridAStar_1_1DynamicVoronoi_a2c98c230e9ed9a53756caa7374255976}{Obst\+Data\+State}} \{ \mbox{\hyperlink{classHybridAStar_1_1DynamicVoronoi_a2c98c230e9ed9a53756caa7374255976a8d78c6e43b623a2215580eb62e67e2bc}{invalid\+Obst\+Data}} = S\+H\+R\+T\+\_\+\+M\+AX / 2
+ \}
+\item 
+enum \mbox{\hyperlink{classHybridAStar_1_1DynamicVoronoi_ad4169acc5061c61c54b5f2b82bc0d283}{marker\+Match\+Result}} \{ \mbox{\hyperlink{classHybridAStar_1_1DynamicVoronoi_ad4169acc5061c61c54b5f2b82bc0d283ab2d8d71034ad0876137bc389d0cce3d2}{pruned}}, 
+\mbox{\hyperlink{classHybridAStar_1_1DynamicVoronoi_ad4169acc5061c61c54b5f2b82bc0d283aaea7c7b093514c626e1d4d13166053f8}{keep}}, 
+\mbox{\hyperlink{classHybridAStar_1_1DynamicVoronoi_ad4169acc5061c61c54b5f2b82bc0d283a0889e1f35c4e39210f4ce1dee6e83e69}{retry}}
+ \}
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classHybridAStar_1_1DynamicVoronoi_a46ff0dd6d07c044901f1865fe37fef05}{Dynamic\+Voronoi}} ()
+\item 
+\mbox{\hyperlink{classHybridAStar_1_1DynamicVoronoi_a8f7a2e09d5343352c59b7994e59f1673}{$\sim$\+Dynamic\+Voronoi}} ()
+\item 
+void \mbox{\hyperlink{classHybridAStar_1_1DynamicVoronoi_a0f853b1d5f0920ad6853ccf9fc1ee9f6}{initialize\+Empty}} (int \+\_\+sizeX, int \+\_\+sizeY, bool init\+Grid\+Map=true)
+\begin{DoxyCompactList}\small\item\em Initialization with an empty map. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classHybridAStar_1_1DynamicVoronoi_ae4650e19a4754f476508dafb08ff8fed}{initialize\+Map}} (int \+\_\+sizeX, int \+\_\+sizeY, bool $\ast$$\ast$\+\_\+grid\+Map)
+\begin{DoxyCompactList}\small\item\em Initialization with a given binary map (false==free, true==occupied) \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classHybridAStar_1_1DynamicVoronoi_aecb1202c10fb0d67c0363490971f0a53}{occupy\+Cell}} (int x, int y)
+\begin{DoxyCompactList}\small\item\em add an obstacle at the specified cell coordinate \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classHybridAStar_1_1DynamicVoronoi_aa93b79d97c4e8347c812b6f9bbca20da}{clear\+Cell}} (int x, int y)
+\begin{DoxyCompactList}\small\item\em remove an obstacle at the specified cell coordinate \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classHybridAStar_1_1DynamicVoronoi_a3c9c1236339ff3a879c6d306dbf81c50}{exchange\+Obstacles}} (std\+::vector$<$ \mbox{\hyperlink{point_8h_a029053565997837c89e2448248703492}{I\+N\+T\+P\+O\+I\+NT}} $>$ new\+Obstacles)
+\begin{DoxyCompactList}\small\item\em remove old dynamic obstacles and add the new ones \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classHybridAStar_1_1DynamicVoronoi_a1597506b8c427486884c2b2ec3492cdd}{update}} (bool update\+Real\+Dist=true)
+\begin{DoxyCompactList}\small\item\em update distance map and Voronoi diagram to reflect the changes \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classHybridAStar_1_1DynamicVoronoi_a152affee9cd562ae29f85768c6b6f2e3}{prune}} ()
+\begin{DoxyCompactList}\small\item\em prune the Voronoi diagram \end{DoxyCompactList}\item 
+float \mbox{\hyperlink{classHybridAStar_1_1DynamicVoronoi_a31a96e01c16437c54050acaaf1a05886}{get\+Distance}} (int x, int y)
+\begin{DoxyCompactList}\small\item\em returns the obstacle distance at the specified location \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classHybridAStar_1_1DynamicVoronoi_a2f2447c59f8057179388df92d1ee8509}{is\+Voronoi}} (int x, int y)
+\begin{DoxyCompactList}\small\item\em returns whether the specified cell is part of the (pruned) Voronoi graph \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classHybridAStar_1_1DynamicVoronoi_a11a52dda18a91f59e610b1e2acdc499f}{is\+Occupied}} (int x, int y)
+\begin{DoxyCompactList}\small\item\em checks whether the specficied location is occupied \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classHybridAStar_1_1DynamicVoronoi_a8da1edbbb4f8ce37a67852e8be20d13c}{visualize}} (const char $\ast$filename=\char`\"{}result.\+ppm\char`\"{})
+\begin{DoxyCompactList}\small\item\em write the current distance map and voronoi diagram as ppm file \end{DoxyCompactList}\item 
+unsigned int \mbox{\hyperlink{classHybridAStar_1_1DynamicVoronoi_aa93e35b00ef98dc6fce8844cdae48f98}{get\+SizeX}} ()
+\begin{DoxyCompactList}\small\item\em returns the horizontal size of the workspace/map \end{DoxyCompactList}\item 
+unsigned int \mbox{\hyperlink{classHybridAStar_1_1DynamicVoronoi_a3c4cb39b33dae43a0ace06c0a4709818}{get\+SizeY}} ()
+\begin{DoxyCompactList}\small\item\em returns the vertical size of the workspace/map \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classHybridAStar_1_1DynamicVoronoi_aa9719e4ba2c9f766fba77c76fddeb548}{set\+Obstacle}} (int x, int y)
+\item 
+void \mbox{\hyperlink{classHybridAStar_1_1DynamicVoronoi_a5b02541f71e8d355fccc642dfbab37d2}{remove\+Obstacle}} (int x, int y)
+\item 
+void \mbox{\hyperlink{classHybridAStar_1_1DynamicVoronoi_ad806063cde998821aa549bfaee8a829d}{check\+Voro}} (int x, int y, int nx, int ny, \mbox{\hyperlink{structHybridAStar_1_1DynamicVoronoi_1_1dataCell}{data\+Cell}} \&c, \mbox{\hyperlink{structHybridAStar_1_1DynamicVoronoi_1_1dataCell}{data\+Cell}} \&nc)
+\item 
+void \mbox{\hyperlink{classHybridAStar_1_1DynamicVoronoi_aa0282ffbf595429144027258d38c3b40}{recheck\+Voro}} ()
+\item 
+void \mbox{\hyperlink{classHybridAStar_1_1DynamicVoronoi_ab5a8ebf12a256310e43c3f91b5f84e14}{commit\+And\+Colorize}} (bool update\+Real\+Dist=true)
+\item 
+void \mbox{\hyperlink{classHybridAStar_1_1DynamicVoronoi_a095be0a50023d7c144c863b804b47b67}{revive\+Voro\+Neighbors}} (int \&x, int \&y)
+\item 
+bool \mbox{\hyperlink{classHybridAStar_1_1DynamicVoronoi_afc877b1ff972ed55b0268410d559720a}{is\+Occupied}} (int \&x, int \&y, \mbox{\hyperlink{structHybridAStar_1_1DynamicVoronoi_1_1dataCell}{data\+Cell}} \&c)
+\item 
+\mbox{\hyperlink{classHybridAStar_1_1DynamicVoronoi_ad4169acc5061c61c54b5f2b82bc0d283}{marker\+Match\+Result}} \mbox{\hyperlink{classHybridAStar_1_1DynamicVoronoi_a299433d390d9b8ffe5b67cfaadef8215}{marker\+Match}} (int x, int y)
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classHybridAStar_1_1BucketPrioQueue}{Bucket\+Prio\+Queue}} \mbox{\hyperlink{classHybridAStar_1_1DynamicVoronoi_a31c064b306618aa3365482fde9bf4d8e}{open}}
+\item 
+std\+::queue$<$ \mbox{\hyperlink{point_8h_a029053565997837c89e2448248703492}{I\+N\+T\+P\+O\+I\+NT}} $>$ \mbox{\hyperlink{classHybridAStar_1_1DynamicVoronoi_a8dc0d31041ac006cf7d2b4df71f63c23}{prune\+Queue}}
+\item 
+std\+::vector$<$ \mbox{\hyperlink{point_8h_a029053565997837c89e2448248703492}{I\+N\+T\+P\+O\+I\+NT}} $>$ \mbox{\hyperlink{classHybridAStar_1_1DynamicVoronoi_a56234634fc440cd698d499f674f6349b}{remove\+List}}
+\item 
+std\+::vector$<$ \mbox{\hyperlink{point_8h_a029053565997837c89e2448248703492}{I\+N\+T\+P\+O\+I\+NT}} $>$ \mbox{\hyperlink{classHybridAStar_1_1DynamicVoronoi_ac5e390aeb9d002a83fbe0c2928d8f4b2}{add\+List}}
+\item 
+std\+::vector$<$ \mbox{\hyperlink{point_8h_a029053565997837c89e2448248703492}{I\+N\+T\+P\+O\+I\+NT}} $>$ \mbox{\hyperlink{classHybridAStar_1_1DynamicVoronoi_a8969051fa4edd4ce5c21640a3d971b86}{last\+Obstacles}}
+\item 
+int \mbox{\hyperlink{classHybridAStar_1_1DynamicVoronoi_a6d926a72ad5dbd0ea70123d9a6f3cd55}{sizeY}}
+\item 
+int \mbox{\hyperlink{classHybridAStar_1_1DynamicVoronoi_a0321ae73d45fa3a9b7a4ec3b77c1fbbc}{sizeX}}
+\item 
+\mbox{\hyperlink{structHybridAStar_1_1DynamicVoronoi_1_1dataCell}{data\+Cell}} $\ast$$\ast$ \mbox{\hyperlink{classHybridAStar_1_1DynamicVoronoi_a1b01c9fd8a31173ee9da2ef1bcdf4afe}{data}}
+\item 
+bool $\ast$$\ast$ \mbox{\hyperlink{classHybridAStar_1_1DynamicVoronoi_ac3dfdf6c53c82b19aa2b3cb8e4c4baf1}{grid\+Map}}
+\item 
+int \mbox{\hyperlink{classHybridAStar_1_1DynamicVoronoi_a28816284aaa825fb7de5dd0892e52152}{padding}}
+\item 
+double \mbox{\hyperlink{classHybridAStar_1_1DynamicVoronoi_a6848f8a16f5881c0e8957aafc8cf276f}{double\+Threshold}}
+\item 
+double \mbox{\hyperlink{classHybridAStar_1_1DynamicVoronoi_a2aed5c84b5add70e41de317e3e517471}{sqrt2}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+A \mbox{\hyperlink{classHybridAStar_1_1DynamicVoronoi}{Dynamic\+Voronoi}} object computes and updates a distance map and Voronoi diagram. 
+
+\doxysubsection{Member Enumeration Documentation}
+\mbox{\Hypertarget{classHybridAStar_1_1DynamicVoronoi_ad4169acc5061c61c54b5f2b82bc0d283}\label{classHybridAStar_1_1DynamicVoronoi_ad4169acc5061c61c54b5f2b82bc0d283}} 
+\index{HybridAStar::DynamicVoronoi@{HybridAStar::DynamicVoronoi}!markerMatchResult@{markerMatchResult}}
+\index{markerMatchResult@{markerMatchResult}!HybridAStar::DynamicVoronoi@{HybridAStar::DynamicVoronoi}}
+\doxysubsubsection{\texorpdfstring{markerMatchResult}{markerMatchResult}}
+{\footnotesize\ttfamily enum \mbox{\hyperlink{classHybridAStar_1_1DynamicVoronoi_ad4169acc5061c61c54b5f2b82bc0d283}{Hybrid\+A\+Star\+::\+Dynamic\+Voronoi\+::marker\+Match\+Result}}}
+
+\begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{pruned@{pruned}!HybridAStar::DynamicVoronoi@{HybridAStar::DynamicVoronoi}}\index{HybridAStar::DynamicVoronoi@{HybridAStar::DynamicVoronoi}!pruned@{pruned}}}\mbox{\Hypertarget{classHybridAStar_1_1DynamicVoronoi_ad4169acc5061c61c54b5f2b82bc0d283ab2d8d71034ad0876137bc389d0cce3d2}\label{classHybridAStar_1_1DynamicVoronoi_ad4169acc5061c61c54b5f2b82bc0d283ab2d8d71034ad0876137bc389d0cce3d2}} 
+pruned&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{keep@{keep}!HybridAStar::DynamicVoronoi@{HybridAStar::DynamicVoronoi}}\index{HybridAStar::DynamicVoronoi@{HybridAStar::DynamicVoronoi}!keep@{keep}}}\mbox{\Hypertarget{classHybridAStar_1_1DynamicVoronoi_ad4169acc5061c61c54b5f2b82bc0d283aaea7c7b093514c626e1d4d13166053f8}\label{classHybridAStar_1_1DynamicVoronoi_ad4169acc5061c61c54b5f2b82bc0d283aaea7c7b093514c626e1d4d13166053f8}} 
+keep&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{retry@{retry}!HybridAStar::DynamicVoronoi@{HybridAStar::DynamicVoronoi}}\index{HybridAStar::DynamicVoronoi@{HybridAStar::DynamicVoronoi}!retry@{retry}}}\mbox{\Hypertarget{classHybridAStar_1_1DynamicVoronoi_ad4169acc5061c61c54b5f2b82bc0d283a0889e1f35c4e39210f4ce1dee6e83e69}\label{classHybridAStar_1_1DynamicVoronoi_ad4169acc5061c61c54b5f2b82bc0d283a0889e1f35c4e39210f4ce1dee6e83e69}} 
+retry&\\
+\hline
+
+\end{DoxyEnumFields}
+\mbox{\Hypertarget{classHybridAStar_1_1DynamicVoronoi_a2c98c230e9ed9a53756caa7374255976}\label{classHybridAStar_1_1DynamicVoronoi_a2c98c230e9ed9a53756caa7374255976}} 
+\index{HybridAStar::DynamicVoronoi@{HybridAStar::DynamicVoronoi}!ObstDataState@{ObstDataState}}
+\index{ObstDataState@{ObstDataState}!HybridAStar::DynamicVoronoi@{HybridAStar::DynamicVoronoi}}
+\doxysubsubsection{\texorpdfstring{ObstDataState}{ObstDataState}}
+{\footnotesize\ttfamily enum \mbox{\hyperlink{classHybridAStar_1_1DynamicVoronoi_a2c98c230e9ed9a53756caa7374255976}{Hybrid\+A\+Star\+::\+Dynamic\+Voronoi\+::\+Obst\+Data\+State}}}
+
+\begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{invalidObstData@{invalidObstData}!HybridAStar::DynamicVoronoi@{HybridAStar::DynamicVoronoi}}\index{HybridAStar::DynamicVoronoi@{HybridAStar::DynamicVoronoi}!invalidObstData@{invalidObstData}}}\mbox{\Hypertarget{classHybridAStar_1_1DynamicVoronoi_a2c98c230e9ed9a53756caa7374255976a8d78c6e43b623a2215580eb62e67e2bc}\label{classHybridAStar_1_1DynamicVoronoi_a2c98c230e9ed9a53756caa7374255976a8d78c6e43b623a2215580eb62e67e2bc}} 
+invalid\+Obst\+Data&\\
+\hline
+
+\end{DoxyEnumFields}
+\mbox{\Hypertarget{classHybridAStar_1_1DynamicVoronoi_a2d1deb64aba9a9740dbf2be8ffa14146}\label{classHybridAStar_1_1DynamicVoronoi_a2d1deb64aba9a9740dbf2be8ffa14146}} 
+\index{HybridAStar::DynamicVoronoi@{HybridAStar::DynamicVoronoi}!QueueingState@{QueueingState}}
+\index{QueueingState@{QueueingState}!HybridAStar::DynamicVoronoi@{HybridAStar::DynamicVoronoi}}
+\doxysubsubsection{\texorpdfstring{QueueingState}{QueueingState}}
+{\footnotesize\ttfamily enum \mbox{\hyperlink{classHybridAStar_1_1DynamicVoronoi_a2d1deb64aba9a9740dbf2be8ffa14146}{Hybrid\+A\+Star\+::\+Dynamic\+Voronoi\+::\+Queueing\+State}}}
+
+\begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{fwNotQueued@{fwNotQueued}!HybridAStar::DynamicVoronoi@{HybridAStar::DynamicVoronoi}}\index{HybridAStar::DynamicVoronoi@{HybridAStar::DynamicVoronoi}!fwNotQueued@{fwNotQueued}}}\mbox{\Hypertarget{classHybridAStar_1_1DynamicVoronoi_a2d1deb64aba9a9740dbf2be8ffa14146a999697a2537064ff31ebbf6d0bcb8dbc}\label{classHybridAStar_1_1DynamicVoronoi_a2d1deb64aba9a9740dbf2be8ffa14146a999697a2537064ff31ebbf6d0bcb8dbc}} 
+fw\+Not\+Queued&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{fwQueued@{fwQueued}!HybridAStar::DynamicVoronoi@{HybridAStar::DynamicVoronoi}}\index{HybridAStar::DynamicVoronoi@{HybridAStar::DynamicVoronoi}!fwQueued@{fwQueued}}}\mbox{\Hypertarget{classHybridAStar_1_1DynamicVoronoi_a2d1deb64aba9a9740dbf2be8ffa14146ae439c14ef8d911824476ffbd42686217}\label{classHybridAStar_1_1DynamicVoronoi_a2d1deb64aba9a9740dbf2be8ffa14146ae439c14ef8d911824476ffbd42686217}} 
+fw\+Queued&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{fwProcessed@{fwProcessed}!HybridAStar::DynamicVoronoi@{HybridAStar::DynamicVoronoi}}\index{HybridAStar::DynamicVoronoi@{HybridAStar::DynamicVoronoi}!fwProcessed@{fwProcessed}}}\mbox{\Hypertarget{classHybridAStar_1_1DynamicVoronoi_a2d1deb64aba9a9740dbf2be8ffa14146a050e11b92218e5993608d8255d811d88}\label{classHybridAStar_1_1DynamicVoronoi_a2d1deb64aba9a9740dbf2be8ffa14146a050e11b92218e5993608d8255d811d88}} 
+fw\+Processed&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{bwQueued@{bwQueued}!HybridAStar::DynamicVoronoi@{HybridAStar::DynamicVoronoi}}\index{HybridAStar::DynamicVoronoi@{HybridAStar::DynamicVoronoi}!bwQueued@{bwQueued}}}\mbox{\Hypertarget{classHybridAStar_1_1DynamicVoronoi_a2d1deb64aba9a9740dbf2be8ffa14146a843760555d100e0026357758395e2e0c}\label{classHybridAStar_1_1DynamicVoronoi_a2d1deb64aba9a9740dbf2be8ffa14146a843760555d100e0026357758395e2e0c}} 
+bw\+Queued&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{bwProcessed@{bwProcessed}!HybridAStar::DynamicVoronoi@{HybridAStar::DynamicVoronoi}}\index{HybridAStar::DynamicVoronoi@{HybridAStar::DynamicVoronoi}!bwProcessed@{bwProcessed}}}\mbox{\Hypertarget{classHybridAStar_1_1DynamicVoronoi_a2d1deb64aba9a9740dbf2be8ffa14146a2d1a7fd6e20f132051ca9316c34c3e2e}\label{classHybridAStar_1_1DynamicVoronoi_a2d1deb64aba9a9740dbf2be8ffa14146a2d1a7fd6e20f132051ca9316c34c3e2e}} 
+bw\+Processed&\\
+\hline
+
+\end{DoxyEnumFields}
+\mbox{\Hypertarget{classHybridAStar_1_1DynamicVoronoi_a5516c47ad77b554fba6cccc37c53d9ec}\label{classHybridAStar_1_1DynamicVoronoi_a5516c47ad77b554fba6cccc37c53d9ec}} 
+\index{HybridAStar::DynamicVoronoi@{HybridAStar::DynamicVoronoi}!State@{State}}
+\index{State@{State}!HybridAStar::DynamicVoronoi@{HybridAStar::DynamicVoronoi}}
+\doxysubsubsection{\texorpdfstring{State}{State}}
+{\footnotesize\ttfamily enum \mbox{\hyperlink{classHybridAStar_1_1DynamicVoronoi_a5516c47ad77b554fba6cccc37c53d9ec}{Hybrid\+A\+Star\+::\+Dynamic\+Voronoi\+::\+State}}}
+
+\begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{voronoiKeep@{voronoiKeep}!HybridAStar::DynamicVoronoi@{HybridAStar::DynamicVoronoi}}\index{HybridAStar::DynamicVoronoi@{HybridAStar::DynamicVoronoi}!voronoiKeep@{voronoiKeep}}}\mbox{\Hypertarget{classHybridAStar_1_1DynamicVoronoi_a5516c47ad77b554fba6cccc37c53d9eca01ab08155fbbf9f1d9ff9c4dc5bf6676}\label{classHybridAStar_1_1DynamicVoronoi_a5516c47ad77b554fba6cccc37c53d9eca01ab08155fbbf9f1d9ff9c4dc5bf6676}} 
+voronoi\+Keep&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{freeQueued@{freeQueued}!HybridAStar::DynamicVoronoi@{HybridAStar::DynamicVoronoi}}\index{HybridAStar::DynamicVoronoi@{HybridAStar::DynamicVoronoi}!freeQueued@{freeQueued}}}\mbox{\Hypertarget{classHybridAStar_1_1DynamicVoronoi_a5516c47ad77b554fba6cccc37c53d9eca31987e1be802b47e7206fc242bfcbc1b}\label{classHybridAStar_1_1DynamicVoronoi_a5516c47ad77b554fba6cccc37c53d9eca31987e1be802b47e7206fc242bfcbc1b}} 
+free\+Queued&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{voronoiRetry@{voronoiRetry}!HybridAStar::DynamicVoronoi@{HybridAStar::DynamicVoronoi}}\index{HybridAStar::DynamicVoronoi@{HybridAStar::DynamicVoronoi}!voronoiRetry@{voronoiRetry}}}\mbox{\Hypertarget{classHybridAStar_1_1DynamicVoronoi_a5516c47ad77b554fba6cccc37c53d9ecacc3917b4100e1ab38252af2f2ab546dc}\label{classHybridAStar_1_1DynamicVoronoi_a5516c47ad77b554fba6cccc37c53d9ecacc3917b4100e1ab38252af2f2ab546dc}} 
+voronoi\+Retry&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{voronoiPrune@{voronoiPrune}!HybridAStar::DynamicVoronoi@{HybridAStar::DynamicVoronoi}}\index{HybridAStar::DynamicVoronoi@{HybridAStar::DynamicVoronoi}!voronoiPrune@{voronoiPrune}}}\mbox{\Hypertarget{classHybridAStar_1_1DynamicVoronoi_a5516c47ad77b554fba6cccc37c53d9eca1e4add218b7e25445c996252fb8396bc}\label{classHybridAStar_1_1DynamicVoronoi_a5516c47ad77b554fba6cccc37c53d9eca1e4add218b7e25445c996252fb8396bc}} 
+voronoi\+Prune&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{free@{free}!HybridAStar::DynamicVoronoi@{HybridAStar::DynamicVoronoi}}\index{HybridAStar::DynamicVoronoi@{HybridAStar::DynamicVoronoi}!free@{free}}}\mbox{\Hypertarget{classHybridAStar_1_1DynamicVoronoi_a5516c47ad77b554fba6cccc37c53d9ecafadb491e274cf08f1239c3e2a2227b35}\label{classHybridAStar_1_1DynamicVoronoi_a5516c47ad77b554fba6cccc37c53d9ecafadb491e274cf08f1239c3e2a2227b35}} 
+free&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{occupied@{occupied}!HybridAStar::DynamicVoronoi@{HybridAStar::DynamicVoronoi}}\index{HybridAStar::DynamicVoronoi@{HybridAStar::DynamicVoronoi}!occupied@{occupied}}}\mbox{\Hypertarget{classHybridAStar_1_1DynamicVoronoi_a5516c47ad77b554fba6cccc37c53d9eca489676145c4fd15306748f826b771bf1}\label{classHybridAStar_1_1DynamicVoronoi_a5516c47ad77b554fba6cccc37c53d9eca489676145c4fd15306748f826b771bf1}} 
+occupied&\\
+\hline
+
+\end{DoxyEnumFields}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classHybridAStar_1_1DynamicVoronoi_a46ff0dd6d07c044901f1865fe37fef05}\label{classHybridAStar_1_1DynamicVoronoi_a46ff0dd6d07c044901f1865fe37fef05}} 
+\index{HybridAStar::DynamicVoronoi@{HybridAStar::DynamicVoronoi}!DynamicVoronoi@{DynamicVoronoi}}
+\index{DynamicVoronoi@{DynamicVoronoi}!HybridAStar::DynamicVoronoi@{HybridAStar::DynamicVoronoi}}
+\doxysubsubsection{\texorpdfstring{DynamicVoronoi()}{DynamicVoronoi()}}
+{\footnotesize\ttfamily Dynamic\+Voronoi\+::\+Dynamic\+Voronoi (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classHybridAStar_1_1DynamicVoronoi_a8f7a2e09d5343352c59b7994e59f1673}\label{classHybridAStar_1_1DynamicVoronoi_a8f7a2e09d5343352c59b7994e59f1673}} 
+\index{HybridAStar::DynamicVoronoi@{HybridAStar::DynamicVoronoi}!````~DynamicVoronoi@{$\sim$DynamicVoronoi}}
+\index{````~DynamicVoronoi@{$\sim$DynamicVoronoi}!HybridAStar::DynamicVoronoi@{HybridAStar::DynamicVoronoi}}
+\doxysubsubsection{\texorpdfstring{$\sim$DynamicVoronoi()}{~DynamicVoronoi()}}
+{\footnotesize\ttfamily Dynamic\+Voronoi\+::$\sim$\+Dynamic\+Voronoi (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classHybridAStar_1_1DynamicVoronoi_ad806063cde998821aa549bfaee8a829d}\label{classHybridAStar_1_1DynamicVoronoi_ad806063cde998821aa549bfaee8a829d}} 
+\index{HybridAStar::DynamicVoronoi@{HybridAStar::DynamicVoronoi}!checkVoro@{checkVoro}}
+\index{checkVoro@{checkVoro}!HybridAStar::DynamicVoronoi@{HybridAStar::DynamicVoronoi}}
+\doxysubsubsection{\texorpdfstring{checkVoro()}{checkVoro()}}
+{\footnotesize\ttfamily void Dynamic\+Voronoi\+::check\+Voro (\begin{DoxyParamCaption}\item[{int}]{x,  }\item[{int}]{y,  }\item[{int}]{nx,  }\item[{int}]{ny,  }\item[{\mbox{\hyperlink{structHybridAStar_1_1DynamicVoronoi_1_1dataCell}{data\+Cell}} \&}]{c,  }\item[{\mbox{\hyperlink{structHybridAStar_1_1DynamicVoronoi_1_1dataCell}{data\+Cell}} \&}]{nc }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classHybridAStar_1_1DynamicVoronoi_aa93b79d97c4e8347c812b6f9bbca20da}\label{classHybridAStar_1_1DynamicVoronoi_aa93b79d97c4e8347c812b6f9bbca20da}} 
+\index{HybridAStar::DynamicVoronoi@{HybridAStar::DynamicVoronoi}!clearCell@{clearCell}}
+\index{clearCell@{clearCell}!HybridAStar::DynamicVoronoi@{HybridAStar::DynamicVoronoi}}
+\doxysubsubsection{\texorpdfstring{clearCell()}{clearCell()}}
+{\footnotesize\ttfamily void Dynamic\+Voronoi\+::clear\+Cell (\begin{DoxyParamCaption}\item[{int}]{x,  }\item[{int}]{y }\end{DoxyParamCaption})}
+
+
+
+remove an obstacle at the specified cell coordinate 
+
+\mbox{\Hypertarget{classHybridAStar_1_1DynamicVoronoi_ab5a8ebf12a256310e43c3f91b5f84e14}\label{classHybridAStar_1_1DynamicVoronoi_ab5a8ebf12a256310e43c3f91b5f84e14}} 
+\index{HybridAStar::DynamicVoronoi@{HybridAStar::DynamicVoronoi}!commitAndColorize@{commitAndColorize}}
+\index{commitAndColorize@{commitAndColorize}!HybridAStar::DynamicVoronoi@{HybridAStar::DynamicVoronoi}}
+\doxysubsubsection{\texorpdfstring{commitAndColorize()}{commitAndColorize()}}
+{\footnotesize\ttfamily void Dynamic\+Voronoi\+::commit\+And\+Colorize (\begin{DoxyParamCaption}\item[{bool}]{update\+Real\+Dist = {\ttfamily true} }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classHybridAStar_1_1DynamicVoronoi_a3c9c1236339ff3a879c6d306dbf81c50}\label{classHybridAStar_1_1DynamicVoronoi_a3c9c1236339ff3a879c6d306dbf81c50}} 
+\index{HybridAStar::DynamicVoronoi@{HybridAStar::DynamicVoronoi}!exchangeObstacles@{exchangeObstacles}}
+\index{exchangeObstacles@{exchangeObstacles}!HybridAStar::DynamicVoronoi@{HybridAStar::DynamicVoronoi}}
+\doxysubsubsection{\texorpdfstring{exchangeObstacles()}{exchangeObstacles()}}
+{\footnotesize\ttfamily void Dynamic\+Voronoi\+::exchange\+Obstacles (\begin{DoxyParamCaption}\item[{std\+::vector$<$ \mbox{\hyperlink{point_8h_a029053565997837c89e2448248703492}{I\+N\+T\+P\+O\+I\+NT}} $>$}]{new\+Obstacles }\end{DoxyParamCaption})}
+
+
+
+remove old dynamic obstacles and add the new ones 
+
+\mbox{\Hypertarget{classHybridAStar_1_1DynamicVoronoi_a31a96e01c16437c54050acaaf1a05886}\label{classHybridAStar_1_1DynamicVoronoi_a31a96e01c16437c54050acaaf1a05886}} 
+\index{HybridAStar::DynamicVoronoi@{HybridAStar::DynamicVoronoi}!getDistance@{getDistance}}
+\index{getDistance@{getDistance}!HybridAStar::DynamicVoronoi@{HybridAStar::DynamicVoronoi}}
+\doxysubsubsection{\texorpdfstring{getDistance()}{getDistance()}}
+{\footnotesize\ttfamily float Dynamic\+Voronoi\+::get\+Distance (\begin{DoxyParamCaption}\item[{int}]{x,  }\item[{int}]{y }\end{DoxyParamCaption})}
+
+
+
+returns the obstacle distance at the specified location 
+
+\mbox{\Hypertarget{classHybridAStar_1_1DynamicVoronoi_aa93e35b00ef98dc6fce8844cdae48f98}\label{classHybridAStar_1_1DynamicVoronoi_aa93e35b00ef98dc6fce8844cdae48f98}} 
+\index{HybridAStar::DynamicVoronoi@{HybridAStar::DynamicVoronoi}!getSizeX@{getSizeX}}
+\index{getSizeX@{getSizeX}!HybridAStar::DynamicVoronoi@{HybridAStar::DynamicVoronoi}}
+\doxysubsubsection{\texorpdfstring{getSizeX()}{getSizeX()}}
+{\footnotesize\ttfamily unsigned int Hybrid\+A\+Star\+::\+Dynamic\+Voronoi\+::get\+SizeX (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+returns the horizontal size of the workspace/map 
+
+\mbox{\Hypertarget{classHybridAStar_1_1DynamicVoronoi_a3c4cb39b33dae43a0ace06c0a4709818}\label{classHybridAStar_1_1DynamicVoronoi_a3c4cb39b33dae43a0ace06c0a4709818}} 
+\index{HybridAStar::DynamicVoronoi@{HybridAStar::DynamicVoronoi}!getSizeY@{getSizeY}}
+\index{getSizeY@{getSizeY}!HybridAStar::DynamicVoronoi@{HybridAStar::DynamicVoronoi}}
+\doxysubsubsection{\texorpdfstring{getSizeY()}{getSizeY()}}
+{\footnotesize\ttfamily unsigned int Hybrid\+A\+Star\+::\+Dynamic\+Voronoi\+::get\+SizeY (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+returns the vertical size of the workspace/map 
+
+\mbox{\Hypertarget{classHybridAStar_1_1DynamicVoronoi_a0f853b1d5f0920ad6853ccf9fc1ee9f6}\label{classHybridAStar_1_1DynamicVoronoi_a0f853b1d5f0920ad6853ccf9fc1ee9f6}} 
+\index{HybridAStar::DynamicVoronoi@{HybridAStar::DynamicVoronoi}!initializeEmpty@{initializeEmpty}}
+\index{initializeEmpty@{initializeEmpty}!HybridAStar::DynamicVoronoi@{HybridAStar::DynamicVoronoi}}
+\doxysubsubsection{\texorpdfstring{initializeEmpty()}{initializeEmpty()}}
+{\footnotesize\ttfamily void Dynamic\+Voronoi\+::initialize\+Empty (\begin{DoxyParamCaption}\item[{int}]{\+\_\+sizeX,  }\item[{int}]{\+\_\+sizeY,  }\item[{bool}]{init\+Grid\+Map = {\ttfamily true} }\end{DoxyParamCaption})}
+
+
+
+Initialization with an empty map. 
+
+\mbox{\Hypertarget{classHybridAStar_1_1DynamicVoronoi_ae4650e19a4754f476508dafb08ff8fed}\label{classHybridAStar_1_1DynamicVoronoi_ae4650e19a4754f476508dafb08ff8fed}} 
+\index{HybridAStar::DynamicVoronoi@{HybridAStar::DynamicVoronoi}!initializeMap@{initializeMap}}
+\index{initializeMap@{initializeMap}!HybridAStar::DynamicVoronoi@{HybridAStar::DynamicVoronoi}}
+\doxysubsubsection{\texorpdfstring{initializeMap()}{initializeMap()}}
+{\footnotesize\ttfamily void Dynamic\+Voronoi\+::initialize\+Map (\begin{DoxyParamCaption}\item[{int}]{\+\_\+sizeX,  }\item[{int}]{\+\_\+sizeY,  }\item[{bool $\ast$$\ast$}]{\+\_\+grid\+Map }\end{DoxyParamCaption})}
+
+
+
+Initialization with a given binary map (false==free, true==occupied) 
+
+\mbox{\Hypertarget{classHybridAStar_1_1DynamicVoronoi_afc877b1ff972ed55b0268410d559720a}\label{classHybridAStar_1_1DynamicVoronoi_afc877b1ff972ed55b0268410d559720a}} 
+\index{HybridAStar::DynamicVoronoi@{HybridAStar::DynamicVoronoi}!isOccupied@{isOccupied}}
+\index{isOccupied@{isOccupied}!HybridAStar::DynamicVoronoi@{HybridAStar::DynamicVoronoi}}
+\doxysubsubsection{\texorpdfstring{isOccupied()}{isOccupied()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily bool Dynamic\+Voronoi\+::is\+Occupied (\begin{DoxyParamCaption}\item[{int \&}]{x,  }\item[{int \&}]{y,  }\item[{\mbox{\hyperlink{structHybridAStar_1_1DynamicVoronoi_1_1dataCell}{data\+Cell}} \&}]{c }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classHybridAStar_1_1DynamicVoronoi_a11a52dda18a91f59e610b1e2acdc499f}\label{classHybridAStar_1_1DynamicVoronoi_a11a52dda18a91f59e610b1e2acdc499f}} 
+\index{HybridAStar::DynamicVoronoi@{HybridAStar::DynamicVoronoi}!isOccupied@{isOccupied}}
+\index{isOccupied@{isOccupied}!HybridAStar::DynamicVoronoi@{HybridAStar::DynamicVoronoi}}
+\doxysubsubsection{\texorpdfstring{isOccupied()}{isOccupied()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily bool Dynamic\+Voronoi\+::is\+Occupied (\begin{DoxyParamCaption}\item[{int}]{x,  }\item[{int}]{y }\end{DoxyParamCaption})}
+
+
+
+checks whether the specficied location is occupied 
+
+\mbox{\Hypertarget{classHybridAStar_1_1DynamicVoronoi_a2f2447c59f8057179388df92d1ee8509}\label{classHybridAStar_1_1DynamicVoronoi_a2f2447c59f8057179388df92d1ee8509}} 
+\index{HybridAStar::DynamicVoronoi@{HybridAStar::DynamicVoronoi}!isVoronoi@{isVoronoi}}
+\index{isVoronoi@{isVoronoi}!HybridAStar::DynamicVoronoi@{HybridAStar::DynamicVoronoi}}
+\doxysubsubsection{\texorpdfstring{isVoronoi()}{isVoronoi()}}
+{\footnotesize\ttfamily bool Dynamic\+Voronoi\+::is\+Voronoi (\begin{DoxyParamCaption}\item[{int}]{x,  }\item[{int}]{y }\end{DoxyParamCaption})}
+
+
+
+returns whether the specified cell is part of the (pruned) Voronoi graph 
+
+\mbox{\Hypertarget{classHybridAStar_1_1DynamicVoronoi_a299433d390d9b8ffe5b67cfaadef8215}\label{classHybridAStar_1_1DynamicVoronoi_a299433d390d9b8ffe5b67cfaadef8215}} 
+\index{HybridAStar::DynamicVoronoi@{HybridAStar::DynamicVoronoi}!markerMatch@{markerMatch}}
+\index{markerMatch@{markerMatch}!HybridAStar::DynamicVoronoi@{HybridAStar::DynamicVoronoi}}
+\doxysubsubsection{\texorpdfstring{markerMatch()}{markerMatch()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classHybridAStar_1_1DynamicVoronoi_ad4169acc5061c61c54b5f2b82bc0d283}{Dynamic\+Voronoi\+::marker\+Match\+Result}} Dynamic\+Voronoi\+::marker\+Match (\begin{DoxyParamCaption}\item[{int}]{x,  }\item[{int}]{y }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classHybridAStar_1_1DynamicVoronoi_aecb1202c10fb0d67c0363490971f0a53}\label{classHybridAStar_1_1DynamicVoronoi_aecb1202c10fb0d67c0363490971f0a53}} 
+\index{HybridAStar::DynamicVoronoi@{HybridAStar::DynamicVoronoi}!occupyCell@{occupyCell}}
+\index{occupyCell@{occupyCell}!HybridAStar::DynamicVoronoi@{HybridAStar::DynamicVoronoi}}
+\doxysubsubsection{\texorpdfstring{occupyCell()}{occupyCell()}}
+{\footnotesize\ttfamily void Dynamic\+Voronoi\+::occupy\+Cell (\begin{DoxyParamCaption}\item[{int}]{x,  }\item[{int}]{y }\end{DoxyParamCaption})}
+
+
+
+add an obstacle at the specified cell coordinate 
+
+\mbox{\Hypertarget{classHybridAStar_1_1DynamicVoronoi_a152affee9cd562ae29f85768c6b6f2e3}\label{classHybridAStar_1_1DynamicVoronoi_a152affee9cd562ae29f85768c6b6f2e3}} 
+\index{HybridAStar::DynamicVoronoi@{HybridAStar::DynamicVoronoi}!prune@{prune}}
+\index{prune@{prune}!HybridAStar::DynamicVoronoi@{HybridAStar::DynamicVoronoi}}
+\doxysubsubsection{\texorpdfstring{prune()}{prune()}}
+{\footnotesize\ttfamily void Dynamic\+Voronoi\+::prune (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+prune the Voronoi diagram 
+
+\mbox{\Hypertarget{classHybridAStar_1_1DynamicVoronoi_aa0282ffbf595429144027258d38c3b40}\label{classHybridAStar_1_1DynamicVoronoi_aa0282ffbf595429144027258d38c3b40}} 
+\index{HybridAStar::DynamicVoronoi@{HybridAStar::DynamicVoronoi}!recheckVoro@{recheckVoro}}
+\index{recheckVoro@{recheckVoro}!HybridAStar::DynamicVoronoi@{HybridAStar::DynamicVoronoi}}
+\doxysubsubsection{\texorpdfstring{recheckVoro()}{recheckVoro()}}
+{\footnotesize\ttfamily void Hybrid\+A\+Star\+::\+Dynamic\+Voronoi\+::recheck\+Voro (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classHybridAStar_1_1DynamicVoronoi_a5b02541f71e8d355fccc642dfbab37d2}\label{classHybridAStar_1_1DynamicVoronoi_a5b02541f71e8d355fccc642dfbab37d2}} 
+\index{HybridAStar::DynamicVoronoi@{HybridAStar::DynamicVoronoi}!removeObstacle@{removeObstacle}}
+\index{removeObstacle@{removeObstacle}!HybridAStar::DynamicVoronoi@{HybridAStar::DynamicVoronoi}}
+\doxysubsubsection{\texorpdfstring{removeObstacle()}{removeObstacle()}}
+{\footnotesize\ttfamily void Dynamic\+Voronoi\+::remove\+Obstacle (\begin{DoxyParamCaption}\item[{int}]{x,  }\item[{int}]{y }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classHybridAStar_1_1DynamicVoronoi_a095be0a50023d7c144c863b804b47b67}\label{classHybridAStar_1_1DynamicVoronoi_a095be0a50023d7c144c863b804b47b67}} 
+\index{HybridAStar::DynamicVoronoi@{HybridAStar::DynamicVoronoi}!reviveVoroNeighbors@{reviveVoroNeighbors}}
+\index{reviveVoroNeighbors@{reviveVoroNeighbors}!HybridAStar::DynamicVoronoi@{HybridAStar::DynamicVoronoi}}
+\doxysubsubsection{\texorpdfstring{reviveVoroNeighbors()}{reviveVoroNeighbors()}}
+{\footnotesize\ttfamily void Dynamic\+Voronoi\+::revive\+Voro\+Neighbors (\begin{DoxyParamCaption}\item[{int \&}]{x,  }\item[{int \&}]{y }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classHybridAStar_1_1DynamicVoronoi_aa9719e4ba2c9f766fba77c76fddeb548}\label{classHybridAStar_1_1DynamicVoronoi_aa9719e4ba2c9f766fba77c76fddeb548}} 
+\index{HybridAStar::DynamicVoronoi@{HybridAStar::DynamicVoronoi}!setObstacle@{setObstacle}}
+\index{setObstacle@{setObstacle}!HybridAStar::DynamicVoronoi@{HybridAStar::DynamicVoronoi}}
+\doxysubsubsection{\texorpdfstring{setObstacle()}{setObstacle()}}
+{\footnotesize\ttfamily void Dynamic\+Voronoi\+::set\+Obstacle (\begin{DoxyParamCaption}\item[{int}]{x,  }\item[{int}]{y }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classHybridAStar_1_1DynamicVoronoi_a1597506b8c427486884c2b2ec3492cdd}\label{classHybridAStar_1_1DynamicVoronoi_a1597506b8c427486884c2b2ec3492cdd}} 
+\index{HybridAStar::DynamicVoronoi@{HybridAStar::DynamicVoronoi}!update@{update}}
+\index{update@{update}!HybridAStar::DynamicVoronoi@{HybridAStar::DynamicVoronoi}}
+\doxysubsubsection{\texorpdfstring{update()}{update()}}
+{\footnotesize\ttfamily void Dynamic\+Voronoi\+::update (\begin{DoxyParamCaption}\item[{bool}]{update\+Real\+Dist = {\ttfamily true} }\end{DoxyParamCaption})}
+
+
+
+update distance map and Voronoi diagram to reflect the changes 
+
+\mbox{\Hypertarget{classHybridAStar_1_1DynamicVoronoi_a8da1edbbb4f8ce37a67852e8be20d13c}\label{classHybridAStar_1_1DynamicVoronoi_a8da1edbbb4f8ce37a67852e8be20d13c}} 
+\index{HybridAStar::DynamicVoronoi@{HybridAStar::DynamicVoronoi}!visualize@{visualize}}
+\index{visualize@{visualize}!HybridAStar::DynamicVoronoi@{HybridAStar::DynamicVoronoi}}
+\doxysubsubsection{\texorpdfstring{visualize()}{visualize()}}
+{\footnotesize\ttfamily void Dynamic\+Voronoi\+::visualize (\begin{DoxyParamCaption}\item[{const char $\ast$}]{filename = {\ttfamily \char`\"{}result.ppm\char`\"{}} }\end{DoxyParamCaption})}
+
+
+
+write the current distance map and voronoi diagram as ppm file 
+
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{classHybridAStar_1_1DynamicVoronoi_ac5e390aeb9d002a83fbe0c2928d8f4b2}\label{classHybridAStar_1_1DynamicVoronoi_ac5e390aeb9d002a83fbe0c2928d8f4b2}} 
+\index{HybridAStar::DynamicVoronoi@{HybridAStar::DynamicVoronoi}!addList@{addList}}
+\index{addList@{addList}!HybridAStar::DynamicVoronoi@{HybridAStar::DynamicVoronoi}}
+\doxysubsubsection{\texorpdfstring{addList}{addList}}
+{\footnotesize\ttfamily std\+::vector$<$\mbox{\hyperlink{point_8h_a029053565997837c89e2448248703492}{I\+N\+T\+P\+O\+I\+NT}}$>$ Hybrid\+A\+Star\+::\+Dynamic\+Voronoi\+::add\+List}
+
+\mbox{\Hypertarget{classHybridAStar_1_1DynamicVoronoi_a1b01c9fd8a31173ee9da2ef1bcdf4afe}\label{classHybridAStar_1_1DynamicVoronoi_a1b01c9fd8a31173ee9da2ef1bcdf4afe}} 
+\index{HybridAStar::DynamicVoronoi@{HybridAStar::DynamicVoronoi}!data@{data}}
+\index{data@{data}!HybridAStar::DynamicVoronoi@{HybridAStar::DynamicVoronoi}}
+\doxysubsubsection{\texorpdfstring{data}{data}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structHybridAStar_1_1DynamicVoronoi_1_1dataCell}{data\+Cell}}$\ast$$\ast$ Hybrid\+A\+Star\+::\+Dynamic\+Voronoi\+::data}
+
+\mbox{\Hypertarget{classHybridAStar_1_1DynamicVoronoi_a6848f8a16f5881c0e8957aafc8cf276f}\label{classHybridAStar_1_1DynamicVoronoi_a6848f8a16f5881c0e8957aafc8cf276f}} 
+\index{HybridAStar::DynamicVoronoi@{HybridAStar::DynamicVoronoi}!doubleThreshold@{doubleThreshold}}
+\index{doubleThreshold@{doubleThreshold}!HybridAStar::DynamicVoronoi@{HybridAStar::DynamicVoronoi}}
+\doxysubsubsection{\texorpdfstring{doubleThreshold}{doubleThreshold}}
+{\footnotesize\ttfamily double Hybrid\+A\+Star\+::\+Dynamic\+Voronoi\+::double\+Threshold}
+
+\mbox{\Hypertarget{classHybridAStar_1_1DynamicVoronoi_ac3dfdf6c53c82b19aa2b3cb8e4c4baf1}\label{classHybridAStar_1_1DynamicVoronoi_ac3dfdf6c53c82b19aa2b3cb8e4c4baf1}} 
+\index{HybridAStar::DynamicVoronoi@{HybridAStar::DynamicVoronoi}!gridMap@{gridMap}}
+\index{gridMap@{gridMap}!HybridAStar::DynamicVoronoi@{HybridAStar::DynamicVoronoi}}
+\doxysubsubsection{\texorpdfstring{gridMap}{gridMap}}
+{\footnotesize\ttfamily bool$\ast$$\ast$ Hybrid\+A\+Star\+::\+Dynamic\+Voronoi\+::grid\+Map}
+
+\mbox{\Hypertarget{classHybridAStar_1_1DynamicVoronoi_a8969051fa4edd4ce5c21640a3d971b86}\label{classHybridAStar_1_1DynamicVoronoi_a8969051fa4edd4ce5c21640a3d971b86}} 
+\index{HybridAStar::DynamicVoronoi@{HybridAStar::DynamicVoronoi}!lastObstacles@{lastObstacles}}
+\index{lastObstacles@{lastObstacles}!HybridAStar::DynamicVoronoi@{HybridAStar::DynamicVoronoi}}
+\doxysubsubsection{\texorpdfstring{lastObstacles}{lastObstacles}}
+{\footnotesize\ttfamily std\+::vector$<$\mbox{\hyperlink{point_8h_a029053565997837c89e2448248703492}{I\+N\+T\+P\+O\+I\+NT}}$>$ Hybrid\+A\+Star\+::\+Dynamic\+Voronoi\+::last\+Obstacles}
+
+\mbox{\Hypertarget{classHybridAStar_1_1DynamicVoronoi_a31c064b306618aa3365482fde9bf4d8e}\label{classHybridAStar_1_1DynamicVoronoi_a31c064b306618aa3365482fde9bf4d8e}} 
+\index{HybridAStar::DynamicVoronoi@{HybridAStar::DynamicVoronoi}!open@{open}}
+\index{open@{open}!HybridAStar::DynamicVoronoi@{HybridAStar::DynamicVoronoi}}
+\doxysubsubsection{\texorpdfstring{open}{open}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classHybridAStar_1_1BucketPrioQueue}{Bucket\+Prio\+Queue}} Hybrid\+A\+Star\+::\+Dynamic\+Voronoi\+::open}
+
+\mbox{\Hypertarget{classHybridAStar_1_1DynamicVoronoi_a28816284aaa825fb7de5dd0892e52152}\label{classHybridAStar_1_1DynamicVoronoi_a28816284aaa825fb7de5dd0892e52152}} 
+\index{HybridAStar::DynamicVoronoi@{HybridAStar::DynamicVoronoi}!padding@{padding}}
+\index{padding@{padding}!HybridAStar::DynamicVoronoi@{HybridAStar::DynamicVoronoi}}
+\doxysubsubsection{\texorpdfstring{padding}{padding}}
+{\footnotesize\ttfamily int Hybrid\+A\+Star\+::\+Dynamic\+Voronoi\+::padding}
+
+\mbox{\Hypertarget{classHybridAStar_1_1DynamicVoronoi_a8dc0d31041ac006cf7d2b4df71f63c23}\label{classHybridAStar_1_1DynamicVoronoi_a8dc0d31041ac006cf7d2b4df71f63c23}} 
+\index{HybridAStar::DynamicVoronoi@{HybridAStar::DynamicVoronoi}!pruneQueue@{pruneQueue}}
+\index{pruneQueue@{pruneQueue}!HybridAStar::DynamicVoronoi@{HybridAStar::DynamicVoronoi}}
+\doxysubsubsection{\texorpdfstring{pruneQueue}{pruneQueue}}
+{\footnotesize\ttfamily std\+::queue$<$\mbox{\hyperlink{point_8h_a029053565997837c89e2448248703492}{I\+N\+T\+P\+O\+I\+NT}}$>$ Hybrid\+A\+Star\+::\+Dynamic\+Voronoi\+::prune\+Queue}
+
+\mbox{\Hypertarget{classHybridAStar_1_1DynamicVoronoi_a56234634fc440cd698d499f674f6349b}\label{classHybridAStar_1_1DynamicVoronoi_a56234634fc440cd698d499f674f6349b}} 
+\index{HybridAStar::DynamicVoronoi@{HybridAStar::DynamicVoronoi}!removeList@{removeList}}
+\index{removeList@{removeList}!HybridAStar::DynamicVoronoi@{HybridAStar::DynamicVoronoi}}
+\doxysubsubsection{\texorpdfstring{removeList}{removeList}}
+{\footnotesize\ttfamily std\+::vector$<$\mbox{\hyperlink{point_8h_a029053565997837c89e2448248703492}{I\+N\+T\+P\+O\+I\+NT}}$>$ Hybrid\+A\+Star\+::\+Dynamic\+Voronoi\+::remove\+List}
+
+\mbox{\Hypertarget{classHybridAStar_1_1DynamicVoronoi_a0321ae73d45fa3a9b7a4ec3b77c1fbbc}\label{classHybridAStar_1_1DynamicVoronoi_a0321ae73d45fa3a9b7a4ec3b77c1fbbc}} 
+\index{HybridAStar::DynamicVoronoi@{HybridAStar::DynamicVoronoi}!sizeX@{sizeX}}
+\index{sizeX@{sizeX}!HybridAStar::DynamicVoronoi@{HybridAStar::DynamicVoronoi}}
+\doxysubsubsection{\texorpdfstring{sizeX}{sizeX}}
+{\footnotesize\ttfamily int Hybrid\+A\+Star\+::\+Dynamic\+Voronoi\+::sizeX}
+
+\mbox{\Hypertarget{classHybridAStar_1_1DynamicVoronoi_a6d926a72ad5dbd0ea70123d9a6f3cd55}\label{classHybridAStar_1_1DynamicVoronoi_a6d926a72ad5dbd0ea70123d9a6f3cd55}} 
+\index{HybridAStar::DynamicVoronoi@{HybridAStar::DynamicVoronoi}!sizeY@{sizeY}}
+\index{sizeY@{sizeY}!HybridAStar::DynamicVoronoi@{HybridAStar::DynamicVoronoi}}
+\doxysubsubsection{\texorpdfstring{sizeY}{sizeY}}
+{\footnotesize\ttfamily int Hybrid\+A\+Star\+::\+Dynamic\+Voronoi\+::sizeY}
+
+\mbox{\Hypertarget{classHybridAStar_1_1DynamicVoronoi_a2aed5c84b5add70e41de317e3e517471}\label{classHybridAStar_1_1DynamicVoronoi_a2aed5c84b5add70e41de317e3e517471}} 
+\index{HybridAStar::DynamicVoronoi@{HybridAStar::DynamicVoronoi}!sqrt2@{sqrt2}}
+\index{sqrt2@{sqrt2}!HybridAStar::DynamicVoronoi@{HybridAStar::DynamicVoronoi}}
+\doxysubsubsection{\texorpdfstring{sqrt2}{sqrt2}}
+{\footnotesize\ttfamily double Hybrid\+A\+Star\+::\+Dynamic\+Voronoi\+::sqrt2}
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+geometry/\mbox{\hyperlink{dynamicvoronoi_8h}{dynamicvoronoi.\+h}}\item 
+geometry/\mbox{\hyperlink{dynamicvoronoi_8cpp}{dynamicvoronoi.\+cpp}}\end{DoxyCompactItemize}

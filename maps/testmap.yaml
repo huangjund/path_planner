@@ -1,0 +1,6 @@
+image: map_vnl_1cm.png
+resolution: 0.01
+origin: [0.0, 0.0, 0.0]
+occupied_thresh: 0.01
+free_thresh: 0.01
+negate: 0

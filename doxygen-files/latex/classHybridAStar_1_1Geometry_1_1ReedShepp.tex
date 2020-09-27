@@ -1,0 +1,246 @@
+\hypertarget{classHybridAStar_1_1Geometry_1_1ReedShepp}{}\doxysection{Hybrid\+A\+Star\+::Geometry\+::Reed\+Shepp Class Reference}
+\label{classHybridAStar_1_1Geometry_1_1ReedShepp}\index{HybridAStar::Geometry::ReedShepp@{HybridAStar::Geometry::ReedShepp}}
+
+
+{\ttfamily \#include $<$Reeds\+Shepp\+Path.\+h$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classHybridAStar_1_1Geometry_1_1ReedShepp_a742b8737b9fe0b688ac10cf55d6c3339}{Reed\+Shepp}} (const double max\+\_\+kappa, const double step\+\_\+size)
+\item 
+bool \mbox{\hyperlink{classHybridAStar_1_1Geometry_1_1ReedShepp_a728ee220f3bddb2a8a1ba612a79247ab}{Shortest\+R\+SP}} (const std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classHybridAStar_1_1Geometry_1_1Node3d}{Node3d}} $>$ start\+\_\+node, const std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classHybridAStar_1_1Geometry_1_1Node3d}{Node3d}} $>$ end\+\_\+node, \mbox{\hyperlink{structHybridAStar_1_1Geometry_1_1ReedSheppPath}{Reed\+Shepp\+Path}} \&optimal\+\_\+path)
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+bool \mbox{\hyperlink{classHybridAStar_1_1Geometry_1_1ReedShepp_ac5ad88db3a6275f41e4a6f818a35d227}{Generate\+R\+S\+Ps}} (const std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classHybridAStar_1_1Geometry_1_1Node3d}{Node3d}} $>$ start\+\_\+node, const std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classHybridAStar_1_1Geometry_1_1Node3d}{Node3d}} $>$ end\+\_\+node, std\+::vector$<$ \mbox{\hyperlink{structHybridAStar_1_1Geometry_1_1ReedSheppPath}{Reed\+Shepp\+Path}} $>$ $\ast$all\+\_\+possible\+\_\+paths)
+\item 
+bool \mbox{\hyperlink{classHybridAStar_1_1Geometry_1_1ReedShepp_aa45c71b9626bada19f99edb0badcdbc7}{Generate\+R\+SP}} (const std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classHybridAStar_1_1Geometry_1_1Node3d}{Node3d}} $>$ start\+\_\+node, const std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classHybridAStar_1_1Geometry_1_1Node3d}{Node3d}} $>$ end\+\_\+node, std\+::vector$<$ \mbox{\hyperlink{structHybridAStar_1_1Geometry_1_1ReedSheppPath}{Reed\+Shepp\+Path}} $>$ $\ast$all\+\_\+possible\+\_\+paths)
+\item 
+bool \mbox{\hyperlink{classHybridAStar_1_1Geometry_1_1ReedShepp_acceb5a9e0cbc496ebc1f2b315ebe4801}{Generate\+R\+S\+P\+Par}} (const std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classHybridAStar_1_1Geometry_1_1Node3d}{Node3d}} $>$ start\+\_\+node, const std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classHybridAStar_1_1Geometry_1_1Node3d}{Node3d}} $>$ end\+\_\+node, std\+::vector$<$ \mbox{\hyperlink{structHybridAStar_1_1Geometry_1_1ReedSheppPath}{Reed\+Shepp\+Path}} $>$ $\ast$all\+\_\+possible\+\_\+paths)
+\item 
+bool \mbox{\hyperlink{classHybridAStar_1_1Geometry_1_1ReedShepp_a303df07899d3783b64a03eaaaa511ec2}{Generate\+Local\+Configurations}} (const std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classHybridAStar_1_1Geometry_1_1Node3d}{Node3d}} $>$ start\+\_\+node, const std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classHybridAStar_1_1Geometry_1_1Node3d}{Node3d}} $>$ end\+\_\+node, \mbox{\hyperlink{structHybridAStar_1_1Geometry_1_1ReedSheppPath}{Reed\+Shepp\+Path}} $\ast$shortest\+\_\+path)
+\item 
+void \mbox{\hyperlink{classHybridAStar_1_1Geometry_1_1ReedShepp_a712b1e34421fc12c5506db389e1b1b06}{Interpolation}} (const int index, const double pd, const char m, const double ox, const double oy, const double ophi, std\+::vector$<$ double $>$ $\ast$px, std\+::vector$<$ double $>$ $\ast$py, std\+::vector$<$ double $>$ $\ast$pphi, std\+::vector$<$ bool $>$ $\ast$pgear)
+\item 
+bool \mbox{\hyperlink{classHybridAStar_1_1Geometry_1_1ReedShepp_a187b88212bdf35fd352db3af57d5e909}{Set\+R\+SP}} (const int size, const double $\ast$lengths, const char $\ast$types, std\+::vector$<$ \mbox{\hyperlink{structHybridAStar_1_1Geometry_1_1ReedSheppPath}{Reed\+Shepp\+Path}} $>$ $\ast$all\+\_\+possible\+\_\+paths)
+\item 
+bool \mbox{\hyperlink{classHybridAStar_1_1Geometry_1_1ReedShepp_a87a710cf541c188727895c141cd2b159}{Set\+R\+S\+P\+Par}} (const int size, const double $\ast$lengths, const std\+::string \&types, std\+::vector$<$ \mbox{\hyperlink{structHybridAStar_1_1Geometry_1_1ReedSheppPath}{Reed\+Shepp\+Path}} $>$ $\ast$all\+\_\+possible\+\_\+paths, const int idx)
+\item 
+bool \mbox{\hyperlink{classHybridAStar_1_1Geometry_1_1ReedShepp_af417b4d929723b31d19a4781f77ebc13}{S\+CS}} (const double x, const double y, const double phi, std\+::vector$<$ \mbox{\hyperlink{structHybridAStar_1_1Geometry_1_1ReedSheppPath}{Reed\+Shepp\+Path}} $>$ $\ast$all\+\_\+possible\+\_\+paths)
+\item 
+bool \mbox{\hyperlink{classHybridAStar_1_1Geometry_1_1ReedShepp_ae082336d81ac6b235cdc3cc7045921b3}{C\+SC}} (const double x, const double y, const double phi, std\+::vector$<$ \mbox{\hyperlink{structHybridAStar_1_1Geometry_1_1ReedSheppPath}{Reed\+Shepp\+Path}} $>$ $\ast$all\+\_\+possible\+\_\+paths)
+\item 
+bool \mbox{\hyperlink{classHybridAStar_1_1Geometry_1_1ReedShepp_ae133fc730aa2666ba10e7c276c525e17}{C\+CC}} (const double x, const double y, const double phi, std\+::vector$<$ \mbox{\hyperlink{structHybridAStar_1_1Geometry_1_1ReedSheppPath}{Reed\+Shepp\+Path}} $>$ $\ast$all\+\_\+possible\+\_\+paths)
+\item 
+bool \mbox{\hyperlink{classHybridAStar_1_1Geometry_1_1ReedShepp_acea2f031f313ec91068eb2a77e3c91bd}{C\+C\+CC}} (const double x, const double y, const double phi, std\+::vector$<$ \mbox{\hyperlink{structHybridAStar_1_1Geometry_1_1ReedSheppPath}{Reed\+Shepp\+Path}} $>$ $\ast$all\+\_\+possible\+\_\+paths)
+\item 
+bool \mbox{\hyperlink{classHybridAStar_1_1Geometry_1_1ReedShepp_a17cf19c2b87aea9cfa4905ddf3859b0b}{C\+C\+SC}} (const double x, const double y, const double phi, std\+::vector$<$ \mbox{\hyperlink{structHybridAStar_1_1Geometry_1_1ReedSheppPath}{Reed\+Shepp\+Path}} $>$ $\ast$all\+\_\+possible\+\_\+paths)
+\item 
+bool \mbox{\hyperlink{classHybridAStar_1_1Geometry_1_1ReedShepp_a01a630050456a1ff67bdbab6e2076be3}{C\+C\+S\+CC}} (const double x, const double y, const double phi, std\+::vector$<$ \mbox{\hyperlink{structHybridAStar_1_1Geometry_1_1ReedSheppPath}{Reed\+Shepp\+Path}} $>$ $\ast$all\+\_\+possible\+\_\+paths)
+\item 
+void \mbox{\hyperlink{classHybridAStar_1_1Geometry_1_1ReedShepp_a092779384ee2292851d75d2809ba531b}{L\+SL}} (const double x, const double y, const double phi, \mbox{\hyperlink{structHybridAStar_1_1Geometry_1_1RSPParam}{R\+S\+P\+Param}} $\ast$param)
+\item 
+void \mbox{\hyperlink{classHybridAStar_1_1Geometry_1_1ReedShepp_afde0ca62da1be4dfd2625961938a3341}{L\+SR}} (const double x, const double y, const double phi, \mbox{\hyperlink{structHybridAStar_1_1Geometry_1_1RSPParam}{R\+S\+P\+Param}} $\ast$param)
+\item 
+void \mbox{\hyperlink{classHybridAStar_1_1Geometry_1_1ReedShepp_aed29c0797c40397ca4658b21ec7ccac3}{L\+RL}} (const double x, const double y, const double phi, \mbox{\hyperlink{structHybridAStar_1_1Geometry_1_1RSPParam}{R\+S\+P\+Param}} $\ast$param)
+\item 
+void \mbox{\hyperlink{classHybridAStar_1_1Geometry_1_1ReedShepp_a53a9fe5fde24ec25f5fefee959b8ffcd}{S\+LS}} (const double x, const double y, const double phi, \mbox{\hyperlink{structHybridAStar_1_1Geometry_1_1RSPParam}{R\+S\+P\+Param}} $\ast$param)
+\item 
+void \mbox{\hyperlink{classHybridAStar_1_1Geometry_1_1ReedShepp_a71173382a3a02f5ffff5b1c5c424e5f5}{L\+R\+L\+Rn}} (const double x, const double y, const double phi, \mbox{\hyperlink{structHybridAStar_1_1Geometry_1_1RSPParam}{R\+S\+P\+Param}} $\ast$param)
+\item 
+void \mbox{\hyperlink{classHybridAStar_1_1Geometry_1_1ReedShepp_a2de63dce8e5b5926e88d71661e3e58fc}{L\+R\+L\+Rp}} (const double x, const double y, const double phi, \mbox{\hyperlink{structHybridAStar_1_1Geometry_1_1RSPParam}{R\+S\+P\+Param}} $\ast$param)
+\item 
+void \mbox{\hyperlink{classHybridAStar_1_1Geometry_1_1ReedShepp_a77a5e4631e11b91da17f094ffe4d1ab4}{L\+R\+SR}} (const double x, const double y, const double phi, \mbox{\hyperlink{structHybridAStar_1_1Geometry_1_1RSPParam}{R\+S\+P\+Param}} $\ast$param)
+\item 
+void \mbox{\hyperlink{classHybridAStar_1_1Geometry_1_1ReedShepp_a73b18f6bd55ff32fa2a9c5f769cad512}{L\+R\+SL}} (const double x, const double y, const double phi, \mbox{\hyperlink{structHybridAStar_1_1Geometry_1_1RSPParam}{R\+S\+P\+Param}} $\ast$param)
+\item 
+void \mbox{\hyperlink{classHybridAStar_1_1Geometry_1_1ReedShepp_af9a9fce45e383814cfc92098fa2da60d}{L\+R\+S\+LR}} (const double x, const double y, const double phi, \mbox{\hyperlink{structHybridAStar_1_1Geometry_1_1RSPParam}{R\+S\+P\+Param}} $\ast$param)
+\item 
+std\+::pair$<$ double, double $>$ \mbox{\hyperlink{classHybridAStar_1_1Geometry_1_1ReedShepp_acc66f19834da1b3ebac46d4a5629bcb0}{calc\+\_\+tau\+\_\+omega}} (const double u, const double v, const double xi, const double eta, const double phi)
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+double \mbox{\hyperlink{classHybridAStar_1_1Geometry_1_1ReedShepp_a208cdea57141f3c7edd9ab9d524a6604}{max\+\_\+kappa\+\_\+}}
+\item 
+double \mbox{\hyperlink{classHybridAStar_1_1Geometry_1_1ReedShepp_af2f5bedc97ecc9658e033a220dd3137a}{step\+\_\+size\+\_\+}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classHybridAStar_1_1Geometry_1_1ReedShepp_a742b8737b9fe0b688ac10cf55d6c3339}\label{classHybridAStar_1_1Geometry_1_1ReedShepp_a742b8737b9fe0b688ac10cf55d6c3339}} 
+\index{HybridAStar::Geometry::ReedShepp@{HybridAStar::Geometry::ReedShepp}!ReedShepp@{ReedShepp}}
+\index{ReedShepp@{ReedShepp}!HybridAStar::Geometry::ReedShepp@{HybridAStar::Geometry::ReedShepp}}
+\doxysubsubsection{\texorpdfstring{ReedShepp()}{ReedShepp()}}
+{\footnotesize\ttfamily Hybrid\+A\+Star\+::\+Geometry\+::\+Reed\+Shepp\+::\+Reed\+Shepp (\begin{DoxyParamCaption}\item[{const double}]{max\+\_\+kappa,  }\item[{const double}]{step\+\_\+size }\end{DoxyParamCaption})}
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classHybridAStar_1_1Geometry_1_1ReedShepp_acc66f19834da1b3ebac46d4a5629bcb0}\label{classHybridAStar_1_1Geometry_1_1ReedShepp_acc66f19834da1b3ebac46d4a5629bcb0}} 
+\index{HybridAStar::Geometry::ReedShepp@{HybridAStar::Geometry::ReedShepp}!calc\_tau\_omega@{calc\_tau\_omega}}
+\index{calc\_tau\_omega@{calc\_tau\_omega}!HybridAStar::Geometry::ReedShepp@{HybridAStar::Geometry::ReedShepp}}
+\doxysubsubsection{\texorpdfstring{calc\_tau\_omega()}{calc\_tau\_omega()}}
+{\footnotesize\ttfamily std\+::pair$<$ double, double $>$ Hybrid\+A\+Star\+::\+Geometry\+::\+Reed\+Shepp\+::calc\+\_\+tau\+\_\+omega (\begin{DoxyParamCaption}\item[{const double}]{u,  }\item[{const double}]{v,  }\item[{const double}]{xi,  }\item[{const double}]{eta,  }\item[{const double}]{phi }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{classHybridAStar_1_1Geometry_1_1ReedShepp_ae133fc730aa2666ba10e7c276c525e17}\label{classHybridAStar_1_1Geometry_1_1ReedShepp_ae133fc730aa2666ba10e7c276c525e17}} 
+\index{HybridAStar::Geometry::ReedShepp@{HybridAStar::Geometry::ReedShepp}!CCC@{CCC}}
+\index{CCC@{CCC}!HybridAStar::Geometry::ReedShepp@{HybridAStar::Geometry::ReedShepp}}
+\doxysubsubsection{\texorpdfstring{CCC()}{CCC()}}
+{\footnotesize\ttfamily bool Hybrid\+A\+Star\+::\+Geometry\+::\+Reed\+Shepp\+::\+C\+CC (\begin{DoxyParamCaption}\item[{const double}]{x,  }\item[{const double}]{y,  }\item[{const double}]{phi,  }\item[{std\+::vector$<$ \mbox{\hyperlink{structHybridAStar_1_1Geometry_1_1ReedSheppPath}{Reed\+Shepp\+Path}} $>$ $\ast$}]{all\+\_\+possible\+\_\+paths }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{classHybridAStar_1_1Geometry_1_1ReedShepp_acea2f031f313ec91068eb2a77e3c91bd}\label{classHybridAStar_1_1Geometry_1_1ReedShepp_acea2f031f313ec91068eb2a77e3c91bd}} 
+\index{HybridAStar::Geometry::ReedShepp@{HybridAStar::Geometry::ReedShepp}!CCCC@{CCCC}}
+\index{CCCC@{CCCC}!HybridAStar::Geometry::ReedShepp@{HybridAStar::Geometry::ReedShepp}}
+\doxysubsubsection{\texorpdfstring{CCCC()}{CCCC()}}
+{\footnotesize\ttfamily bool Hybrid\+A\+Star\+::\+Geometry\+::\+Reed\+Shepp\+::\+C\+C\+CC (\begin{DoxyParamCaption}\item[{const double}]{x,  }\item[{const double}]{y,  }\item[{const double}]{phi,  }\item[{std\+::vector$<$ \mbox{\hyperlink{structHybridAStar_1_1Geometry_1_1ReedSheppPath}{Reed\+Shepp\+Path}} $>$ $\ast$}]{all\+\_\+possible\+\_\+paths }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{classHybridAStar_1_1Geometry_1_1ReedShepp_a17cf19c2b87aea9cfa4905ddf3859b0b}\label{classHybridAStar_1_1Geometry_1_1ReedShepp_a17cf19c2b87aea9cfa4905ddf3859b0b}} 
+\index{HybridAStar::Geometry::ReedShepp@{HybridAStar::Geometry::ReedShepp}!CCSC@{CCSC}}
+\index{CCSC@{CCSC}!HybridAStar::Geometry::ReedShepp@{HybridAStar::Geometry::ReedShepp}}
+\doxysubsubsection{\texorpdfstring{CCSC()}{CCSC()}}
+{\footnotesize\ttfamily bool Hybrid\+A\+Star\+::\+Geometry\+::\+Reed\+Shepp\+::\+C\+C\+SC (\begin{DoxyParamCaption}\item[{const double}]{x,  }\item[{const double}]{y,  }\item[{const double}]{phi,  }\item[{std\+::vector$<$ \mbox{\hyperlink{structHybridAStar_1_1Geometry_1_1ReedSheppPath}{Reed\+Shepp\+Path}} $>$ $\ast$}]{all\+\_\+possible\+\_\+paths }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{classHybridAStar_1_1Geometry_1_1ReedShepp_a01a630050456a1ff67bdbab6e2076be3}\label{classHybridAStar_1_1Geometry_1_1ReedShepp_a01a630050456a1ff67bdbab6e2076be3}} 
+\index{HybridAStar::Geometry::ReedShepp@{HybridAStar::Geometry::ReedShepp}!CCSCC@{CCSCC}}
+\index{CCSCC@{CCSCC}!HybridAStar::Geometry::ReedShepp@{HybridAStar::Geometry::ReedShepp}}
+\doxysubsubsection{\texorpdfstring{CCSCC()}{CCSCC()}}
+{\footnotesize\ttfamily bool Hybrid\+A\+Star\+::\+Geometry\+::\+Reed\+Shepp\+::\+C\+C\+S\+CC (\begin{DoxyParamCaption}\item[{const double}]{x,  }\item[{const double}]{y,  }\item[{const double}]{phi,  }\item[{std\+::vector$<$ \mbox{\hyperlink{structHybridAStar_1_1Geometry_1_1ReedSheppPath}{Reed\+Shepp\+Path}} $>$ $\ast$}]{all\+\_\+possible\+\_\+paths }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{classHybridAStar_1_1Geometry_1_1ReedShepp_ae082336d81ac6b235cdc3cc7045921b3}\label{classHybridAStar_1_1Geometry_1_1ReedShepp_ae082336d81ac6b235cdc3cc7045921b3}} 
+\index{HybridAStar::Geometry::ReedShepp@{HybridAStar::Geometry::ReedShepp}!CSC@{CSC}}
+\index{CSC@{CSC}!HybridAStar::Geometry::ReedShepp@{HybridAStar::Geometry::ReedShepp}}
+\doxysubsubsection{\texorpdfstring{CSC()}{CSC()}}
+{\footnotesize\ttfamily bool Hybrid\+A\+Star\+::\+Geometry\+::\+Reed\+Shepp\+::\+C\+SC (\begin{DoxyParamCaption}\item[{const double}]{x,  }\item[{const double}]{y,  }\item[{const double}]{phi,  }\item[{std\+::vector$<$ \mbox{\hyperlink{structHybridAStar_1_1Geometry_1_1ReedSheppPath}{Reed\+Shepp\+Path}} $>$ $\ast$}]{all\+\_\+possible\+\_\+paths }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{classHybridAStar_1_1Geometry_1_1ReedShepp_a303df07899d3783b64a03eaaaa511ec2}\label{classHybridAStar_1_1Geometry_1_1ReedShepp_a303df07899d3783b64a03eaaaa511ec2}} 
+\index{HybridAStar::Geometry::ReedShepp@{HybridAStar::Geometry::ReedShepp}!GenerateLocalConfigurations@{GenerateLocalConfigurations}}
+\index{GenerateLocalConfigurations@{GenerateLocalConfigurations}!HybridAStar::Geometry::ReedShepp@{HybridAStar::Geometry::ReedShepp}}
+\doxysubsubsection{\texorpdfstring{GenerateLocalConfigurations()}{GenerateLocalConfigurations()}}
+{\footnotesize\ttfamily bool Hybrid\+A\+Star\+::\+Geometry\+::\+Reed\+Shepp\+::\+Generate\+Local\+Configurations (\begin{DoxyParamCaption}\item[{const std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classHybridAStar_1_1Geometry_1_1Node3d}{Node3d}} $>$}]{start\+\_\+node,  }\item[{const std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classHybridAStar_1_1Geometry_1_1Node3d}{Node3d}} $>$}]{end\+\_\+node,  }\item[{\mbox{\hyperlink{structHybridAStar_1_1Geometry_1_1ReedSheppPath}{Reed\+Shepp\+Path}} $\ast$}]{shortest\+\_\+path }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{classHybridAStar_1_1Geometry_1_1ReedShepp_aa45c71b9626bada19f99edb0badcdbc7}\label{classHybridAStar_1_1Geometry_1_1ReedShepp_aa45c71b9626bada19f99edb0badcdbc7}} 
+\index{HybridAStar::Geometry::ReedShepp@{HybridAStar::Geometry::ReedShepp}!GenerateRSP@{GenerateRSP}}
+\index{GenerateRSP@{GenerateRSP}!HybridAStar::Geometry::ReedShepp@{HybridAStar::Geometry::ReedShepp}}
+\doxysubsubsection{\texorpdfstring{GenerateRSP()}{GenerateRSP()}}
+{\footnotesize\ttfamily bool Hybrid\+A\+Star\+::\+Geometry\+::\+Reed\+Shepp\+::\+Generate\+R\+SP (\begin{DoxyParamCaption}\item[{const std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classHybridAStar_1_1Geometry_1_1Node3d}{Node3d}} $>$}]{start\+\_\+node,  }\item[{const std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classHybridAStar_1_1Geometry_1_1Node3d}{Node3d}} $>$}]{end\+\_\+node,  }\item[{std\+::vector$<$ \mbox{\hyperlink{structHybridAStar_1_1Geometry_1_1ReedSheppPath}{Reed\+Shepp\+Path}} $>$ $\ast$}]{all\+\_\+possible\+\_\+paths }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{classHybridAStar_1_1Geometry_1_1ReedShepp_acceb5a9e0cbc496ebc1f2b315ebe4801}\label{classHybridAStar_1_1Geometry_1_1ReedShepp_acceb5a9e0cbc496ebc1f2b315ebe4801}} 
+\index{HybridAStar::Geometry::ReedShepp@{HybridAStar::Geometry::ReedShepp}!GenerateRSPPar@{GenerateRSPPar}}
+\index{GenerateRSPPar@{GenerateRSPPar}!HybridAStar::Geometry::ReedShepp@{HybridAStar::Geometry::ReedShepp}}
+\doxysubsubsection{\texorpdfstring{GenerateRSPPar()}{GenerateRSPPar()}}
+{\footnotesize\ttfamily bool Hybrid\+A\+Star\+::\+Geometry\+::\+Reed\+Shepp\+::\+Generate\+R\+S\+P\+Par (\begin{DoxyParamCaption}\item[{const std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classHybridAStar_1_1Geometry_1_1Node3d}{Node3d}} $>$}]{start\+\_\+node,  }\item[{const std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classHybridAStar_1_1Geometry_1_1Node3d}{Node3d}} $>$}]{end\+\_\+node,  }\item[{std\+::vector$<$ \mbox{\hyperlink{structHybridAStar_1_1Geometry_1_1ReedSheppPath}{Reed\+Shepp\+Path}} $>$ $\ast$}]{all\+\_\+possible\+\_\+paths }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{classHybridAStar_1_1Geometry_1_1ReedShepp_ac5ad88db3a6275f41e4a6f818a35d227}\label{classHybridAStar_1_1Geometry_1_1ReedShepp_ac5ad88db3a6275f41e4a6f818a35d227}} 
+\index{HybridAStar::Geometry::ReedShepp@{HybridAStar::Geometry::ReedShepp}!GenerateRSPs@{GenerateRSPs}}
+\index{GenerateRSPs@{GenerateRSPs}!HybridAStar::Geometry::ReedShepp@{HybridAStar::Geometry::ReedShepp}}
+\doxysubsubsection{\texorpdfstring{GenerateRSPs()}{GenerateRSPs()}}
+{\footnotesize\ttfamily bool Hybrid\+A\+Star\+::\+Geometry\+::\+Reed\+Shepp\+::\+Generate\+R\+S\+Ps (\begin{DoxyParamCaption}\item[{const std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classHybridAStar_1_1Geometry_1_1Node3d}{Node3d}} $>$}]{start\+\_\+node,  }\item[{const std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classHybridAStar_1_1Geometry_1_1Node3d}{Node3d}} $>$}]{end\+\_\+node,  }\item[{std\+::vector$<$ \mbox{\hyperlink{structHybridAStar_1_1Geometry_1_1ReedSheppPath}{Reed\+Shepp\+Path}} $>$ $\ast$}]{all\+\_\+possible\+\_\+paths }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{classHybridAStar_1_1Geometry_1_1ReedShepp_a712b1e34421fc12c5506db389e1b1b06}\label{classHybridAStar_1_1Geometry_1_1ReedShepp_a712b1e34421fc12c5506db389e1b1b06}} 
+\index{HybridAStar::Geometry::ReedShepp@{HybridAStar::Geometry::ReedShepp}!Interpolation@{Interpolation}}
+\index{Interpolation@{Interpolation}!HybridAStar::Geometry::ReedShepp@{HybridAStar::Geometry::ReedShepp}}
+\doxysubsubsection{\texorpdfstring{Interpolation()}{Interpolation()}}
+{\footnotesize\ttfamily void Hybrid\+A\+Star\+::\+Geometry\+::\+Reed\+Shepp\+::\+Interpolation (\begin{DoxyParamCaption}\item[{const int}]{index,  }\item[{const double}]{pd,  }\item[{const char}]{m,  }\item[{const double}]{ox,  }\item[{const double}]{oy,  }\item[{const double}]{ophi,  }\item[{std\+::vector$<$ double $>$ $\ast$}]{px,  }\item[{std\+::vector$<$ double $>$ $\ast$}]{py,  }\item[{std\+::vector$<$ double $>$ $\ast$}]{pphi,  }\item[{std\+::vector$<$ bool $>$ $\ast$}]{pgear }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{classHybridAStar_1_1Geometry_1_1ReedShepp_aed29c0797c40397ca4658b21ec7ccac3}\label{classHybridAStar_1_1Geometry_1_1ReedShepp_aed29c0797c40397ca4658b21ec7ccac3}} 
+\index{HybridAStar::Geometry::ReedShepp@{HybridAStar::Geometry::ReedShepp}!LRL@{LRL}}
+\index{LRL@{LRL}!HybridAStar::Geometry::ReedShepp@{HybridAStar::Geometry::ReedShepp}}
+\doxysubsubsection{\texorpdfstring{LRL()}{LRL()}}
+{\footnotesize\ttfamily void Hybrid\+A\+Star\+::\+Geometry\+::\+Reed\+Shepp\+::\+L\+RL (\begin{DoxyParamCaption}\item[{const double}]{x,  }\item[{const double}]{y,  }\item[{const double}]{phi,  }\item[{\mbox{\hyperlink{structHybridAStar_1_1Geometry_1_1RSPParam}{R\+S\+P\+Param}} $\ast$}]{param }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{classHybridAStar_1_1Geometry_1_1ReedShepp_a71173382a3a02f5ffff5b1c5c424e5f5}\label{classHybridAStar_1_1Geometry_1_1ReedShepp_a71173382a3a02f5ffff5b1c5c424e5f5}} 
+\index{HybridAStar::Geometry::ReedShepp@{HybridAStar::Geometry::ReedShepp}!LRLRn@{LRLRn}}
+\index{LRLRn@{LRLRn}!HybridAStar::Geometry::ReedShepp@{HybridAStar::Geometry::ReedShepp}}
+\doxysubsubsection{\texorpdfstring{LRLRn()}{LRLRn()}}
+{\footnotesize\ttfamily void Hybrid\+A\+Star\+::\+Geometry\+::\+Reed\+Shepp\+::\+L\+R\+L\+Rn (\begin{DoxyParamCaption}\item[{const double}]{x,  }\item[{const double}]{y,  }\item[{const double}]{phi,  }\item[{\mbox{\hyperlink{structHybridAStar_1_1Geometry_1_1RSPParam}{R\+S\+P\+Param}} $\ast$}]{param }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{classHybridAStar_1_1Geometry_1_1ReedShepp_a2de63dce8e5b5926e88d71661e3e58fc}\label{classHybridAStar_1_1Geometry_1_1ReedShepp_a2de63dce8e5b5926e88d71661e3e58fc}} 
+\index{HybridAStar::Geometry::ReedShepp@{HybridAStar::Geometry::ReedShepp}!LRLRp@{LRLRp}}
+\index{LRLRp@{LRLRp}!HybridAStar::Geometry::ReedShepp@{HybridAStar::Geometry::ReedShepp}}
+\doxysubsubsection{\texorpdfstring{LRLRp()}{LRLRp()}}
+{\footnotesize\ttfamily void Hybrid\+A\+Star\+::\+Geometry\+::\+Reed\+Shepp\+::\+L\+R\+L\+Rp (\begin{DoxyParamCaption}\item[{const double}]{x,  }\item[{const double}]{y,  }\item[{const double}]{phi,  }\item[{\mbox{\hyperlink{structHybridAStar_1_1Geometry_1_1RSPParam}{R\+S\+P\+Param}} $\ast$}]{param }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{classHybridAStar_1_1Geometry_1_1ReedShepp_a73b18f6bd55ff32fa2a9c5f769cad512}\label{classHybridAStar_1_1Geometry_1_1ReedShepp_a73b18f6bd55ff32fa2a9c5f769cad512}} 
+\index{HybridAStar::Geometry::ReedShepp@{HybridAStar::Geometry::ReedShepp}!LRSL@{LRSL}}
+\index{LRSL@{LRSL}!HybridAStar::Geometry::ReedShepp@{HybridAStar::Geometry::ReedShepp}}
+\doxysubsubsection{\texorpdfstring{LRSL()}{LRSL()}}
+{\footnotesize\ttfamily void Hybrid\+A\+Star\+::\+Geometry\+::\+Reed\+Shepp\+::\+L\+R\+SL (\begin{DoxyParamCaption}\item[{const double}]{x,  }\item[{const double}]{y,  }\item[{const double}]{phi,  }\item[{\mbox{\hyperlink{structHybridAStar_1_1Geometry_1_1RSPParam}{R\+S\+P\+Param}} $\ast$}]{param }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{classHybridAStar_1_1Geometry_1_1ReedShepp_af9a9fce45e383814cfc92098fa2da60d}\label{classHybridAStar_1_1Geometry_1_1ReedShepp_af9a9fce45e383814cfc92098fa2da60d}} 
+\index{HybridAStar::Geometry::ReedShepp@{HybridAStar::Geometry::ReedShepp}!LRSLR@{LRSLR}}
+\index{LRSLR@{LRSLR}!HybridAStar::Geometry::ReedShepp@{HybridAStar::Geometry::ReedShepp}}
+\doxysubsubsection{\texorpdfstring{LRSLR()}{LRSLR()}}
+{\footnotesize\ttfamily void Hybrid\+A\+Star\+::\+Geometry\+::\+Reed\+Shepp\+::\+L\+R\+S\+LR (\begin{DoxyParamCaption}\item[{const double}]{x,  }\item[{const double}]{y,  }\item[{const double}]{phi,  }\item[{\mbox{\hyperlink{structHybridAStar_1_1Geometry_1_1RSPParam}{R\+S\+P\+Param}} $\ast$}]{param }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{classHybridAStar_1_1Geometry_1_1ReedShepp_a77a5e4631e11b91da17f094ffe4d1ab4}\label{classHybridAStar_1_1Geometry_1_1ReedShepp_a77a5e4631e11b91da17f094ffe4d1ab4}} 
+\index{HybridAStar::Geometry::ReedShepp@{HybridAStar::Geometry::ReedShepp}!LRSR@{LRSR}}
+\index{LRSR@{LRSR}!HybridAStar::Geometry::ReedShepp@{HybridAStar::Geometry::ReedShepp}}
+\doxysubsubsection{\texorpdfstring{LRSR()}{LRSR()}}
+{\footnotesize\ttfamily void Hybrid\+A\+Star\+::\+Geometry\+::\+Reed\+Shepp\+::\+L\+R\+SR (\begin{DoxyParamCaption}\item[{const double}]{x,  }\item[{const double}]{y,  }\item[{const double}]{phi,  }\item[{\mbox{\hyperlink{structHybridAStar_1_1Geometry_1_1RSPParam}{R\+S\+P\+Param}} $\ast$}]{param }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{classHybridAStar_1_1Geometry_1_1ReedShepp_a092779384ee2292851d75d2809ba531b}\label{classHybridAStar_1_1Geometry_1_1ReedShepp_a092779384ee2292851d75d2809ba531b}} 
+\index{HybridAStar::Geometry::ReedShepp@{HybridAStar::Geometry::ReedShepp}!LSL@{LSL}}
+\index{LSL@{LSL}!HybridAStar::Geometry::ReedShepp@{HybridAStar::Geometry::ReedShepp}}
+\doxysubsubsection{\texorpdfstring{LSL()}{LSL()}}
+{\footnotesize\ttfamily void Hybrid\+A\+Star\+::\+Geometry\+::\+Reed\+Shepp\+::\+L\+SL (\begin{DoxyParamCaption}\item[{const double}]{x,  }\item[{const double}]{y,  }\item[{const double}]{phi,  }\item[{\mbox{\hyperlink{structHybridAStar_1_1Geometry_1_1RSPParam}{R\+S\+P\+Param}} $\ast$}]{param }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{classHybridAStar_1_1Geometry_1_1ReedShepp_afde0ca62da1be4dfd2625961938a3341}\label{classHybridAStar_1_1Geometry_1_1ReedShepp_afde0ca62da1be4dfd2625961938a3341}} 
+\index{HybridAStar::Geometry::ReedShepp@{HybridAStar::Geometry::ReedShepp}!LSR@{LSR}}
+\index{LSR@{LSR}!HybridAStar::Geometry::ReedShepp@{HybridAStar::Geometry::ReedShepp}}
+\doxysubsubsection{\texorpdfstring{LSR()}{LSR()}}
+{\footnotesize\ttfamily void Hybrid\+A\+Star\+::\+Geometry\+::\+Reed\+Shepp\+::\+L\+SR (\begin{DoxyParamCaption}\item[{const double}]{x,  }\item[{const double}]{y,  }\item[{const double}]{phi,  }\item[{\mbox{\hyperlink{structHybridAStar_1_1Geometry_1_1RSPParam}{R\+S\+P\+Param}} $\ast$}]{param }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{classHybridAStar_1_1Geometry_1_1ReedShepp_af417b4d929723b31d19a4781f77ebc13}\label{classHybridAStar_1_1Geometry_1_1ReedShepp_af417b4d929723b31d19a4781f77ebc13}} 
+\index{HybridAStar::Geometry::ReedShepp@{HybridAStar::Geometry::ReedShepp}!SCS@{SCS}}
+\index{SCS@{SCS}!HybridAStar::Geometry::ReedShepp@{HybridAStar::Geometry::ReedShepp}}
+\doxysubsubsection{\texorpdfstring{SCS()}{SCS()}}
+{\footnotesize\ttfamily bool Hybrid\+A\+Star\+::\+Geometry\+::\+Reed\+Shepp\+::\+S\+CS (\begin{DoxyParamCaption}\item[{const double}]{x,  }\item[{const double}]{y,  }\item[{const double}]{phi,  }\item[{std\+::vector$<$ \mbox{\hyperlink{structHybridAStar_1_1Geometry_1_1ReedSheppPath}{Reed\+Shepp\+Path}} $>$ $\ast$}]{all\+\_\+possible\+\_\+paths }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{classHybridAStar_1_1Geometry_1_1ReedShepp_a187b88212bdf35fd352db3af57d5e909}\label{classHybridAStar_1_1Geometry_1_1ReedShepp_a187b88212bdf35fd352db3af57d5e909}} 
+\index{HybridAStar::Geometry::ReedShepp@{HybridAStar::Geometry::ReedShepp}!SetRSP@{SetRSP}}
+\index{SetRSP@{SetRSP}!HybridAStar::Geometry::ReedShepp@{HybridAStar::Geometry::ReedShepp}}
+\doxysubsubsection{\texorpdfstring{SetRSP()}{SetRSP()}}
+{\footnotesize\ttfamily bool Hybrid\+A\+Star\+::\+Geometry\+::\+Reed\+Shepp\+::\+Set\+R\+SP (\begin{DoxyParamCaption}\item[{const int}]{size,  }\item[{const double $\ast$}]{lengths,  }\item[{const char $\ast$}]{types,  }\item[{std\+::vector$<$ \mbox{\hyperlink{structHybridAStar_1_1Geometry_1_1ReedSheppPath}{Reed\+Shepp\+Path}} $>$ $\ast$}]{all\+\_\+possible\+\_\+paths }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{classHybridAStar_1_1Geometry_1_1ReedShepp_a87a710cf541c188727895c141cd2b159}\label{classHybridAStar_1_1Geometry_1_1ReedShepp_a87a710cf541c188727895c141cd2b159}} 
+\index{HybridAStar::Geometry::ReedShepp@{HybridAStar::Geometry::ReedShepp}!SetRSPPar@{SetRSPPar}}
+\index{SetRSPPar@{SetRSPPar}!HybridAStar::Geometry::ReedShepp@{HybridAStar::Geometry::ReedShepp}}
+\doxysubsubsection{\texorpdfstring{SetRSPPar()}{SetRSPPar()}}
+{\footnotesize\ttfamily bool Hybrid\+A\+Star\+::\+Geometry\+::\+Reed\+Shepp\+::\+Set\+R\+S\+P\+Par (\begin{DoxyParamCaption}\item[{const int}]{size,  }\item[{const double $\ast$}]{lengths,  }\item[{const std\+::string \&}]{types,  }\item[{std\+::vector$<$ \mbox{\hyperlink{structHybridAStar_1_1Geometry_1_1ReedSheppPath}{Reed\+Shepp\+Path}} $>$ $\ast$}]{all\+\_\+possible\+\_\+paths,  }\item[{const int}]{idx }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{classHybridAStar_1_1Geometry_1_1ReedShepp_a728ee220f3bddb2a8a1ba612a79247ab}\label{classHybridAStar_1_1Geometry_1_1ReedShepp_a728ee220f3bddb2a8a1ba612a79247ab}} 
+\index{HybridAStar::Geometry::ReedShepp@{HybridAStar::Geometry::ReedShepp}!ShortestRSP@{ShortestRSP}}
+\index{ShortestRSP@{ShortestRSP}!HybridAStar::Geometry::ReedShepp@{HybridAStar::Geometry::ReedShepp}}
+\doxysubsubsection{\texorpdfstring{ShortestRSP()}{ShortestRSP()}}
+{\footnotesize\ttfamily bool Hybrid\+A\+Star\+::\+Geometry\+::\+Reed\+Shepp\+::\+Shortest\+R\+SP (\begin{DoxyParamCaption}\item[{const std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classHybridAStar_1_1Geometry_1_1Node3d}{Node3d}} $>$}]{start\+\_\+node,  }\item[{const std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classHybridAStar_1_1Geometry_1_1Node3d}{Node3d}} $>$}]{end\+\_\+node,  }\item[{\mbox{\hyperlink{structHybridAStar_1_1Geometry_1_1ReedSheppPath}{Reed\+Shepp\+Path}} \&}]{optimal\+\_\+path }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classHybridAStar_1_1Geometry_1_1ReedShepp_a53a9fe5fde24ec25f5fefee959b8ffcd}\label{classHybridAStar_1_1Geometry_1_1ReedShepp_a53a9fe5fde24ec25f5fefee959b8ffcd}} 
+\index{HybridAStar::Geometry::ReedShepp@{HybridAStar::Geometry::ReedShepp}!SLS@{SLS}}
+\index{SLS@{SLS}!HybridAStar::Geometry::ReedShepp@{HybridAStar::Geometry::ReedShepp}}
+\doxysubsubsection{\texorpdfstring{SLS()}{SLS()}}
+{\footnotesize\ttfamily void Hybrid\+A\+Star\+::\+Geometry\+::\+Reed\+Shepp\+::\+S\+LS (\begin{DoxyParamCaption}\item[{const double}]{x,  }\item[{const double}]{y,  }\item[{const double}]{phi,  }\item[{\mbox{\hyperlink{structHybridAStar_1_1Geometry_1_1RSPParam}{R\+S\+P\+Param}} $\ast$}]{param }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{classHybridAStar_1_1Geometry_1_1ReedShepp_a208cdea57141f3c7edd9ab9d524a6604}\label{classHybridAStar_1_1Geometry_1_1ReedShepp_a208cdea57141f3c7edd9ab9d524a6604}} 
+\index{HybridAStar::Geometry::ReedShepp@{HybridAStar::Geometry::ReedShepp}!max\_kappa\_@{max\_kappa\_}}
+\index{max\_kappa\_@{max\_kappa\_}!HybridAStar::Geometry::ReedShepp@{HybridAStar::Geometry::ReedShepp}}
+\doxysubsubsection{\texorpdfstring{max\_kappa\_}{max\_kappa\_}}
+{\footnotesize\ttfamily double Hybrid\+A\+Star\+::\+Geometry\+::\+Reed\+Shepp\+::max\+\_\+kappa\+\_\+\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{classHybridAStar_1_1Geometry_1_1ReedShepp_af2f5bedc97ecc9658e033a220dd3137a}\label{classHybridAStar_1_1Geometry_1_1ReedShepp_af2f5bedc97ecc9658e033a220dd3137a}} 
+\index{HybridAStar::Geometry::ReedShepp@{HybridAStar::Geometry::ReedShepp}!step\_size\_@{step\_size\_}}
+\index{step\_size\_@{step\_size\_}!HybridAStar::Geometry::ReedShepp@{HybridAStar::Geometry::ReedShepp}}
+\doxysubsubsection{\texorpdfstring{step\_size\_}{step\_size\_}}
+{\footnotesize\ttfamily double Hybrid\+A\+Star\+::\+Geometry\+::\+Reed\+Shepp\+::step\+\_\+size\+\_\+\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+geometry/\+Reeds\+Shepp/\mbox{\hyperlink{ReedsSheppPath_8h}{Reeds\+Shepp\+Path.\+h}}\item 
+geometry/\+Reeds\+Shepp/\mbox{\hyperlink{ReedsSheppPath_8cc}{Reeds\+Shepp\+Path.\+cc}}\end{DoxyCompactItemize}

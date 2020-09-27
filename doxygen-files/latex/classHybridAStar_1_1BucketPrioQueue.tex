@@ -1,0 +1,139 @@
+\hypertarget{classHybridAStar_1_1BucketPrioQueue}{}\doxysection{Hybrid\+A\+Star\+::Bucket\+Prio\+Queue Class Reference}
+\label{classHybridAStar_1_1BucketPrioQueue}\index{HybridAStar::BucketPrioQueue@{HybridAStar::BucketPrioQueue}}
+
+
+Priority queue for integer coordinates with squared distances as priority.  
+
+
+
+
+{\ttfamily \#include $<$bucketedqueue.\+h$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classHybridAStar_1_1BucketPrioQueue_a17c2051e7091233687c4256e37a4be0b}{Bucket\+Prio\+Queue}} ()
+\begin{DoxyCompactList}\small\item\em Standard constructor. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classHybridAStar_1_1BucketPrioQueue_ae8474f69d9bd7f4b6f84d6049f80011d}{empty}} ()
+\begin{DoxyCompactList}\small\item\em Checks whether the Queue is empty. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classHybridAStar_1_1BucketPrioQueue_a4ea9cc823a00239c42ae0482682a6a6e}{push}} (int prio, \mbox{\hyperlink{point_8h_a029053565997837c89e2448248703492}{I\+N\+T\+P\+O\+I\+NT}} t)
+\begin{DoxyCompactList}\small\item\em push an element \end{DoxyCompactList}\item 
+\mbox{\hyperlink{point_8h_a029053565997837c89e2448248703492}{I\+N\+T\+P\+O\+I\+NT}} \mbox{\hyperlink{classHybridAStar_1_1BucketPrioQueue_a95d8b816a7b1b00ddec6d74da8398fc7}{pop}} ()
+\begin{DoxyCompactList}\small\item\em return and pop the element with the lowest squared distance $\ast$/ \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Static Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static void \mbox{\hyperlink{classHybridAStar_1_1BucketPrioQueue_a039f486e2e0d54f4ef55b3460e0745bf}{init\+Sqr\+Indices}} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{classHybridAStar_1_1BucketPrioQueue_a4563338cae2bd918acfb0f7d007dfe6b}{count}}
+\item 
+int \mbox{\hyperlink{classHybridAStar_1_1BucketPrioQueue_ac66555e3a6df564817aaa2d66a546604}{next\+Bucket}}
+\item 
+std\+::vector$<$ std\+::queue$<$ \mbox{\hyperlink{point_8h_a029053565997837c89e2448248703492}{I\+N\+T\+P\+O\+I\+NT}} $>$ $>$ \mbox{\hyperlink{classHybridAStar_1_1BucketPrioQueue_ac442e562f4e6aac2b260a45679c12022}{buckets}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Static Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+static std\+::vector$<$ int $>$ \mbox{\hyperlink{classHybridAStar_1_1BucketPrioQueue_afbf006b1b6d810b95813de468f185f74}{sqr\+Indices}}
+\item 
+static int \mbox{\hyperlink{classHybridAStar_1_1BucketPrioQueue_a0ad1ec2faa00ba4825c431ba0b5cbf6c}{num\+Buckets}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Priority queue for integer coordinates with squared distances as priority. 
+
+A priority queue that uses buckets to group elements with the same priority. The individual buckets are unsorted, which increases efficiency if these groups are large. The elements are assumed to be integer coordinates, and the priorities are assumed to be squared euclidean distances (integers). 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classHybridAStar_1_1BucketPrioQueue_a17c2051e7091233687c4256e37a4be0b}\label{classHybridAStar_1_1BucketPrioQueue_a17c2051e7091233687c4256e37a4be0b}} 
+\index{HybridAStar::BucketPrioQueue@{HybridAStar::BucketPrioQueue}!BucketPrioQueue@{BucketPrioQueue}}
+\index{BucketPrioQueue@{BucketPrioQueue}!HybridAStar::BucketPrioQueue@{HybridAStar::BucketPrioQueue}}
+\doxysubsubsection{\texorpdfstring{BucketPrioQueue()}{BucketPrioQueue()}}
+{\footnotesize\ttfamily Bucket\+Prio\+Queue\+::\+Bucket\+Prio\+Queue (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Standard constructor. 
+
+Standard constructor. When called for the first time it creates a look up table that maps square distanes to bucket numbers, which might take some time... 
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classHybridAStar_1_1BucketPrioQueue_ae8474f69d9bd7f4b6f84d6049f80011d}\label{classHybridAStar_1_1BucketPrioQueue_ae8474f69d9bd7f4b6f84d6049f80011d}} 
+\index{HybridAStar::BucketPrioQueue@{HybridAStar::BucketPrioQueue}!empty@{empty}}
+\index{empty@{empty}!HybridAStar::BucketPrioQueue@{HybridAStar::BucketPrioQueue}}
+\doxysubsubsection{\texorpdfstring{empty()}{empty()}}
+{\footnotesize\ttfamily bool Bucket\+Prio\+Queue\+::empty (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Checks whether the Queue is empty. 
+
+\mbox{\Hypertarget{classHybridAStar_1_1BucketPrioQueue_a039f486e2e0d54f4ef55b3460e0745bf}\label{classHybridAStar_1_1BucketPrioQueue_a039f486e2e0d54f4ef55b3460e0745bf}} 
+\index{HybridAStar::BucketPrioQueue@{HybridAStar::BucketPrioQueue}!initSqrIndices@{initSqrIndices}}
+\index{initSqrIndices@{initSqrIndices}!HybridAStar::BucketPrioQueue@{HybridAStar::BucketPrioQueue}}
+\doxysubsubsection{\texorpdfstring{initSqrIndices()}{initSqrIndices()}}
+{\footnotesize\ttfamily void Bucket\+Prio\+Queue\+::init\+Sqr\+Indices (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [private]}}
+
+\mbox{\Hypertarget{classHybridAStar_1_1BucketPrioQueue_a95d8b816a7b1b00ddec6d74da8398fc7}\label{classHybridAStar_1_1BucketPrioQueue_a95d8b816a7b1b00ddec6d74da8398fc7}} 
+\index{HybridAStar::BucketPrioQueue@{HybridAStar::BucketPrioQueue}!pop@{pop}}
+\index{pop@{pop}!HybridAStar::BucketPrioQueue@{HybridAStar::BucketPrioQueue}}
+\doxysubsubsection{\texorpdfstring{pop()}{pop()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{point_8h_a029053565997837c89e2448248703492}{I\+N\+T\+P\+O\+I\+NT}} Bucket\+Prio\+Queue\+::pop (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+return and pop the element with the lowest squared distance $\ast$/ 
+
+\mbox{\Hypertarget{classHybridAStar_1_1BucketPrioQueue_a4ea9cc823a00239c42ae0482682a6a6e}\label{classHybridAStar_1_1BucketPrioQueue_a4ea9cc823a00239c42ae0482682a6a6e}} 
+\index{HybridAStar::BucketPrioQueue@{HybridAStar::BucketPrioQueue}!push@{push}}
+\index{push@{push}!HybridAStar::BucketPrioQueue@{HybridAStar::BucketPrioQueue}}
+\doxysubsubsection{\texorpdfstring{push()}{push()}}
+{\footnotesize\ttfamily void Bucket\+Prio\+Queue\+::push (\begin{DoxyParamCaption}\item[{int}]{prio,  }\item[{\mbox{\hyperlink{point_8h_a029053565997837c89e2448248703492}{I\+N\+T\+P\+O\+I\+NT}}}]{t }\end{DoxyParamCaption})}
+
+
+
+push an element 
+
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{classHybridAStar_1_1BucketPrioQueue_ac442e562f4e6aac2b260a45679c12022}\label{classHybridAStar_1_1BucketPrioQueue_ac442e562f4e6aac2b260a45679c12022}} 
+\index{HybridAStar::BucketPrioQueue@{HybridAStar::BucketPrioQueue}!buckets@{buckets}}
+\index{buckets@{buckets}!HybridAStar::BucketPrioQueue@{HybridAStar::BucketPrioQueue}}
+\doxysubsubsection{\texorpdfstring{buckets}{buckets}}
+{\footnotesize\ttfamily std\+::vector$<$std\+::queue$<$\mbox{\hyperlink{point_8h_a029053565997837c89e2448248703492}{I\+N\+T\+P\+O\+I\+NT}}$>$ $>$ Hybrid\+A\+Star\+::\+Bucket\+Prio\+Queue\+::buckets\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classHybridAStar_1_1BucketPrioQueue_a4563338cae2bd918acfb0f7d007dfe6b}\label{classHybridAStar_1_1BucketPrioQueue_a4563338cae2bd918acfb0f7d007dfe6b}} 
+\index{HybridAStar::BucketPrioQueue@{HybridAStar::BucketPrioQueue}!count@{count}}
+\index{count@{count}!HybridAStar::BucketPrioQueue@{HybridAStar::BucketPrioQueue}}
+\doxysubsubsection{\texorpdfstring{count}{count}}
+{\footnotesize\ttfamily int Hybrid\+A\+Star\+::\+Bucket\+Prio\+Queue\+::count\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classHybridAStar_1_1BucketPrioQueue_ac66555e3a6df564817aaa2d66a546604}\label{classHybridAStar_1_1BucketPrioQueue_ac66555e3a6df564817aaa2d66a546604}} 
+\index{HybridAStar::BucketPrioQueue@{HybridAStar::BucketPrioQueue}!nextBucket@{nextBucket}}
+\index{nextBucket@{nextBucket}!HybridAStar::BucketPrioQueue@{HybridAStar::BucketPrioQueue}}
+\doxysubsubsection{\texorpdfstring{nextBucket}{nextBucket}}
+{\footnotesize\ttfamily int Hybrid\+A\+Star\+::\+Bucket\+Prio\+Queue\+::next\+Bucket\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classHybridAStar_1_1BucketPrioQueue_a0ad1ec2faa00ba4825c431ba0b5cbf6c}\label{classHybridAStar_1_1BucketPrioQueue_a0ad1ec2faa00ba4825c431ba0b5cbf6c}} 
+\index{HybridAStar::BucketPrioQueue@{HybridAStar::BucketPrioQueue}!numBuckets@{numBuckets}}
+\index{numBuckets@{numBuckets}!HybridAStar::BucketPrioQueue@{HybridAStar::BucketPrioQueue}}
+\doxysubsubsection{\texorpdfstring{numBuckets}{numBuckets}}
+{\footnotesize\ttfamily int Bucket\+Prio\+Queue\+::num\+Buckets\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [private]}}
+
+\mbox{\Hypertarget{classHybridAStar_1_1BucketPrioQueue_afbf006b1b6d810b95813de468f185f74}\label{classHybridAStar_1_1BucketPrioQueue_afbf006b1b6d810b95813de468f185f74}} 
+\index{HybridAStar::BucketPrioQueue@{HybridAStar::BucketPrioQueue}!sqrIndices@{sqrIndices}}
+\index{sqrIndices@{sqrIndices}!HybridAStar::BucketPrioQueue@{HybridAStar::BucketPrioQueue}}
+\doxysubsubsection{\texorpdfstring{sqrIndices}{sqrIndices}}
+{\footnotesize\ttfamily std\+::vector$<$ int $>$ Bucket\+Prio\+Queue\+::sqr\+Indices\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [private]}}
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+utils/\mbox{\hyperlink{bucketedqueue_8h}{bucketedqueue.\+h}}\item 
+utils/\mbox{\hyperlink{bucketedqueue_8cpp}{bucketedqueue.\+cpp}}\end{DoxyCompactItemize}

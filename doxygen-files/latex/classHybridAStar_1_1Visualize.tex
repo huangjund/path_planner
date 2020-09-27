@@ -1,0 +1,193 @@
+\hypertarget{classHybridAStar_1_1Visualize}{}\doxysection{Hybrid\+A\+Star\+::Visualize Class Reference}
+\label{classHybridAStar_1_1Visualize}\index{HybridAStar::Visualize@{HybridAStar::Visualize}}
+
+
+A class for visualizing the hybrid A$\ast$ search.  
+
+
+
+
+{\ttfamily \#include $<$visualize.\+h$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classHybridAStar_1_1Visualize_a7bdb534ad38b24284b580c09adaa599b}{Visualize}} ()
+\begin{DoxyCompactList}\small\item\em The default constructor initializing the visualization object and setting publishers for the same. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classHybridAStar_1_1Visualize_a96a35c9d0962cd51944256b47e682a58}{clear}} ()
+\begin{DoxyCompactList}\small\item\em Clears the entire visualization. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classHybridAStar_1_1Visualize_a707b46179b9baea9122d747e18c512f6}{publish\+Node3\+D\+Pose}} (\mbox{\hyperlink{classHybridAStar_1_1Common_1_1SE2State}{S\+E2\+State}} \&node)
+\begin{DoxyCompactList}\small\item\em Publishes a single node to R\+Viz, usually the one currently being expanded. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classHybridAStar_1_1Visualize_ac366fcf107deddaee0e2981c35a98887}{publish\+Node3\+D\+Poses}} (\mbox{\hyperlink{classHybridAStar_1_1Common_1_1SE2State}{S\+E2\+State}} \&node)
+\begin{DoxyCompactList}\small\item\em Publishes all expanded nodes to R\+Viz. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classHybridAStar_1_1Visualize_a8727a34df8295b3e26a95401323961ea}{publish\+Node3\+D\+Costs}} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classHybridAStar_1_1Common_1_1Map}{Common\+::\+Map}}$<$ \mbox{\hyperlink{classHybridAStar_1_1Common_1_1SE2State}{S\+E2\+State}} $>$$>$ pmap, int depth=72)
+\begin{DoxyCompactList}\small\item\em Publishes the minimum of the cost of all nodes in a 2D grid cell. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+ros\+::\+Node\+Handle \mbox{\hyperlink{classHybridAStar_1_1Visualize_adbc8c8b04921210a5498f06359c11051}{n}}
+\begin{DoxyCompactList}\small\item\em A handle to the R\+OS node. \end{DoxyCompactList}\item 
+ros\+::\+Publisher \mbox{\hyperlink{classHybridAStar_1_1Visualize_adc619e6e4543d1cd7c7f95b816970d4d}{pub\+Node3D}}
+\begin{DoxyCompactList}\small\item\em Publisher for a single 3D node. \end{DoxyCompactList}\item 
+ros\+::\+Publisher \mbox{\hyperlink{classHybridAStar_1_1Visualize_a576d53b7e2c268cd3ae1476e1f58da4f}{pub\+Nodes3D}}
+\begin{DoxyCompactList}\small\item\em Publisher for an array of 3D forward nodes. \end{DoxyCompactList}\item 
+ros\+::\+Publisher \mbox{\hyperlink{classHybridAStar_1_1Visualize_a994403f6bc70a54747d6d32398e9efea}{pub\+Nodes3\+Dreverse}}
+\begin{DoxyCompactList}\small\item\em Publisher for an array of 3D reaward nodes. \end{DoxyCompactList}\item 
+ros\+::\+Publisher \mbox{\hyperlink{classHybridAStar_1_1Visualize_aaaa78dc34e3fdd29e4c442db6ecbbad5}{pub\+Nodes3\+D\+Costs}}
+\begin{DoxyCompactList}\small\item\em Publisher for an array of 3D cost with color gradient. \end{DoxyCompactList}\item 
+geometry\+\_\+msgs\+::\+Pose\+Array \mbox{\hyperlink{classHybridAStar_1_1Visualize_a81205c2f774b1991ec9af2bb64e58a4c}{poses3D}}
+\begin{DoxyCompactList}\small\item\em Array of poses describing forward nodes. \end{DoxyCompactList}\item 
+geometry\+\_\+msgs\+::\+Pose\+Array \mbox{\hyperlink{classHybridAStar_1_1Visualize_a0fbc2fd5f38fdcc24aa2cf40c6411c62}{poses3\+Dreverse}}
+\begin{DoxyCompactList}\small\item\em Array of poses describing reaward nodes. \end{DoxyCompactList}\item 
+geometry\+\_\+msgs\+::\+Pose\+Array \mbox{\hyperlink{classHybridAStar_1_1Visualize_a8b2e14835a250b8c39ebbfb8ea3f812b}{poses2D}}
+\begin{DoxyCompactList}\small\item\em Array of poses describing 2D heuristic nodes. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+A class for visualizing the hybrid A$\ast$ search. 
+
+Depending on the settings in constants.\+h the visualization will send different amounts of detail. It can show the 3D search as well as the underlying 2D search used for the holonomic with obstacles heuristic. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classHybridAStar_1_1Visualize_a7bdb534ad38b24284b580c09adaa599b}\label{classHybridAStar_1_1Visualize_a7bdb534ad38b24284b580c09adaa599b}} 
+\index{HybridAStar::Visualize@{HybridAStar::Visualize}!Visualize@{Visualize}}
+\index{Visualize@{Visualize}!HybridAStar::Visualize@{HybridAStar::Visualize}}
+\doxysubsubsection{\texorpdfstring{Visualize()}{Visualize()}}
+{\footnotesize\ttfamily Hybrid\+A\+Star\+::\+Visualize\+::\+Visualize (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+The default constructor initializing the visualization object and setting publishers for the same. 
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classHybridAStar_1_1Visualize_a96a35c9d0962cd51944256b47e682a58}\label{classHybridAStar_1_1Visualize_a96a35c9d0962cd51944256b47e682a58}} 
+\index{HybridAStar::Visualize@{HybridAStar::Visualize}!clear@{clear}}
+\index{clear@{clear}!HybridAStar::Visualize@{HybridAStar::Visualize}}
+\doxysubsubsection{\texorpdfstring{clear()}{clear()}}
+{\footnotesize\ttfamily void Visualize\+::clear (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Clears the entire visualization. 
+
+\mbox{\Hypertarget{classHybridAStar_1_1Visualize_a8727a34df8295b3e26a95401323961ea}\label{classHybridAStar_1_1Visualize_a8727a34df8295b3e26a95401323961ea}} 
+\index{HybridAStar::Visualize@{HybridAStar::Visualize}!publishNode3DCosts@{publishNode3DCosts}}
+\index{publishNode3DCosts@{publishNode3DCosts}!HybridAStar::Visualize@{HybridAStar::Visualize}}
+\doxysubsubsection{\texorpdfstring{publishNode3DCosts()}{publishNode3DCosts()}}
+{\footnotesize\ttfamily void Visualize\+::publish\+Node3\+D\+Costs (\begin{DoxyParamCaption}\item[{std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classHybridAStar_1_1Common_1_1Map}{Common\+::\+Map}}$<$ \mbox{\hyperlink{classHybridAStar_1_1Common_1_1SE2State}{S\+E2\+State}} $>$$>$}]{pmap,  }\item[{int}]{depth = {\ttfamily 72} }\end{DoxyParamCaption})}
+
+
+
+Publishes the minimum of the cost of all nodes in a 2D grid cell. 
+
+\mbox{\Hypertarget{classHybridAStar_1_1Visualize_a707b46179b9baea9122d747e18c512f6}\label{classHybridAStar_1_1Visualize_a707b46179b9baea9122d747e18c512f6}} 
+\index{HybridAStar::Visualize@{HybridAStar::Visualize}!publishNode3DPose@{publishNode3DPose}}
+\index{publishNode3DPose@{publishNode3DPose}!HybridAStar::Visualize@{HybridAStar::Visualize}}
+\doxysubsubsection{\texorpdfstring{publishNode3DPose()}{publishNode3DPose()}}
+{\footnotesize\ttfamily void Visualize\+::publish\+Node3\+D\+Pose (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classHybridAStar_1_1Common_1_1SE2State}{S\+E2\+State}} \&}]{node }\end{DoxyParamCaption})}
+
+
+
+Publishes a single node to R\+Viz, usually the one currently being expanded. 
+
+\mbox{\Hypertarget{classHybridAStar_1_1Visualize_ac366fcf107deddaee0e2981c35a98887}\label{classHybridAStar_1_1Visualize_ac366fcf107deddaee0e2981c35a98887}} 
+\index{HybridAStar::Visualize@{HybridAStar::Visualize}!publishNode3DPoses@{publishNode3DPoses}}
+\index{publishNode3DPoses@{publishNode3DPoses}!HybridAStar::Visualize@{HybridAStar::Visualize}}
+\doxysubsubsection{\texorpdfstring{publishNode3DPoses()}{publishNode3DPoses()}}
+{\footnotesize\ttfamily void Visualize\+::publish\+Node3\+D\+Poses (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classHybridAStar_1_1Common_1_1SE2State}{S\+E2\+State}} \&}]{node }\end{DoxyParamCaption})}
+
+
+
+Publishes all expanded nodes to R\+Viz. 
+
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{classHybridAStar_1_1Visualize_adbc8c8b04921210a5498f06359c11051}\label{classHybridAStar_1_1Visualize_adbc8c8b04921210a5498f06359c11051}} 
+\index{HybridAStar::Visualize@{HybridAStar::Visualize}!n@{n}}
+\index{n@{n}!HybridAStar::Visualize@{HybridAStar::Visualize}}
+\doxysubsubsection{\texorpdfstring{n}{n}}
+{\footnotesize\ttfamily ros\+::\+Node\+Handle Hybrid\+A\+Star\+::\+Visualize\+::n\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+A handle to the R\+OS node. 
+
+\mbox{\Hypertarget{classHybridAStar_1_1Visualize_a8b2e14835a250b8c39ebbfb8ea3f812b}\label{classHybridAStar_1_1Visualize_a8b2e14835a250b8c39ebbfb8ea3f812b}} 
+\index{HybridAStar::Visualize@{HybridAStar::Visualize}!poses2D@{poses2D}}
+\index{poses2D@{poses2D}!HybridAStar::Visualize@{HybridAStar::Visualize}}
+\doxysubsubsection{\texorpdfstring{poses2D}{poses2D}}
+{\footnotesize\ttfamily geometry\+\_\+msgs\+::\+Pose\+Array Hybrid\+A\+Star\+::\+Visualize\+::poses2D\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Array of poses describing 2D heuristic nodes. 
+
+\mbox{\Hypertarget{classHybridAStar_1_1Visualize_a81205c2f774b1991ec9af2bb64e58a4c}\label{classHybridAStar_1_1Visualize_a81205c2f774b1991ec9af2bb64e58a4c}} 
+\index{HybridAStar::Visualize@{HybridAStar::Visualize}!poses3D@{poses3D}}
+\index{poses3D@{poses3D}!HybridAStar::Visualize@{HybridAStar::Visualize}}
+\doxysubsubsection{\texorpdfstring{poses3D}{poses3D}}
+{\footnotesize\ttfamily geometry\+\_\+msgs\+::\+Pose\+Array Hybrid\+A\+Star\+::\+Visualize\+::poses3D\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Array of poses describing forward nodes. 
+
+\mbox{\Hypertarget{classHybridAStar_1_1Visualize_a0fbc2fd5f38fdcc24aa2cf40c6411c62}\label{classHybridAStar_1_1Visualize_a0fbc2fd5f38fdcc24aa2cf40c6411c62}} 
+\index{HybridAStar::Visualize@{HybridAStar::Visualize}!poses3Dreverse@{poses3Dreverse}}
+\index{poses3Dreverse@{poses3Dreverse}!HybridAStar::Visualize@{HybridAStar::Visualize}}
+\doxysubsubsection{\texorpdfstring{poses3Dreverse}{poses3Dreverse}}
+{\footnotesize\ttfamily geometry\+\_\+msgs\+::\+Pose\+Array Hybrid\+A\+Star\+::\+Visualize\+::poses3\+Dreverse\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Array of poses describing reaward nodes. 
+
+\mbox{\Hypertarget{classHybridAStar_1_1Visualize_adc619e6e4543d1cd7c7f95b816970d4d}\label{classHybridAStar_1_1Visualize_adc619e6e4543d1cd7c7f95b816970d4d}} 
+\index{HybridAStar::Visualize@{HybridAStar::Visualize}!pubNode3D@{pubNode3D}}
+\index{pubNode3D@{pubNode3D}!HybridAStar::Visualize@{HybridAStar::Visualize}}
+\doxysubsubsection{\texorpdfstring{pubNode3D}{pubNode3D}}
+{\footnotesize\ttfamily ros\+::\+Publisher Hybrid\+A\+Star\+::\+Visualize\+::pub\+Node3D\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Publisher for a single 3D node. 
+
+\mbox{\Hypertarget{classHybridAStar_1_1Visualize_a576d53b7e2c268cd3ae1476e1f58da4f}\label{classHybridAStar_1_1Visualize_a576d53b7e2c268cd3ae1476e1f58da4f}} 
+\index{HybridAStar::Visualize@{HybridAStar::Visualize}!pubNodes3D@{pubNodes3D}}
+\index{pubNodes3D@{pubNodes3D}!HybridAStar::Visualize@{HybridAStar::Visualize}}
+\doxysubsubsection{\texorpdfstring{pubNodes3D}{pubNodes3D}}
+{\footnotesize\ttfamily ros\+::\+Publisher Hybrid\+A\+Star\+::\+Visualize\+::pub\+Nodes3D\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Publisher for an array of 3D forward nodes. 
+
+\mbox{\Hypertarget{classHybridAStar_1_1Visualize_aaaa78dc34e3fdd29e4c442db6ecbbad5}\label{classHybridAStar_1_1Visualize_aaaa78dc34e3fdd29e4c442db6ecbbad5}} 
+\index{HybridAStar::Visualize@{HybridAStar::Visualize}!pubNodes3DCosts@{pubNodes3DCosts}}
+\index{pubNodes3DCosts@{pubNodes3DCosts}!HybridAStar::Visualize@{HybridAStar::Visualize}}
+\doxysubsubsection{\texorpdfstring{pubNodes3DCosts}{pubNodes3DCosts}}
+{\footnotesize\ttfamily ros\+::\+Publisher Hybrid\+A\+Star\+::\+Visualize\+::pub\+Nodes3\+D\+Costs\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Publisher for an array of 3D cost with color gradient. 
+
+\mbox{\Hypertarget{classHybridAStar_1_1Visualize_a994403f6bc70a54747d6d32398e9efea}\label{classHybridAStar_1_1Visualize_a994403f6bc70a54747d6d32398e9efea}} 
+\index{HybridAStar::Visualize@{HybridAStar::Visualize}!pubNodes3Dreverse@{pubNodes3Dreverse}}
+\index{pubNodes3Dreverse@{pubNodes3Dreverse}!HybridAStar::Visualize@{HybridAStar::Visualize}}
+\doxysubsubsection{\texorpdfstring{pubNodes3Dreverse}{pubNodes3Dreverse}}
+{\footnotesize\ttfamily ros\+::\+Publisher Hybrid\+A\+Star\+::\+Visualize\+::pub\+Nodes3\+Dreverse\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Publisher for an array of 3D reaward nodes. 
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+aux/\mbox{\hyperlink{visualize_8h}{visualize.\+h}}\item 
+aux/\mbox{\hyperlink{visualize_8cpp}{visualize.\+cpp}}\end{DoxyCompactItemize}

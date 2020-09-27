@@ -1,0 +1,186 @@
+\hypertarget{classHybridAStar_1_1Geometry_1_1HAstar}{}\doxysection{Hybrid\+A\+Star\+::Geometry\+::H\+Astar Class Reference}
+\label{classHybridAStar_1_1Geometry_1_1HAstar}\index{HybridAStar::Geometry::HAstar@{HybridAStar::Geometry::HAstar}}
+
+
+{\ttfamily \#include $<$H\+Astar.\+h$>$}
+
+Inheritance diagram for Hybrid\+A\+Star\+::Geometry\+::H\+Astar\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classHybridAStar_1_1Geometry_1_1HAstar}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classHybridAStar_1_1Geometry_1_1HAstar_aba21ed86cb062b5073ca06ff4513665c}{H\+Astar}} ()=default
+\item 
+\mbox{\hyperlink{classHybridAStar_1_1Geometry_1_1HAstar_a3a100c4f96336772d362148f41a96364}{H\+Astar}} (shared\+\_\+ptr$<$ \mbox{\hyperlink{classHybridAStar_1_1Common_1_1SE2State}{S\+E2\+State}} $>$, \mbox{\hyperlink{classHybridAStar_1_1Common_1_1SE2State}{S\+E2\+State}} \&, shared\+\_\+ptr$<$ \mbox{\hyperlink{classHybridAStar_1_1Common_1_1Map}{Map}}$<$ \mbox{\hyperlink{classHybridAStar_1_1Common_1_1SE2State}{S\+E2\+State}} $>$$>$, shared\+\_\+ptr$<$ \mbox{\hyperlink{classHybridAStar_1_1Common_1_1CollisionDetection}{Collision\+Detection}} $>$ \&)
+\item 
+\mbox{\hyperlink{classHybridAStar_1_1Geometry_1_1HAstar_a47c4adb2ea1b4afdf6f006499eb27603}{$\sim$\+H\+Astar}} ()=default
+\item 
+\mbox{\hyperlink{classHybridAStar_1_1Geometry_1_1HAstar_aea927f8d515e19123cdecf655236778e}{H\+Astar}} (const \mbox{\hyperlink{classHybridAStar_1_1Geometry_1_1HAstar}{H\+Astar}} \&)=delete
+\item 
+\mbox{\hyperlink{classHybridAStar_1_1Geometry_1_1HAstar}{H\+Astar}} \& \mbox{\hyperlink{classHybridAStar_1_1Geometry_1_1HAstar_a06bef90cf9f2185a1a72995df383f0b5}{operator=}} (const \mbox{\hyperlink{classHybridAStar_1_1Geometry_1_1HAstar}{H\+Astar}} \&)=delete
+\item 
+shared\+\_\+ptr$<$ \mbox{\hyperlink{classHybridAStar_1_1Common_1_1SE2State}{S\+E2\+State}} $>$ \mbox{\hyperlink{classHybridAStar_1_1Geometry_1_1HAstar_a537d30b3cff15ac080df4278f7660a85}{solve}} ()
+\item 
+void \mbox{\hyperlink{classHybridAStar_1_1Geometry_1_1HAstar_a7bc240925ebe17c6993187de1d1a7b34}{update\+Heuristic}} (\mbox{\hyperlink{classHybridAStar_1_1Common_1_1SE2State}{S\+E2\+State}} \&, \mbox{\hyperlink{classHybridAStar_1_1Common_1_1SE2State}{S\+E2\+State}} \&)
+\item 
+shared\+\_\+ptr$<$ \mbox{\hyperlink{classHybridAStar_1_1Common_1_1SE2State}{S\+E2\+State}} $>$ \mbox{\hyperlink{classHybridAStar_1_1Geometry_1_1HAstar_a8347af8abdcfb6243b19851ed37615be}{dubins\+Shot}} (shared\+\_\+ptr$<$ \mbox{\hyperlink{classHybridAStar_1_1Common_1_1SE2State}{S\+E2\+State}} $>$, const \mbox{\hyperlink{classHybridAStar_1_1Common_1_1SE2State}{S\+E2\+State}} \&)
+\item 
+shared\+\_\+ptr$<$ \mbox{\hyperlink{classHybridAStar_1_1Common_1_1SE2State}{S\+E2\+State}} $>$ \mbox{\hyperlink{classHybridAStar_1_1Geometry_1_1HAstar_a7ce7391101dbb6b73cbd6c303344a39f}{Reeds\+Shepp}} (shared\+\_\+ptr$<$ \mbox{\hyperlink{classHybridAStar_1_1Common_1_1SE2State}{S\+E2\+State}} $>$, const \mbox{\hyperlink{classHybridAStar_1_1Common_1_1SE2State}{S\+E2\+State}} \&)
+\item 
+\mbox{\hyperlink{classHybridAStar_1_1Common_1_1SE2State}{S\+E2\+State}} \& \mbox{\hyperlink{classHybridAStar_1_1Geometry_1_1HAstar_a496e79675499e9c1149ba63a85cd68c5}{get\+Start}} ()
+\item 
+\mbox{\hyperlink{classHybridAStar_1_1Common_1_1SE2State}{S\+E2\+State}} \& \mbox{\hyperlink{classHybridAStar_1_1Geometry_1_1HAstar_a2f61ebde48b5c3d4976e9e536895378a}{get\+Goal}} ()
+\item 
+void \mbox{\hyperlink{classHybridAStar_1_1Geometry_1_1HAstar_a2309a56aa324e089af332e52c4cdd56f}{set\+Start}} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classHybridAStar_1_1Common_1_1SE2State}{S\+E2\+State}} $>$)
+\end{DoxyCompactItemize}
+\doxysubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+shared\+\_\+ptr$<$ \mbox{\hyperlink{classHybridAStar_1_1Common_1_1SE2State}{S\+E2\+State}} $>$ \mbox{\hyperlink{classHybridAStar_1_1Geometry_1_1HAstar_ab84235ad859f16055868dfe8c2a4143d}{start\+\_\+}}
+\item 
+\mbox{\hyperlink{classHybridAStar_1_1Common_1_1SE2State}{S\+E2\+State}} \mbox{\hyperlink{classHybridAStar_1_1Geometry_1_1HAstar_a0c62690e456624056530bb45a2865b1e}{goal\+\_\+}}
+\item 
+shared\+\_\+ptr$<$ \mbox{\hyperlink{classHybridAStar_1_1Common_1_1CollisionDetection}{Collision\+Detection}} $>$ \mbox{\hyperlink{classHybridAStar_1_1Geometry_1_1HAstar_a1b2b9b04a22dfb2286d072a8c4ce41e2}{config\+Space\+\_\+}}
+\item 
+unique\+\_\+ptr$<$ \mbox{\hyperlink{classHybridAStar_1_1Common_1_1hRScurve}{h\+R\+Scurve}} $>$ \mbox{\hyperlink{classHybridAStar_1_1Geometry_1_1HAstar_a89a4094d73c27731addafca320295def}{rs\+Planner\+\_\+}}
+\item 
+unique\+\_\+ptr$<$ \mbox{\hyperlink{classHybridAStar_1_1Common_1_1hRRTx}{h\+R\+R\+Tx}} $>$ \mbox{\hyperlink{classHybridAStar_1_1Geometry_1_1HAstar_a830501e5b8dbb8c362ac7f66807b3426}{rrtx\+Planner\+\_\+}}
+\item 
+shared\+\_\+ptr$<$ \mbox{\hyperlink{classHybridAStar_1_1Common_1_1Map}{Map}}$<$ \mbox{\hyperlink{classHybridAStar_1_1Common_1_1SE2State}{S\+E2\+State}} $>$ $>$ \mbox{\hyperlink{classHybridAStar_1_1Geometry_1_1HAstar_a5fb49737c2e2a3de8fcc1a2f498d8d7e}{p\+Map\+\_\+}}
+\item 
+int \mbox{\hyperlink{classHybridAStar_1_1Geometry_1_1HAstar_a15a1eae4105fcd2ef556a215430c4cda}{default\+Iter}} = 3000
+\end{DoxyCompactItemize}
+\doxysubsection*{Additional Inherited Members}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classHybridAStar_1_1Geometry_1_1HAstar_aba21ed86cb062b5073ca06ff4513665c}\label{classHybridAStar_1_1Geometry_1_1HAstar_aba21ed86cb062b5073ca06ff4513665c}} 
+\index{HybridAStar::Geometry::HAstar@{HybridAStar::Geometry::HAstar}!HAstar@{HAstar}}
+\index{HAstar@{HAstar}!HybridAStar::Geometry::HAstar@{HybridAStar::Geometry::HAstar}}
+\doxysubsubsection{\texorpdfstring{HAstar()}{HAstar()}\hspace{0.1cm}{\footnotesize\ttfamily [1/3]}}
+{\footnotesize\ttfamily Hybrid\+A\+Star\+::\+Geometry\+::\+H\+Astar\+::\+H\+Astar (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [default]}}
+
+\mbox{\Hypertarget{classHybridAStar_1_1Geometry_1_1HAstar_a3a100c4f96336772d362148f41a96364}\label{classHybridAStar_1_1Geometry_1_1HAstar_a3a100c4f96336772d362148f41a96364}} 
+\index{HybridAStar::Geometry::HAstar@{HybridAStar::Geometry::HAstar}!HAstar@{HAstar}}
+\index{HAstar@{HAstar}!HybridAStar::Geometry::HAstar@{HybridAStar::Geometry::HAstar}}
+\doxysubsubsection{\texorpdfstring{HAstar()}{HAstar()}\hspace{0.1cm}{\footnotesize\ttfamily [2/3]}}
+{\footnotesize\ttfamily Hybrid\+A\+Star\+::\+Geometry\+::\+H\+Astar\+::\+H\+Astar (\begin{DoxyParamCaption}\item[{shared\+\_\+ptr$<$ \mbox{\hyperlink{classHybridAStar_1_1Common_1_1SE2State}{S\+E2\+State}} $>$}]{start,  }\item[{\mbox{\hyperlink{classHybridAStar_1_1Common_1_1SE2State}{S\+E2\+State}} \&}]{goal,  }\item[{shared\+\_\+ptr$<$ \mbox{\hyperlink{classHybridAStar_1_1Common_1_1Map}{Map}}$<$ \mbox{\hyperlink{classHybridAStar_1_1Common_1_1SE2State}{S\+E2\+State}} $>$$>$}]{pmap,  }\item[{shared\+\_\+ptr$<$ \mbox{\hyperlink{classHybridAStar_1_1Common_1_1CollisionDetection}{Collision\+Detection}} $>$ \&}]{config\+Space }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [explicit]}}
+
+\mbox{\Hypertarget{classHybridAStar_1_1Geometry_1_1HAstar_a47c4adb2ea1b4afdf6f006499eb27603}\label{classHybridAStar_1_1Geometry_1_1HAstar_a47c4adb2ea1b4afdf6f006499eb27603}} 
+\index{HybridAStar::Geometry::HAstar@{HybridAStar::Geometry::HAstar}!````~HAstar@{$\sim$HAstar}}
+\index{````~HAstar@{$\sim$HAstar}!HybridAStar::Geometry::HAstar@{HybridAStar::Geometry::HAstar}}
+\doxysubsubsection{\texorpdfstring{$\sim$HAstar()}{~HAstar()}}
+{\footnotesize\ttfamily Hybrid\+A\+Star\+::\+Geometry\+::\+H\+Astar\+::$\sim$\+H\+Astar (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [default]}}
+
+\mbox{\Hypertarget{classHybridAStar_1_1Geometry_1_1HAstar_aea927f8d515e19123cdecf655236778e}\label{classHybridAStar_1_1Geometry_1_1HAstar_aea927f8d515e19123cdecf655236778e}} 
+\index{HybridAStar::Geometry::HAstar@{HybridAStar::Geometry::HAstar}!HAstar@{HAstar}}
+\index{HAstar@{HAstar}!HybridAStar::Geometry::HAstar@{HybridAStar::Geometry::HAstar}}
+\doxysubsubsection{\texorpdfstring{HAstar()}{HAstar()}\hspace{0.1cm}{\footnotesize\ttfamily [3/3]}}
+{\footnotesize\ttfamily Hybrid\+A\+Star\+::\+Geometry\+::\+H\+Astar\+::\+H\+Astar (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classHybridAStar_1_1Geometry_1_1HAstar}{H\+Astar}} \&}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [delete]}}
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classHybridAStar_1_1Geometry_1_1HAstar_a8347af8abdcfb6243b19851ed37615be}\label{classHybridAStar_1_1Geometry_1_1HAstar_a8347af8abdcfb6243b19851ed37615be}} 
+\index{HybridAStar::Geometry::HAstar@{HybridAStar::Geometry::HAstar}!dubinsShot@{dubinsShot}}
+\index{dubinsShot@{dubinsShot}!HybridAStar::Geometry::HAstar@{HybridAStar::Geometry::HAstar}}
+\doxysubsubsection{\texorpdfstring{dubinsShot()}{dubinsShot()}}
+{\footnotesize\ttfamily shared\+\_\+ptr$<$\mbox{\hyperlink{classHybridAStar_1_1Common_1_1SE2State}{S\+E2\+State}}$>$ Hybrid\+A\+Star\+::\+Geometry\+::\+H\+Astar\+::dubins\+Shot (\begin{DoxyParamCaption}\item[{shared\+\_\+ptr$<$ \mbox{\hyperlink{classHybridAStar_1_1Common_1_1SE2State}{S\+E2\+State}} $>$}]{,  }\item[{const \mbox{\hyperlink{classHybridAStar_1_1Common_1_1SE2State}{S\+E2\+State}} \&}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classHybridAStar_1_1Geometry_1_1HAstar_a2f61ebde48b5c3d4976e9e536895378a}\label{classHybridAStar_1_1Geometry_1_1HAstar_a2f61ebde48b5c3d4976e9e536895378a}} 
+\index{HybridAStar::Geometry::HAstar@{HybridAStar::Geometry::HAstar}!getGoal@{getGoal}}
+\index{getGoal@{getGoal}!HybridAStar::Geometry::HAstar@{HybridAStar::Geometry::HAstar}}
+\doxysubsubsection{\texorpdfstring{getGoal()}{getGoal()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classHybridAStar_1_1Common_1_1SE2State}{S\+E2\+State}} \& Hybrid\+A\+Star\+::\+Geometry\+::\+H\+Astar\+::get\+Goal (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classHybridAStar_1_1Geometry_1_1HAstar_a496e79675499e9c1149ba63a85cd68c5}\label{classHybridAStar_1_1Geometry_1_1HAstar_a496e79675499e9c1149ba63a85cd68c5}} 
+\index{HybridAStar::Geometry::HAstar@{HybridAStar::Geometry::HAstar}!getStart@{getStart}}
+\index{getStart@{getStart}!HybridAStar::Geometry::HAstar@{HybridAStar::Geometry::HAstar}}
+\doxysubsubsection{\texorpdfstring{getStart()}{getStart()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classHybridAStar_1_1Common_1_1SE2State}{S\+E2\+State}} \& Hybrid\+A\+Star\+::\+Geometry\+::\+H\+Astar\+::get\+Start (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classHybridAStar_1_1Geometry_1_1HAstar_a06bef90cf9f2185a1a72995df383f0b5}\label{classHybridAStar_1_1Geometry_1_1HAstar_a06bef90cf9f2185a1a72995df383f0b5}} 
+\index{HybridAStar::Geometry::HAstar@{HybridAStar::Geometry::HAstar}!operator=@{operator=}}
+\index{operator=@{operator=}!HybridAStar::Geometry::HAstar@{HybridAStar::Geometry::HAstar}}
+\doxysubsubsection{\texorpdfstring{operator=()}{operator=()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classHybridAStar_1_1Geometry_1_1HAstar}{H\+Astar}}\& Hybrid\+A\+Star\+::\+Geometry\+::\+H\+Astar\+::operator= (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classHybridAStar_1_1Geometry_1_1HAstar}{H\+Astar}} \&}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [delete]}}
+
+\mbox{\Hypertarget{classHybridAStar_1_1Geometry_1_1HAstar_a7ce7391101dbb6b73cbd6c303344a39f}\label{classHybridAStar_1_1Geometry_1_1HAstar_a7ce7391101dbb6b73cbd6c303344a39f}} 
+\index{HybridAStar::Geometry::HAstar@{HybridAStar::Geometry::HAstar}!ReedsShepp@{ReedsShepp}}
+\index{ReedsShepp@{ReedsShepp}!HybridAStar::Geometry::HAstar@{HybridAStar::Geometry::HAstar}}
+\doxysubsubsection{\texorpdfstring{ReedsShepp()}{ReedsShepp()}}
+{\footnotesize\ttfamily shared\+\_\+ptr$<$\mbox{\hyperlink{classHybridAStar_1_1Common_1_1SE2State}{S\+E2\+State}}$>$ Hybrid\+A\+Star\+::\+Geometry\+::\+H\+Astar\+::\+Reeds\+Shepp (\begin{DoxyParamCaption}\item[{shared\+\_\+ptr$<$ \mbox{\hyperlink{classHybridAStar_1_1Common_1_1SE2State}{S\+E2\+State}} $>$}]{,  }\item[{const \mbox{\hyperlink{classHybridAStar_1_1Common_1_1SE2State}{S\+E2\+State}} \&}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classHybridAStar_1_1Geometry_1_1HAstar_a2309a56aa324e089af332e52c4cdd56f}\label{classHybridAStar_1_1Geometry_1_1HAstar_a2309a56aa324e089af332e52c4cdd56f}} 
+\index{HybridAStar::Geometry::HAstar@{HybridAStar::Geometry::HAstar}!setStart@{setStart}}
+\index{setStart@{setStart}!HybridAStar::Geometry::HAstar@{HybridAStar::Geometry::HAstar}}
+\doxysubsubsection{\texorpdfstring{setStart()}{setStart()}}
+{\footnotesize\ttfamily void Hybrid\+A\+Star\+::\+Geometry\+::\+H\+Astar\+::set\+Start (\begin{DoxyParamCaption}\item[{std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classHybridAStar_1_1Common_1_1SE2State}{S\+E2\+State}} $>$}]{start }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classHybridAStar_1_1Geometry_1_1HAstar_a537d30b3cff15ac080df4278f7660a85}\label{classHybridAStar_1_1Geometry_1_1HAstar_a537d30b3cff15ac080df4278f7660a85}} 
+\index{HybridAStar::Geometry::HAstar@{HybridAStar::Geometry::HAstar}!solve@{solve}}
+\index{solve@{solve}!HybridAStar::Geometry::HAstar@{HybridAStar::Geometry::HAstar}}
+\doxysubsubsection{\texorpdfstring{solve()}{solve()}}
+{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classHybridAStar_1_1Common_1_1SE2State}{S\+E2\+State}} $>$ Hybrid\+A\+Star\+::\+Geometry\+::\+H\+Astar\+::solve (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classHybridAStar_1_1Geometry_1_1HAstar_a7bc240925ebe17c6993187de1d1a7b34}\label{classHybridAStar_1_1Geometry_1_1HAstar_a7bc240925ebe17c6993187de1d1a7b34}} 
+\index{HybridAStar::Geometry::HAstar@{HybridAStar::Geometry::HAstar}!updateHeuristic@{updateHeuristic}}
+\index{updateHeuristic@{updateHeuristic}!HybridAStar::Geometry::HAstar@{HybridAStar::Geometry::HAstar}}
+\doxysubsubsection{\texorpdfstring{updateHeuristic()}{updateHeuristic()}}
+{\footnotesize\ttfamily void Hybrid\+A\+Star\+::\+Geometry\+::\+H\+Astar\+::update\+Heuristic (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classHybridAStar_1_1Common_1_1SE2State}{S\+E2\+State}} \&}]{start,  }\item[{\mbox{\hyperlink{classHybridAStar_1_1Common_1_1SE2State}{S\+E2\+State}} \&}]{goal }\end{DoxyParamCaption})}
+
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{classHybridAStar_1_1Geometry_1_1HAstar_a1b2b9b04a22dfb2286d072a8c4ce41e2}\label{classHybridAStar_1_1Geometry_1_1HAstar_a1b2b9b04a22dfb2286d072a8c4ce41e2}} 
+\index{HybridAStar::Geometry::HAstar@{HybridAStar::Geometry::HAstar}!configSpace\_@{configSpace\_}}
+\index{configSpace\_@{configSpace\_}!HybridAStar::Geometry::HAstar@{HybridAStar::Geometry::HAstar}}
+\doxysubsubsection{\texorpdfstring{configSpace\_}{configSpace\_}}
+{\footnotesize\ttfamily shared\+\_\+ptr$<$\mbox{\hyperlink{classHybridAStar_1_1Common_1_1CollisionDetection}{Collision\+Detection}}$>$ Hybrid\+A\+Star\+::\+Geometry\+::\+H\+Astar\+::config\+Space\+\_\+\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classHybridAStar_1_1Geometry_1_1HAstar_a15a1eae4105fcd2ef556a215430c4cda}\label{classHybridAStar_1_1Geometry_1_1HAstar_a15a1eae4105fcd2ef556a215430c4cda}} 
+\index{HybridAStar::Geometry::HAstar@{HybridAStar::Geometry::HAstar}!defaultIter@{defaultIter}}
+\index{defaultIter@{defaultIter}!HybridAStar::Geometry::HAstar@{HybridAStar::Geometry::HAstar}}
+\doxysubsubsection{\texorpdfstring{defaultIter}{defaultIter}}
+{\footnotesize\ttfamily int Hybrid\+A\+Star\+::\+Geometry\+::\+H\+Astar\+::default\+Iter = 3000\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classHybridAStar_1_1Geometry_1_1HAstar_a0c62690e456624056530bb45a2865b1e}\label{classHybridAStar_1_1Geometry_1_1HAstar_a0c62690e456624056530bb45a2865b1e}} 
+\index{HybridAStar::Geometry::HAstar@{HybridAStar::Geometry::HAstar}!goal\_@{goal\_}}
+\index{goal\_@{goal\_}!HybridAStar::Geometry::HAstar@{HybridAStar::Geometry::HAstar}}
+\doxysubsubsection{\texorpdfstring{goal\_}{goal\_}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classHybridAStar_1_1Common_1_1SE2State}{S\+E2\+State}} Hybrid\+A\+Star\+::\+Geometry\+::\+H\+Astar\+::goal\+\_\+\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classHybridAStar_1_1Geometry_1_1HAstar_a5fb49737c2e2a3de8fcc1a2f498d8d7e}\label{classHybridAStar_1_1Geometry_1_1HAstar_a5fb49737c2e2a3de8fcc1a2f498d8d7e}} 
+\index{HybridAStar::Geometry::HAstar@{HybridAStar::Geometry::HAstar}!pMap\_@{pMap\_}}
+\index{pMap\_@{pMap\_}!HybridAStar::Geometry::HAstar@{HybridAStar::Geometry::HAstar}}
+\doxysubsubsection{\texorpdfstring{pMap\_}{pMap\_}}
+{\footnotesize\ttfamily shared\+\_\+ptr$<$\mbox{\hyperlink{classHybridAStar_1_1Common_1_1Map}{Map}}$<$\mbox{\hyperlink{classHybridAStar_1_1Common_1_1SE2State}{S\+E2\+State}}$>$ $>$ Hybrid\+A\+Star\+::\+Geometry\+::\+H\+Astar\+::p\+Map\+\_\+\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classHybridAStar_1_1Geometry_1_1HAstar_a830501e5b8dbb8c362ac7f66807b3426}\label{classHybridAStar_1_1Geometry_1_1HAstar_a830501e5b8dbb8c362ac7f66807b3426}} 
+\index{HybridAStar::Geometry::HAstar@{HybridAStar::Geometry::HAstar}!rrtxPlanner\_@{rrtxPlanner\_}}
+\index{rrtxPlanner\_@{rrtxPlanner\_}!HybridAStar::Geometry::HAstar@{HybridAStar::Geometry::HAstar}}
+\doxysubsubsection{\texorpdfstring{rrtxPlanner\_}{rrtxPlanner\_}}
+{\footnotesize\ttfamily unique\+\_\+ptr$<$\mbox{\hyperlink{classHybridAStar_1_1Common_1_1hRRTx}{h\+R\+R\+Tx}}$>$ Hybrid\+A\+Star\+::\+Geometry\+::\+H\+Astar\+::rrtx\+Planner\+\_\+\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classHybridAStar_1_1Geometry_1_1HAstar_a89a4094d73c27731addafca320295def}\label{classHybridAStar_1_1Geometry_1_1HAstar_a89a4094d73c27731addafca320295def}} 
+\index{HybridAStar::Geometry::HAstar@{HybridAStar::Geometry::HAstar}!rsPlanner\_@{rsPlanner\_}}
+\index{rsPlanner\_@{rsPlanner\_}!HybridAStar::Geometry::HAstar@{HybridAStar::Geometry::HAstar}}
+\doxysubsubsection{\texorpdfstring{rsPlanner\_}{rsPlanner\_}}
+{\footnotesize\ttfamily unique\+\_\+ptr$<$\mbox{\hyperlink{classHybridAStar_1_1Common_1_1hRScurve}{h\+R\+Scurve}}$>$ Hybrid\+A\+Star\+::\+Geometry\+::\+H\+Astar\+::rs\+Planner\+\_\+\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classHybridAStar_1_1Geometry_1_1HAstar_ab84235ad859f16055868dfe8c2a4143d}\label{classHybridAStar_1_1Geometry_1_1HAstar_ab84235ad859f16055868dfe8c2a4143d}} 
+\index{HybridAStar::Geometry::HAstar@{HybridAStar::Geometry::HAstar}!start\_@{start\_}}
+\index{start\_@{start\_}!HybridAStar::Geometry::HAstar@{HybridAStar::Geometry::HAstar}}
+\doxysubsubsection{\texorpdfstring{start\_}{start\_}}
+{\footnotesize\ttfamily shared\+\_\+ptr$<$\mbox{\hyperlink{classHybridAStar_1_1Common_1_1SE2State}{S\+E2\+State}}$>$ Hybrid\+A\+Star\+::\+Geometry\+::\+H\+Astar\+::start\+\_\+\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+geometry/hybridastar/\mbox{\hyperlink{HAstar_8h}{H\+Astar.\+h}}\item 
+geometry/hybridastar/\mbox{\hyperlink{HAstar_8cpp}{H\+Astar.\+cpp}}\end{DoxyCompactItemize}
