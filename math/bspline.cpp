@@ -27,7 +27,6 @@ bool BSpline::isCusp(int i) {
 }
 
 // complete function
-// TODO: if the path didn't find, this function can have problems
 void BSpline::tracePath(const std::shared_ptr<Common::SE2State> node) {
   Smoother::tracePath(node);  // trace a whole path
   auto pathlength = path_.size();
@@ -134,18 +133,14 @@ void BSpline::setCtrlPoints(bool autogen) {
     if (k != 0) {
       for (size_t j = 0; j < ctrlpSize; ++j)
       {
-        if(j == 0) {  // if at the first point
-          temp.value = 0;
-          temp.multiplicity = k+1;
-        }
-        else if(j == ctrlpSize-1) { // if at the last point
-          temp.value = ctrlpSize-1;
+        if(j == 0 || j == ctrlpSize-1) {  // if at the first point or last point
           temp.multiplicity = k+1;
         }
         else {  // if at the medium points
           temp.value = j;
           temp.multiplicity = 1;
         }
+        temp.value = j;
         vtemp.push_back(temp);
       }
     }

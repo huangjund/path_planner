@@ -29,13 +29,13 @@ namespace HybridAStar{
       isStartvalid_ = true;
       Action action = startSetting;
       start_ = *start;
-      // start_.pose.pose.position.x = 47.95;
-      // start_.pose.pose.position.y = 3.359;
-      // start_.pose.pose.position.z = 0;
-      // start_.pose.pose.orientation.w = -1.113;
-      // start_.pose.pose.orientation.x = 0;
-      // start_.pose.pose.orientation.y = 0;
-      // start_.pose.pose.orientation.z = 1;
+      start_.pose.pose.position.x = 43.302;
+      start_.pose.pose.position.y = 10.267;
+      start_.pose.pose.position.z = 0;
+      start_.pose.pose.orientation.w = -0.853;
+      start_.pose.pose.orientation.x = 0;
+      start_.pose.pose.orientation.y = 0;
+      start_.pose.pose.orientation.z = 1;
       
       // automata
       outputAutomata(action);
@@ -56,13 +56,13 @@ namespace HybridAStar{
       isGoalvalid_ = true;
       Action action = goalSetting;
       goal_ = *goal;
-      // goal_.pose.position.x = 48.031;
-      // goal_.pose.position.y = 3.1;
-      // goal_.pose.position.z = 0;
-      // goal_.pose.orientation.w = 0.989;
-      // goal_.pose.orientation.x = 0;
-      // goal_.pose.orientation.y = 0;
-      // goal_.pose.orientation.z = -0.149;
+      goal_.pose.position.x = 45.139;
+      goal_.pose.position.y = 5.067;
+      goal_.pose.position.z = 0;
+      goal_.pose.orientation.w = 0.542;
+      goal_.pose.orientation.x = 0;
+      goal_.pose.orientation.y = 0;
+      goal_.pose.orientation.z = -0.84;
 
       // automata
       outputAutomata(action);
