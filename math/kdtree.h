@@ -2,8 +2,8 @@
 #define _HYBRID_A_STAR_KD_TREE_H
 
 /*
- * This is an adaptation of the KD-tree implementation in rosetta code
- *  https://rosettacode.org/wiki/K-d_tree
+ * Reference to the following theory:
+ *  https://en.wikipedia.org/wiki/K-d_tree
  *
  */
 

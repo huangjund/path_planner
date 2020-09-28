@@ -35,6 +35,7 @@ set(SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/common/hRRTx.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/common/hRScurve.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/common/hAStar.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/common/PlannerTerminationCondition.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/geometry/Planner.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/geometry/hybridastar/HAstar.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/geometry/RRTxstatic/RRTXstatic.cpp
@@ -63,6 +64,7 @@ set(HEADERS
     ${CMAKE_CURRENT_SOURCE_DIR}/common/hRRTx.h
     ${CMAKE_CURRENT_SOURCE_DIR}/common/hRScurve.h
     ${CMAKE_CURRENT_SOURCE_DIR}/common/hAStar.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/common/PlannerTerminationCondition.h
     ${CMAKE_CURRENT_SOURCE_DIR}/geometry/Planner.h
     ${CMAKE_CURRENT_SOURCE_DIR}/geometry/hybridastar/HAstar.h
     ${CMAKE_CURRENT_SOURCE_DIR}/geometry/RRTxstatic/RRTXstatic.h
@@ -78,6 +80,7 @@ set(HEADERS
     ${CMAKE_CURRENT_SOURCE_DIR}/multibody/SingleForkLiftPlant.h
     ${CMAKE_CURRENT_SOURCE_DIR}/utils/Helper.h
     ${CMAKE_CURRENT_SOURCE_DIR}/utils/bucketedqueue.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/utils/Time.h
     ${CMAKE_CURRENT_SOURCE_DIR}/aux/visualize.h
     ${CMAKE_CURRENT_SOURCE_DIR}/math/smoother.h
     ${CMAKE_CURRENT_SOURCE_DIR}/math/bspline.h
