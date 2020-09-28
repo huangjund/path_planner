@@ -38,6 +38,7 @@ set(SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/geometry/Planner.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/geometry/hybridastar/HAstar.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/geometry/RRTxstatic/RRTXstatic.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/geometry/RRTxdynamic/RRTXdynamic.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/geometry/dubins/dubins.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/geometry/dynamicvoronoi.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/geometry/path.cpp
@@ -49,6 +50,7 @@ set(SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/math/smoother.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/math/bspline.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/math/bsplinebasis.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/math/kdtree.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/aux/visualize.cpp
     )
 set(HEADERS
@@ -64,6 +66,7 @@ set(HEADERS
     ${CMAKE_CURRENT_SOURCE_DIR}/geometry/Planner.h
     ${CMAKE_CURRENT_SOURCE_DIR}/geometry/hybridastar/HAstar.h
     ${CMAKE_CURRENT_SOURCE_DIR}/geometry/RRTxstatic/RRTXstatic.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/geometry/RRTxdynamic/RRTXdynamic.h
     ${CMAKE_CURRENT_SOURCE_DIR}/geometry/dubins/dubins.h
     ${CMAKE_CURRENT_SOURCE_DIR}/geometry/dynamicvoronoi.h
     ${CMAKE_CURRENT_SOURCE_DIR}/geometry/path.h
@@ -80,6 +83,7 @@ set(HEADERS
     ${CMAKE_CURRENT_SOURCE_DIR}/math/bspline.h
     ${CMAKE_CURRENT_SOURCE_DIR}/math/bsplinebasis.h
     ${CMAKE_CURRENT_SOURCE_DIR}/math/vector2d.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/math/kdtree.h
     ${CMAKE_CURRENT_SOURCE_DIR}/examples/main.h
     )
 add_library(HYAS ${SOURCES} ${HEADERS})
