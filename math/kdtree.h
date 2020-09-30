@@ -22,7 +22,15 @@ namespace HybridAStar {
 template <std::size_t N>
 class Point {
  public:
+  Point() = default;
+  ~Point() = default;
 
+  Point(const Point<N>& p) { *this = p;}
+  
+  Point& operator=(const Point<N>& p) {
+    for (size_t i = 0; i < N; i++) coords[i] = p.coords[i];
+    return *this;
+  }
   // Types representing iterators that can traverse and optionally modify the elements of the Point.
   typedef double* iterator;
   typedef const double* const_iterator;
@@ -48,6 +56,7 @@ class Point {
 // Returns the Euclidean distance between two points.
 template <std::size_t N>
 double Distance(const Point<N>& one, const Point<N>& two);
+
 
 // Returns whether two points are equal / not equal
 template <std::size_t N>
@@ -175,12 +184,15 @@ class BoundedPQueue {
   std::size_t maximumSize;
 };
 
+// the ElemType should be a label of a point
+// if points are used by knn algorithm, this label could be an unsigned int to verify a set
+// here, we take it as a coordinate of the point
 template <std::size_t N, typename ElemType>
 class KDTree {
  public:
 
   // Constructs an empty KDTree.
-  KDTree() = default;
+  KDTree();
 
   // Efficiently build a balanced KD-tree from a large set of points
   KDTree(std::vector<std::pair<Point<N>, ElemType>>& points);
@@ -227,9 +239,17 @@ class KDTree {
     * nearest to v and returns the most common value associated with those
     * points. In the event of a tie, one of the most frequent value will be chosen.
     */
-  ElemType kNNValue(const Point<N>& key, std::size_t k) const;
+  BoundedPQueue<ElemType> kNNValue(const Point<N>& key, std::size_t k) const;
 
-  
+  /**
+   * @brief find points within a specific radius
+   * 
+   * @param key 
+   * @param radius 
+   * @return BoundedPQueue<ElemType> 
+   */
+  BoundedPQueue<ElemType> kNNValue(const Point<N>& key, double radius) const;
+
  private:
   struct Node {
       Point<N> point;
@@ -265,6 +285,10 @@ class KDTree {
   // Recursive helper method for kNNValue(pt, k)
   void nearestNeighborRecurse(const Node* currNode, const Point<N>& key, BoundedPQueue<ElemType>& pQueue) const;
 
+  void nearestNeighborRecurse(const Node* currNode, 
+                              const Point<N>& key, 
+                              double radius,
+                              std::unordered_map<double, ElemType>& pBucket) const;
   /*
     * Recursive helper method for copy constructor and assignment operator
     * Deep copies tree 'root' and returns the root of the copied tree
@@ -274,6 +298,8 @@ class KDTree {
   // Recursively free up all resources of subtree rooted at 'currNode'
   void freeResource(Node* currNode);
 };
+
+template class KDTree<2, Point<2>>;
 
 } // namespace HybridAStar
 

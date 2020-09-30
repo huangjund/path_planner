@@ -4,6 +4,7 @@
 #include <vector>
 #include <functional>
 #include <utility>
+#include <random>
 
 #include "common/PlannerTerminationCondition.h"
 #include "math/kdtree.h"
@@ -26,19 +27,28 @@ namespace Geometry
   // TODO: this class should be inherit from Planner
   class RRTXdynamic
   {
-    using point_t = std::pair<Point<2>, unsigned int>;  /// a 2 dimensional point
+   public:
+    using point_t = std::pair<Point<2>, Point<2>>;  /// first: geometry position; second: value carried by the position
     using pointVec = std::vector<point_t>;
-    using kdtree = KDTree<1, unsigned int>;
-  private:
+    using kdtree = KDTree<2, Point<2>>;
+   private:
     point_t v_goal_;
     point_t v_start_;
     point_t v_bot_;
     pointVec vertexSet_;  // store all vertices into this structure
-    kdtree isibleTree_;
+    kdtree visableTree_;
 
+    const double delta = 1.5;  // the fixed maximum radius
+    double gama;
 
-    double r_;
-  public:
+    std::default_random_engine randEngine;
+    std::uniform_real_distribution<double> u;
+
+    // uniform sampler
+    point_t genRandom();
+    point_t nearest(const point_t&);
+    void saturate(point_t& _v, const point_t& _v_nearest);
+   public:
     RRTXdynamic(const point_t&, const point_t&);
     ~RRTXdynamic();
 
@@ -54,8 +64,6 @@ namespace Geometry
     void solve(double solvetime);
     double shrinkingBallRadius(const size_t&);
     void updateObstacles();
-    point_t genRandom();
-    point_t nearest(const point_t&);
   };
 
 } // namespace Geometry

@@ -188,31 +188,51 @@ void KDTree<N, ElemType>::nearestNeighborRecurse(const typename KDTree<N, ElemTy
 }
 
 template <std::size_t N, typename ElemType>
-ElemType KDTree<N, ElemType>::kNNValue(const Point<N>& key, std::size_t k) const {
+BoundedPQueue<ElemType> KDTree<N, ElemType>::kNNValue(const Point<N>& key, std::size_t k) const {
     BoundedPQueue<ElemType> pQueue(k); // BPQ with maximum size k
-    if (empty()) return ElemType(); // default return value if KD-tree is empty
+    if (empty()) return BoundedPQueue<ElemType>(0); // default return value if KD-tree is empty
 
     // Recursively search the KD-tree with pruning
     nearestNeighborRecurse(root_, key, pQueue);
 
-    // Count occurrences of all ElemType in the kNN set
-    std::unordered_map<ElemType, int> counter;
-    while (!pQueue.empty()) {
-        ++counter[pQueue.dequeueMin()];
-    }
-
-    // Return the most frequent element in the kNN set
-    ElemType result;
-    int cnt = -1;
-    for (const auto &p : counter) {
-        if (p.second > cnt) {
-            result = p.first;
-            cnt = p.second;
-        }
-    }
-    return result;
+    return pQueue;
 }
 
+template <std::size_t N, typename ElemType>
+void KDTree<N, ElemType>::nearestNeighborRecurse(const Node* currNode, 
+                                                const Point<N>& key, 
+                                                double radius,
+                                                std::unordered_map<double, ElemType>& pBucket) const {
+  if (currNode == NULL) return;
+  const Point<N>& currPoint = currNode->point;
+
+  auto dis = Distance(currPoint, key);
+  if (dis < radius) 
+    pBucket[dis] = currNode->value;
+
+  int currLevel = currNode->level;
+  bool isLeftTree;
+  if (key[currLevel%N] < currPoint[currLevel%N]) {
+    nearestNeighborRecurse(currNode->left, key, radius, pBucket);
+    isLeftTree = true;
+  } else {
+    nearestNeighborRecurse(currNode->right, key, radius, pBucket);
+    isLeftTree = false;
+  }
+
+  if (fabs(key[currLevel%N] - currPoint[currLevel%N]) < radius) {
+    if (isLeftTree) nearestNeighborRecurse(currNode->right, key, radius, pBucket);
+    else nearestNeighborRecurse(currNode->left, key, radius, pBucket);
+  }
+}
+
+template <std::size_t N, typename ElemType>
+BoundedPQueue<ElemType> KDTree<N, ElemType>::kNNValue(const Point<N>& key, double radius) const {
+  std::unordered_map<double, ElemType> bucket;   // create an unordered multimap as a temp container
+  if (empty()) return BoundedPQueue<ElemType>(0);
+
+
+}
 
 // class Point
 
