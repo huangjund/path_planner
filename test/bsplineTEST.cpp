@@ -1,6 +1,5 @@
 #define PY_SSIZE_T_CLEAN
 #include <python3.8/Python.h>
-#include <gtest/gtest.h>
 
 #include <iostream>
 #include <cmath>
@@ -8,13 +7,17 @@
 #include "../math/bsplinebasis.h"
 #include "../math/vector2d.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 std::vector<HybridAStar::Vector2D> generatepath() {
   std::vector<HybridAStar::Vector2D> vtemp;
   HybridAStar::Vector2D temp;
   double x = 0, y = 0;
-  double stepsize = 0.1;
+  double stepsize = 0.4;
   while(x<5) {
-    y = 0.3*x+2;
+    y = 0.5*x*x-2*x+1;
     temp.setX(x);temp.setY(y);
     vtemp.push_back(std::move(temp));
     x += stepsize;
@@ -22,7 +25,7 @@ std::vector<HybridAStar::Vector2D> generatepath() {
   return vtemp;
 }
 
-std::vector<HybridAStar::Vector2D> run() {
+std::vector<HybridAStar::Vector2D> generateSpline() {
   HybridAStar::bsplinebasis line(generatepath());
 
   auto num = line.trajSize();
@@ -37,40 +40,71 @@ std::vector<HybridAStar::Vector2D> run() {
   return vtemp;
 }
 
-
-static PyObject* _run(PyObject *self, PyObject *args) {
-  auto res = run();
-  return PyLong_FromLong(1);
+int pathSize() {
+  return generatepath().size();
 }
 
-static PyMethodDef BSplinePlot[] = {
-    {
-        "run",
-        _run,
-        METH_VARARGS,
-        ""
-    },
-    {NULL, NULL, 0, NULL}
-};
+int trajectorySize() {
+  HybridAStar::bsplinebasis line(generatepath());
 
-static struct PyModuleDef bsplineTEST = {
-  PyModuleDef_HEAD_INIT,
-  "bsplineTEST",
-  NULL,
-  -1,
-  BSplinePlot
-};
-
-PyMODINIT_FUNC PyInit_bsplineTEST(void)
-{
-  PyObject *m;
-  m = PyModule_Create(&bsplineTEST);
-  if (m == NULL)
-  return NULL;
-    printf("init great_module module\n");
-  return m;
+  return line.trajSize();
 }
 
+void splineVector(double x[], double y[], int len) {
+  auto splinev = generateSpline();
+  for(size_t i = 0; i<len ; ++i) {
+    x[i] = splinev[i].getX();
+    y[i] = splinev[i].getY();
+  }
+  return;
+}
+
+void pathVector(double x[], double y[], int len) {
+  auto path = generatepath();
+  for (size_t i = 0; i<path.size(); ++i) {
+    x[i] = path[i].getX();
+    y[i] = path[i].getY();
+  }
+  return;
+}
+
+// static PyObject* _run(PyObject *self, PyObject *args) {
+//   auto res = run();
+//   long a = 1;
+//   return PyLong_FromLong(a);
+// }
+
+// static PyMethodDef BSplinePlot[] = {
+//     {
+//         "run",
+//         _run,
+//         METH_VARARGS,
+//         ""
+//     },
+//     {NULL, NULL, 0, NULL} // sentinel
+// };
+
+// static struct PyModuleDef bsplineTEST = {
+//   PyModuleDef_HEAD_INIT,
+//   "bsplineTEST",  // name of python module
+//   NULL, // module documentation, maybe null
+//   -1,
+//   BSplinePlot
+// };
+
+// PyMODINIT_FUNC PyInit_bsplineTEST(void)
+// {
+//   PyObject *m;
+//   m = PyModule_Create(&bsplineTEST);
+//   if (m == NULL)
+//     return NULL;
+//   printf("init great_module module\n");
+//   return m;
+// }
+
+#ifdef __cplusplus
+}
+#endif
 // int main(int argc, char **argv) {
 //   ::testing::InitGoogleTest(&argc,argv);
 //   run();
