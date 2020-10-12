@@ -13,7 +13,7 @@ import ctypes
 so = ctypes.CDLL('/home/navision/catkin_ws/devel/lib/libTEST.so')
 
 a = so.trajectorySize()
-size = (a - 3 + 2)/0.01
+size = (a-3)/0.05#(a - 3)/0.05   # related to ctrlpoints and spline step size
 b = so.pathSize()
 
 

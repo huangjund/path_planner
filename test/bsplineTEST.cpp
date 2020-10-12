@@ -15,7 +15,7 @@ std::vector<HybridAStar::Vector2D> generatepath() {
   std::vector<HybridAStar::Vector2D> vtemp;
   HybridAStar::Vector2D temp;
   double x = 0, y = 0;
-  double stepsize = 0.4;
+  double stepsize = 0.8;
   while(x<5) {
     y = 0.5*x*x-2*x+1;
     temp.setX(x);temp.setY(y);
@@ -29,13 +29,17 @@ std::vector<HybridAStar::Vector2D> generateSpline() {
   HybridAStar::bsplinebasis line(generatepath());
 
   auto num = line.trajSize();
-  auto ctrlpoints = num - 3 + 2;
+  auto ctrlpoints = num - 3 + 1;  // when the spline order equals 3
+
+  //auto ctrlpoints = num - 2 + 1; // when the spline order equals 2
+
+  std::cout << "trajectory point size:" << num << "\tcontrol point numbers:" << ctrlpoints << std::endl;
 
   std::vector<HybridAStar::Vector2D> vtemp;
   double t = 0;
-  while (t<ctrlpoints) {
+  while (t<(ctrlpoints-1)) {
     vtemp.push_back(line.compute(t));
-    t += 0.01;
+    t += 0.05;
   }
   return vtemp;
 }
