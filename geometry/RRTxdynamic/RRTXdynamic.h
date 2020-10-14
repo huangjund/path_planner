@@ -5,51 +5,86 @@
 #include <functional>
 #include <utility>
 #include <random>
+#include <memory>
+#include <map>
 
 #include "common/PlannerTerminationCondition.h"
+#include "common/collision/clsDetection.h"
+#include "common/ValidityChecker.h"
+#include "common/statespace/SE2State.h"
 #include "math/kdtree.h"
 
 namespace HybridAStar
 {
 namespace Geometry
 {
-  struct Vertex {
-    double x;
-    double y;
-    Vertex() : Vertex(0,0) {}
-    Vertex(const double& xcor, const double& ycor) : x(xcor), y(ycor) {}
-    Vertex(const Vertex& v) : x(v.x), y(v.y) {}
-    Vertex& operator=(const Vertex& v) {x = v.x; y = v.y;}
-  };
-
-
-
   // TODO: this class should be inherit from Planner
+  /**
+   * @brief reference to RRTx: Asymptotically Optimal Single-Query Sampling-Based Motion
+   * Planning with Quick Replanning
+   * 
+   */
   class RRTXdynamic
   {
    public:
-    using point_t = std::pair<Point<2>, Point<2>>;  /// first: geometry position; second: value carried by the position
-    using pointVec = std::vector<point_t>;
-    using kdtree = KDTree<2, Point<2>>;
+    using point_t = Point<2>;  /// first: geometry position and value carried by the position
+    using pointVec = std::vector<std::shared_ptr<point_t>>;
+    using kdtree = KDTree<2>;
    private:
+    struct less
+    {
+      bool operator()(const std::pair<double, double>& x,
+                      const std::pair<double, double>& y) const {
+        return (x.first < y.first || (x.first == y.first && x.second < y.second));
+      }
+    };
+    
+
     point_t v_goal_;
     point_t v_start_;
     point_t v_bot_;
     pointVec vertexSet_;  // store all vertices into this structure
     kdtree visableTree_;
+    std::multimap<std::pair<double,double>, point_t, less> Q_; 
 
     const double delta = 1.5;  // the fixed maximum radius
     double gama;
+    const double epsilon = 0; // epsilon-consistent parameter
 
     std::default_random_engine randEngine;
     std::uniform_real_distribution<double> u;
 
+    std::unique_ptr<ValidityChecker> stateChecker;
+    std::unique_ptr<MotionChecker> motionChecker;
+
     // uniform sampler
+    double shrinkingBallRadius(const size_t&);
+
     point_t genRandom();
-    point_t nearest(const point_t&);
+    
+    std::shared_ptr<point_t>& nearest(const point_t&);
+    
     void saturate(point_t& _v, const point_t& _v_nearest);
+    
+    std::shared_ptr<point_t>& extend(point_t& _v, const double r);
+    
+    void rewireNeighbors(std::shared_ptr<point_t>& _v, const double& r);
+    
+    void cullNeighbors(std::shared_ptr<point_t>& _v, const double& r);
+    
+    void makeParentOf(std::shared_ptr<point_t>& _v, std::shared_ptr<point_t>& _u);
+    
+    void verrifyQueue(std::shared_ptr<point_t>& _u);
+    
+    void reduceInconsistency();
+    
+    void findParent(point_t&,const BoundedPQueue<std::shared_ptr<Point<2>>>&, const double& r);
+    
+    
    public:
-    RRTXdynamic(const point_t&, const point_t&);
+    RRTXdynamic(const point_t&, const point_t&,
+                double, double,
+                std::shared_ptr<Common::CollisionDetection>&);  // [unit: meters]
     ~RRTXdynamic();
 
     void setvGoal(const double& x, const double& y);
@@ -62,8 +97,9 @@ namespace Geometry
     // set validator as a function pointer parameter
     void solve(const Common::PlannerTerminationCondition& ptc);
     void solve(double solvetime);
-    double shrinkingBallRadius(const size_t&);
     void updateObstacles();
+    void setStateValidityChecker(const std::shared_ptr<Common::CollisionDetection>&);
+    void setMotionValidityChecker(const std::shared_ptr<Common::CollisionDetection>&);
   };
 
 } // namespace Geometry

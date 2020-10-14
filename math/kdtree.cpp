@@ -1,12 +1,12 @@
 #include "kdtree.h"
 
 namespace HybridAStar {
-template <std::size_t N, typename ElemType>
-KDTree<N, ElemType>::KDTree() :
+template <std::size_t N>
+KDTree<N>::KDTree() :
     root_(NULL), size_(0) { }
 
-template <std::size_t N, typename ElemType>
-typename KDTree<N, ElemType>::Node* KDTree<N, ElemType>::deepcopyTree(typename KDTree<N, ElemType>::Node* root) {
+template <std::size_t N>
+typename KDTree<N>::Node* KDTree<N>::deepcopyTree(typename KDTree<N>::Node* root) {
     if (root == NULL) return NULL;
     Node* newRoot = new Node(*root);
     newRoot->left = deepcopyTree(root->left);
@@ -14,14 +14,14 @@ typename KDTree<N, ElemType>::Node* KDTree<N, ElemType>::deepcopyTree(typename K
     return newRoot;
 }
 
-template <std::size_t N, typename ElemType>
-typename KDTree<N, ElemType>::Node* KDTree<N, ElemType>::buildTree(typename std::vector<std::pair<Point<N>, ElemType>>::iterator start,
-                                                                   typename std::vector<std::pair<Point<N>, ElemType>>::iterator end, int currLevel) {
+template <std::size_t N>
+typename KDTree<N>::Node* KDTree<N>::buildTree(typename std::vector<Point<N>>::iterator start,
+                                                typename std::vector<Point<N>>::iterator end, int currLevel) {
     if (start >= end) return NULL; // empty tree
 
     int axis = currLevel % N; // the axis to split on
-    auto cmp = [axis](const std::pair<Point<N>, ElemType>& p1, const std::pair<Point<N>, ElemType>& p2) {
-        return p1.first[axis] < p2.first[axis];
+    auto cmp = [axis](const Point<N>& p1, const Point<N>& p2) {
+        return p1[axis] < p2[axis];
     };
     std::size_t len = end - start;
     auto mid = start + len / 2;
@@ -29,30 +29,30 @@ typename KDTree<N, ElemType>::Node* KDTree<N, ElemType>::buildTree(typename std:
 
     // move left (if needed) so that all the equal points are to the right
     // The tree will still be balanced as long as there aren't many points that are equal along each axis
-    while (mid > start && (mid - 1)->first[axis] == mid->first[axis]) {
+    while (mid > start && (mid - 1)[axis] == mid[axis]) {
         --mid;
     }
 
-    Node* newNode = new Node(mid->first, currLevel, mid->second);
+    Node* newNode = new Node(*mid, currLevel);
     newNode->left = buildTree(start, mid, currLevel + 1);
     newNode->right = buildTree(mid + 1, end, currLevel + 1);
     return newNode;
 }
 
-template <std::size_t N, typename ElemType>
-KDTree<N, ElemType>::KDTree(std::vector<std::pair<Point<N>, ElemType>>& points) {
+template <std::size_t N>
+KDTree<N>::KDTree(std::vector<Point<N>>& points) {
     root_ = buildTree(points.begin(), points.end(), 0);
     size_ = points.size();
 }
 
-template <std::size_t N, typename ElemType>
-KDTree<N, ElemType>::KDTree(const KDTree& rhs) {
+template <std::size_t N>
+KDTree<N>::KDTree(const KDTree& rhs) {
     root_ = deepcopyTree(rhs.root_);
     size_ = rhs.size_;
 }
 
-template <std::size_t N, typename ElemType>
-KDTree<N, ElemType>& KDTree<N, ElemType>::operator=(const KDTree& rhs) {
+template <std::size_t N>
+KDTree<N>& KDTree<N>::operator=(const KDTree& rhs) {
     if (this != &rhs) { // make sure we don't self-assign
         freeResource(root_);
         root_ = deepcopyTree(rhs.root_);
@@ -61,36 +61,36 @@ KDTree<N, ElemType>& KDTree<N, ElemType>::operator=(const KDTree& rhs) {
     return *this;
 }
 
-template <std::size_t N, typename ElemType>
-void KDTree<N, ElemType>::freeResource(typename KDTree<N, ElemType>::Node* currNode) {
+template <std::size_t N>
+void KDTree<N>::freeResource(typename KDTree<N>::Node* currNode) {
     if (currNode == NULL) return;
     freeResource(currNode->left);
     freeResource(currNode->right);
     delete currNode;
 }
 
-template <std::size_t N, typename ElemType>
-KDTree<N, ElemType>::~KDTree() {
+template <std::size_t N>
+KDTree<N>::~KDTree() {
     freeResource(root_);
 }
 
-template <std::size_t N, typename ElemType>
-std::size_t KDTree<N, ElemType>::dimension() const {
+template <std::size_t N>
+std::size_t KDTree<N>::dimension() const {
     return N;
 }
 
-template <std::size_t N, typename ElemType>
-std::size_t KDTree<N, ElemType>::size() const {
+template <std::size_t N>
+std::size_t KDTree<N>::size() const {
     return size_;
 }
 
-template <std::size_t N, typename ElemType>
-bool KDTree<N, ElemType>::empty() const {
+template <std::size_t N>
+bool KDTree<N>::empty() const {
     return size_ == 0;
 }
 
-template <std::size_t N, typename ElemType>
-typename KDTree<N, ElemType>::Node* KDTree<N, ElemType>::findNode(typename KDTree<N, ElemType>::Node* currNode, const Point<N>& pt) const {
+template <std::size_t N>
+typename KDTree<N>::Node* KDTree<N>::findNode(typename KDTree<N>::Node* currNode, const Point<N>& pt) const {
     if (currNode == NULL || currNode->point == pt) return currNode;
 
     const Point<N>& currPoint = currNode->point;
@@ -102,25 +102,25 @@ typename KDTree<N, ElemType>::Node* KDTree<N, ElemType>::findNode(typename KDTre
     }
 }
 
-template <std::size_t N, typename ElemType>
-bool KDTree<N, ElemType>::contains(const Point<N>& pt) const {
+template <std::size_t N>
+bool KDTree<N>::contains(const Point<N>& pt) const {
     auto node = findNode(root_, pt);
     return node != NULL && node->point == pt;
 }
 
-template <std::size_t N, typename ElemType>
-void KDTree<N, ElemType>::insert(const Point<N>& pt, const ElemType& value) {
-    auto targetNode = findNode(root_, pt);
+template <std::size_t N>
+void KDTree<N>::insert(const std::shared_ptr<Point<N>>& pt) {
+    auto targetNode = findNode(root_, *pt);
     if (targetNode == NULL) { // this means the tree is empty
-        root_ = new Node(pt, 0, value);
+        root_ = new Node(pt, 0);
         size_ = 1;
     } else {
         if (targetNode->point == pt) { // pt is already in the tree, simply update its value
-            targetNode->value = value;
+            std::cout << "point already in kd tree" << std::endl;
         } else { // construct a new node and insert it to the right place (child of targetNode)
             int currLevel = targetNode->level;
-            Node* newNode = new Node(pt, currLevel + 1, value);
-            if (pt[currLevel%N] < targetNode->point[currLevel%N]) {
+            Node* newNode = new Node(pt, currLevel + 1);
+            if ((*pt)[currLevel%N] < (*targetNode->point)[currLevel%N]) {
                 targetNode->left = newNode;
             } else {
                 targetNode->right = newNode;
@@ -130,44 +130,45 @@ void KDTree<N, ElemType>::insert(const Point<N>& pt, const ElemType& value) {
     }
 }
 
-template <std::size_t N, typename ElemType>
-const ElemType& KDTree<N, ElemType>::at(const Point<N>& pt) const {
-    auto node = findNode(root_, pt);
-    if (node == NULL || node->point != pt) {
-        throw std::out_of_range("Point not found in the KD-Tree");
-    } else {
-        return node->value;
-    }
-}
+// template <std::size_t N>
+// const ElemType& KDTree<N>::at(const Point<N>& pt) const {
+//     auto node = findNode(root_, pt);
+//     if (node == NULL || node->point != pt) {
+//         throw std::out_of_range("Point not found in the KD-Tree");
+//     } else {
+//         return node->value;
+//     }
+// }
 
-template <std::size_t N, typename ElemType>
-ElemType& KDTree<N, ElemType>::at(const Point<N>& pt) {
-    const KDTree<N, ElemType>& constThis = *this;
-    return const_cast<ElemType&>(constThis.at(pt));
-}
+// template <std::size_t N>
+// ElemType& KDTree<N>::at(const Point<N>& pt) {
+//     const KDTree<N>& constThis = *this;
+//     return const_cast<ElemType&>(constThis.at(pt));
+// }
 
-template <std::size_t N, typename ElemType>
-ElemType& KDTree<N, ElemType>::operator[](const Point<N>& pt) {
-    auto node = findNode(root_, pt);
-    if (node != NULL && node->point == pt) { // pt is already in the tree
-        return node->value;
-    } else { // insert pt with default ElemType value, and return reference to the new ElemType
-        insert(pt);
-        if (node == NULL) return root_->value; // the new node is the root
-        else return (node->left != NULL && node->left->point == pt) ? node->left->value: node->right->value;
-    }
-}
+// template <std::size_t N>
+// ElemType& KDTree<N>::operator[](const Point<N>& pt) {
+//     auto node = findNode(root_, pt);
+//     if (node != NULL && node->point == pt) { // pt is already in the tree
+//         return node->value;
+//     } else { // insert pt with default ElemType value, and return reference to the new ElemType
+//         insert(pt);
+//         if (node == NULL) return root_->value; // the new node is the root
+//         else return (node->left != NULL && node->left->point == pt) ? node->left->value: node->right->value;
+//     }
+// }
 
-template <std::size_t N, typename ElemType>
-void KDTree<N, ElemType>::nearestNeighborRecurse(const typename KDTree<N, ElemType>::Node* currNode,
-                                                const Point<N>& key, 
-                                                BoundedPQueue<ElemType>& pQueue) const {
+template <std::size_t N>
+void KDTree<N>::nearestNeighborRecurse(const typename KDTree<N>::Node* currNode,
+                                        const Point<N>& key, 
+                                        BoundedPQueue<std::shared_ptr<Point<N>>>& pQueue) const {
     if (currNode == NULL) return;
-    const Point<N>& currPoint = currNode->point;
+    const auto& currPoint = currNode->point;
 
     // Add the current point to the BPQ if it is closer to 'key' that some point in the BPQ
     // @param: value, priority
-    pQueue.enqueue(currNode->value, Distance(currPoint, key));
+    // TODO: this sentence should not be here
+    pQueue.enqueue(currNode->point, Distance(*currPoint, key));
 
     // Recursively search the half of the tree that contains Point 'key'
     int currLevel = currNode->level;
@@ -187,10 +188,10 @@ void KDTree<N, ElemType>::nearestNeighborRecurse(const typename KDTree<N, ElemTy
     }
 }
 
-template <std::size_t N, typename ElemType>
-BoundedPQueue<ElemType> KDTree<N, ElemType>::kNNValue(const Point<N>& key, std::size_t k) const {
-    BoundedPQueue<ElemType> pQueue(k); // BPQ with maximum size k
-    if (empty()) return BoundedPQueue<ElemType>(0); // default return value if KD-tree is empty
+template <std::size_t N>
+BoundedPQueue<std::shared_ptr<Point<N>>> KDTree<N>::kNNValue(const Point<N>& key, std::size_t k) const {
+    BoundedPQueue<std::shared_ptr<Point<N>>> pQueue(k); // BPQ with maximum size k
+    if (empty()) return BoundedPQueue<std::shared_ptr<Point<N>>>(0); // default return value if KD-tree is empty
 
     // Recursively search the KD-tree with pruning
     nearestNeighborRecurse(root_, key, pQueue);
@@ -198,17 +199,17 @@ BoundedPQueue<ElemType> KDTree<N, ElemType>::kNNValue(const Point<N>& key, std::
     return pQueue;
 }
 
-template <std::size_t N, typename ElemType>
-void KDTree<N, ElemType>::nearestNeighborRecurse(const Node* currNode, 
-                                                const Point<N>& key, 
-                                                double radius,
-                                                std::unordered_map<double, ElemType>& pBucket) const {
+template <std::size_t N>
+void KDTree<N>::nearestNeighborRecurse(const Node* currNode, 
+                                        const Point<N>& key, 
+                                        double radius,
+                                        std::unordered_map<double, std::shared_ptr<Point<N>>>& pBucket) const {
   if (currNode == NULL) return;
-  const Point<N>& currPoint = currNode->point;
+  const auto& currPoint = currNode->point;
 
-  auto dis = Distance(currPoint, key);
+  auto dis = Distance(*currPoint, key);
   if (dis < radius) 
-    pBucket[dis] = currNode->value;
+    pBucket[dis] = currNode->point;
 
   int currLevel = currNode->level;
   bool isLeftTree;
@@ -226,12 +227,12 @@ void KDTree<N, ElemType>::nearestNeighborRecurse(const Node* currNode,
   }
 }
 
-template <std::size_t N, typename ElemType>
-BoundedPQueue<ElemType> KDTree<N, ElemType>::kNNValue(const Point<N>& key, double radius) const {
-  std::unordered_map<double, ElemType> bucket;   // create an unordered multimap as a temp container
-  if (empty()) return BoundedPQueue<ElemType>(0);
+template <std::size_t N>
+BoundedPQueue<std::shared_ptr<Point<N>>> KDTree<N>::kNNValue(const Point<N>& key, double radius) const {
+    std::unordered_map<double, std::shared_ptr<Point<N>>> bucket;   // create an unordered multimap as a temp container
+    if (empty()) return BoundedPQueue<std::shared_ptr<Point<N>>>(0);
 
-
+    
 }
 
 // class Point
@@ -300,7 +301,7 @@ BoundedPQueue<T>::BoundedPQueue(std::size_t maxSize) {
 // enqueue adds the element to the map, then deletes the last element of the
 // map if there size exceeds the maximum size.
 template <typename T>
-void BoundedPQueue<T>::enqueue(const T& value, double priority) {
+void BoundedPQueue<T>::enqueue(const T value, double priority) {
     // Add the element to the collection.
     elems.insert(std::make_pair(priority, value));
 

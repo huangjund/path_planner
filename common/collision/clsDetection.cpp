@@ -3,8 +3,10 @@
 
 namespace HybridAStar{
 namespace Common{
-  CollisionDetection::CollisionDetection():carPlant_(std::make_unique<Multibody::SingleForkLiftPlant>()),
-  grid_(nullptr),collisionLookup_(new configuration[carPlant_->headings_*carPlant_->positions_]()){}
+  CollisionDetection::CollisionDetection():
+    carPlant_(std::make_unique<Multibody::SingleForkLiftPlant>()),
+    grid_(nullptr),
+    collisionLookup_(new configuration[carPlant_->headings_*carPlant_->positions_]()){}
 
   CollisionDetection::CollisionDetection(nav_msgs::OccupancyGrid::Ptr &grid):
     carPlant_(std::make_unique<Multibody::SingleForkLiftPlant>()),

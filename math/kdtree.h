@@ -16,9 +16,10 @@
 #include <unordered_map>
 #include <utility>
 #include <map>
+#include <iostream>
 
 namespace HybridAStar {
-
+// Point class used in RRTx
 template <std::size_t N>
 class Point {
  public:
@@ -29,6 +30,8 @@ class Point {
   
   Point& operator=(const Point<N>& p) {
     for (size_t i = 0; i < N; i++) coords[i] = p.coords[i];
+    g = p.g; lmc = p.lmc;
+    prtTreePositive = p.prtTreePositive;
     return *this;
   }
   // Types representing iterators that can traverse and optionally modify the elements of the Point.
@@ -48,8 +51,22 @@ class Point {
   const_iterator begin() const;
   const_iterator end() const;
 
+  double& getMutableG() {return g;}
+  const double getG() const {return g;}
+  double& getMutableLMC() {return lmc;}
+  const double getLMC() const {return lmc;}
+  void setCost(const double& g, const double& lmc) {getMutableG() = g; getMutableLMC() = lmc;}
+
+  std::shared_ptr<Point<N>> prtTreePositive;  // parent tree positive
+  std::vector<std::shared_ptr<Point<N>>> cldTreeNeg; // Child tree negative
+  std::vector<std::shared_ptr<Point<N>>> nOrgPositive;  // original neighbors positive
+  std::vector<std::shared_ptr<Point<N>>> nOrgNeg; // original neighbors negative
+  std::vector<std::shared_ptr<Point<N>>> nRunPositive; // running neighbors positive
+  std::vector<std::shared_ptr<Point<N>>> nRunNeg; // running neighbors negative
  private:
   double coords[N];
+  double g;
+  double lmc;
 };
 
 
@@ -126,6 +143,7 @@ class BoundedPQueue {
   // maximum size equal to the constructor argument.
   ///
   explicit BoundedPQueue(std::size_t maxSize);
+  ~BoundedPQueue() = default;
 
   // void enqueue(const T& value, double priority);
   // Usage: bpq.enqueue("Hi!", 2.71828);
@@ -135,7 +153,7 @@ class BoundedPQueue {
   // size of the queue, the element with the highest
   // priority will be deleted from the queue. Note that
   // this might be the element that was just added.
-  void enqueue(const T& value, double priority);
+  void enqueue(const T value, double priority);
 
   // T dequeueMin();
   // Usage: int val = bpq.dequeueMin();
@@ -177,6 +195,18 @@ class BoundedPQueue {
   double best()  const;
   double worst() const;
 
+  T& operator[](size_t n) {
+    auto p = elems.cbegin()+n;
+    if(p<elems.cend()) 
+      return p->second;
+  }
+
+  const T& operator[](size_t n) const {
+    auto p = elems.cbegin() + n;
+    if (p < elems.cend())
+      return p->second;
+  }
+
  private:
   // This class is layered on top of a multimap mapping from priorities
   // to elements with those priorities.
@@ -187,7 +217,7 @@ class BoundedPQueue {
 // the ElemType should be a label of a point
 // if points are used by knn algorithm, this label could be an unsigned int to verify a set
 // here, we take it as a coordinate of the point
-template <std::size_t N, typename ElemType>
+template <std::size_t N>
 class KDTree {
  public:
 
@@ -195,7 +225,7 @@ class KDTree {
   KDTree();
 
   // Efficiently build a balanced KD-tree from a large set of points
-  KDTree(std::vector<std::pair<Point<N>, ElemType>>& points);
+  KDTree(std::vector<std::shared_ptr<Point<N>>>& points);
 
   // Frees up all the dynamically allocated resources
   ~KDTree();
@@ -218,47 +248,46 @@ class KDTree {
     * Inserts the point pt into the KDTree, associating it with the specified value.
     * If the element already existed in the tree, the new value will overwrite the existing one.
     */
-  void insert(const Point<N>& pt, const ElemType& value=ElemType());
+  void insert(const std::shared_ptr<Point<N>>& pt);
 
-  /*
-    * Returns a reference to the value associated with point pt in the KDTree.
-    * If the point does not exist, then it is added to the KDTree using the
-    * default value of ElemType as its key.
-    */
-  ElemType& operator[](const Point<N>& pt);
+  // /*
+  //   * Returns a reference to the value associated with point pt in the KDTree.
+  //   * If the point does not exist, then it is added to the KDTree using the
+  //   * default value of ElemType as its key.
+  //   */
+  // ElemType& operator[](const Point<N>& pt);
 
-  /*
-    * Returns a reference to the key associated with the point pt. If the point
-    * is not in the tree, this function throws an out_of_range exception.
-    */
-  ElemType& at(const Point<N>& pt);
-  const ElemType& at(const Point<N>& pt) const;
+  // /*
+  //   * Returns a reference to the key associated with the point pt. If the point
+  //   * is not in the tree, this function throws an out_of_range exception.
+  //   */
+  // ElemType& at(const Point<N>& pt);
+  // const ElemType& at(const Point<N>& pt) const;
 
   /*
     * Given a point v and an integer k, finds the k points in the KDTree
     * nearest to v and returns the most common value associated with those
     * points. In the event of a tie, one of the most frequent value will be chosen.
     */
-  BoundedPQueue<ElemType> kNNValue(const Point<N>& key, std::size_t k) const;
+  BoundedPQueue<std::shared_ptr<Point<N>>> kNNValue(const Point<N>& key, std::size_t k) const;
 
   /**
    * @brief find points within a specific radius
    * 
    * @param key 
    * @param radius 
-   * @return BoundedPQueue<ElemType> 
+   * @return BoundedPQueue<Point<N>> 
    */
-  BoundedPQueue<ElemType> kNNValue(const Point<N>& key, double radius) const;
+  BoundedPQueue<std::shared_ptr<Point<N>>> kNNValue(const Point<N>& key, double radius) const;
 
  private:
   struct Node {
-      Point<N> point;
+      std::shared_ptr<Point<N>> point;
       Node *left;
       Node *right;
       int level;  // level of the node in the tree, starts at 0 for the root
-      ElemType value;
-      Node(const Point<N>& _pt, int _level, const ElemType& _value=ElemType()):
-          point(_pt), left(NULL), right(NULL), level(_level), value(_value) {}
+      Node(const std::shared_ptr<Point<N>>& _pt, int _level):
+          point(_pt), left(NULL), right(NULL), level(_level) {}
   };
 
   // Root node of the KD-Tree
@@ -273,8 +302,8 @@ class KDTree {
     * The root of the subtree is at level 'currLevel'
     * O(n) time partitioning algorithm is used to locate the median element
     */
-  Node* buildTree(typename std::vector<std::pair<Point<N>, ElemType>>::iterator start,
-                  typename std::vector<std::pair<Point<N>, ElemType>>::iterator end, int currLevel);
+  Node* buildTree(typename std::vector<Point<N>>::iterator start,
+                  typename std::vector<Point<N>>::iterator end, int currLevel);
 
   /*
     * Returns the Node that contains Point pt if it is present in subtree 'currNode'
@@ -283,12 +312,14 @@ class KDTree {
   Node* findNode(Node* currNode, const Point<N>& pt) const;
 
   // Recursive helper method for kNNValue(pt, k)
-  void nearestNeighborRecurse(const Node* currNode, const Point<N>& key, BoundedPQueue<ElemType>& pQueue) const;
+  void nearestNeighborRecurse(const Node* currNode,
+                              const Point<N>& key, 
+                              BoundedPQueue<std::shared_ptr<Point<N>>>& pQueue) const;
 
   void nearestNeighborRecurse(const Node* currNode, 
                               const Point<N>& key, 
                               double radius,
-                              std::unordered_map<double, ElemType>& pBucket) const;
+                              std::unordered_map<double, std::shared_ptr<Point<N>>>& pBucket) const;
   /*
     * Recursive helper method for copy constructor and assignment operator
     * Deep copies tree 'root' and returns the root of the copied tree
@@ -299,7 +330,7 @@ class KDTree {
   void freeResource(Node* currNode);
 };
 
-template class KDTree<2, Point<2>>;
+template class KDTree<2>;
 
 } // namespace HybridAStar
 

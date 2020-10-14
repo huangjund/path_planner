@@ -1,4 +1,5 @@
-#pragma once
+#ifndef _HYBRID_A_STAR_COLLISION_DETECTION_H
+#define _HYBRID_A_STAR_COLLISION_DETECTION_H
 
 #include "multibody/SingleForkLiftPlant.h"
 #include "common/statespace/GridState.h"
@@ -16,7 +17,7 @@ namespace Common {
 		// TODO: this class needs to be modified
   class CollisionDetection
   {
-  private:
+   private:
     /// Planning Map with occupancy property [planning map]
     struct PlanOccupancyGrid {
       int width; // [unit:cells] planning map
@@ -51,7 +52,7 @@ namespace Common {
     /// The collision lookup table
     configuration *collisionLookup_;
 
-  public:
+   public:
     CollisionDetection(const CollisionDetection&);
     CollisionDetection &operator=(const CollisionDetection &) = delete;
     // constructor
@@ -77,3 +78,6 @@ namespace Common {
   };
 } // namespace Common
 } // namespace HybridAStar
+
+
+#endif
