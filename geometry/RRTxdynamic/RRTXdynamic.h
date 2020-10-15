@@ -33,8 +33,10 @@ namespace Geometry
    private:
     struct less
     {
-      bool operator()(const std::pair<double, double>& x,
-                      const std::pair<double, double>& y) const {
+      bool operator()(const std::shared_ptr<point_t>& _x,
+                      const std::shared_ptr<point_t>& _y) const {
+        std::pair<double,double> x(std::min(_x->getG(),_x->getLMC()),_x->getG());
+        std::pair<double,double> y(std::min(_y->getG(),_y->getLMC()),_y->getG());
         return (x.first < y.first || (x.first == y.first && x.second < y.second));
       }
     };
@@ -44,8 +46,9 @@ namespace Geometry
     point_t v_start_;
     point_t v_bot_;
     pointVec vertexSet_;  // store all vertices into this structure
+    std::map<std::shared_ptr<point_t>, double, less> orphanSet_;  // store all orphan vertices  vertexSet_/visableTree_ = orphanSet_
     kdtree visableTree_;
-    std::multimap<std::pair<double,double>, point_t, less> Q_; 
+    std::map<std::shared_ptr<point_t>, double, less> Q_; 
 
     const double delta = 1.5;  // the fixed maximum radius
     double gama;
@@ -66,7 +69,7 @@ namespace Geometry
     
     void saturate(point_t& _v, const point_t& _v_nearest);
     
-    std::shared_ptr<point_t>& extend(point_t& _v, const double r);
+    void extend(point_t& _v, const double r, std::shared_ptr<point_t>& v);
     
     void rewireNeighbors(std::shared_ptr<point_t>& _v, const double& r);
     
@@ -76,11 +79,11 @@ namespace Geometry
     
     void verrifyQueue(std::shared_ptr<point_t>& _u);
     
-    void reduceInconsistency();
-    
     void findParent(point_t&,const BoundedPQueue<std::shared_ptr<Point<2>>>&, const double& r);
     
-    
+    void reduceInconsistency(const double& radius);
+
+    void updateLMC(std::shared_ptr<point_t>& v, const double& r);
    public:
     RRTXdynamic(const point_t&, const point_t&,
                 double, double,

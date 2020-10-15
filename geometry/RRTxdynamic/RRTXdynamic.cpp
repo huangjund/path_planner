@@ -29,11 +29,12 @@ namespace Geometry
         saturate(v, *v_nearest);
 
       // extend the new vertex
-      auto extended_v = extend(v,radius);
+      std::shared_ptr<point_t> extended_v(nullptr);
+      extend(v,radius, extended_v);
       
       if(extended_v) {
         rewireNeighbors(extended_v,radius);
-        reduceInconsistency();
+        reduceInconsistency(radius);
       }
     }
   }
@@ -60,8 +61,7 @@ namespace Geometry
 
   std::shared_ptr<RRTXdynamic::point_t>& RRTXdynamic::nearest(const point_t& v) {
     auto queue = visableTree_.kNNValue(v,(std::size_t)1);
-    auto temp = queue.dequeueMin();
-    return temp;
+    return queue.dequeueMin();
   }
 
   void RRTXdynamic::saturate(point_t& _v, const point_t& _v_nearest) {
@@ -91,7 +91,7 @@ namespace Geometry
                         ).release());
   }
 
-  std::shared_ptr<RRTXdynamic::point_t>& RRTXdynamic::extend(point_t& _v, const double r) {
+  void RRTXdynamic::extend(point_t& _v, const double r, std::shared_ptr<point_t>& v) {
     Common::SE2State v_new(_v[0],_v[1],0);
     //  if the state is not obstacle district
     if(stateChecker->isValid(&v_new)) {
@@ -100,7 +100,7 @@ namespace Geometry
 
       if (!_v.prtTreePositive) return;
 
-      auto v = std::make_shared<point_t>(_v);
+      v = std::make_shared<point_t>(_v);
       vertexSet_.push_back(v);
       visableTree_.insert(v);
       v->prtTreePositive->cldTreeNeg.push_back(v);
@@ -117,7 +117,7 @@ namespace Geometry
           u->nRunNeg.push_back(v);
         }
       }
-      return v;
+      return;
     }
     else 
       return;
@@ -162,6 +162,19 @@ namespace Geometry
             verrifyQueue(*u);
         }
       }
+      for (auto u = _v->nRunNeg.begin(); u != _v->nRunNeg.end(); ++u) {
+        if (*u == _v->prtTreePositive) continue;
+        
+        auto lmc_u = (*u)->getMutableLMC();
+        auto lmc_v = _v->getLMC();
+        auto d_uv = Distance(**u, *_v);
+        if (lmc_u > lmc_v + d_uv) {
+          lmc_u = d_uv + lmc_v;
+          makeParentOf(*u,_v);
+          if ((*u)->getG() - lmc_u > epsilon)
+            verrifyQueue(*u);
+        }
+      }
     }
   }
 
@@ -190,7 +203,47 @@ namespace Geometry
   }
 
   void RRTXdynamic::verrifyQueue(std::shared_ptr<point_t>& _u) {
-    
+    if (Q_.find(_u) == Q_.end()) 
+      Q_.emplace(_u,1);
   }
+
+  void RRTXdynamic::reduceInconsistency(const double& radius) {
+    while (Q_.size() > 0) {
+      auto v = Q_.begin()->first; // copy the first element to v
+      Q_.erase(Q_.begin()); // remove the first element from Q_
+
+      if (v->getG() > v->getLMC() + epsilon) {
+        updateLMC(v,radius);
+        rewireNeighbors(v,radius);
+      }
+
+      v->getMutableG() = v->getLMC();
+    }
+  }
+
+  void RRTXdynamic::updateLMC(std::shared_ptr<point_t>& _v, const double& r) {
+    cullNeighbors(_v, r);
+
+    auto p = _v->prtTreePositive;
+    // search through positive neighbors of _v
+    // Nr+ + No+  ==>> N+
+    for (auto u = _v->nOrgPositive.begin(); u != _v->nOrgPositive.end(); ++u) {
+      if (orphanSet_.find(*u) == orphanSet_.end() && 
+          (*u)->prtTreePositive != _v && 
+          _v->getLMC() > Distance(*_v,**u) + (*u)->getLMC()) {
+        p = *u;
+      }
+    }
+    for (auto u = _v->nRunPositive.begin(); u != _v->nRunPositive.end(); ++u) {
+      if (orphanSet_.find(*u) == orphanSet_.end() && 
+          (*u)->prtTreePositive != _v && 
+          _v->getLMC() > Distance(*_v,**u) + (*u)->getLMC()) {
+        p = *u;
+      }
+    }
+
+    makeParentOf(p,_v);
+  }
+
 } // namespace Geometry
 } // namespace HybridAStar

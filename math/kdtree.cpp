@@ -15,13 +15,14 @@ typename KDTree<N>::Node* KDTree<N>::deepcopyTree(typename KDTree<N>::Node* root
 }
 
 template <std::size_t N>
-typename KDTree<N>::Node* KDTree<N>::buildTree(typename std::vector<Point<N>>::iterator start,
-                                                typename std::vector<Point<N>>::iterator end, int currLevel) {
+typename KDTree<N>::Node* KDTree<N>::buildTree(typename PointsPointerVec::iterator start,
+                                                typename PointsPointerVec::iterator end, int currLevel) {
     if (start >= end) return NULL; // empty tree
 
     int axis = currLevel % N; // the axis to split on
-    auto cmp = [axis](const Point<N>& p1, const Point<N>& p2) {
-        return p1[axis] < p2[axis];
+    auto cmp = [axis](const std::shared_ptr<Point<N>>& p1, 
+                      const std::shared_ptr<Point<N>>& p2) {
+        return (*p1)[axis] < (*p2)[axis];
     };
     std::size_t len = end - start;
     auto mid = start + len / 2;
@@ -40,7 +41,7 @@ typename KDTree<N>::Node* KDTree<N>::buildTree(typename std::vector<Point<N>>::i
 }
 
 template <std::size_t N>
-KDTree<N>::KDTree(std::vector<Point<N>>& points) {
+KDTree<N>::KDTree(PointsPointerVec& points) {
     root_ = buildTree(points.begin(), points.end(), 0);
     size_ = points.size();
 }
@@ -90,12 +91,13 @@ bool KDTree<N>::empty() const {
 }
 
 template <std::size_t N>
-typename KDTree<N>::Node* KDTree<N>::findNode(typename KDTree<N>::Node* currNode, const Point<N>& pt) const {
+typename KDTree<N>::Node* KDTree<N>::findNode(typename KDTree<N>::Node* currNode,
+                                              const std::shared_ptr<Point<N>>& pt) const {
     if (currNode == NULL || currNode->point == pt) return currNode;
 
-    const Point<N>& currPoint = currNode->point;
+    const auto& currPoint = currNode->point;
     int currLevel = currNode->level;
-    if (pt[currLevel%N] < currPoint[currLevel%N]) { // recurse to the left side
+    if ((*pt)[currLevel%N] < (*currPoint)[currLevel%N]) { // recurse to the left side
         return currNode->left == NULL ? currNode : findNode(currNode->left, pt);
     } else { // recurse to the right side
         return currNode->right == NULL ? currNode : findNode(currNode->right, pt);
@@ -103,14 +105,14 @@ typename KDTree<N>::Node* KDTree<N>::findNode(typename KDTree<N>::Node* currNode
 }
 
 template <std::size_t N>
-bool KDTree<N>::contains(const Point<N>& pt) const {
+bool KDTree<N>::contains(const std::shared_ptr<Point<N>>& pt) const {
     auto node = findNode(root_, pt);
     return node != NULL && node->point == pt;
 }
 
 template <std::size_t N>
 void KDTree<N>::insert(const std::shared_ptr<Point<N>>& pt) {
-    auto targetNode = findNode(root_, *pt);
+    auto targetNode = findNode(root_, pt);
     if (targetNode == NULL) { // this means the tree is empty
         root_ = new Node(pt, 0);
         size_ = 1;
@@ -173,7 +175,7 @@ void KDTree<N>::nearestNeighborRecurse(const typename KDTree<N>::Node* currNode,
     // Recursively search the half of the tree that contains Point 'key'
     int currLevel = currNode->level;
     bool isLeftTree;
-    if (key[currLevel%N] < currPoint[currLevel%N]) {
+    if (key[currLevel%N] < (*currPoint)[currLevel%N]) {
         nearestNeighborRecurse(currNode->left, key, pQueue);
         isLeftTree = true;
     } else {
@@ -181,7 +183,7 @@ void KDTree<N>::nearestNeighborRecurse(const typename KDTree<N>::Node* currNode,
         isLeftTree = false;
     }
 
-    if (pQueue.size() < pQueue.maxSize() || fabs(key[currLevel%N] - currPoint[currLevel%N]) < pQueue.worst()) {
+    if (pQueue.size() < pQueue.maxSize() || fabs(key[currLevel%N] - (*currPoint)[currLevel%N]) < pQueue.worst()) {
         // Recursively search the other half of the tree if necessary
         if (isLeftTree) nearestNeighborRecurse(currNode->right, key, pQueue);
         else nearestNeighborRecurse(currNode->left, key, pQueue);
@@ -213,7 +215,7 @@ void KDTree<N>::nearestNeighborRecurse(const Node* currNode,
 
   int currLevel = currNode->level;
   bool isLeftTree;
-  if (key[currLevel%N] < currPoint[currLevel%N]) {
+  if (key[currLevel%N] < (*currPoint)[currLevel%N]) {
     nearestNeighborRecurse(currNode->left, key, radius, pBucket);
     isLeftTree = true;
   } else {
@@ -221,18 +223,17 @@ void KDTree<N>::nearestNeighborRecurse(const Node* currNode,
     isLeftTree = false;
   }
 
-  if (fabs(key[currLevel%N] - currPoint[currLevel%N]) < radius) {
+  if (fabs(key[currLevel%N] - (*currPoint)[currLevel%N]) < radius) {
     if (isLeftTree) nearestNeighborRecurse(currNode->right, key, radius, pBucket);
     else nearestNeighborRecurse(currNode->left, key, radius, pBucket);
   }
 }
 
+// incomplete
 template <std::size_t N>
 BoundedPQueue<std::shared_ptr<Point<N>>> KDTree<N>::kNNValue(const Point<N>& key, double radius) const {
     std::unordered_map<double, std::shared_ptr<Point<N>>> bucket;   // create an unordered multimap as a temp container
-    if (empty()) return BoundedPQueue<std::shared_ptr<Point<N>>>(0);
-
-    
+    if (empty()) return BoundedPQueue<std::shared_ptr<Point<N>>>(0);   
 }
 
 // class Point
@@ -282,7 +283,12 @@ double Distance(const Point<N>& one, const Point<N>& two) {
 
 template <std::size_t N>
 bool operator==(const Point<N>& one, const Point<N>& two) {
-    return std::equal(one.begin(), one.end(), two.begin());
+    for (const auto i = one.begin(), j = two.begin(); i != one.end(); ++i, ++j) {
+        if (!(std::abs(*i - *j) < 1e-8)) {
+            return false;
+        }
+    }
+    return true;
 }
 
 template <std::size_t N>
@@ -316,7 +322,7 @@ void BoundedPQueue<T>::enqueue(const T value, double priority) {
 // dequeueMin copies the lowest element of the map (the one pointed at by
 // begin()) and then removes it.
 template <typename T>
-T BoundedPQueue<T>::dequeueMin() {
+T& BoundedPQueue<T>::dequeueMin() {
     // Copy the best value.
     T result = elems.begin()->second;
 

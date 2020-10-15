@@ -11,13 +11,13 @@
 namespace HybridAStar
 {
 class ValidityChecker{
+  private:
+    std::function<bool(const Common::SE2State*)> checker_;
   public:
     ValidityChecker(const std::function<bool(const Common::SE2State*)>&);
     virtual bool isValid(const Common::SE2State *state) const {
       return checker_(state);
     }
-  private:
-    std::function<bool(const Common::SE2State*)> checker_;
 };
 
 class MotionChecker{

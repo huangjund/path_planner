@@ -17,6 +17,7 @@
 #include <utility>
 #include <map>
 #include <iostream>
+#include <iterator>
 
 namespace HybridAStar {
 // Point class used in RRTx
@@ -161,7 +162,7 @@ class BoundedPQueue {
   // Returns the element from the BoundedPQueue with the
   // smallest priority value, then removes that element
   // from the queue.
-  T dequeueMin();
+  T& dequeueMin();
 
   // size_t size() const;
   // bool empty() const;
@@ -196,15 +197,19 @@ class BoundedPQueue {
   double worst() const;
 
   T& operator[](size_t n) {
-    auto p = elems.cbegin()+n;
-    if(p<elems.cend()) 
-      return p->second;
+    auto p = elems.begin();
+    while (n-- && p!=elems.end()) {
+      ++p;
+    }
+    return p->second;
   }
 
   const T& operator[](size_t n) const {
-    auto p = elems.cbegin() + n;
-    if (p < elems.cend())
-      return p->second;
+    auto p = elems.cbegin();
+    while (n-- && p!=elems.cend()) {
+      ++p;
+    }
+    return p->second;
   }
 
  private:
@@ -214,18 +219,23 @@ class BoundedPQueue {
   std::size_t maximumSize;
 };
 
+template class BoundedPQueue<std::shared_ptr<Point<2>>>;
+
 // the ElemType should be a label of a point
 // if points are used by knn algorithm, this label could be an unsigned int to verify a set
 // here, we take it as a coordinate of the point
+// in default: "same point", in description of the node in kdtree, means the two points 
+// is absolutely same or saying they are in the same memory. So, we use the pointer to decide
+// whether two points are "same point".
 template <std::size_t N>
 class KDTree {
  public:
-
+  using PointsPointerVec = std::vector<std::shared_ptr<Point<N>>>;
   // Constructs an empty KDTree.
   KDTree();
 
   // Efficiently build a balanced KD-tree from a large set of points
-  KDTree(std::vector<std::shared_ptr<Point<N>>>& points);
+  KDTree(PointsPointerVec& points);
 
   // Frees up all the dynamically allocated resources
   ~KDTree();
@@ -242,7 +252,7 @@ class KDTree {
   bool empty() const;
 
   // Returns whether the specified point is contained in the KDTree.
-  bool contains(const Point<N>& pt) const;
+  bool contains(const std::shared_ptr<Point<N>>& pt) const;
 
   /*
     * Inserts the point pt into the KDTree, associating it with the specified value.
@@ -302,14 +312,14 @@ class KDTree {
     * The root of the subtree is at level 'currLevel'
     * O(n) time partitioning algorithm is used to locate the median element
     */
-  Node* buildTree(typename std::vector<Point<N>>::iterator start,
-                  typename std::vector<Point<N>>::iterator end, int currLevel);
+  Node* buildTree(typename PointsPointerVec::iterator start,
+                  typename PointsPointerVec::iterator end, int currLevel);
 
   /*
     * Returns the Node that contains Point pt if it is present in subtree 'currNode'
     * Returns the Node below which pt should be inserted if pt is not in the subtree
     */
-  Node* findNode(Node* currNode, const Point<N>& pt) const;
+  Node* findNode(Node* currNode, const std::shared_ptr<Point<N>>& pt) const;
 
   // Recursive helper method for kNNValue(pt, k)
   void nearestNeighborRecurse(const Node* currNode,
