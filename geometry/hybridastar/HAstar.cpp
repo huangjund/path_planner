@@ -23,8 +23,8 @@ namespace Geometry{
                 Planner(start,goal),start_(start),goal_(goal),configSpace_(configSpace), 
                 rsPlanner_(std::make_unique<hRScurve>(*start_,goal_)),
                 rrtxPlanner_(std::make_unique<hRRTx>(*start_,goal_,
-                                                      pmap->info_.width*pmap->info_.resolution,
-                                                      pmap->info_.height*pmap->info_.resolution,
+                                                      pmap->info_.width*pmap->info_.resolution, // real width [meters]
+                                                      pmap->info_.height*pmap->info_.resolution,  // real height [meters]
                                                       configSpace)),
                 // aStarPlanner_(std::make_unique<hAStar>()),
                 pMap_(pmap){

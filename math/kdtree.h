@@ -19,6 +19,8 @@
 #include <iostream>
 #include <iterator>
 
+#include "common/statespace/SE2State.h"
+
 namespace HybridAStar {
 // Point class used in RRTx
 template <std::size_t N>
@@ -33,6 +35,11 @@ class Point {
     for (size_t i = 0; i < N; i++) coords[i] = p.coords[i];
     g = p.g; lmc = p.lmc;
     prtTreePositive = p.prtTreePositive;
+    cldTreeNeg = p.cldTreeNeg;
+    nOrgNeg = p.nOrgNeg;
+    nOrgPositive = p.nOrgPositive;
+    nRunPositive = p.nRunPositive;
+    nRunNeg = p.nRunNeg;
     return *this;
   }
   // Types representing iterators that can traverse and optionally modify the elements of the Point.
@@ -144,6 +151,7 @@ class BoundedPQueue {
   // maximum size equal to the constructor argument.
   ///
   explicit BoundedPQueue(std::size_t maxSize);
+  explicit BoundedPQueue(const std::multimap<double, T>& t);
   ~BoundedPQueue() = default;
 
   // void enqueue(const T& value, double priority);
@@ -162,7 +170,7 @@ class BoundedPQueue {
   // Returns the element from the BoundedPQueue with the
   // smallest priority value, then removes that element
   // from the queue.
-  T& dequeueMin();
+  T dequeueMin();
 
   // size_t size() const;
   // bool empty() const;
@@ -227,6 +235,7 @@ template class BoundedPQueue<std::shared_ptr<Point<2>>>;
 // in default: "same point", in description of the node in kdtree, means the two points 
 // is absolutely same or saying they are in the same memory. So, we use the pointer to decide
 // whether two points are "same point".
+// reference to https://www.cnblogs.com/earendil/p/8135074.html
 template <std::size_t N>
 class KDTree {
  public:
@@ -290,6 +299,12 @@ class KDTree {
    */
   BoundedPQueue<std::shared_ptr<Point<N>>> kNNValue(const Point<N>& key, double radius) const;
 
+  std::shared_ptr<Point<N>> kNNValue(const Point<N>& key, 
+                                std::function<bool(const Common::SE2State* s1, 
+                                                  const Common::SE2State* s2)> condition) const;
+
+  std::shared_ptr<Point<N>> rootNode() {return root_->point;}
+
  private:
   struct Node {
       std::shared_ptr<Point<N>> point;
@@ -329,7 +344,13 @@ class KDTree {
   void nearestNeighborRecurse(const Node* currNode, 
                               const Point<N>& key, 
                               double radius,
-                              std::unordered_map<double, std::shared_ptr<Point<N>>>& pBucket) const;
+                              std::multimap<double, std::shared_ptr<Point<N>>>& pBucket) const;
+
+  void nearestNeighborRecurse(const Node* currNode,
+                              const Point<N>& key,
+                              std::shared_ptr<Point<N>>& p,
+                              std::function<bool(const Common::SE2State* s1, 
+                                                  const Common::SE2State* s2)>& condition) const;
   /*
     * Recursive helper method for copy constructor and assignment operator
     * Deep copies tree 'root' and returns the root of the copied tree

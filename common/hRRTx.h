@@ -4,6 +4,7 @@
 #include "Heuristic.h"
 #include "common/statespace/SE2State.h"
 #include "geometry/RRTxstatic/RRTXstatic.h"
+#include "geometry/RRTxdynamic/RRTXdynamic.h"
 #include "common/collision/clsDetection.h"
 
 #include <ompl/base/StateSpace.h>

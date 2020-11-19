@@ -1,6 +1,6 @@
 #include "hRRTx.h"
 
-#define TIME 10
+#define TIME 1
 
 namespace HybridAStar  {
 namespace Common {
@@ -35,6 +35,13 @@ namespace Common {
     rrtxPlanner_->setup();
     rrtxPlanner_->ob::Planner::solve(TIME);
     treeConstructed_ = true;
+
+    //====================================================================================
+    Geometry::RRTXdynamic::point_t s,e;
+    s[0] = start.getX(); s[1] = start.getY();
+    e[0] = goal.getX(); e[1] = goal.getY();
+    Geometry::RRTXdynamic testPlanner(s,e,mapwidth,mapheight,config);
+    testPlanner.solve(20);
   }
 
   bool hRRTx::terminationFn() {
@@ -101,8 +108,6 @@ namespace Common {
       return problemDef_->getSolutionPath()->length();
     else
       std::cerr << "there is no solution path: "<< isTreeconstructed() << std::endl;
-
-
   }
 } // namespace Common
 } // namespace HybridAStar

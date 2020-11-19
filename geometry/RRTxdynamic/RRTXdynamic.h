@@ -7,6 +7,7 @@
 #include <random>
 #include <memory>
 #include <map>
+#include <ros/ros.h>
 
 #include "common/PlannerTerminationCondition.h"
 #include "common/collision/clsDetection.h"
@@ -14,13 +15,15 @@
 #include "common/statespace/SE2State.h"
 #include "math/kdtree.h"
 
+#include <visualization_msgs/MarkerArray.h>
+
 namespace HybridAStar
 {
 namespace Geometry
 {
   // TODO: this class should be inherit from Planner
   /**
-   * @brief reference to RRTx: Asymptotically Optimal Single-Query Sampling-Based Motion
+   * @brief reference to [RRTx: Asymptotically Optimal Single-Query Sampling-Based Motion]
    * Planning with Quick Replanning
    * 
    */
@@ -56,6 +59,7 @@ namespace Geometry
 
     std::default_random_engine randEngine;
     std::uniform_real_distribution<double> u;
+    double map_width_, map_height_;
 
     std::unique_ptr<ValidityChecker> stateChecker;
     std::unique_ptr<MotionChecker> motionChecker;
@@ -65,7 +69,7 @@ namespace Geometry
 
     point_t genRandom();
     
-    std::shared_ptr<point_t>& nearest(const point_t&);
+    std::shared_ptr<point_t> nearest(const point_t&);
     
     void saturate(point_t& _v, const point_t& _v_nearest);
     
@@ -84,11 +88,13 @@ namespace Geometry
     void reduceInconsistency(const double& radius);
 
     void updateLMC(std::shared_ptr<point_t>& v, const double& r);
+
+    void connectNearestFeasible(std::shared_ptr<point_t>& v, const double r);
    public:
     RRTXdynamic(const point_t&, const point_t&,
                 double, double,
                 std::shared_ptr<Common::CollisionDetection>&);  // [unit: meters]
-    ~RRTXdynamic();
+    ~RRTXdynamic() = default;
 
     void setvGoal(const double& x, const double& y);
     void setvStart(const double& x, const double& y);
@@ -103,6 +109,14 @@ namespace Geometry
     void updateObstacles();
     void setStateValidityChecker(const std::shared_ptr<Common::CollisionDetection>&);
     void setMotionValidityChecker(const std::shared_ptr<Common::CollisionDetection>&);
+   private: // for visualization
+    struct Visualizer {
+      ros::NodeHandle n;
+      ros::Publisher pub;
+      Visualizer();
+    } visualizer;
+
+    void visual(std::shared_ptr<point_t>, visualization_msgs::Marker&);
   };
 
 } // namespace Geometry

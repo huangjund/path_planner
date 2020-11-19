@@ -1,26 +1,36 @@
 #include "RRTXdynamic.h"
 
+
 namespace HybridAStar
 {
 namespace Geometry
 {
   RRTXdynamic::RRTXdynamic(const point_t& goal, const point_t& start,
-                          double width, double height,
+                          double width, double height,  //[meters]
                           std::shared_ptr<Common::CollisionDetection>& config):
                           v_goal_(goal),v_start_(start),v_bot_(start),
                           vertexSet_(pointVec{std::make_shared<point_t>(v_goal_)}),
                           visableTree_(kdtree(vertexSet_)),
-                          u(std::uniform_real_distribution<double>(0,1)) {
+                          u(std::uniform_real_distribution<double>(0,1)),
+                          map_width_(width), map_height_(height) {
     gama = 6*width*height; // 2^D(1+1/D)*S(x_free)
     setStateValidityChecker(config);
     setMotionValidityChecker(config);
   }
 
+  RRTXdynamic::Visualizer::Visualizer() {
+    pub = n.advertise<visualization_msgs::Marker>("/dynamicPath", 1);
+  }
+
   void RRTXdynamic::solve(const Common::PlannerTerminationCondition& ptc) {
-    while(1) {
-      auto radius = shrinkingBallRadius(vertexSet_.size());
+    double radius = shrinkingBallRadius(vertexSet_.size());
+    // termination condition directed tree generation
+    while(!ptc) {
+      radius = shrinkingBallRadius(vertexSet_.size());
+      radius = 1.5;
       updateObstacles();
       auto v = genRandom();
+      v[0] *= map_width_; v[1] *= map_height_;
       auto v_nearest = nearest(v);
 
       // if the new point is greater than the largest radius
@@ -37,6 +47,42 @@ namespace Geometry
         reduceInconsistency(radius);
       }
     }
+
+    // extend to solution (connect the start to a feasible tree node)
+    auto start = std::make_shared<point_t>(v_start_);
+    connectNearestFeasible(start, radius);
+
+    { // trace the path
+      ptc.terminate();
+      std::vector<point_t> path;
+      auto temp = start;
+      point_t point;
+      while(temp->prtTreePositive != NULL) {
+        point[0] = (*temp)[0]; point[1] = (*temp)[1];
+        path.push_back(point);
+        temp = temp->prtTreePositive;
+      }
+      point[0] = (*temp)[0]; point[1] = (*temp)[1];
+      path.push_back(point);
+
+      { // visualization
+        visualization_msgs::Marker marker;
+        geometry_msgs::Point p_start, p_end;
+        marker.header.frame_id = "path";
+        marker.header.stamp = ros::Time::now();
+        marker.ns = "tree";
+        marker.action = visualization_msgs::Marker::ADD;
+        marker.pose.orientation.w = 1.0;
+        marker.id = 0;
+        marker.type = visualization_msgs::Marker::LINE_LIST;
+        marker.scale.x = .01;
+        marker.color.b = 1.0;
+        marker.color.a = 1.0;
+
+        visual(visableTree_.rootNode(), marker);
+        visualizer.pub.publish(marker);
+      }
+    }
   }
 
   void RRTXdynamic::solve(double solvetime) {
@@ -45,8 +91,44 @@ namespace Geometry
     return solve(Common::timedPlannerTerminationCondition(solvetime, std::min(solvetime / 100.0, 0.1)));
   }
 
+  void RRTXdynamic::visual(std::shared_ptr<point_t> currPoint, visualization_msgs::Marker& marker) {
+    if (currPoint == NULL) return;
+
+    for (auto child : currPoint->cldTreeNeg) {
+      visual(child, marker);
+      geometry_msgs::Point p_start, p_end;
+      p_start.x = (*currPoint)[0]; p_start.y = (*currPoint)[1];
+      p_end.x = (*child)[0]; p_end.y = (*child)[1];
+      marker.points.push_back(p_start);
+      marker.points.push_back(p_end);
+    }
+  }
+
+  // connect start point to the nearest feasible point
+  void RRTXdynamic::connectNearestFeasible(std::shared_ptr<point_t>& v, const double r) {
+    // try to find a feasible point to connect to
+    auto v_near = visableTree_.kNNValue(v_start_, 
+                  [this](const Common::SE2State* s1, const Common::SE2State* s2) {
+                      return motionChecker->checkMotion(s1,s2);
+                  });
+    if (v_near != NULL) {
+      vertexSet_.push_back(v);
+      visableTree_.insert(v);
+      v->prtTreePositive = v_near;
+      v->prtTreePositive->cldTreeNeg.push_back(v);
+
+      // only recoginize v_near as neighbor
+      v->nOrgPositive.push_back(v_near);
+      v->nOrgNeg.push_back(v_near);
+      v_near->nRunPositive.push_back(v);
+      v_near->nRunNeg.push_back(v);
+    }
+    else 
+      std::cout << "[ERROR]: cannot find a feasible point" << std::endl;
+  }
+
   double RRTXdynamic::shrinkingBallRadius(const size_t& vsetSize) {
-    double temp = sqrt(gama*std::log10(vsetSize)/(vsetSize*M_PI));
+    double temp = sqrt(gama*std::log10(vsetSize+1)/(vsetSize*M_PI));
     return std::min(temp, delta);
   }
 
@@ -56,10 +138,11 @@ namespace Geometry
     Point<2> temp;
     temp[0] = u(randEngine);
     temp[1] = u(randEngine);
+
     return point_t(temp);
   }
 
-  std::shared_ptr<RRTXdynamic::point_t>& RRTXdynamic::nearest(const point_t& v) {
+  std::shared_ptr<RRTXdynamic::point_t> RRTXdynamic::nearest(const point_t& v) {
     auto queue = visableTree_.kNNValue(v,(std::size_t)1);
     return queue.dequeueMin();
   }
@@ -126,7 +209,7 @@ namespace Geometry
   void RRTXdynamic::findParent(point_t& _v,const BoundedPQueue<std::shared_ptr<Point<2>>>& U,const double& r) {
     for (size_t i = 0; i < U.size(); ++i)
     {
-      // gete every element in U
+      // get every element in U
       const auto u = U[i];
 
       // trajectory between two point is line in default

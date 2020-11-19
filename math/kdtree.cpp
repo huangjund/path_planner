@@ -160,6 +160,8 @@ void KDTree<N>::insert(const std::shared_ptr<Point<N>>& pt) {
 //     }
 // }
 
+
+// completed
 template <std::size_t N>
 void KDTree<N>::nearestNeighborRecurse(const typename KDTree<N>::Node* currNode,
                                         const Point<N>& key, 
@@ -201,17 +203,19 @@ BoundedPQueue<std::shared_ptr<Point<N>>> KDTree<N>::kNNValue(const Point<N>& key
     return pQueue;
 }
 
+
+// completed
 template <std::size_t N>
 void KDTree<N>::nearestNeighborRecurse(const Node* currNode, 
                                         const Point<N>& key, 
                                         double radius,
-                                        std::unordered_map<double, std::shared_ptr<Point<N>>>& pBucket) const {
+                                        std::multimap<double, std::shared_ptr<Point<N>>>& pBucket) const {
   if (currNode == NULL) return;
   const auto& currPoint = currNode->point;
 
   auto dis = Distance(*currPoint, key);
   if (dis < radius) 
-    pBucket[dis] = currNode->point;
+    pBucket.insert(std::make_pair(dis, currPoint));
 
   int currLevel = currNode->level;
   bool isLeftTree;
@@ -230,12 +234,69 @@ void KDTree<N>::nearestNeighborRecurse(const Node* currNode,
 }
 
 // incomplete
+// searching for points within radius r
 template <std::size_t N>
 BoundedPQueue<std::shared_ptr<Point<N>>> KDTree<N>::kNNValue(const Point<N>& key, double radius) const {
-    std::unordered_map<double, std::shared_ptr<Point<N>>> bucket;   // create an unordered multimap as a temp container
-    if (empty()) return BoundedPQueue<std::shared_ptr<Point<N>>>(0);   
+    std::multimap<double, std::shared_ptr<Point<N>>> bucket;   // create an ordered map as a temp container
+    if (empty()) return BoundedPQueue<std::shared_ptr<Point<N>>>(0);    // default return value if KD-tree is empty
+
+    nearestNeighborRecurse(root_, key, radius, bucket);
+
+    return BoundedPQueue<std::shared_ptr<Point<N>>>(bucket);
 }
 
+template <std::size_t N>
+void KDTree<N>::nearestNeighborRecurse(const Node* currNode,
+                                    const Point<N>& key,
+                                    std::shared_ptr<Point<N>>& p,
+                                    std::function<bool(const Common::SE2State* s1, 
+                                                        const Common::SE2State* s2)>& condition) const {
+    if (currNode == NULL) return;
+    const auto& currPoint = currNode->point;
+
+    bool isLeftTree;
+    int currLevel = currNode->level;
+    if (key[currLevel%N] < (*currPoint)[currLevel%N]) {
+        nearestNeighborRecurse(currNode->left, key, p, condition);
+        isLeftTree = true;
+    }else {
+        nearestNeighborRecurse(currNode->right, key, p, condition);
+        isLeftTree = false;
+    }
+
+    static double maxRadius = Distance(key, *currPoint);
+
+    // assume there must be a point which can connect with key
+    auto v0 = std::make_unique<Common::SE2State>(key[0],key[1],0);
+    auto u0 = std::make_unique<Common::SE2State>((*currPoint)[0],(*currPoint)[1],0);
+    if (condition(v0.get(), u0.get())) {
+        if (p == NULL) {
+            p = currNode->point;
+        }
+        if (fabs((*p)[currLevel%N] - (*currPoint)[currLevel%N]) < Distance(*p,key)) {
+            if (isLeftTree) nearestNeighborRecurse(currNode->right, key, p, condition);
+            else nearestNeighborRecurse(currNode->left, key, p, condition);
+        }
+    } else if (p == NULL){  // if p is still not found, search within an extending circle
+        if (fabs((*p)[currLevel%N] - (*currPoint)[currLevel%N]) < maxRadius) {
+            if (isLeftTree) nearestNeighborRecurse(currNode->right, key, p, condition);
+            else nearestNeighborRecurse(currNode->left, key, p, condition);
+        }
+        maxRadius += 0.2;
+    }
+}
+
+template <std::size_t N>
+std::shared_ptr<Point<N>> KDTree<N>::kNNValue(const Point<N>& key, 
+                            std::function<bool(const Common::SE2State* s1, 
+                                            const Common::SE2State* s2)> condition) const {
+    std::shared_ptr<Point<N>> p;
+    if (empty()) return p;
+
+    nearestNeighborRecurse(root_, key, p, condition);
+
+    return p;
+}
 // class Point
 
 template <std::size_t N>
@@ -304,6 +365,11 @@ BoundedPQueue<T>::BoundedPQueue(std::size_t maxSize) {
     maximumSize = maxSize;
 }
 
+template <typename T>
+BoundedPQueue<T>::BoundedPQueue(const std::multimap<double, T>& t) : elems(t) {
+    maximumSize = elems.size();
+}
+
 // enqueue adds the element to the map, then deletes the last element of the
 // map if there size exceeds the maximum size.
 template <typename T>
@@ -322,13 +388,13 @@ void BoundedPQueue<T>::enqueue(const T value, double priority) {
 // dequeueMin copies the lowest element of the map (the one pointed at by
 // begin()) and then removes it.
 template <typename T>
-T& BoundedPQueue<T>::dequeueMin() {
+T BoundedPQueue<T>::dequeueMin() {
     // Copy the best value.
     T result = elems.begin()->second;
 
     // Remove it from the map.
     elems.erase(elems.begin());
-
+    
     return result;
 }
 

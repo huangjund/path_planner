@@ -122,6 +122,7 @@ namespace Common{
 
   template bool CollisionDetection::isTraversable<SE2State>(const SE2State*,const bool);
 
+// find whether the line between s1 and s2 collide with obstacle
   bool CollisionDetection::fastSearch(double* s1, double* s2) {
     float csize = grid_->info.resolution;
     int width = grid_->info.width;
