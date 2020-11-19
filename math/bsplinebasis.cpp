@@ -1,4 +1,5 @@
 #include "bsplinebasis.h"
+#include <iostream>
 
 using namespace HybridAStar;
 
@@ -12,7 +13,7 @@ Vector2D bsplinebasis::compute(double glb_value) {
 }
 
 Vector2D bsplinebasis::pieceiValue(const double loc_value, const unsigned int piece) {
-  auto n = trajPoints.size() - 1;
+  auto n = trajSize() - 1;
   Vector2D temp;
   if (order == 2) {
     auto i = piece + 2;
@@ -68,8 +69,10 @@ Vector2D bsplinebasis::pieceiValue(const double loc_value, const unsigned int pi
                (t[0]*n4i4[0][1]+t[1]*n4i4[1][1]+t[2]*n4i4[2][1]+t[3]*n4i4[3][1])*trajPoints[i-2] + 
                (t[0]*n4i4[0][2]+t[1]*n4i4[1][2]+t[2]*n4i4[2][2]+t[3]*n4i4[3][2])*trajPoints[i-1] + 
                (t[0]*n4i4[0][3]+t[1]*n4i4[1][3]+t[2]*n4i4[2][3]+t[3]*n4i4[3][3])*trajPoints[i];
-      else 
+      else {
+        std::cout << "when order equals 3, n equals 4, i should either be 3 or 4" << std::endl;
         exit(0);
+      }
       break;
     case 5:
       if(i == 3)  // n == 5 ; i == 3;
@@ -87,8 +90,10 @@ Vector2D bsplinebasis::pieceiValue(const double loc_value, const unsigned int pi
                (t[0]*n5i5[0][1]+t[1]*n5i5[1][1]+t[2]*n5i5[2][1]+t[3]*n5i5[3][1])*trajPoints[i-2] + 
                (t[0]*n5i5[0][2]+t[1]*n5i5[1][2]+t[2]*n5i5[2][2]+t[3]*n5i5[3][2])*trajPoints[i-1] + 
                (t[0]*n5i5[0][3]+t[1]*n5i5[1][3]+t[2]*n5i5[2][3]+t[3]*n5i5[3][3])*trajPoints[i];
-      else 
+      else {
+        std::cout << "when order equals 3, n equals 5, i should either be 3, 4 or 5" << std::endl;
         exit(0);
+      }
     default:
       if(i == 3)  // n >= 6 ; i == 3
         temp = (t[0]*n6i3[0][0]+t[1]*n6i3[1][0]+t[2]*n6i3[2][0]+t[3]*n6i3[3][0])*trajPoints[i-3] + 
@@ -118,8 +123,11 @@ Vector2D bsplinebasis::pieceiValue(const double loc_value, const unsigned int pi
       break;
     }
   }
-  else 
+  else {
+    std::cout << "the required spline order is neither 2 or 3" << std::endl;
     exit(0);
+  }
+    
 
   return temp;
 }
