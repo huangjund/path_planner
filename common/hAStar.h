@@ -20,7 +20,9 @@ namespace Common{
     std::unique_ptr<Map<GridState>> pMap_;
   public:
     hAStar() = default;
-    hAStar(const std::shared_ptr<GridState>&,const GridState&,std::shared_ptr<CollisionDetection>&);
+    hAStar(const std::shared_ptr<GridState>&,
+          const GridState&,
+          std::shared_ptr<CollisionDetection>&);
     ~hAStar() = default;
 
     hAStar(const hAStar &) = delete;
@@ -28,7 +30,8 @@ namespace Common{
 
     void setStart(const std::shared_ptr<GridState>&);
     void setGoal(const GridState& goal);
-    void setStartGoal(const std::shared_ptr<GridState>&, const GridState&);
+    void setStartGoal(const std::shared_ptr<GridState>&, 
+                      const GridState&);
     void setRawmap(const nav_msgs::OccupancyGrid::Ptr &);
     void setSS();
     std::unique_ptr<Map<GridState>>& returnMap();

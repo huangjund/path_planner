@@ -1,6 +1,6 @@
 #include "hRRTx.h"
 
-#define TIME 1
+#define TIME 10
 
 namespace HybridAStar  {
 namespace Common {
@@ -37,11 +37,11 @@ namespace Common {
     treeConstructed_ = true;
 
     //====================================================================================
-    Geometry::RRTXdynamic::point_t s,e;
-    s[0] = start.getX(); s[1] = start.getY();
-    e[0] = goal.getX(); e[1] = goal.getY();
-    Geometry::RRTXdynamic testPlanner(s,e,mapwidth,mapheight,config);
-    testPlanner.solve(20);
+    // Geometry::RRTXdynamic::point_t s,e;
+    // s[0] = start.getX(); s[1] = start.getY();
+    // e[0] = goal.getX(); e[1] = goal.getY();
+    // Geometry::RRTXdynamic testPlanner(s,e,mapwidth,mapheight,config);
+    // testPlanner.solve(10);
   }
 
   bool hRRTx::terminationFn() {

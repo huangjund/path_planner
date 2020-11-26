@@ -22,11 +22,11 @@ namespace Geometry{
                 shared_ptr<Map<SE2State>> pmap,shared_ptr<CollisionDetection> &configSpace): 
                 Planner(start,goal),start_(start),goal_(goal),configSpace_(configSpace), 
                 rsPlanner_(std::make_unique<hRScurve>(*start_,goal_)),
-                rrtxPlanner_(std::make_unique<hRRTx>(*start_,goal_,
-                                                      pmap->info_.width*pmap->info_.resolution, // real width [meters]
-                                                      pmap->info_.height*pmap->info_.resolution,  // real height [meters]
-                                                      configSpace)),
-                // aStarPlanner_(std::make_unique<hAStar>()),
+                // rrtxPlanner_(std::make_unique<hRRTx>(*start_,goal_,
+                //                                       pmap->info_.width*pmap->info_.resolution, // real width [meters]
+                //                                       pmap->info_.height*pmap->info_.resolution,  // real height [meters]
+                //                                       configSpace)),
+                aStarPlanner_(std::make_unique<hAStar>()),
                 pMap_(pmap){
     #ifdef _HEURISTIC_ASTAR_H
     auto s = std::make_shared<GridState>(pmap->info_.planResolution,0);
@@ -60,10 +60,10 @@ namespace Geometry{
     start.setH(std::max(rrtxCost,rsCost));
     #elif defined _HEURISTIC_ASTAR_H
     auto s = std::make_shared<GridState>(pMap_->info_.planResolution,0);
-    GridState g;
+    GridState g(pMap_->info_.planResolution, 0);
     float srx = start.getX()/pMap_->info_.planResolution;
     float sry = start.getY()/pMap_->info_.planResolution;
-    float grx = goal.getY()/pMap_->info_.planResolution;
+    float grx = goal.getX()/pMap_->info_.planResolution;
     float gry = goal.getY()/pMap_->info_.planResolution;
     float sx = srx - (int)srx;
     float sy = sry - (int)sry;
@@ -76,6 +76,7 @@ namespace Geometry{
 
     double offSet = sqrt(pow(sx-gx,2) + pow(sy-gy,2));
     astarCost -= offSet;
+    astarCost *= pMap_->info_.planResolution;
 
     start.setH(std::max(astarCost,rsCost));
     #endif

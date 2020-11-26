@@ -38,7 +38,7 @@ namespace Common {
     int pheight = info_.height*info_.resolution/info_.planResolution;
     // TODO: needs to be fixed
     if(temp.getDimensions() == 2)
-      statespace = std::vector<T>(pwidth*pheight, T(info_.resolution,0.087266));
+      statespace = std::vector<T>(pwidth*pheight, T(info_.planResolution,0));
     else
       statespace = std::vector<T>(pwidth*pheight*72, T(info_.planResolution,0.087266));
     hasStateSpace_ = true;

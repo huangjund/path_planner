@@ -14,23 +14,14 @@
 
 namespace HybridAStar {
 namespace Common {
-  // OMPL_CLASS_FORWARD(Map);
   template <class T>
   class Map {
   private:
     bool hasStateSpace_ = false;
   public:
-    // non-copyable
-    Map(const Map &) = delete;
-    Map &operator=(const Map &) = delete;
-    // constructor
-    Map() = default;
-    explicit Map(const nav_msgs::OccupancyGrid::Ptr map);
-    virtual ~Map() = default;
-
     struct RawMap {
-      int width;
-      int height;
+      int width;  // [unit: cell]
+      int height; // [unit: cell]
       float resolution;   // [unit: meters/cell]
       float planResolution; // [unit: meters/cell]
 
@@ -39,6 +30,15 @@ namespace Common {
       // RawMap& operator=(const RawMap&);
     } info_;
     
+    // non-copyable
+    Map(const Map &) = delete;
+    Map &operator=(const Map &) = delete;
+    // constructor
+    Map() = default;
+    explicit Map(const nav_msgs::OccupancyGrid::Ptr map);
+    virtual ~Map() = default;
+
+    // TODO:should be removed to other class
     std::vector<T> statespace;
     void setMap(const nav_msgs::OccupancyGrid::Ptr map);
     void setSS();

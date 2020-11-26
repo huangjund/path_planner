@@ -48,11 +48,11 @@ namespace Common {
   GridState* GridState::createSuccessor(const int i, std::shared_ptr<GridState>& self) {
     int xSucc = x_ + GridState::dx[i];
     int ySucc = y_ + GridState::dy[i];
-    return new GridState(xSucc, ySucc, g_, 0, self, 1);
+    return new GridState(xSucc, ySucc, g_, 0, self, cellSize_);
   }
 
   void GridState::clear() {
-    x_ = 0; y_ = 0; g_ = 0; c_ = 0;
+    x_ = y_ = g_ = 0;
     pred_.reset(); idx_ = -1;
     o_ = c_ = false;
   }

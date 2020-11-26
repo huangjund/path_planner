@@ -14,7 +14,7 @@ namespace Common
 
   hAStar::hAStar(const std::shared_ptr<GridState>& start, const GridState& goal,std::shared_ptr<CollisionDetection>& config):
     start_(start), goal_(goal), config_(config), pMap_(std::unique_ptr<Map<GridState>>()){}
-
+    
   void hAStar::setGoal(const GridState& goal){
     goal_ = goal;
   }
@@ -31,24 +31,23 @@ namespace Common
   double hAStar::getDistance() {
     int iPred, iSucc;
     float newG;
-    int pwidth = pMap_->info_.width*pMap_->info_.resolution/pMap_->info_.planResolution;
-    int pheight = pMap_->info_.height*pMap_->info_.resolution/pMap_->info_.planResolution;
+    const int pwidth = pMap_->info_.width*pMap_->info_.resolution/pMap_->info_.planResolution;
+    const int pheight = pMap_->info_.height*pMap_->info_.resolution/pMap_->info_.planResolution;
     int dir = 8;
 
-    // reset the open and closed list
-    for(auto i = pMap_->statespace.begin(); i<pMap_->statespace.end(); ++i ){
-      (*i).reset();
-    }
+    std::vector<std::shared_ptr<GridState>> statespace(pwidth*pheight);
 
-    boost::heap::binomial_heap<std::shared_ptr<GridState>,
-                boost::heap::compare<CompareNodes>> O;
+    using binomial_heap = boost::heap::binomial_heap<std::shared_ptr<GridState>,
+                boost::heap::compare<CompareNodes>>;
+    binomial_heap O;
+    std::vector<binomial_heap::handle_type> handler(pwidth*pheight);
 
     start_->updateH(goal_);
     start_->open();
     O.push(start_);
 
     iPred = start_->setIdx(pwidth);
-    pMap_->statespace[iPred] = *start_;
+    statespace[iPred] = start_;
 
     std::shared_ptr<GridState> nPred;
     std::shared_ptr<GridState> nSucc;
@@ -57,13 +56,13 @@ namespace Common
       nPred = O.top();
       iPred = nPred->setIdx(pwidth);
 
-      if(pMap_->statespace[iPred].isClosed()) {
+      if(statespace[iPred]->isClosed()) {
         O.pop();
         continue;
       }
 
-      else if(pMap_->statespace[iPred].isOpen()) {
-        pMap_->statespace[iPred].close();
+      else if(statespace[iPred]->isOpen()) {
+        statespace[iPred]->close();
         O.pop();
 
         if(*nPred == goal_) {
@@ -76,14 +75,20 @@ namespace Common
             iSucc = nSucc->setIdx(pwidth);
 
             if (nSucc->isOnGrid(pwidth,pheight) && config_->isTraversable(nSucc.get()) &&
-                !pMap_->statespace[iSucc].isClosed()) {
+                (statespace[iSucc] == NULL || !statespace[iSucc]->isClosed())) {
               nSucc->updateG();
               newG = nSucc->getG();
-              if (!pMap_->statespace[iSucc].isOpen() || newG < pMap_->statespace[iSucc].getG()) {
+              // if this point has not explored yet or g is greater
+              if (statespace[iSucc] == NULL || !statespace[iSucc]->isOpen()) {
                 nSucc->updateH(goal_);
                 nSucc->open();
-                pMap_->statespace[iSucc] = *nSucc;
-                O.push(nSucc);
+                statespace[iSucc] = nSucc;
+                handler[iSucc] = O.push(nSucc);
+              }
+              else if(newG < statespace[iSucc]->getG()) {
+                statespace[iSucc]->setG(newG);
+                statespace[iSucc]->setPred(nSucc->getPred());
+                O.update(handler[iSucc]);
               }
             }
           }
