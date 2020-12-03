@@ -128,6 +128,7 @@ if(NOT PYTHONLIBS_FOUND)
     message(AUTHOR_WARNING,"python libs not found")
 endif(NOT PYTHONLIBS_FOUND)
 
+## add_subdirectory(communication)
 
 include_directories(include ${catkin_INCLUDE_DIRS})
 include_directories(include ${OMPL_INCLUDE_DIRS})
@@ -144,7 +145,7 @@ target_link_libraries(hybrid_astar ${catkin_LIBRARIES})
 target_link_libraries(hybrid_astar ${OMPL_LIBRARIES})
 target_link_libraries(hybrid_astar ${GFLAGS_LIBRARIES})
 
-add_executable(interactionUI simulation/interaction_box.cpp)
+add_executable(interactionUI simulation/vision_mock.cpp)
 target_link_libraries(interactionUI ${catkin_LIBRARIES})
 
 add_executable(simple_tf simulation/simple_tf.cpp)

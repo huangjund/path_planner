@@ -118,7 +118,7 @@ Visualization Manager:
       Marker Topic: /visualizeNodes3DCosts
       Name: MarkerArray
       Namespaces:
-        "": true
+        {}
       Queue Size: 1000
       Value: true
     - Alpha: 1
@@ -217,6 +217,15 @@ Visualization Manager:
         {}
       Queue Size: 100
       Value: false
+    - Class: rviz/InteractiveMarkers
+      Enable Transparency: true
+      Enabled: true
+      Name: InteractiveMarkers
+      Show Axes: false
+      Show Descriptions: true
+      Show Visual Aids: false
+      Update Topic: /Sensor_Mock/update
+      Value: true
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
@@ -244,7 +253,7 @@ Visualization Manager:
   Value: true
   Views:
     Current:
-      Angle: -34.55997848510742
+      Angle: -34.719947814941406
       Class: rviz/TopDownOrtho
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
@@ -254,10 +263,10 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Scale: -45.836517333984375
+      Scale: -16.369829177856445
       Target Frame: <Fixed Frame>
-      X: 44.36143112182617
-      Y: 13.518567085266113
+      X: 31.607837677001953
+      Y: 13.455260276794434
     Saved: ~
 Window Geometry:
   Displays:

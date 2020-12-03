@@ -15,6 +15,7 @@
 
 namespace HybridAStar {
 using Common::SE2State;
+using namespace visualization_msgs;
 //class Common::GridState;
 /*!
    \brief A class for visualizing the hybrid A* search.
@@ -33,10 +34,7 @@ class Visualize {
     pubNode3D = n.advertise<geometry_msgs::PoseStamped>("/visualizeNodes3DPose", 100);
     pubNodes3D = n.advertise<geometry_msgs::PoseArray>("/visualizeNodes3DPoses", 100);
     pubNodes3Dreverse = n.advertise<geometry_msgs::PoseArray>("/visualizeNodes3DPosesReverse", 100);
-    pubNodes3DCosts = n.advertise<visualization_msgs::MarkerArray>("/visualizeNodes3DCosts", 1000);
-    // pubNode2D = n.advertise<geometry_msgs::PoseStamped>("/visualizeNodes2DPose", 100);
-    // pubNodes2D = n.advertise<geometry_msgs::PoseArray>("/visualizeNodes2DPoses", 100);
-    // pubNodes2DCosts = n.advertise<visualization_msgs::MarkerArray>("/visualizeNodes2DCosts", 100);
+    pubNodes3DCosts = n.advertise<MarkerArray>("/visualizeNodes3DCosts", 1000);
 
     // CONFIGURE THE CONTAINER
     poses3D.header.frame_id = "path";
@@ -47,8 +45,6 @@ class Visualize {
   // CLEAR VISUALIZATION
   /// Clears the entire visualization
   void clear();
-  // /// Clears the 2D visualization
-  // void clear2D() {poses2D.poses.clear();}
 
   // PUBLISH A SINGLE/ARRAY 3D NODE TO RViz
   /// Publishes a single node to RViz, usually the one currently being expanded
@@ -58,15 +54,6 @@ class Visualize {
   // PUBLISH THE COST FOR A 3D NODE TO RViz
   /// Publishes the minimum of the cost of all nodes in a 2D grid cell
   void publishNode3DCosts(std::shared_ptr<Common::Map<SE2State>> pmap, int depth = 72);
-
-  // // PUBLISH A SINGEL/ARRAY 2D NODE TO RViz
-  // /// Publishes a single node to RViz, usually the one currently being expanded
-  // void publishNode2DPose(GridState& node);
-  // /// Publishes all expanded nodes to RViz
-  // void publishNode2DPoses(GridState& node);
-  // // PUBLISH THE COST FOR A 2D NODE TO RViz
-  // /// Publishes the minimum of the cost of all nodes in a 2D grid cell
-  // void publishNode2DCosts(GridState* nodes, int width, int height);
 
  private:
   /// A handle to the ROS node
@@ -79,19 +66,12 @@ class Visualize {
   ros::Publisher pubNodes3Dreverse;
   /// Publisher for an array of 3D cost with color gradient
   ros::Publisher pubNodes3DCosts;
-  // /// Publisher for a single 2D node
-  // ros::Publisher pubNode2D;
-  // /// Publisher for an array of 2D nodes
-  // ros::Publisher pubNodes2D;
-  // /// Publisher for an array of 2D cost with color gradient
-  // ros::Publisher pubNodes2DCosts;
   /// Array of poses describing forward nodes
   geometry_msgs::PoseArray poses3D;
   /// Array of poses describing reaward nodes
   geometry_msgs::PoseArray poses3Dreverse;
   /// Array of poses describing 2D heuristic nodes
   geometry_msgs::PoseArray poses2D;
-
 };
 }
 #endif // VISUALIZE_H

@@ -17,6 +17,7 @@ namespace HybridAStar{
     subGoal_ = n_.subscribe("/move_base_simple/goal", 1, &Interface::makeGoal, this);
     subStart_ = n_.subscribe("/initialpose", 1, &Interface::makeStart, this);
     subMap_ = n_.subscribe("/map", 1, &Interface::setMap, this);
+    subObs_ = n_.subscribe("/sensor/obstaclePos", 1, &Interface::updateObs, this);
   }
 
   void Interface::makeStart(const geometry_msgs::PoseWithCovarianceStamped::ConstPtr& start) {
@@ -29,13 +30,6 @@ namespace HybridAStar{
       isStartvalid_ = true;
       Action action = startSetting;
       start_ = *start;
-      // start_.pose.pose.position.x = 43.302;
-      // start_.pose.pose.position.y = 10.267;
-      // start_.pose.pose.position.z = 0;
-      // start_.pose.pose.orientation.w = -0.853;
-      // start_.pose.pose.orientation.x = 0;
-      // start_.pose.pose.orientation.y = 0;
-      // start_.pose.pose.orientation.z = 1;
       
       // automata
       outputAutomata(action);
@@ -56,13 +50,6 @@ namespace HybridAStar{
       isGoalvalid_ = true;
       Action action = goalSetting;
       goal_ = *goal;
-      // goal_.pose.position.x = 45.139;
-      // goal_.pose.position.y = 5.067;
-      // goal_.pose.position.z = 0;
-      // goal_.pose.orientation.w = 0.542;
-      // goal_.pose.orientation.x = 0;
-      // goal_.pose.orientation.y = 0;
-      // goal_.pose.orientation.z = -0.84;
 
       // automata
       outputAutomata(action);
@@ -81,6 +68,205 @@ namespace HybridAStar{
     outputAutomata(action);
   }
 
+  void Interface::updateObs(const geometry_msgs::PoseStampedPtr& pose) {
+    // get basic pose information
+    std::array<double,4> info;
+    tf::Quaternion quat;
+    double roll, pitch, yaw;
+    tf::quaternionMsgToTF(pose->pose.orientation, quat);
+    tf::Matrix3x3(quat).getRPY(roll,pitch,yaw);
+
+    int id = pose->header.frame_id.back() - '0';
+    info[0] = pose->pose.position.x;
+    info[1] = pose->pose.position.y;
+    info[2] = pose->pose.position.z;
+    info[3] = yaw;
+
+    // project obstacle from cooridnate to blocks
+    std::unordered_map<int, bool> obstacle;
+    obsProjection(info, obstacle);
+    
+    // update current obstacle list
+    auto cp = currObstacles_.find(id);
+    if (cp == currObstacles_.end()) {
+      currObstacles_.emplace(id, obstacle);
+    }
+    else {
+      cp->second.swap(obstacle);
+    }
+
+    // refresh grid_ with new obstacle position
+    auto lastp = lastObstacles_.find(id);
+    auto currObs = currObstacles_.find(id)->second;
+    if (lastp == lastObstacles_.end()) {
+      for (auto i : currObs) {
+        grid_->data[i.first] = 1;
+      }
+    }
+    else {
+      auto lastObs = lastp->second;
+      for (auto j : lastObs) {
+        grid_->data[j.first] = 0;
+      }
+      for (auto i : currObs) {
+        grid_->data[i.first] = 1;
+      }
+    }
+
+    // update last obstacle list
+    auto lp = lastObstacles_.find(id);
+    cp = currObstacles_.find(id);
+    if (lp == lastObstacles_.end()) {
+      lastObstacles_.emplace(id, cp->second);
+    }
+    else {
+      lp->second = cp->second;
+    }
+
+    // automata
+    Action action = Action::obstacleSetting;
+    outputAutomata(action);
+  }
+
+  void Interface::obsProjection(const std::array<double, 4>& info,
+                                std::unordered_map<int, bool>& obstacle) {
+    const float cSize = grid_->info.resolution;
+    // bounding box size length/width
+		/// [unit: collision cells] -- The bounding box size length and width to precompute all possible headings
+    double length = 1.2, width = 0.9;
+
+    struct point {
+      double x;
+      double y;
+    };
+
+    // ______________________
+    // VARIABLES FOR ROTATION
+    //center of the rectangle
+    point c;
+    // points of the rectangle
+    point p[4];
+    point nP[4];
+
+    // ____________________________
+    // VARIABLES FOR GRID TRAVERSAL
+    // vector for grid traversal
+    point t;
+    point start;
+    point end;
+    // cell index
+    int X;
+    int Y;
+    // t value for crossing vertical and horizontal boundary
+    double tMaxX;
+    double tMaxY;
+    // t value for width/heigth of cell
+    double tDeltaX;
+    double tDeltaY;
+    // positive or negative step direction
+    int stepX;
+    int stepY;
+
+    // set the starting angle to zero;
+    double theta = info[3];
+    // set points of rectangle
+    c.x = info[0] / cSize;
+    c.y = info[1] / cSize;
+
+    p[0].x = - length / 2 / cSize;
+    p[0].y = - width / 2 / cSize;
+
+    p[1].x = - length / 2 / cSize;
+    p[1].y = width / 2 / cSize;
+
+    p[2].x = length / 2 / cSize;
+    p[2].y = width / 2 / cSize;
+
+    p[3].x = length / 2 / cSize;
+    p[3].y = - width / 2 / cSize;
+
+    // shape rotation
+    for (int j = 0; j < 4; ++j) {
+      // rotate and shift back
+      nP[j].x = p[j].x * cos(theta) - p[j].y * sin(theta) + c.x;
+      nP[j].y = p[j].x * sin(theta) + p[j].y * cos(theta) + c.y;
+    }
+
+    // cell traversal clockwise
+    for (int k = 0; k < 4; ++k) {
+      // create the vectors clockwise
+      if (k < 3) {
+        start = nP[k]; // [unit: collision cell]
+        end = nP[k + 1];
+      } else {
+        start = nP[k];
+        end = nP[0];
+      }
+
+      //set indexes
+      X = (int)start.x;
+      Y = (int)start.y;
+      // std::pair(idx, value)
+      obstacle.emplace(Y*grid_->info.width+X,true);
+      t.x = end.x - start.x;
+      t.y = end.y - start.y;
+      stepX = t.x >= 0 ? 1 : -1;
+      stepY = t.y >= 0 ? 1 : -1;
+
+      // width and height normalized by t
+      if (t.x != 0) {
+        tDeltaX = 1.f / std::abs(t.x);
+      } else {
+        tDeltaX = std::numeric_limits<double>::max();
+      }
+
+      if (t.y != 0) {
+        tDeltaY = 1.f / std::abs(t.y);
+      } else {
+        tDeltaY = std::numeric_limits<double>::max();
+      }
+
+      // set maximum traversal values
+      if (stepX > 0) {
+        tMaxX = tDeltaX * (1 - (start.x - (long)start.x));
+      } else {
+        tMaxX = tDeltaX * (start.x - (long)start.x);
+      }
+
+      if (stepY > 0) {
+        tMaxY = tDeltaY * (1 - (start.y - (long)start.y));
+      } else {
+        tMaxY = tDeltaY * (start.y - (long)start.y);
+      }
+
+      while ((int)end.x != X || (int)end.y != Y) {
+        // only increment x if the t length is smaller and the result will be closer to the goal
+        if (tMaxX < tMaxY && std::abs(X + stepX - (int)end.x) < std::abs(X - (int)end.x)) {
+          tMaxX = tMaxX + tDeltaX;
+          X = X + stepX;
+          obstacle.emplace(Y*grid_->info.width+X,true);
+          // only increment y if the t length is smaller and the result will be closer to the goal
+        } else if (tMaxY < tMaxX && std::abs(Y + stepY - (int)end.y) < std::abs(Y - (int)end.y)) {
+          tMaxY = tMaxY + tDeltaY;
+          Y = Y + stepY;
+          obstacle.emplace(Y*grid_->info.width+X,true);
+        } else if (2 >= std::abs(X - (int)end.x) + std::abs(Y - (int)end.y)) {
+          if (std::abs(X - (int)end.x) > std::abs(Y - (int)end.y)) {
+            X = X + stepX;
+            obstacle.emplace(Y*grid_->info.width+X,true);
+          } else {
+            Y = Y + stepY;
+            obstacle.emplace(Y*grid_->info.width+X,true);
+          }
+        } else {
+          // this SHOULD NOT happen
+          std::cout << "\n--->tie occured, please check for error in script\n";
+          break;
+        }
+      }
+    }
+  }
+
   bool Interface::outputAutomata(Action action) {
     switch (automata_)
     {
@@ -94,20 +280,26 @@ namespace HybridAStar{
       break;
     case plan:
       /* no action executed */
-      /* this action should no really exist in this automata
+      /* this action should not really exist in this automata
          as it is a temporary value */
       break;
     case planned:
-      if (action == Action::mapSetting || action == goalSetting) {
+      if (action == obstacleSetting || 
+          action == mapSetting || 
+          action == goalSetting) {
         automata_ = initial;
         outputAutomata(action);
       } else if(action == startSetting) {
-        automata_ = replan;
+        automata_ = startReplan;
         outputAutomata(action);
       }
       break;
-    case replan:
+    case startReplan:
       setStartOutput();
+      simulate(planningMap);
+      automata_ = planned;
+      break;
+    case obsReplan:
       simulate(planningMap);
       automata_ = planned;
       break;

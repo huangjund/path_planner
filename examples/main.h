@@ -1,9 +1,12 @@
 #pragma once 
 
+#include <unordered_map>
+
 #include <ros/ros.h>
 #include <ros/time.h>
 #include <geometry_msgs/PoseWithCovarianceStamped.h>
 #include <geometry_msgs/PoseStamped.h>
+#include <tf/transform_datatypes.h>
 
 #include "../common/map/map.h"
 #include "../common/statespace/GridState.h"
@@ -34,11 +37,12 @@ namespace HybridAStar{
     ros::Subscriber subStart_;
     ros::Subscriber subGoal_;
     ros::Subscriber subMap_;
+    ros::Subscriber subObs_;
     bool isStartvalid_;
     bool isGoalvalid_;
     bool hasMap_;
-    enum CurrentState{initial, plan, planned, replan}automata_;
-    enum Action{noAct,mapSetting,startSetting,goalSetting};
+    enum CurrentState{initial, plan, planned, startReplan, obsReplan}automata_;
+    enum Action{noAct,mapSetting,startSetting,goalSetting,obstacleSetting};
 
     // raw datas from outside
     geometry_msgs::PoseWithCovarianceStamped start_;
@@ -52,6 +56,8 @@ namespace HybridAStar{
     Path smoothedPath_ = Path(true);/// The path smoothed and ready for the controller
     BSpline smoother_;/// The smoother used for optimizing the path and create b spline
     std::unique_ptr<Multibody::SingleForkLiftPlant> carPlant_;
+    std::unordered_map<int, std::unordered_map<int, bool>> lastObstacles_;
+    std::unordered_map<int, std::unordered_map<int, bool>> currObstacles_;
   public:
     explicit Interface();
     ~Interface() = default;
@@ -84,6 +90,11 @@ namespace HybridAStar{
      * @param  map              the map published by map server
      */
     void setMap(const nav_msgs::OccupancyGrid::Ptr map);
+
+    void updateObs(const geometry_msgs::PoseStampedPtr& pose);
+
+    void obsProjection(const std::array<double, 4>&,
+                      std::unordered_map<int, bool>&);
 
     /**
      * @brief clear \p isStartvalid_ and \p isGoalvalid_ two flags. With any one of these two flags turned to
