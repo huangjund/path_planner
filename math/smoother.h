@@ -8,7 +8,7 @@
 #include "../common/statespace/SE2State.h"
 #include "../utils/Helper.h"
 #include "../math/vector2d.h"
-#include "../multibody/SingleForkLiftPlant.h"
+#include "common/parameters/parameters.h"
 
 namespace HybridAStar {
 /*!
@@ -85,9 +85,8 @@ class Smoother {
   /// weight for the smoothness term
   float wSmoothness = 10;
  private:
-  std::unique_ptr<Multibody::SingleForkLiftPlant> carPlant_;
   /// maximum possible curvature of the non-holonomic vehicle
-  float kappaMax = 1.f / carPlant_->rad_;
+  float kappaMax = 1.f / Common::ForkProperty::rad_;
   /// maximum distance to obstacles that is penalized
   //   TODO: this should be in the shield?
   // [m] --- The minimum width of a safe road for the vehicle at hand

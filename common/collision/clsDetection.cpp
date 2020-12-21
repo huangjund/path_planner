@@ -3,46 +3,42 @@
 
 namespace HybridAStar{
 namespace Common{
-  CollisionDetection::CollisionDetection():
-    carPlant_(std::make_unique<Multibody::SingleForkLiftPlant>()),
-    grid_(nullptr),
-    collisionLookup_(new configuration[carPlant_->headings_*carPlant_->positions_]()){}
+  CollisionDetection::CollisionDetection() : clsMap_(nullptr),
+    collisionLookup_(std::make_unique<configuration>(
+                     new configuration[HaStarMotionPrimitives::headings*CollisionMapConst::positions_]){}
 
-  CollisionDetection::CollisionDetection(nav_msgs::OccupancyGrid::Ptr &grid):
-    carPlant_(std::make_unique<Multibody::SingleForkLiftPlant>()),
-    grid_(grid),collisionLookup_(new configuration[carPlant_->headings_*carPlant_->positions_]()) {
+  CollisionDetection::CollisionDetection(const nav_msgs::OccupancyGrid::Ptr &grid):
+    clsMap_(std::make_unique<CollisionMap>(grid)),
+    collisionLookup_(new configuration[HaStarMotionPrimitives::headings*CollisionMapConst::positions_]()) {
     makeClsLookup(); // initialize collision lookup
   }
 
-  CollisionDetection::CollisionDetection(const CollisionDetection& cp):
-    carPlant_(std::make_unique<Multibody::SingleForkLiftPlant>()),
-    grid_(cp.grid_),collisionLookup_(new configuration[carPlant_->headings_*carPlant_->positions_]()) {
-      // copy collision lookup
-      for (size_t i = 0; i < carPlant_->headings_*carPlant_->positions_; ++i) {
-        collisionLookup_[i].length = cp.collisionLookup_[i].length;
-        for (size_t j = 0; j < collisionLookup_[i].length; j++)
-        {
-          collisionLookup_[i].pos[j].x = cp.collisionLookup_[i].pos[j].x;
-          collisionLookup_[i].pos[j].y = cp.collisionLookup_[i].pos[j].y;
-        }
-      }
-  }
-
-	CollisionDetection::~CollisionDetection() {
-		delete [] collisionLookup_;
-  }
+  // CollisionDetection::CollisionDetection(const CollisionDetection& cp):
+  //   clsMap_(cp.clsMap_),collisionLookup_(new configuration[HaStarMotionPrimitives::headings*CollisionMapConst::positions_]()) {
+  //     // copy collision lookup
+  //     for (size_t i = 0; i < HaStarMotionPrimitives::headings*CollisionMapConst::positions_; ++i) {
+  //       collisionLookup_[i].length = cp.collisionLookup_[i].length;
+  //       for (size_t j = 0; j < collisionLookup_[i].length; j++)
+  //       {
+  //         collisionLookup_[i].pos[j].x = cp.collisionLookup_[i].pos[j].x;
+  //         collisionLookup_[i].pos[j].y = cp.collisionLookup_[i].pos[j].y;
+  //       }
+  //     }
+  // }
 
   void CollisionDetection::setGrid(nav_msgs::OccupancyGrid::Ptr &grid) {
-    grid_ = grid;
+    clsMap_.reset(new CollisionMap(grid));
 
     setPGrid();
   }
 
   void CollisionDetection::setPGrid() {
-    auto ccsize = grid_->info.resolution; // collision cell size
-    auto pcsize = carPlant_->planResolution;
-    pGrid_.height = (int)(grid_->info.height*ccsize/pcsize);
-    pGrid_.width = (int)(grid_->info.width*ccsize/pcsize);
+    auto ccsize = clsMap_->colResolution_; // collision cell size
+    auto pcsize = PlanningMapConst::cellSize;
+    double cwidth = clsMap_->getWid();
+    double cheight = clsMap_->getHeight();
+    pGrid_.height = (int)(cheight*ccsize/pcsize);
+    pGrid_.width = (int)(cwidth*ccsize/pcsize);
 
     // initailize the grid pointer
     pGrid_.planGrid.reset(new float[pGrid_.height*pGrid_.width]);
@@ -55,9 +51,9 @@ namespace Common{
 
     int cpx, cpy; // the current planning map point along x or y direction
     // computing occupancy rate
-    for (int i = 0; i < grid_->info.width; i++){
-      for (int j = 0; j < grid_->info.height; j++){
-        if(grid_->data[j*grid_->info.width + i]){ // if the cell has obstacle, add 
+    for (int i = 0; i < cwidth; i++){
+      for (int j = 0; j < cheight; j++){
+        if(clsMap_->data_[j*cwidth + i]){ // if the cell has obstacle, add 
           cpx = static_cast<int>(i*ccsize/pcsize);
           cpy = static_cast<int>(j*ccsize/pcsize);
           *(pg.get()+cpy*pGrid_.width + cpx) += ccsize*ccsize;
@@ -76,36 +72,29 @@ namespace Common{
   void CollisionDetection::getConfiguration(const SE2State* state, float &x,float &y, float &t) {
     x = state->getX();
     y = state->getY();
-    t = state->getT();
+    t = state->getYaw();
   }
 
 
-  void CollisionDetection::getConfiguration(const GridState* state, float &x,float &y,float &) {
-    x = state->getX();
-    y = state->getY();
+  void CollisionDetection::getConfiguration(const RealVectorState<int>* state, float &x,float &y,float &t) {
+    x = state->values_[0];
+    y = state->values_[1];
+    t = 100;
   }
   
   template <class T>
   bool CollisionDetection::isTraversable(const T* state) {
     float x, y, t;
     getConfiguration(state,x,y,t);
-    // TODO:change this into an enumeration struct
-    switch (state->dimension)
-    {
-    case 2:
+    
+    if (t == 100) {
       if (*(pGrid_.planGrid.get()+state->getIdx()) > pGrid_.threshold){
         return false;
       }
       return true;
-      break;
-    
-    case 3:
+    }
+    else {
       return configinCFree(x, y, t);
-      break;
-
-    default:
-      exit(0);
-      break;
     }
   }
 
@@ -116,17 +105,17 @@ namespace Common{
   bool CollisionDetection::isTraversable(const T* state, const bool rrtmap) {
     float x,y,t;
     getConfiguration(state,x,y,t);
-    int idx = (int)(y/grid_->info.resolution)*grid_->info.width + (int)(x/grid_->info.resolution);
-    return !static_cast<bool>(grid_->data[idx]);
+    int idx = (int)(y/clsMap_->colResolution_)*clsMap_->getWid() + (int)(x/clsMap_->colResolution_);
+    return !static_cast<bool>(clsMap_->data_[idx]);
   }
 
   template bool CollisionDetection::isTraversable<SE2State>(const SE2State*,const bool);
 
 // find whether the line between s1 and s2 collide with obstacle
   bool CollisionDetection::fastSearch(double* s1, double* s2) {
-    float csize = grid_->info.resolution;
-    int width = grid_->info.width;
-    int height = grid_->info.height;
+    float csize = clsMap_->colResolution_;
+    int width = clsMap_->getWid();
+    int height = clsMap_->getHeight();
     float start[] = {s1[0]/csize, s1[1]/csize}; // relative point [unit: cell]
     float goal[] = {s2[0]/csize, s2[1]/csize};
 
@@ -184,20 +173,20 @@ namespace Common{
         std::cout << "\n--->tie occured, please check for error in script\n";
         return false;
       }
-      if(grid_->data[Y*width + X]) return false;
+      if(clsMap_->data_[Y*width + X]) return false;
     }
     return true;
   }
 
   bool CollisionDetection::configinCFree(float x, float y, float t) {
-    int X = (int)(x/grid_->info.resolution); // [unit:collision cell]
-    int Y = (int)(y/grid_->info.resolution); // [unit:collision cell]
-    int iX = (int)((x - (long)x) * carPlant_->positionResolution_);
+    int X = (int)(x/clsMap_->colResolution_); // [unit:collision cell]
+    int Y = (int)(y/clsMap_->colResolution_); // [unit:collision cell]
+    int iX = (int)((x - (long)x) * CollisionMapConst::positionResolution_);
     iX = iX > 0 ? iX : 0;
-    int iY = (int)((y - (long)y) * carPlant_->positionResolution_);
+    int iY = (int)((y - (long)y) * CollisionMapConst::positionResolution_);
     iY = iY > 0 ? iY : 0;
-    int iT = (int)(t / carPlant_->deltaHeadingRad_);
-    int idx = iY * carPlant_->positionResolution_ * carPlant_->headings_ + iX * carPlant_->headings_ + iT;
+    int iT = (int)(t / HaStarMotionPrimitives::deltaHeadingRad);
+    int idx = iY * CollisionMapConst::positionResolution_ * HaStarMotionPrimitives::headings + iX * HaStarMotionPrimitives::headings + iT;
     int cX;
     int cY;
 
@@ -206,8 +195,8 @@ namespace Common{
       cY = (Y + collisionLookup_[idx].pos[i].y);
 
       // make sure the configuration coordinates are actually on the grid
-      if (cX >= 0 && (unsigned int)cX < grid_->info.width && cY >= 0 && (unsigned int)cY < grid_->info.height) {
-        if (grid_->data[cY * grid_->info.width + cX]) {
+      if (cX >= 0 && (unsigned int)cX < clsMap_->getWid() && cY >= 0 && (unsigned int)cY < clsMap_->getHeight()) {
+        if (clsMap_->data_[cY * clsMap_->getWid() + cX]) {
           return false;
         }
       }
@@ -224,10 +213,10 @@ namespace Common{
   void CollisionDetection::makeClsLookup() {
     std::cout << "I am building the collision lookup table...";
     // collision cell size [unit: meters/cell]
-    const float cSize = grid_->info.resolution;
+    const float cSize = clsMap_->colResolution_;
     // bounding box size length/width
 		/// [unit: collision cells] -- The bounding box size length and width to precompute all possible headings
-		const int bbSize = std::ceil((sqrt(carPlant_->width_*carPlant_->width_ + carPlant_->length_*carPlant_->length_) + 4) / cSize);
+		const int bbSize = std::ceil((sqrt(ForkProperty::width_*ForkProperty::width_ + ForkProperty::length_*ForkProperty::length_) + 4) / cSize);
 
     struct point {
       double x;
@@ -273,8 +262,8 @@ namespace Common{
     // _____________________________
     // VARIABLES FOR LOOKUP CREATION
     int count = 0;
-    const int positionResolution = carPlant_->positionResolution_;
-    const int positions = carPlant_->positions_;
+    const int positionResolution = CollisionMapConst::positionResolution_;
+    const int positions = CollisionMapConst::positions_;
     point points[positions];
 
     // generate all discrete positions within one cell
@@ -293,19 +282,19 @@ namespace Common{
       c.x = (double)bbSize / 2 + points[q].x;
       c.y = (double)bbSize / 2 + points[q].y;
 
-      p[0].x = c.x - carPlant_->length_ / 2 / cSize;
-      p[0].y = c.y - carPlant_->width_ / 2 / cSize;
+      p[0].x = c.x - ForkProperty::length_ / 2 / cSize;
+      p[0].y = c.y - ForkProperty::width_ / 2 / cSize;
 
-      p[1].x = c.x - carPlant_->length_ / 2 / cSize;
-      p[1].y = c.y + carPlant_->width_ / 2 / cSize;
+      p[1].x = c.x - ForkProperty::length_ / 2 / cSize;
+      p[1].y = c.y + ForkProperty::width_ / 2 / cSize;
 
-      p[2].x = c.x + carPlant_->length_ / 2 / cSize;
-      p[2].y = c.y + carPlant_->width_ / 2 / cSize;
+      p[2].x = c.x + ForkProperty::length_ / 2 / cSize;
+      p[2].y = c.y + ForkProperty::width_ / 2 / cSize;
 
-      p[3].x = c.x + carPlant_->length_ / 2 / cSize;
-      p[3].y = c.y - carPlant_->width_ / 2 / cSize;
+      p[3].x = c.x + ForkProperty::length_ / 2 / cSize;
+      p[3].y = c.y - ForkProperty::width_ / 2 / cSize;
 
-      for (int o = 0; o < carPlant_->headings_; ++o) {
+      for (int o = 0; o < HaStarMotionPrimitives::headings; ++o) {
         // initialize cSpace
         for (int i = 0; i < bbSize; ++i) {
           for (int j = 0; j < bbSize; ++j) {
@@ -325,7 +314,7 @@ namespace Common{
         }
 
         // create the next angle
-        theta += carPlant_->deltaHeadingRad_;
+        theta += HaStarMotionPrimitives::deltaHeadingRad;
 
         // cell traversal clockwise
         for (int k = 0; k < 4; ++k) {
@@ -433,15 +422,15 @@ namespace Common{
           for (int j = 0; j < bbSize; ++j) {
             if (cSpace[i * bbSize + j]) {
               // compute the relative position of the car cells
-              collisionLookup_[q * carPlant_->headings_ + o].pos[count].x = j - (int)c.x;
-              collisionLookup_[q * carPlant_->headings_ + o].pos[count].y = i - (int)c.y; // [unit:cell]
+              collisionLookup_[q * HaStarMotionPrimitives::headings + o].pos[count].x = j - (int)c.x;
+              collisionLookup_[q * HaStarMotionPrimitives::headings + o].pos[count].y = i - (int)c.y; // [unit:cell]
               // add one for the length of the current list
               count++;
             }
           }
         }
 
-        collisionLookup_[q * carPlant_->headings_ + o].length = count;
+        collisionLookup_[q * HaStarMotionPrimitives::headings + o].length = count;
 
       }
     }

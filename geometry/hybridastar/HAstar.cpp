@@ -18,23 +18,26 @@ namespace Geometry{
     }
   };
 
-  HAstar::HAstar(shared_ptr<SE2State> start,SE2State &goal,
-                shared_ptr<Map<SE2State>> pmap,shared_ptr<CollisionDetection> &configSpace): 
-                Planner(start,goal),start_(start),goal_(goal),configSpace_(configSpace), 
-                rsPlanner_(std::make_unique<hRScurve>(*start_,goal_)),
-                // rrtxPlanner_(std::make_unique<hRRTx>(*start_,goal_,
-                //                                       pmap->info_.width*pmap->info_.resolution, // real width [meters]
-                //                                       pmap->info_.height*pmap->info_.resolution,  // real height [meters]
-                //                                       configSpace)),
-                aStarPlanner_(std::make_unique<hAStar>()),
+  // rrtxPlanner_(std::make_unique<hRRTx>(*start_,goal_,
+  //                                       pmap->info_.width*pmap->info_.resolution, // real width [meters]
+  //                                       pmap->info_.height*pmap->info_.resolution,  // real height [meters]
+  //                                       configSpace)),
+  // rsPlanner_(std::make_unique<hRScurve>(*start_,goal_)),
+  // aStarPlanner_(std::make_unique<hAStar>()),
+  HAstar::HAstar(const Common::SE2StatePtr& start,
+                 const Common::SE2StatePtr& goal,
+                 const PlanningMapPtr& pmap,
+                 const Common::CollisionDetectionPtr& configSpace):
+                CompoundPlanner(start, goal),
+                configSpace_(configSpace), 
                 pMap_(pmap){
     #ifdef _HEURISTIC_ASTAR_H
-    auto s = std::make_shared<GridState>(pmap->info_.planResolution,0);
-    GridState g(pmap->info_.planResolution,0);
+    auto s = std::make_shared<GridState>();
+    auto g = std::make_shared<GridState>();
     s->setX(start->getX()/pmap->info_.planResolution);
     s->setY(start->getY()/pmap->info_.planResolution);
-    g.setX(goal.getX()/pmap->info_.planResolution);
-    g.setY(goal.getY()/pmap->info_.planResolution);
+    g->setX(goal->getX()/pmap->info_.planResolution);
+    g->setY(goal->getY()/pmap->info_.planResolution);
 
     aStarPlanner_.reset(new hAStar(s,g,configSpace));
     // set map
@@ -92,16 +95,16 @@ namespace Geometry{
     // initialize the path
     DubinsPath path;
     // calculate the path
-    dubins_init(q0, q1, carPlant_->rad_, &path);
+    dubins_init(q0, q1, Common::ForkProperty::rad_, &path);
 
-    float x = carPlant_->dubinsStepSize_;
+    float x = Common::ForkProperty::dubinsStepSize_;
     float length = dubins_path_length(&path);
     int i = 0;
 
     // TODO: this construction should not related to the default constructor
     // TODO: the angle resolution should be synthesized to a class
     auto dubinsNodes = std::vector<std::shared_ptr<SE2State>>(
-      (int)(length / carPlant_->dubinsStepSize_) + 2);
+      (int)(length / Common::ForkProperty::dubinsStepSize_) + 2);
       // std::make_shared<SE2State>(pMap_->info_.planResolution, 0.087266)
     
     while (x <  length) {
@@ -128,7 +131,7 @@ namespace Geometry{
           std::cout << "looping shot";
         }
 
-        x += carPlant_->dubinsStepSize_;
+        x += Common::ForkProperty::dubinsStepSize_;
         i++;
       } else {
         // collided, discarding the path
@@ -158,7 +161,7 @@ namespace Geometry{
 
     // TODO:change the last 0.5 to a carplant related value
     // should carplant class be an abstract base class and other class inherit from this class?
-    auto reed_shepp_generator = std::make_shared<RSPath4Fork>(1/carPlant_->rad_,0.2);
+    auto reed_shepp_generator = std::make_shared<RSPath4Fork>(1/Common::ForkProperty::rad_,0.2);
     ReedSheppPath optimal_path;
 
     // TODO: what if the algorithm really goes into this?
@@ -208,15 +211,8 @@ namespace Geometry{
   }
 #endif
 
-  SE2State &HAstar::getStart() {
-    return *start_;
-  }
 
-  SE2State &HAstar::getGoal() {
-    return goal_;
-  }
-
-  void HAstar::setStart(std::shared_ptr<SE2State> start) {
+  void HAstar::setStart(Common::SE2StatePtr start) {
     #ifdef _HEURISTIC_RRTX_H
     assert(rrtxPlanner_->isTreeconstructed());
     start_ = start;
@@ -240,7 +236,7 @@ namespace Geometry{
     int iPred, iSucc;
     float newG;
     // Number of possible directions, 3 for forward driving and an additional 3 for reversing
-    int dir = carPlant_->isReversable_ ? 6 : 3;
+    int dir = Common::ForkProperty::isReversable_ ? 6 : 3;
     // Number of iterations the algorithm has run for stopping based on Constants::iterations
     int iterations = 0;
 
@@ -248,13 +244,13 @@ namespace Geometry{
     ros::Duration d(0.003);
 
     // OPEN LIST AS BOOST IMPLEMENTATION
-    typedef boost::heap::binomial_heap<std::shared_ptr<SE2State>,
+    typedef boost::heap::binomial_heap<Common::SE2StatePtr,
             boost::heap::compare<CompareNodes>
             > priorityQueue;
     priorityQueue O;
 
     // update h value
-    updateHeuristic(*start_, goal_);
+    updateHeuristic(*start_, *goal_);
     // mark start_ as open
     start_->open();
     // push on priority queue open list
@@ -294,7 +290,7 @@ namespace Geometry{
 
         // _________
         // GOAL TEST
-        if (*nPred == goal_ || iterations > defaultIter) {
+        if (*nPred == *goal_ || iterations > defaultIter) {
           // DEBUG
           return nPred;
         }
@@ -306,13 +302,13 @@ namespace Geometry{
           // SEARCH WITH DUBINS SHOT
           // TODO:when changed to RS curve, the primitives < 3 needs to be removed
           // the isInRange function needs to be more scientific
-          if (nPred->isInRange(goal_) && nPred->getPrim() < 3) {
+          if (nPred->isInRange(*goal_) && nPred->getPrim() < 3) {
             #if defined DUBINS_H
             nSucc = dubinsShot(nPred, goal_);
             #elif defined _HYBRIDASTAR_REEDSSHEPPPATH_H
-            nSucc = ReedsShepp(nPred, goal_);
+            nSucc = ReedsShepp(nPred, *goal_);
             #endif
-            if (nSucc != nullptr && *nSucc == goal_) {
+            if (nSucc != nullptr && *nSucc == *goal_) {
               std::cout << "iterations:" << iterations << std::endl;
               
               return nSucc;
@@ -341,14 +337,14 @@ namespace Geometry{
                 if (!pMap_->statespace[iSucc].isOpen() || newG < pMap_->statespace[iSucc].getG() || iPred == iSucc) {
 
                   // calculate H value
-                  updateHeuristic(*nSucc, goal_);
+                  updateHeuristic(*nSucc, *goal_);
 
                   // if the successor is in the same cell but the C value is larger
-                  if (iPred == iSucc && nSucc->getC() > nPred->getC() + carPlant_->tieBreaker_) {
+                  if (iPred == iSucc && nSucc->getC() > nPred->getC() + Common::PlanningMapConst::tieBreaker_) {
                     continue;
                   }
                   // if successor is in the same cell and the C value is lower, set predecessor to predecessor of predecessor
-                  else if (iPred == iSucc && nSucc->getC() <= nPred->getC() + carPlant_->tieBreaker_) {
+                  else if (iPred == iSucc && nSucc->getC() <= nPred->getC() + Common::PlanningMapConst::tieBreaker_) {
                     nSucc->setPred(nPred->getPred());
                   }
 

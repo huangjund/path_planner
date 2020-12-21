@@ -1,51 +1,36 @@
-#pragma once
-
-#include <ros/ros.h>
-#include <ompl/util/ClassForward.h>
-#include <nav_msgs/OccupancyGrid.h>
-
-#include "../statespace/GridState.h"
-#include "../statespace/SE2State.h"
-
-#include <functional>
-#include <memory>
-#include <vector>
-#include <iostream>
+#ifndef _HYBRID_A_STAR_MAP_H_
+#define _HYBRID_A_STAR_MAP_H_
 
 namespace HybridAStar {
 namespace Common {
+
+  /**
+   * @brief a piece of white map
+   * 
+   * @tparam T double or int
+   */
   template <class T>
   class Map {
-  private:
-    bool hasStateSpace_ = false;
-  public:
-    struct RawMap {
-      int width;  // [unit: cell]
-      int height; // [unit: cell]
-      float resolution;   // [unit: meters/cell]
-      float planResolution; // [unit: meters/cell]
-
-      nav_msgs::OccupancyGrid::_data_type data;
-      RawMap(){width = 0; height = 0; resolution = 0; planResolution = 0.5; data.reserve(19000000);}
-      // RawMap& operator=(const RawMap&);
-    } info_;
-    
-    // non-copyable
-    Map(const Map &) = delete;
-    Map &operator=(const Map &) = delete;
-    // constructor
+   public:
     Map() = default;
-    explicit Map(const nav_msgs::OccupancyGrid::Ptr map);
+    explicit Map(T length, T width);
     virtual ~Map() = default;
 
-    // TODO:should be removed to other class
-    std::vector<T> statespace;
-    void setMap(const nav_msgs::OccupancyGrid::Ptr map);
-    void setSS();
-    void resetSS();
-    // const std::vector<T>& getStateSpace() const;
-    const bool hasStateSpace() { return hasStateSpace_;}
+    Map(const Map<T>& m);
+    Map<T>& operator=(const Map<T>& rhs);
+
+    void setMap(T length, T width) { width_ = length; height_ = width;}
+    T getWid() const { return width_; }
+    T& getMutableWid() { return width_; }
+    T getHeight() const { return height_; }
+    T& getMutableHeight() {return height_; }
+
+   protected:
+    T width_{0};
+    T height_{0};
   };
 
 } // namespace Common
 } // namespace HybridAStar
+
+#endif

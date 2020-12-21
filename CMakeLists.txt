@@ -28,8 +28,11 @@ find_package(catkin REQUIRED COMPONENTS
 
 set(SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/common/map/map.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/common/map/collisionMap.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/common/statespace/GridState.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/common/statespace/SE2State.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/common/statespace/RealVectorState.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/common/statespace/SE2HAStarState.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/common/collision/clsDetection.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/common/Heuristic.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/common/hRRTx.cpp
@@ -57,9 +60,14 @@ set(SOURCES
     )
 set(HEADERS
     ${CMAKE_CURRENT_SOURCE_DIR}/common/map/map.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/common/map/collisionMap.h
     ${CMAKE_CURRENT_SOURCE_DIR}/common/statespace/GridState.h
     ${CMAKE_CURRENT_SOURCE_DIR}/common/statespace/State.h
     ${CMAKE_CURRENT_SOURCE_DIR}/common/statespace/SE2State.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/common/statespace/RealVectorState.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/common/statespace/SE2HAStarState.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/common/statespace/SO2State.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/common/parameters/parameters.h
     ${CMAKE_CURRENT_SOURCE_DIR}/common/collision/clsDetection.h
     ${CMAKE_CURRENT_SOURCE_DIR}/common/Heuristic.h
     ${CMAKE_CURRENT_SOURCE_DIR}/common/hRRTx.h
@@ -79,7 +87,6 @@ set(HEADERS
     ${CMAKE_CURRENT_SOURCE_DIR}/geometry/ReedsShepp/Node3d.h
     ${CMAKE_CURRENT_SOURCE_DIR}/geometry/ReedsShepp/Node.h
     ${CMAKE_CURRENT_SOURCE_DIR}/geometry/ReedsShepp/ReedsSheppStateSpace.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/multibody/SingleForkLiftPlant.h
     ${CMAKE_CURRENT_SOURCE_DIR}/utils/Helper.h
     ${CMAKE_CURRENT_SOURCE_DIR}/utils/bucketedqueue.h
     ${CMAKE_CURRENT_SOURCE_DIR}/utils/Time.h

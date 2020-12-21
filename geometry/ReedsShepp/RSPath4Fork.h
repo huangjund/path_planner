@@ -2,6 +2,7 @@
 #define _HYBRIDASTAR_REEDSHEPP_PATH_FOR_FORK_H
 
 #include "ReedsSheppPath.h"
+#include "common/statespace/SE2State.h"
 
 namespace HybridAStar
 {
@@ -23,13 +24,20 @@ protected:
   virtual bool CCSCC(const double x, const double y, const double phi,
              std::vector<ReedSheppPath>* all_possible_paths) override;
 public:
-  RSPath4Fork(const double max_kappa, const double step_size = 0.1);
+  RSPath4Fork(const double max_kappa,
+              const double step_size);
 
-  double ShortestRSPlength(const std::shared_ptr<Node3d> start_node,
-                            const std::shared_ptr<Node3d> end_node);
+  RSPath4Fork(const Common::SE2StatePtr&,
+              const Common::SE2StatePtr&);
 
-  std::vector<ReedSheppPath> possiblePath(const std::shared_ptr<Node3d> start_node,
-                                          const std::shared_ptr<Node3d> end_node);
+  RSPath4Fork(const Common::SE2StatePtr&,
+              const Common::SE2StatePtr&,
+              const double max_kappa, 
+              const double step_size = 0.1);
+
+  double ShortestRSPlength();
+
+  std::vector<ReedSheppPath> possiblePath();
                                         
 
 };

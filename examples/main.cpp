@@ -335,7 +335,7 @@ namespace HybridAStar{
     // initialize using planning map resolution
     // TODO: change this cell size and angle size to a class
     auto start = std::make_shared<SE2State>(0.5,0.08726646);
-    SE2State goal(carPlant_->planResolution,carPlant_->planAngleResolution);
+    SE2State goal(Common::PlanningMapConst::cellSize,Common::PlanningMapConst::angleSize);
     start->setX(start_.pose.pose.position.x);
     start->setY(start_.pose.pose.position.y);
     goal.setX(goal_.pose.position.x);

@@ -1,7 +1,10 @@
 #pragma once
 #include "Node.h"
+#include "utils/PtrWrapper.h"
 namespace HybridAStar{
 namespace Geometry {
+CLASS_SHARED(Node3d);
+
 class Node3d : public Node {
  public:
   Node3d(const double x, const double y, const double phi,

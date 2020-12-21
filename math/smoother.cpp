@@ -1,10 +1,9 @@
 #include "smoother.h"
 using namespace HybridAStar;
 
-Smoother::Smoother():carPlant_(std::make_unique<Multibody::SingleForkLiftPlant>()){}
+Smoother::Smoother(){}
 
 Smoother::~Smoother() {
-  carPlant_->~SingleForkLiftPlant();
   carPlant_.reset();
   for (auto i = path_.begin(); i != path_.end(); i++)
   {

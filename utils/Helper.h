@@ -1,4 +1,5 @@
-#pragma once
+#ifndef _HYBRID_A_STAR_HELPER_H_
+#define _HYBRID_A_STAR_HELPER_H_
 
 #include <cmath>
 #include <algorithm>
@@ -55,3 +56,5 @@ inline float clamp(float n, float lower, float upper) {
 
 }
 }
+
+#endif

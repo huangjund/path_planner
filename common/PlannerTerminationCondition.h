@@ -4,7 +4,7 @@
 #include <functional>
 #include <memory>
 
-#include "../utils/Time.h"
+#include "utils/Time.h"
 
 namespace HybridAStar
 {

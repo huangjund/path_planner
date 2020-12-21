@@ -1,5 +1,5 @@
-#ifndef _HYBRIDASTAR_REEDSSHEPPPATH_H
-#define _HYBRIDASTAR_REEDSSHEPPPATH_H
+#ifndef _HYBRIDASTAR_REEDSSHEPP_PATH_H
+#define _HYBRIDASTAR_REEDSSHEPP_PATH_H
 
 #include <iostream>
 #include <limits>
@@ -9,8 +9,9 @@
 #include <utility>
 #include <vector>
 
+#include "geometry/Planner.h"
 #include "common/statespace/SE2State.h"
-#include "Node3d.h"
+#include "common/PlannerTerminationCondition.h"
 #include "math.h"
 
 namespace HybridAStar{
@@ -33,33 +34,40 @@ struct RSPParam {
   double v = 0.0;
 };
 
-class ReedShepp {
+class ReedShepp : public Planner {
  public:
-  ReedShepp(const double max_kappa, const double step_size);
+  ReedShepp(const Common::SE2StatePtr&,
+            const Common::SE2StatePtr&);
+            
+  ReedShepp(const double max_kappa,
+            const double step_size);
+
+  ReedShepp(const Common::SE2StatePtr&,
+            const Common::SE2StatePtr&,
+            const double max_kappa,
+            const double step_size);
+
+  void setStepKappa(const double max_kappa, const double step_size) {
+    max_kappa_ = max_kappa;
+    step_size_ = step_size;
+  }
   // Pick the shortest path from all possible combination of movement primitives
   // by Reed Shepp
-  bool ShortestRSP(const std::shared_ptr<Node3d> start_node,
-                  const std::shared_ptr<Node3d> end_node,
-                  ReedSheppPath& optimal_path);
+  bool ShortestRSP(ReedSheppPath& optimal_path);
+
+  //TODO: substitute GenerateRSP
+  virtual double solve(const Common::PlannerTerminationCondition& ptc) override;
 
  protected:
   // Generate all possible combination of movement primitives by Reed Shepp and
   // interpolate them
-  bool GenerateRSPs(const std::shared_ptr<Node3d> start_node,
-                    const std::shared_ptr<Node3d> end_node,
-                    std::vector<ReedSheppPath>* all_possible_paths);
+  bool GenerateRSPs(std::vector<ReedSheppPath>* all_possible_paths);
   // Set the general profile of the movement primitives
-  bool GenerateRSP(const std::shared_ptr<Node3d> start_node,
-                   const std::shared_ptr<Node3d> end_node,
-                   std::vector<ReedSheppPath>* all_possible_paths);
+  bool GenerateRSP(std::vector<ReedSheppPath>* all_possible_paths);
   // Set the general profile of the movement primitives, parallel implementation
-  bool GenerateRSPPar(const std::shared_ptr<Node3d> start_node,
-                      const std::shared_ptr<Node3d> end_node,
-                      std::vector<ReedSheppPath>* all_possible_paths);
+  bool GenerateRSPPar(std::vector<ReedSheppPath>* all_possible_paths);
   // Set local exact configurations profile of each movement primitive
-  bool GenerateLocalConfigurations(const std::shared_ptr<Node3d> start_node,
-                                   const std::shared_ptr<Node3d> end_node,
-                                   ReedSheppPath* shortest_path);
+  bool GenerateLocalConfigurations(ReedSheppPath* shortest_path);
   // Interpolation usde in GenetateLocalConfiguration
   void Interpolation(const int index, const double pd, const char m,
                      const double ox, const double oy, const double ophi,

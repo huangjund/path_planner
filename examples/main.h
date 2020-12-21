@@ -12,7 +12,7 @@
 #include "../common/statespace/GridState.h"
 #include "../common/statespace/SE2State.h"
 #include "../common/collision/clsDetection.h"
-#include "../multibody/SingleForkLiftPlant.h"
+#include "common/parameters/parameters.h"
 #include "geometry/hybridastar/HAstar.h"
 #include "aux/visualize.h"
 #include "geometry/path.h"
@@ -25,7 +25,6 @@ namespace HybridAStar{
   using HybridAStar::Common::SE2State;
   using HybridAStar::Common::Map;
   using HybridAStar::Geometry::HAstar;
-  using HybridAStar::Multibody::SingleForkLiftPlant;
   /**
    * @brief the interface class is a whole block that connect each planning components
    *        with each other
@@ -55,7 +54,6 @@ namespace HybridAStar{
     Path path_;
     Path smoothedPath_ = Path(true);/// The path smoothed and ready for the controller
     BSpline smoother_;/// The smoother used for optimizing the path and create b spline
-    std::unique_ptr<Multibody::SingleForkLiftPlant> carPlant_;
     std::unordered_map<int, std::unordered_map<int, bool>> lastObstacles_;
     std::unordered_map<int, std::unordered_map<int, bool>> currObstacles_;
   public:

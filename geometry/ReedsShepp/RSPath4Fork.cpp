@@ -5,11 +5,22 @@ using namespace HybridAStar::Geometry;
 RSPath4Fork::RSPath4Fork(const double max_kappa, const double step_size) :
                         ReedShepp(max_kappa,step_size) {}
 
-double RSPath4Fork::ShortestRSPlength(const std::shared_ptr<Node3d> start_node,
-                            const std::shared_ptr<Node3d> end_node) {
+RSPath4Fork::RSPath4Fork(const Common::SE2StatePtr& start_node,
+                         const Common::SE2StatePtr& end_node) :
+                         ReedShepp(start_node,end_node) {
+}
+
+RSPath4Fork::RSPath4Fork(const Common::SE2StatePtr& start_node,
+                         const Common::SE2StatePtr& end_node,
+                         const double max_kappa,
+                         const double step_size):
+                         ReedShepp(start_node,end_node,max_kappa,step_size){
+}
+
+double RSPath4Fork::ShortestRSPlength() {
   std::vector<ReedSheppPath> all_possible_paths;
 
-  if (!GenerateRSP(start_node, end_node, &all_possible_paths)) {
+  if (!GenerateRSP(&all_possible_paths)) {
     return 0; // if failed to find one feasible path, return length as 0
   }
 
@@ -29,11 +40,10 @@ double RSPath4Fork::ShortestRSPlength(const std::shared_ptr<Node3d> start_node,
   return optimal_path_length;
 }
 
-std::vector<ReedSheppPath> RSPath4Fork::possiblePath(const std::shared_ptr<Node3d> start_node,
-                                                    const std::shared_ptr<Node3d> end_node) {
+std::vector<ReedSheppPath> RSPath4Fork::possiblePath() {
   std::vector<ReedSheppPath> all_possible_paths;
 
-  if(!GenerateRSP(start_node,end_node,&all_possible_paths)) {
+  if(!GenerateRSP(&all_possible_paths)) {
     all_possible_paths.clear();
     std::cout << "no suitable paths" << std::endl;
   }

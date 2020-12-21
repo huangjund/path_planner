@@ -32,17 +32,32 @@ std::pair<double, double> ReedShepp::calc_tau_omega(const double u,
   return std::make_pair(tau, omega);
 }
 
-ReedShepp::ReedShepp(const double max_kappa, const double step_size) {
-  max_kappa_ = max_kappa;
-  step_size_ = step_size;
+ReedShepp::ReedShepp(const Common::SE2StatePtr& start_node,
+                     const Common::SE2StatePtr& end_node):
+                     Planner(start_node, end_node) {
 }
 
-bool ReedShepp::ShortestRSP(const std::shared_ptr<Node3d> start_node,
-                            const std::shared_ptr<Node3d> end_node,
-                            ReedSheppPath& optimal_path) {
+ReedShepp::ReedShepp(const double max_kappa,
+                     const double step_size): 
+                     max_kappa_(max_kappa),
+                     step_size_(step_size) {
+                      
+}
+
+ReedShepp::ReedShepp(const Common::SE2StatePtr& start_node,
+                     const Common::SE2StatePtr& end_node,
+                     const double max_kappa, 
+                     const double step_size) :
+                     Planner(start_node, end_node),
+                     max_kappa_(max_kappa),
+                     step_size_(step_size) {
+
+}
+
+bool ReedShepp::ShortestRSP(ReedSheppPath& optimal_path) {
   std::vector<ReedSheppPath> all_possible_paths;
 
-  if (!GenerateRSP(start_node, end_node, &all_possible_paths)) {
+  if (!GenerateRSP(&all_possible_paths)) {
     return false;
   }
 
@@ -60,19 +75,18 @@ bool ReedShepp::ShortestRSP(const std::shared_ptr<Node3d> start_node,
   }
 
   // generate a scale-right piece of path
-  if (!GenerateLocalConfigurations(start_node, end_node,
-                                   &(all_possible_paths[optimal_path_index]))) {
+  if (!GenerateLocalConfigurations(&(all_possible_paths[optimal_path_index]))) {
     std::cout << "Fail to generate local configurations(x, y, phi) in SetRSP "
               << std::endl;
     return false;
   }
 
   if (std::abs(all_possible_paths[optimal_path_index].x.back() -
-               end_node->GetX()) > 1e-3 ||
+               end_node->getX()) > 1e-3 ||
       std::abs(all_possible_paths[optimal_path_index].y.back() -
-               end_node->GetY()) > 1e-3 ||
+               end_node->getY()) > 1e-3 ||
       std::fmod(std::abs(all_possible_paths[optimal_path_index].phi.back() -
-                         end_node->GetPhi()),
+                         end_node->getYaw()),
                 2 * M_PI) > 1e-3) {
     return false;
   }
@@ -89,10 +103,8 @@ bool ReedShepp::ShortestRSP(const std::shared_ptr<Node3d> start_node,
   return true;
 }
 
-bool ReedShepp::GenerateRSPs(const std::shared_ptr<Node3d> start_node,
-                             const std::shared_ptr<Node3d> end_node,
-                             std::vector<ReedSheppPath>* all_possible_paths) {
-  if (!GenerateRSP(start_node, end_node, all_possible_paths)) {
+bool ReedShepp::GenerateRSPs(std::vector<ReedSheppPath>* all_possible_paths) {
+  if (!GenerateRSP(all_possible_paths)) {
     std::cout << "Fail to generate general profile of different RSPs"
               << std::endl;
     return false;
@@ -100,14 +112,15 @@ bool ReedShepp::GenerateRSPs(const std::shared_ptr<Node3d> start_node,
   return true;
 }
 
-bool ReedShepp::GenerateRSP(const std::shared_ptr<Node3d> start_node,
-                            const std::shared_ptr<Node3d> end_node,
-                            std::vector<ReedSheppPath>* all_possible_paths) {
-  double dx = end_node->GetX() - start_node->GetX();
-  double dy = end_node->GetY() - start_node->GetY();
-  double dphi = end_node->GetPhi() - start_node->GetPhi();
-  double c = std::cos(start_node->GetPhi());
-  double s = std::sin(start_node->GetPhi());
+bool ReedShepp::GenerateRSP(std::vector<ReedSheppPath>* all_possible_paths) {
+  auto start_node = start_->as<Common::SE2State>();
+  auto end_node = goal_->as<Common::SE2State>();
+
+  double dx = end_node->getX() - start_node->getX();
+  double dy = end_node->getY() - start_node->getY();
+  double dphi = end_node->getYaw() - start_node->getYaw();
+  double c = std::cos(start_node->getYaw());
+  double s = std::sin(start_node->getYaw());
   // normalize the initial point to (0,0,0)
   double x = (c * dx + s * dy) * max_kappa_;
   double y = (-s * dx + c * dy) * max_kappa_;
@@ -890,9 +903,7 @@ bool ReedShepp::SetRSP(const int size, const double* lengths, const char* types,
   return true;
 }
 
-bool ReedShepp::GenerateLocalConfigurations(
-    const std::shared_ptr<Node3d> start_node,
-    const std::shared_ptr<Node3d> end_node, ReedSheppPath* shortest_path) {
+bool ReedShepp::GenerateLocalConfigurations(ReedSheppPath* shortest_path) {
   double step_scaled = step_size_ * max_kappa_;
 
   size_t point_num = static_cast<size_t>(
@@ -953,15 +964,16 @@ bool ReedShepp::GenerateLocalConfigurations(
     pgear.pop_back();
   }
 
+  auto start_node = start_->as<Common::SE2State>();
   for (size_t i = 0; i < px.size(); ++i) {
-    shortest_path->x.push_back(std::cos(-start_node->GetPhi()) * px.at(i) +
-                               std::sin(-start_node->GetPhi()) * py.at(i) +
-                               start_node->GetX());
-    shortest_path->y.push_back(-std::sin(-start_node->GetPhi()) * px.at(i) +
-                               std::cos(-start_node->GetPhi()) * py.at(i) +
-                               start_node->GetY());
+    shortest_path->x.push_back(std::cos(-start_node->getYaw()) * px.at(i) +
+                               std::sin(-start_node->getYaw()) * py.at(i) +
+                               start_node->getX());
+    shortest_path->y.push_back(-std::sin(-start_node->getYaw()) * px.at(i) +
+                               std::cos(-start_node->getYaw()) * py.at(i) +
+                               start_node->getY());
     shortest_path->phi.push_back(
-        NormalizeAngle(pphi.at(i) + start_node->GetPhi()));
+        NormalizeAngle(pphi.at(i) + start_node->getYaw()));
   }
 
   shortest_path->gear = pgear;
@@ -1035,14 +1047,15 @@ bool ReedShepp::SetRSPPar(const int size, const double* lengths,
   return true;
 }
 
-bool ReedShepp::GenerateRSPPar(const std::shared_ptr<Node3d> start_node,
-                               const std::shared_ptr<Node3d> end_node,
-                               std::vector<ReedSheppPath>* all_possible_paths) {
-  double dx = end_node->GetX() - start_node->GetX();
-  double dy = end_node->GetY() - start_node->GetY();
-  double dphi = end_node->GetPhi() - start_node->GetPhi();
-  double c = std::cos(start_node->GetPhi());
-  double s = std::sin(start_node->GetPhi());
+bool ReedShepp::GenerateRSPPar(std::vector<ReedSheppPath>* all_possible_paths) {
+  auto start_node = start_->as<Common::SE2State>();
+  auto end_node = goal_->as<Common::SE2State>();
+
+  double dx = end_node->getX() - start_node->getX();
+  double dy = end_node->getY() - start_node->getY();
+  double dphi = end_node->getYaw() - start_node->getYaw();
+  double c = std::cos(start_node->getYaw());
+  double s = std::sin(start_node->getYaw());
   // normalize the initial point to (0,0,0)
   double x = (c * dx + s * dy) * this->max_kappa_;
   double y = (-s * dx + c * dy) * this->max_kappa_;
