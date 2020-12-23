@@ -4,10 +4,13 @@ project(hybrid_astar)
 
 ## C++11
 include(CheckCXXCompilerFlag)
+CHECK_CXX_COMPILER_FLAG("-std=c++17" COMPILER_SUPPORTS_CXX17)
 CHECK_CXX_COMPILER_FLAG("-std=c++14" COMPILER_SUPPORTS_CXX14)
 CHECK_CXX_COMPILER_FLAG("-std=c++11" COMPILER_SUPPORTS_CXX11)
 CHECK_CXX_COMPILER_FLAG("-std=c++0x" COMPILER_SUPPORTS_CXX0X)
-if(COMPILER_SUPPORTS_CXX14)
+if(COMPILER_SUPPORTS_CXX17)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17 -Wall")
+elseif(COMPILER_SUPPORTS_CXX14)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14 -Wall")
 elseif(COMPILER_SUPPORTS_CXX11)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall")
@@ -91,7 +94,6 @@ set(HEADERS
     ${CMAKE_CURRENT_SOURCE_DIR}/math/kdtree.h
     ${CMAKE_CURRENT_SOURCE_DIR}/examples/main.h
     )
-add_library(HYAS ${SOURCES} ${HEADERS})
 
 ## TODO: switch this gtest into a subdirectory
 set(GTESTSRC
@@ -128,7 +130,8 @@ if(NOT PYTHONLIBS_FOUND)
     message(AUTHOR_WARNING,"python libs not found")
 endif(NOT PYTHONLIBS_FOUND)
 
-## add_subdirectory(communication)
+add_subdirectory(communication)
+add_subdirectory(simulation)
 
 include_directories(include ${catkin_INCLUDE_DIRS})
 include_directories(include ${OMPL_INCLUDE_DIRS})
@@ -144,23 +147,3 @@ add_executable(hybrid_astar examples/main.cpp ${HEADERS} ${SOURCES})
 target_link_libraries(hybrid_astar ${catkin_LIBRARIES})
 target_link_libraries(hybrid_astar ${OMPL_LIBRARIES})
 target_link_libraries(hybrid_astar ${GFLAGS_LIBRARIES})
-
-add_executable(interactionUI simulation/vision_mock.cpp)
-target_link_libraries(interactionUI ${catkin_LIBRARIES})
-
-add_executable(simple_tf simulation/simple_tf.cpp)
-target_link_libraries(simple_tf ${catkin_LIBRARIES})
-
-# add_executable(gtest_navision ${GTESTSRC} ${GTESTHDR})
-# target_link_libraries(gtest_navision ${GTEST_LIBRARIES} pthread)
-# target_link_libraries(gtest_navision ${PYTHON_LIBRARIES})
-
-install(TARGETS ${PROJECT_NAME} tf_broadcaster
-    ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-    LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-    RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
-    )
-
-install(DIRECTORY launch/
-    DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/launch
-    )

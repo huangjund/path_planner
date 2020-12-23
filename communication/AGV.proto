@@ -1,0 +1,90 @@
+syntax = "proto3";
+package AGV.Protobuf;
+
+message Task
+{
+  int32 TaskOperateType = 1;
+  int64 TaskId = 2;
+  int32 TaskType = 3;
+  repeated int32 PathNo = 4 [packed=true];
+  bool Cancelable = 5;
+  map<string, string> SpecialInformation = 6;
+  string Description = 7;
+  repeated int32 CtrlPathNo = 8 [packed=true];
+}
+
+message EventReport
+{
+	/* 事件上报,包括事件代码,事件编号,起止时间, */
+	int32 Code = 1 ;      //事件代码
+	int32 State = 2 ;     //已弃用,但为保存兼容保留
+	int64 Time =3;        //开始时间
+	string Detail = 4;    //已弃用,但为保存兼容保留
+	int64 EndTime= 5;     //结束时间
+	string EventId = 6;   //事件编号,单机要求唯一,中控用于重复判断
+}
+
+message BreakdownReport  //
+{
+	/* 已弃用,但为保存兼容保留 */
+	int64 EnventId =1;
+	string Code = 2 ;
+	int32 State = 3 ;
+	int64 Time =4;
+}
+
+message CCDown {
+  int32 ReplyIndex = 1;
+  float MaxVelocity = 2;
+  repeated int32 ControlRegionId = 3 [packed=true];
+  int64 ServerTime =4;
+  string ReplyEventId = 5;  //收到AGV上报的事件编号
+  
+  int64 ReportTaskId=16;
+  int32 ReportTaskStatus=17; 
+
+  repeated Task Task = 18;
+
+  int64 EnventId=25;    //已弃用,但为保存兼容保留
+  int32 EnventState=26; //已弃用,但为保存兼容保留
+  int32 EnventCode=27;  //已弃用,但为保存兼容保留
+  int64 EnventTime=28;  //已弃用,但为保存兼容保留
+}
+
+message CCUpload {
+  int32 MessageIndex=1;
+  string AGVId = 2;
+  double X = 3;
+  double Y = 4;
+  double Theata = 5;
+  float Confidency=6;
+  string District = 7;
+  float Velocity=8;
+  float Battery=9;
+  int32 RunStatusType=10;
+  repeated int32 ControlRegionId = 11 [packed=true];
+  bool IsLowBattery = 12;
+  int32 StateOfStop = 13;
+  bool IsCharging = 14;
+
+  int64 CurrentTaskId=15;
+  
+  int64 ReportTaskId=16;
+  int32 ReportTaskStatus=17;  
+  map<string, string> ReportTaskString = 18;
+
+  float LiftZ=25;
+  float LiftX=26;
+  float LiftY=27;
+  float LiftT=28;
+
+  repeated BreakdownReport Breakdowns = 30;//已弃用,但为保存兼容保留
+  EventReport EventReport = 31;
+
+  int32 MarkerMessageIndex=35;
+  repeated int32 DetectedMarkerId = 36 [packed=true];
+  repeated int32 LostMarkerId = 37 [packed=true];
+	repeated int32 CtrlPathNo = 38 [packed=true];
+}
+
+
