@@ -20,6 +20,7 @@ namespace HybridAStar{
     subStart_ = n_.subscribe("/initialpose", 1, &Interface::makeStart, this);
     subMap_ = n_.subscribe("/map", 1, &Interface::setMap, this);
     subObs_ = n_.subscribe("/sensor/obstaclePos", 1, &Interface::updateObs, this);
+    tempSubscriber_ = n_.advertise<geometry_msgs::PoseStamped>("/PlannerToRVIZ/Target",1);
   }
 
   void Interface::makeStart(const geometry_msgs::PoseWithCovarianceStamped::ConstPtr& start) {
@@ -47,6 +48,24 @@ namespace HybridAStar{
     float x = goal->pose.position.x / grid_->info.resolution; // [unit:collision cells]
     float y = goal->pose.position.y / grid_->info.resolution;
     float t = tf::getYaw(goal->pose.orientation);
+
+    {
+      gazebo_msgs::GetModelState srv;
+      srv.request.model_name = "goalpose";
+      if (posClient_.call(srv)){
+        geometry_msgs::PoseStamped goalOutput;
+        goalOutput.header.frame_id = "map";
+        goalOutput.header.stamp = ros::Time::now();
+        goalOutput.pose.position.x = srv.response.pose.position.x;
+        goalOutput.pose.position.y = srv.response.pose.position.y;
+        goalOutput.pose.position.z = 0;
+        goalOutput.pose.orientation = tf::createQuaternionMsgFromYaw(srv.response.pose.position.z);
+        tempSubscriber_.publish(goalOutput);
+      }
+      else {
+        std::cout << "failed to get response" << std::endl;
+      }
+    }
 
     if (grid_->info.height >= y && y >= 0 && grid_->info.width >= x && x >= 0) {
       isGoalvalid_ = true;

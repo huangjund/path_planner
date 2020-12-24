@@ -106,7 +106,7 @@ void PlannerCC::generateTaskLists(const std_msgs::String::ConstPtr& msg)
 
 bool PlannerCC::getAgvPos(gazebo_msgs::GetModelState::Request& req,
 													gazebo_msgs::GetModelState::Response& res) {
-	if (req.model_name.compare("agvpose")) {
+	if (req.model_name=="agvpose") {
 		auto agvs = agv_manager_.getAvailableAgvs();
 		if (agvs.size()) {
 			auto pose = agvs[0]->getPose();
@@ -123,7 +123,7 @@ bool PlannerCC::getAgvPos(gazebo_msgs::GetModelState::Request& req,
 			cout << "no available AGV" << endl;
 		}
 	}
-	else if (req.model_name.compare("goalpose")) {
+	else if (req.model_name=="goalpose") {
 		start_loading_ = true;
 		std::unique_lock<std::mutex> locker(mutexGoalPos_);
 		condition_.wait(locker, [this]{return goalReady_;});
@@ -149,6 +149,7 @@ void PlannerCC::tryStartMonitor()
 	}
 }
 
+// try get goal pose from Sensor
 void PlannerCC::refreshSensorDetection()
 {
 	try

@@ -42,6 +42,7 @@ namespace HybridAStar{
     ros::Subscriber subGoal_;
     ros::Subscriber subMap_;
     ros::Subscriber subObs_;
+    ros::Publisher tempSubscriber_;
     bool isStartvalid_;
     bool isGoalvalid_;
     bool hasMap_;
