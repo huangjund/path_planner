@@ -24,7 +24,7 @@ namespace Common {
     Geometry::RSPath4Fork reedSheppPath(1/carPlant_->rad_, 0.1);
 
     double xy_resolution = 0.5, phi_resolution = 2*M_PI/72;
-    std::vector<double> XYbound = {0,47.5875,0,25};
+    std::vector<double> XYbound = {0, 60, 0, 30};//{0,47.5875,0,25};
     auto start = std::make_shared<Geometry::Node3d>(start_.getX(),start_.getY(),start_.getT(),xy_resolution,phi_resolution,XYbound);
     auto end = std::make_shared<Geometry::Node3d>(goal_.getX(),goal_.getY(),goal_.getT(),xy_resolution,phi_resolution,XYbound);
 
