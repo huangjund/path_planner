@@ -14,6 +14,8 @@ namespace HybridAStar{
     isStartvalid_ = false;
     isGoalvalid_ = false;
     hasMap_ = false;
+    pubPath_ = n_.advertise<std_msgs::String>("/PlannerToinServer/Path", 1);
+    posClient_ = n_.serviceClient<gazebo_msgs::GetModelState>("/inServerToPlanner/Pos");
     subGoal_ = n_.subscribe("/move_base_simple/goal", 1, &Interface::makeGoal, this);
     subStart_ = n_.subscribe("/initialpose", 1, &Interface::makeStart, this);
     subMap_ = n_.subscribe("/map", 1, &Interface::setMap, this);
@@ -343,7 +345,13 @@ namespace HybridAStar{
     start->setT(Utils::normalizeHeadingRad(tf::getYaw(start_.pose.pose.orientation)));
     goal.setT(Utils::normalizeHeadingRad(tf::getYaw(goal_.pose.orientation)));
     // TODO: extract this planner into a specified class
-    planner_.reset(std::make_unique<HAstar>(start,goal,planningMap,configSpace).release());
+    // Common::hRScurve d(*start,goal);
+    
+    // std::unique_ptr<Common::hRScurve> e(new Common::hRScurve(*start,goal));
+    // auto c = std::make_unique<Common::hRScurve>(*start, goal);
+    // HAstar b(start,goal,planningMap,configSpace);
+    auto a = std::make_unique<HAstar>(start,goal,planningMap,configSpace);
+    planner_.reset(a.release());
 
     return true;
   }
@@ -401,6 +409,17 @@ namespace HybridAStar{
 int main(int argc, char** argv) {
   gflags::ParseCommandLineFlags(&argc, &argv, true);
   ros::init(argc, argv, "a_star");
+  // {
+  //   auto start = std::make_shared<HybridAStar::Common::SE2State>(0.5,0.08726646);
+  //   HybridAStar::Common::SE2State goal(0.5,0.08726646);
+  //   start->setX(0);
+  //   start->setY(12.1);
+  //   goal.setX(10.1);
+  //   goal.setY(123);
+  //   start->setT(HybridAStar::Utils::normalizeHeadingRad(2));
+  //   goal.setT(HybridAStar::Utils::normalizeHeadingRad(3));
+  //   auto f = new HybridAStar::Common::hRScurve(*start, goal);
+  // }
   auto interface(std::make_unique<HybridAStar::Interface>());
   ros::spin();
   return 0;

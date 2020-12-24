@@ -27,7 +27,7 @@ class BSpline : public Smoother {
     };
 
   private:
-    std::vector<std::vector<ctrlPoint>> ctrlPointSet; // the size should equal trajPointSet size equal splineOrder size
+    std::vector<std::vector<ctrlPoint>> ctrlPointSet; // the size should = trajPointSet size = splineOrder size
     std::vector<std::vector<Vector2D>> trajPointSet;
     std::vector<unsigned int> splineOrder;
     std::vector<std::shared_ptr<Common::SE2State>> bpath_;

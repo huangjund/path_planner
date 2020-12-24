@@ -4,6 +4,8 @@
 
 #include <ros/ros.h>
 #include <ros/time.h>
+#include <std_msgs/String.h>
+#include <gazebo_msgs/GetModelState.h>
 #include <geometry_msgs/PoseWithCovarianceStamped.h>
 #include <geometry_msgs/PoseStamped.h>
 #include <tf/transform_datatypes.h>
@@ -34,6 +36,8 @@ namespace HybridAStar{
   {
   private:
     ros::NodeHandle n_;
+    ros::Publisher pubPath_;
+    ros::ServiceClient posClient_;
     ros::Subscriber subStart_;
     ros::Subscriber subGoal_;
     ros::Subscriber subMap_;

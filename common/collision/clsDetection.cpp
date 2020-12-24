@@ -227,7 +227,7 @@ namespace Common{
     const float cSize = grid_->info.resolution;
     // bounding box size length/width
 		/// [unit: collision cells] -- The bounding box size length and width to precompute all possible headings
-		const int bbSize = std::ceil((sqrt(carPlant_->width_*carPlant_->width_ + carPlant_->length_*carPlant_->length_) + 4) / cSize);
+		const int bbSize = std::ceil((sqrt(carPlant_->width_*carPlant_->width_ + carPlant_->length_*carPlant_->length_)) / cSize);
 
     struct point {
       double x;

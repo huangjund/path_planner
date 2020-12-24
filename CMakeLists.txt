@@ -27,6 +27,7 @@ find_package(catkin REQUIRED COMPONENTS
     rospy
     std_msgs
     tf
+    gazebo_msgs
     )
 
 set(SOURCES
@@ -132,12 +133,12 @@ endif(NOT PYTHONLIBS_FOUND)
 
 add_subdirectory(communication)
 add_subdirectory(simulation)
+#add_subdirectory(test)
 
 include_directories(include ${catkin_INCLUDE_DIRS})
 include_directories(include ${OMPL_INCLUDE_DIRS})
 include_directories(include ${GFLAGS_INCLUDE_DIRS})
 include_directories(include ${CMAKE_CURRENT_SOURCE_DIR})
-include_directories(include include)
 include_directories(${PYTHON_INCLUDE_DIRS})
 
 add_executable(tf_broadcaster examples/tf_broadcaster.cpp)

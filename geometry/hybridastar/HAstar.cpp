@@ -20,7 +20,8 @@ namespace Geometry{
 
   HAstar::HAstar(shared_ptr<SE2State> start,SE2State &goal,
                 shared_ptr<Map<SE2State>> pmap,shared_ptr<CollisionDetection> &configSpace): 
-                Planner(start,goal),start_(start),goal_(goal),configSpace_(configSpace), 
+                Planner(start,goal),start_(start),goal_(goal),
+                configSpace_(configSpace), 
                 rsPlanner_(std::make_unique<hRScurve>(*start_,goal_)),
                 // rrtxPlanner_(std::make_unique<hRRTx>(*start_,goal_,
                 //                                       pmap->info_.width*pmap->info_.resolution, // real width [meters]

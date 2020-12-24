@@ -18,13 +18,14 @@ if (NOT OPENCV_FOUND)
   message("===========Opencv not found===========")
 endif(NOT OPENCV_FOUND)
 
-
 include_directories(include ${VnUtils_INCLUDE_DIRS})
 include_directories(include ${OpenCV_INCLUDE_DIRS})
+include_directories(include ${catkin_INCLUDE_DIRS})
 
 add_executable(ServerNode ccserver.cpp ccserver.h)
 target_link_libraries(ServerNode ${PROTOBUF_LIBRARIES}
                                  ${VnUtils_LIBRARIES}
                                  ${OpenCV_LIBRARIES}
+                                 ${catkin_LIBRARIES}
                                  ${PROTOSRCS}
                                  ${PROTOHDRS})

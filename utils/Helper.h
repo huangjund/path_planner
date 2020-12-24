@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string>
+#include <vector>
 #include <cmath>
 #include <algorithm>
 
@@ -53,5 +55,10 @@ inline float clamp(float n, float lower, float upper) {
   return std::max(lower, std::min(n, upper));
 }
 
+/**
+ * @brief 
+ * 
+ */
+  std::string writePath2String(const std::vector<std::pair<double, double>>& path);
 }
 }

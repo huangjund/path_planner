@@ -1,16 +1,10 @@
 #include "ccserver.h"
 
 #include <fstream>
+#include <tf/transform_datatypes.h>
+#include <condition_variable>
 
-struct StorageBin
-{
-	int id;
-	float x;
-	float y;
-	float z;
-	float theta;
-	bool flip;
-};
+
 void to_json(nlohmann::json& j, const StorageBin& p) { 
 	j = nlohmann::json{ 
 		{"id", p.id}, 
@@ -40,23 +34,12 @@ void PlannerAgvManager::checkAndAssign() {
 	}
 	else
 	{
-		// std::list<AgvTask> next_task_group;
-		// {
-		// 	lock_guard<mutex> locker(tasks_mutex_);
-		// 	if (!tasks_.empty())
-		// 	{
-		// 		next_task_group = tasks_;
-		// 	}
-		// 	else
-		// 	{
-		// 		return;
-		// 	}
-		// }
-
-		// for (auto iter = next_task_group.begin(); iter != next_task_group.end(); iter++)
-		// {
-		// 	agvs[0]->assignTask(*iter);
-		// }
+		if (!tasks_.empty()) {
+			for (auto iter = tasks_.begin(); iter != tasks_.end(); iter++)
+			{
+				agvs[0]->assignTask(*iter);
+			}
+		}
 	}
 }
 
@@ -78,12 +61,16 @@ void PlannerAgvManager::onTaskCompletedOrCancelled(
 PlannerCC::PlannerCC(int port, std::string sensor_ip, int sensor_port)
 	: sensor_started_(false), start_loading_(false),
 	httpClient_(sensor_ip, sensor_port),
-	client_(httpClient_, jsonrpccxx::version::v2),
+	client_(httpClient_, jsonrpccxx::version::v2),goalReady_(false),
 	refresh_thread_(500), agv_manager_(port), ready_(false), main_thread_(0)
 {
 	refresh_thread_.setCyclicFunc(std::bind(&PlannerCC::refreshSensorDetection, this));
 	refresh_thread_.setThreadExit(std::bind(&PlannerCC::closeSensorDetection, this));
 	main_thread_.setCyclicFunc(std::bind(&PlannerCC::main, this));
+
+	sub_path_ = node_.subscribe("/PlannerToinServer/Path", 1, &PlannerCC::generateTaskLists, this);
+	pos_server_ = node_.advertiseService("inServerToPlanner/Pos", &PlannerCC::getAgvPos,this);
+
 	agv_manager_.start();
 	refresh_thread_.run();
 	main_thread_.run();
@@ -105,22 +92,49 @@ void PlannerCC::main()
 	agv_manager_.checkAndAssign();
 }
 
-void PlannerCC::generateTaskLists()
+void PlannerCC::generateTaskLists(const std_msgs::String::ConstPtr& msg)
 {
 	stringstream ss;
-	TaskListParser parser;
+	ss << msg;
+	vn::communication::AgvTask task;
+	task.task_type = TaskType::kTaskTypeMoveTo;
+	task.task_info.emplace("PathString", ss.str());
 	std::list<vn::communication::AgvTask> tasks;
-	try
-	{
-		tasks = parser.parseFromFile(ss.str(), task_id_);
-	}
-	catch (nlohmann::detail::exception& e)
-	{
-		cout << "[PlannerCC]:fail to load task list " << endl;
-	}
+	tasks.push_back(task);
 	agv_manager_.addTaskGroup(tasks);
 }
 
+bool PlannerCC::getAgvPos(gazebo_msgs::GetModelState::Request& req,
+													gazebo_msgs::GetModelState::Response& res) {
+	if (req.model_name.compare("agvpose")) {
+		auto agvs = agv_manager_.getAvailableAgvs();
+		if (agvs.size()) {
+			auto pose = agvs[0]->getPose();
+			res.pose.position.x = pose.x();
+			res.pose.position.y = pose.y();
+			res.pose.position.z = 0;
+			auto quat = tf::createQuaternionFromYaw(pose.angle());
+			res.pose.orientation.x = quat.x();
+			res.pose.orientation.y = quat.y();
+			res.pose.orientation.z = quat.z();
+			res.pose.orientation.w = quat.w();
+		}
+		else {
+			cout << "no available AGV" << endl;
+		}
+	}
+	else if (req.model_name.compare("goalpose")) {
+		start_loading_ = true;
+		std::unique_lock<std::mutex> locker(mutexGoalPos_);
+		condition_.wait(locker, [this]{return goalReady_;});
+		goalReady_ = false;
+		res.pose.position.x = goalPos_.x;
+		res.pose.position.y = goalPos_.y;
+		res.pose.position.z = goalPos_.theta;
+		locker.unlock();
+	}
+	return true;
+}
 
 void PlannerCC::tryStartMonitor()
 {
@@ -150,26 +164,14 @@ void PlannerCC::refreshSensorDetection()
 				return;
 			}
 
-			tryStartMonitor();
+			std::lock_guard<std::mutex> locker(mutexGoalPos_);
 			// get result
-			// auto parks = client_.CallMethod<std::vector<StorageBin>>(++rpc_id_, "getResult");
-
-			// if (parks.empty())
-			// {
-			// 	INFO(logger) << "can not detect truck" << endl;
-			// 	return;
-			// }
-
-			// for (auto park : parks)
-			// {
-			// 	park.theta = park.theta / 180.0 * M_PI;
-			// 	INFO(logger) << "id:" << park.id << " x" << park.x << " y" << park.y << " z" << park.z << " theta" << park.theta << endl;
-			// }
-
+			goalPos_ = client_.CallMethod<StorageBin>(++rpc_id_, "getStorageBin");
+			cout << "x: " << goalPos_.x << "y: " << goalPos_.y << "z: " << goalPos_.z << endl;
 			start_loading_ = false;
-
-			// generateTaskLists(parks);
+			goalReady_ = true;
 		}
+		condition_.notify_one();
 
 		closeSensorDetection();
 
@@ -193,13 +195,6 @@ void PlannerCC::refreshSensorDetection()
 
 void PlannerCC::closeSensorDetection()
 {
-	if (sensor_started_)
-	{
-		if (!client_.CallMethod<bool>(++rpc_id_, "stopMonitor"))
-		{
-			cout << "[PlannerCC]:fail to start sensor" << endl;
-		}
-	}
 	sensor_started_ = false;
 }
 
@@ -212,7 +207,9 @@ bool CCConfig::loadConfigImpl(tinyxml2::XMLElement* element) {
 int main(int argc, char* argv[]) {
 	CCConfig config;
 
+	ros::init(argc,argv,"innerServer");
 	PlannerCC cc(config.getServerPort(), config.getTruckDetectionIp(), config.getTruckDetectionPort());
+	ros::spin();
 
-	pause();
+	return 0;
 }
