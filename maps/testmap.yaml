@@ -1,6 +1,6 @@
 image: 4.png
 resolution: 0.0125
-origin: [31.987, 14.63, 0.0]
+origin: [0, 0, 0.0]
 occupied_thresh: 0.01
 free_thresh: 0.01
 negate: 0

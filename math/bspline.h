@@ -29,6 +29,7 @@ class BSpline : public Smoother {
   private:
     std::vector<std::vector<ctrlPoint>> ctrlPointSet; // the size should = trajPointSet size = splineOrder size
     std::vector<std::vector<Vector2D>> trajPointSet;
+    std::vector<bool> trajDirctionSet; // if is forward, true, if is backward, false;
     std::vector<unsigned int> splineOrder;
     std::vector<std::shared_ptr<Common::SE2State>> bpath_;
 
@@ -42,6 +43,8 @@ class BSpline : public Smoother {
     virtual void clearPath();
     void initializeSplineOrders(bool autogen = true);
     void setCtrlPoints(bool autogen = true);
+    std::vector<std::vector<Vector2D>>& returnTrajSet() {return trajPointSet;}
+    std::vector<bool>& returnDirectionSet() {return trajDirctionSet;}
     
     //visualization
   private:

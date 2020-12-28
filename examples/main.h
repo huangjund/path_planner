@@ -119,6 +119,7 @@ namespace HybridAStar{
     bool setAllOutput();
     void setStartOutput();
     void simulate(std::shared_ptr<Map<SE2State>>);
+    void assignTask();
     bool** makeBinMap();
   };
 }

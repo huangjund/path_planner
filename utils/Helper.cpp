@@ -24,14 +24,21 @@ namespace Utils {
     return normalizeHeadingRad(t / 180.f * M_PI);
   }
 
-  std::string writePath2String(const std::vector<std::pair<double, double>>& path) {
+  std::string writePath2String(const std::vector<bool>& forward, 
+                               const std::vector<std::vector<Vector2D>>& path) {
     std::stringstream ss;
-    ss << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" << "<Paths>\n";
-    ss << "<Path No=\"1\" Detail=\"F";
-    for(auto point : path) {
-      ss << ";" << "B," << point.first << "," << point.second << "," << 0;
+    auto d = forward.cbegin();
+    for (auto p = path.cbegin(); p != path.cend(); ++d, ++p) {
+      if (*d)
+        ss << "F";
+      else
+        ss << "B";
+      for(auto i = p->cbegin(); i < p->cend(); ++i) {
+        ss << ";" << "B," << i->x << "," << i->y << "," << 0;
+      }
+      ss << "\n";
     }
-    ss << "\" />\n</Paths>";
+    std::cout << ss.str() << std::endl;
 
     return ss.str();
   }

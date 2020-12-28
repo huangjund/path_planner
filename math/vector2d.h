@@ -45,7 +45,6 @@ class Vector2D {
   inline void setY(float y) {this->y = y;}
   //  void setT(float t) { this->t = t; }
   //  float getT() { return t; }
- private:
   /// the x part of the vector
   float x;
   /// the y part of the vector

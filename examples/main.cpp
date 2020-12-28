@@ -49,23 +49,23 @@ namespace HybridAStar{
     float y = goal->pose.position.y / grid_->info.resolution;
     float t = tf::getYaw(goal->pose.orientation);
 
-    {
-      gazebo_msgs::GetModelState srv;
-      srv.request.model_name = "goalpose";
-      if (posClient_.call(srv)){
-        geometry_msgs::PoseStamped goalOutput;
-        goalOutput.header.frame_id = "map";
-        goalOutput.header.stamp = ros::Time::now();
-        goalOutput.pose.position.x = srv.response.pose.position.x;
-        goalOutput.pose.position.y = srv.response.pose.position.y;
-        goalOutput.pose.position.z = 0;
-        goalOutput.pose.orientation = tf::createQuaternionMsgFromYaw(srv.response.pose.position.z);
-        tempSubscriber_.publish(goalOutput);
-      }
-      else {
-        std::cout << "failed to get response" << std::endl;
-      }
-    }
+    // {
+    //   gazebo_msgs::GetModelState srv;
+    //   srv.request.model_name = "goalpose";
+    //   if (posClient_.call(srv)){
+    //     geometry_msgs::PoseStamped goalOutput;
+    //     goalOutput.header.frame_id = "map";
+    //     goalOutput.header.stamp = ros::Time::now();
+    //     goalOutput.pose.position.x = srv.response.pose.position.x;
+    //     goalOutput.pose.position.y = srv.response.pose.position.y;
+    //     goalOutput.pose.position.z = 0;
+    //     goalOutput.pose.orientation = tf::createQuaternionMsgFromYaw(srv.response.pose.position.z);
+    //     tempSubscriber_.publish(goalOutput);
+    //   }
+    //   else {
+    //     std::cout << "failed to get response" << std::endl;
+    //   }
+    // }
 
     if (grid_->info.height >= y && y >= 0 && grid_->info.width >= x && x >= 0) {
       isGoalvalid_ = true;
@@ -406,6 +406,18 @@ namespace HybridAStar{
     visualizer_.publishNode3DCosts(pmap);
 
     smoother_.splinePub();
+    assignTask();
+  }
+
+  void Interface::assignTask() {
+    auto path = smoother_.returnTrajSet();
+    auto direction = smoother_.returnDirectionSet();
+    std_msgs::String temp;
+    
+    if (path.size() > 0){
+      temp.data = Utils::writePath2String(direction, path);
+      pubPath_.publish(temp);
+    }
   }
 
   void Interface::setStartOutput(){
@@ -428,17 +440,6 @@ namespace HybridAStar{
 int main(int argc, char** argv) {
   gflags::ParseCommandLineFlags(&argc, &argv, true);
   ros::init(argc, argv, "a_star");
-  // {
-  //   auto start = std::make_shared<HybridAStar::Common::SE2State>(0.5,0.08726646);
-  //   HybridAStar::Common::SE2State goal(0.5,0.08726646);
-  //   start->setX(0);
-  //   start->setY(12.1);
-  //   goal.setX(10.1);
-  //   goal.setY(123);
-  //   start->setT(HybridAStar::Utils::normalizeHeadingRad(2));
-  //   goal.setT(HybridAStar::Utils::normalizeHeadingRad(3));
-  //   auto f = new HybridAStar::Common::hRScurve(*start, goal);
-  // }
   auto interface(std::make_unique<HybridAStar::Interface>());
   ros::spin();
   return 0;

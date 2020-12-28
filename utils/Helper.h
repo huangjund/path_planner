@@ -4,6 +4,7 @@
 #include <vector>
 #include <cmath>
 #include <algorithm>
+#include <math/vector2d.h>
 
 namespace HybridAStar {
 /*!
@@ -59,6 +60,7 @@ inline float clamp(float n, float lower, float upper) {
  * @brief 
  * 
  */
-  std::string writePath2String(const std::vector<std::pair<double, double>>& path);
+  std::string writePath2String(const std::vector<bool>& forward,
+                               const std::vector<std::vector<Vector2D>>& path);
 }
 }

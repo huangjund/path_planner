@@ -34,11 +34,13 @@ void PlannerAgvManager::checkAndAssign() {
 	}
 	else
 	{
+		cout << agvs[0]->getAgvId() << endl;
 		if (!tasks_.empty()) {
-			for (auto iter = tasks_.begin(); iter != tasks_.end(); iter++)
+			for (auto iter = tasks_.cbegin(); iter != tasks_.cend(); iter++)
 			{
 				agvs[0]->assignTask(*iter);
 			}
+			tasks_.clear();
 		}
 	}
 }
@@ -94,13 +96,40 @@ void PlannerCC::main()
 
 void PlannerCC::generateTaskLists(const std_msgs::String::ConstPtr& msg)
 {
-	stringstream ss;
-	ss << msg;
+	auto msgStr = msg->data;
+	std::string temp;
+	std::list<AgvTask> tasks;
 	vn::communication::AgvTask task;
+	// split the whole string into several tasks
+	for(auto i = msgStr.cbegin(); i != msgStr.cend() - 1; ++i) {
+		if ((*i) == '\n') {
+			task.task_type = TaskType::kTaskTypeMoveTo;
+			task.task_id = task_id_++;
+			task.task_info.emplace("PathString", temp);
+			tasks.push_back(std::move(task));
+			temp.clear();
+		}
+		else {
+			temp += (*i);
+		}
+	}
 	task.task_type = TaskType::kTaskTypeMoveTo;
-	task.task_info.emplace("PathString", ss.str());
-	std::list<vn::communication::AgvTask> tasks;
-	tasks.push_back(task);
+	task.task_id = task_id_;
+	task.task_info.emplace("PathString", temp);
+	tasks.push_back(std::move(task));
+	
+	// temp = "B;B,24.769,21.520,0;B,25,21.520,0;B,25.5,21.520,0;B,26,21.520,0;B,26.5,21.520,0;B,27,21.520,0;B,27.5,21.520,0";
+	// task.task_type = TaskType::kTaskTypeMoveTo;
+	// task.task_id = task_id_++;
+	// task.task_info.emplace("PathString", temp);
+	// tasks.push_back(std::move(task));
+
+	// temp = "B;B,27.5,21.520,0;B,28,21.520,0;B,28.5,21.520,0;B,29,21.520,0;B,29.5,21.520,0;B,30,21.520,0;B,30.5,21.520,0";
+	// task.task_type = TaskType::kTaskTypeMoveTo;
+	// task.task_id = task_id_++;
+	// task.task_info.emplace("PathString", temp);
+	// tasks.push_back(std::move(task));
+
 	agv_manager_.addTaskGroup(tasks);
 }
 

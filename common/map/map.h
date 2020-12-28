@@ -26,7 +26,9 @@ namespace Common {
       float planResolution; // [unit: meters/cell]
 
       nav_msgs::OccupancyGrid::_data_type data;
-      RawMap(){width = 0; height = 0; resolution = 0; planResolution = 0.5; data.reserve(19000000);}
+      RawMap(){width = 0; height = 0; resolution = 0; planResolution = 0.5;
+       //data.reserve(10000000);
+       }
       // RawMap& operator=(const RawMap&);
     } info_;
     

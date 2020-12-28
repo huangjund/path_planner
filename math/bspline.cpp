@@ -11,6 +11,7 @@ BSpline::BSpline():Smoother(){
 BSpline::~BSpline() {
   ctrlPointSet.clear();
   trajPointSet.clear();
+  trajDirctionSet.clear();
   splineOrder.clear();
   bpath_.clear();
 }
@@ -50,6 +51,7 @@ void BSpline::tracePath(const std::shared_ptr<Common::SE2State> node) {
     traj.push_back(point);
     if (isCusp(i)) {  // if the i th point is a direction changing point
       trajPointSet.push_back(traj);
+      trajDirctionSet.push_back((path_[i]->getPrim() < 3 ? true : false));
       traj.clear();
       traj.push_back(point);
     }
@@ -57,6 +59,12 @@ void BSpline::tracePath(const std::shared_ptr<Common::SE2State> node) {
   point[0] = path_[i]->getX(); point[1] = path_[i]->getY();
   traj.push_back(point);
   trajPointSet.push_back(traj); // push back the last piece of trajectory
+  trajDirctionSet.push_back(path_[i]->getPrim() < 3 ? true : false);
+
+  std::vector<int> debug;
+  for (i = pathlength - 1; i >= 0; --i) {
+    debug.push_back(path_[i]->getPrim());
+  }
 }
 
 // complete function
@@ -154,6 +162,7 @@ void BSpline::clearPath() {
   splineOrder.clear();
   ctrlPointSet.clear();
   trajPointSet.clear();
+  trajDirctionSet.clear();
   bpath_.clear();
 }
 

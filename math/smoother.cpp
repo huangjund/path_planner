@@ -95,6 +95,7 @@ void Smoother::smoothPath(float width, float height) {
   }
 }
 
+// trace a path without considering forward or backward
 void Smoother::tracePath(const std::shared_ptr<Common::SE2State> node) {
   auto waypoint = node;
   while (waypoint!=nullptr){

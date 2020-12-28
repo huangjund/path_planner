@@ -42,7 +42,7 @@ class CCConfig : public vn::core::XmlConfigurable
 {
  public:
 	CCConfig(): 
-    port_(9102),
+    port_(9101),
     truck_detection_ip_("192.168.1.103"),
     truck_detection_port_(8484){}
 
