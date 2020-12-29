@@ -60,11 +60,45 @@ void BSpline::tracePath(const std::shared_ptr<Common::SE2State> node) {
   traj.push_back(point);
   trajPointSet.push_back(traj); // push back the last piece of trajectory
   trajDirctionSet.push_back(path_[i]->getPrim() < 3 ? true : false);
+}
 
-  std::vector<int> debug;
-  for (i = pathlength - 1; i >= 0; --i) {
-    debug.push_back(path_[i]->getPrim());
+//  this function is for agv, not for inner planning
+void BSpline::addPointBetweenLine() {
+  // add one point between two point lines
+  for(int i = 0; i < outputTrajPointSet.size(); ++i) {
+    if (outputTrajPointSet[i].size() == 2) {  // if there are 2 points, interpolate to 5
+      auto p0 = outputTrajPointSet[i].cbegin();
+      auto p2 = p0 + 1;
+      auto p1 = (*p0)/2 + (*p2)/2;
+      std::vector<Vector2D> temp{p1};
+      outputTrajPointSet[i].insert(p2, temp.begin(), temp.end());
+    }
   }
+
+  // insert arc point in every piece of lines
+  if (outputTrajPointSet.size() > 1) {
+    for (int i = 1; i < outputTrajPointSet.size(); ++i) {
+      auto v1 = outputTrajPointSet[i][0];
+      auto vm1 = *(outputTrajPointSet[i-1].end()-2);  // v minus 1
+      auto vp1 = outputTrajPointSet[i][1];  // v plus 1
+      double dp = v1.distanseFrom(vp1); // distance plus
+      // 0.2 is the step length of reeds shepp curve
+      if (dp < 0.25) continue;
+      double dm = v1.distanseFrom(vm1); // distance minus
+      auto vp = vp1 - v1; // v plus
+      auto vm = vm1 - v1; // v minus
+      double rp = vp.radian();  // radian plus
+      double rm = vm.radian();  // radian minus
+      double theta = (std::fmod(rp-rm+M_PI, 2*M_PI) - M_PI)/2 + rm;
+      Vector2D bisectrix(std::cos(theta), std::sin(theta));
+      auto bisectrixMinus = bisectrix*dm/2 + v1;
+      auto bisectrixPlus = bisectrix*dp/2 + v1;
+
+      outputTrajPointSet[i-1].insert(outputTrajPointSet[i-1].cend() - 1, bisectrixMinus);
+      outputTrajPointSet[i].insert(outputTrajPointSet[i].cbegin() + 1, bisectrixPlus);
+    }
+  }
+  
 }
 
 // complete function
@@ -107,6 +141,10 @@ void BSpline::smoothPath(float width, float height) {
       path_[i]->setY(p->getY());
     }
   }
+
+  // modify trajectory outlet to agv
+  outputTrajPointSet = trajPointSet;
+  addPointBetweenLine();
 }
 
 // automatically set the base spline order to 3 or 2

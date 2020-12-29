@@ -99,11 +99,11 @@ namespace Common {
     /// set the y position
     void setY(const float& y) { y_ = y; setry(y);}
     /// set the heading theta
-    void setT(const float& t) { t_ = t; setrt(t);}
+    void setT(const float& t) { t_ = std::fmod(t,2*M_PI); setrt(t_);}
 
     inline void setrx(const float& x) {rx_ = x/cellSize_; }
     inline void setry(const float& y) {ry_ = y/cellSize_; }
-    inline void setrt(const float& t) {rt_ = t/angleSize_;}
+    inline void setrt(const float& t) {rt_ = std::fmod(t,2*M_PI)/angleSize_;}
     void setRelative(const float& x,const float& y,const float& t){setrx(x);setry(y);setrt(t);}
 
     /// set the cost-so-far (real value)

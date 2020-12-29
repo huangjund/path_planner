@@ -57,7 +57,7 @@ namespace Common{
     // computing occupancy rate
     for (int i = 0; i < grid_->info.width; i++){
       for (int j = 0; j < grid_->info.height; j++){
-        if(grid_->data[j*grid_->info.width + i]){ // if the cell has obstacle, add 
+        if(grid_->data[j*grid_->info.width + i] != 0){ // if the cell has obstacle, add 
           cpx = static_cast<int>(i*ccsize/pcsize);
           cpy = static_cast<int>(j*ccsize/pcsize);
           *(pg.get()+cpy*pGrid_.width + cpx) += ccsize*ccsize;
@@ -69,6 +69,8 @@ namespace Common{
     for(int i = 0; i < pGrid_.width; i++){
       for(int j = 0; j < pGrid_.height; j++){
         *(pg.get()+j*pGrid_.width + i) /= pcsize*pcsize;
+        if (*(pg.get()+j*pGrid_.width + i) >= 1 || *(pg.get()+j*pGrid_.width + i) <0)
+          std::cout << *(pg.get() + j*pGrid_.width + i) << ",";
       }
     }
   }

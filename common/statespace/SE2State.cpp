@@ -6,7 +6,7 @@ namespace Common {
   const int SE2State::dir = 3;
   const float SE2State::dy[] = { 0,        -0.2394141,  0.2394141};
   const float SE2State::dx[] = { 0.7,   0.6577848,   0.6577848};
-  const float SE2State::dt[] = { 0,         0.34906585,   -0.34906585};
+  const float SE2State::dt[] = { 0,         -0.34906585,   0.34906585};
 
   const float SE2State::collisionMapCellSize = 0.0125;
 
@@ -18,13 +18,13 @@ namespace Common {
 
   SE2State::SE2State(float x, float y, float t, float g, float h,
                      std::shared_ptr<SE2State> pred, float cellsize, float anglesize, int prim = 0):
-                     x_(x),y_(y),t_(t),g_(g),h_(h),prim_(prim),o_(false),c_(false),idx_(-1),
+                     x_(x),y_(y),t_(std::fmod(t,2*M_PI)),g_(g),h_(h),prim_(prim),o_(false),c_(false),idx_(-1),
                     pred_(pred), cellSize_(cellsize), angleSize_(anglesize){
     setRelative(x,y,t); // set the relative position
   }
 
   SE2State::SE2State(const SE2State &cp):
-                    x_(cp.x_),y_(cp.y_),t_(cp.t_),g_(cp.g_),h_(cp.h_),
+                    x_(cp.x_),y_(cp.y_),t_(std::fmod(cp.t_,2*M_PI)),g_(cp.g_),h_(cp.h_),
                     prim_(cp.prim_),o_(cp.o_),c_(cp.c_),idx_(cp.idx_),pred_(cp.pred_),
                     cellSize_(cp.cellSize_),angleSize_(cp.angleSize_) {
     setRelative(x_,y_,t_);
@@ -32,7 +32,7 @@ namespace Common {
 
   SE2State &SE2State::operator=(const SE2State &rhs) {
     this->x_ = rhs.x_;this->y_ = rhs.y_; 
-    this->t_ = rhs.t_; this->g_ = rhs.g_; 
+    this->t_ = std::fmod(rhs.t_,2*M_PI); this->g_ = rhs.g_; 
     this->h_ = rhs.h_; this->prim_ = rhs.prim_; 
     this->o_ = rhs.o_; this->c_ = rhs.c_; 
     this->idx_ = rhs.idx_; this->pred_ = rhs.pred_;

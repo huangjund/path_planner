@@ -38,12 +38,49 @@ struct StorageBin
 	bool flip;
 };
 
+struct ObstaclePose {
+	double hrzDis;	// horizontal distance
+	double vtcDis;	// vertical distance
+};
+
+// for storage bin
+void to_json(nlohmann::json& j, const StorageBin& p) { 
+	j = nlohmann::json{ 
+		{"id", p.id}, 
+		{"x", p.x}, 
+		{"y", p.y}, 
+		{"z", p.z},
+		{"theta", p.theta},
+		{"flip", p.flip}
+	};
+}
+void from_json(const nlohmann::json& j, StorageBin& p) {
+	j.at("id").get_to(p.id);
+	j.at("x").get_to(p.x);
+	j.at("y").get_to(p.y);
+	j.at("z").get_to(p.z);
+	j.at("theta").get_to(p.theta);
+	j.at("flip").get_to(p.flip);
+}
+
+// for storage bin
+void to_json(nlohmann::json& j, const ObstaclePose& p) { 
+	j = nlohmann::json{ 
+		{"horizontal_distance_", p.hrzDis}, 
+		{"vertical_distance_", p.vtcDis}
+	};
+}
+void from_json(const nlohmann::json& j, ObstaclePose& p) {
+	j.at("horizontal_distance_").get_to(p.hrzDis);
+	j.at("vertical_distance_").get_to(p.vtcDis);
+}
+
 class CCConfig : public vn::core::XmlConfigurable
 {
  public:
 	CCConfig(): 
     port_(9101),
-    truck_detection_ip_("192.168.1.103"),
+    truck_detection_ip_("192.168.1.246"),
     truck_detection_port_(8484){}
 
 	int getServerPort()
@@ -148,6 +185,7 @@ class PlannerCC
 	CyclicThread refresh_thread_;			/*!< thread that monitors the detection of the truck */
 	bool sensor_started_;			/*!< whether the sensor module is started */
 	bool start_loading_;					/*!< try start load the sensor, if the sensor is not found, will be set to false */
+	bool start_obs_ = false;			// try start load the obstacles
 	static int rpc_id_;						/*!< rpc call id */
 	CppHttpLibClientConnector httpClient_;	/*!< http client of sensor */
 	JsonRpcClient client_;					/*!< json rpc client of sensor */
@@ -161,6 +199,7 @@ class PlannerCC
 	ros::NodeHandle node_;
 	ros::Subscriber sub_path_;
 	ros::ServiceServer pos_server_;
+	ros::Publisher pub_Obs_;
 };
 int PlannerCC::rpc_id_ = 0;	// rpc id counts for the callings to the sensor?
 int64 PlannerCC::task_id_ = 1;

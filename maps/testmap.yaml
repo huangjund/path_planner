@@ -1,6 +1,6 @@
-image: 4.png
+image: output.png
 resolution: 0.0125
 origin: [0, 0, 0.0]
-occupied_thresh: 0.01
-free_thresh: 0.01
+occupied_thresh: 0.5
+free_thresh: 0.5
 negate: 0

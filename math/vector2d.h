@@ -51,6 +51,12 @@ class Vector2D {
   float y;
   //  /// the theta part for plotting purposes
   //  float t;
+  double radian() {
+    return std::atan2(y,x); // (-pi, pi]
+  }
+  double distanseFrom(Vector2D& rhs) {
+    return std::sqrt((x-rhs.getX())*(x-rhs.getX()) + (y-rhs.getY())*(y-rhs.getY()));
+  }
 };
 inline Vector2D operator * (double k, const Vector2D& b) {
   return (b * k);

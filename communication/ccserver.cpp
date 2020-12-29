@@ -1,28 +1,10 @@
 #include "ccserver.h"
 
 #include <fstream>
+#include <cmath>
 #include <tf/transform_datatypes.h>
 #include <condition_variable>
-
-
-void to_json(nlohmann::json& j, const StorageBin& p) { 
-	j = nlohmann::json{ 
-		{"id", p.id}, 
-		{"x", p.x}, 
-		{"y", p.y}, 
-		{"z", p.z},
-		{"theta", p.theta},
-		{"flip", p.flip}
-	};
-}
-void from_json(const nlohmann::json& j, StorageBin& p) {
-	j.at("id").get_to(p.id);
-	j.at("x").get_to(p.x);
-	j.at("y").get_to(p.y);
-	j.at("z").get_to(p.z);
-	j.at("theta").get_to(p.theta);
-	j.at("flip").get_to(p.flip);
-}
+#include <geometry_msgs/PoseArray.h>
 
 /*====================================PlannerAgvManager========================================*/
 
@@ -72,6 +54,7 @@ PlannerCC::PlannerCC(int port, std::string sensor_ip, int sensor_port)
 
 	sub_path_ = node_.subscribe("/PlannerToinServer/Path", 1, &PlannerCC::generateTaskLists, this);
 	pos_server_ = node_.advertiseService("inServerToPlanner/Pos", &PlannerCC::getAgvPos,this);
+	pub_Obs_ = node_.advertise<geometry_msgs::PoseArray>("/inServerToPlanner/Obstacles",1);
 
 	agv_manager_.start();
 	refresh_thread_.run();
@@ -114,21 +97,9 @@ void PlannerCC::generateTaskLists(const std_msgs::String::ConstPtr& msg)
 		}
 	}
 	task.task_type = TaskType::kTaskTypeMoveTo;
-	task.task_id = task_id_;
+	task.task_id = task_id_++;
 	task.task_info.emplace("PathString", temp);
 	tasks.push_back(std::move(task));
-	
-	// temp = "B;B,24.769,21.520,0;B,25,21.520,0;B,25.5,21.520,0;B,26,21.520,0;B,26.5,21.520,0;B,27,21.520,0;B,27.5,21.520,0";
-	// task.task_type = TaskType::kTaskTypeMoveTo;
-	// task.task_id = task_id_++;
-	// task.task_info.emplace("PathString", temp);
-	// tasks.push_back(std::move(task));
-
-	// temp = "B;B,27.5,21.520,0;B,28,21.520,0;B,28.5,21.520,0;B,29,21.520,0;B,29.5,21.520,0;B,30,21.520,0;B,30.5,21.520,0";
-	// task.task_type = TaskType::kTaskTypeMoveTo;
-	// task.task_id = task_id_++;
-	// task.task_info.emplace("PathString", temp);
-	// tasks.push_back(std::move(task));
 
 	agv_manager_.addTaskGroup(tasks);
 }
@@ -183,6 +154,32 @@ void PlannerCC::refreshSensorDetection()
 {
 	try
 	{
+		auto agvs = agv_manager_.getAvailableAgvs();
+		// if is demo 2
+		if (start_obs_ && agvs.size()) {
+			// get agv pose, no checker here
+			auto pose = agvs[0]->getPose();
+			double t = pose.angle();
+			double rotation[2][2] = {std::cos(t), -std::sin(t),
+															std::sin(t),  std::cos(t)};
+
+			// call jsonrpc to get obstaclePose
+			std::vector<ObstaclePose> obs = client_.CallMethod<
+													std::vector<ObstaclePose>>(++rpc_id_, "GetObstaclePose");
+			geometry_msgs::PoseArray obs_array;
+			obs_array.header.frame_id = "map";
+			obs_array.header.seq = 1;
+			geometry_msgs::Pose temp;
+			for(auto i = obs.cbegin(); i != obs.cend(); ++i) {
+				double x = i->hrzDis, y = i->vtcDis;
+				temp.position.x = pose.x() + x*rotation[0][0] + y*rotation[0][1];
+				temp.position.y = pose.y() + x*rotation[1][0] + y*rotation[1][1];
+				std::cout << "x: " << temp.position.x << "y: " << temp.position.y << std::endl;
+				obs_array.poses.push_back(std::move(temp));
+			}
+			pub_Obs_.publish(obs_array);
+		}
+
 		// if start loading informtion from sensor
 		// then take the goal
 		if (start_loading_)
@@ -204,7 +201,6 @@ void PlannerCC::refreshSensorDetection()
 		condition_.notify_one();
 
 		closeSensorDetection();
-
 	}
 	catch (jsonrpccxx::JsonRpcException e)
 	{

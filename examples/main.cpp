@@ -14,25 +14,50 @@ namespace HybridAStar{
     isStartvalid_ = false;
     isGoalvalid_ = false;
     hasMap_ = false;
-    pubPath_ = n_.advertise<std_msgs::String>("/PlannerToinServer/Path", 1);
-    posClient_ = n_.serviceClient<gazebo_msgs::GetModelState>("/inServerToPlanner/Pos");
+    pubPath_ = n_.advertise<std_msgs::String>("/PlannerToinServer/Path", 1);  // publish path to inner server
+    posClient_ = n_.serviceClient<gazebo_msgs::GetModelState>("/inServerToPlanner/Pos");  // pose service with inner server: goal pose, agv pose
     subGoal_ = n_.subscribe("/move_base_simple/goal", 1, &Interface::makeGoal, this);
     subStart_ = n_.subscribe("/initialpose", 1, &Interface::makeStart, this);
     subMap_ = n_.subscribe("/map", 1, &Interface::setMap, this);
     subObs_ = n_.subscribe("/sensor/obstaclePos", 1, &Interface::updateObs, this);
-    tempSubscriber_ = n_.advertise<geometry_msgs::PoseStamped>("/PlannerToRVIZ/Target",1);
+    tempSubscriber_ = n_.advertise<geometry_msgs::PoseStamped>("/PlannerToRVIZ/Target",1);  // advertise the goal pose, received from posClient, to rviz
   }
 
   void Interface::makeStart(const geometry_msgs::PoseWithCovarianceStamped::ConstPtr& start) {
-    // TODO: lack of a solution to no map loaded
-    float x = start->pose.pose.position.x / grid_->info.resolution;   //[unit: collision cells]
-    float y = start->pose.pose.position.y / grid_->info.resolution;
-    float t = tf::getYaw(start->pose.pose.orientation);
+    // float x = start->pose.pose.position.x / grid_->info.resolution;   //[unit: collision cells]
+    // float y = start->pose.pose.position.y / grid_->info.resolution;
+    // float t = tf::getYaw(start->pose.pose.orientation);
+
+    // get agv pose from JsonRPC
+    geometry_msgs::PoseWithCovarianceStamped agvPoseOutput;
+    {
+      gazebo_msgs::GetModelState srv;
+      srv.request.model_name = "agvpose";
+      if (posClient_.call(srv)){
+        agvPoseOutput.header.frame_id = "map";
+        agvPoseOutput.header.stamp = ros::Time::now();
+        agvPoseOutput.pose.pose.position.x = srv.response.pose.position.x;
+        agvPoseOutput.pose.pose.position.y = srv.response.pose.position.y;
+        agvPoseOutput.pose.pose.position.z = 0;
+        agvPoseOutput.pose.pose.orientation.x = srv.response.pose.orientation.x;
+        agvPoseOutput.pose.pose.orientation.y = srv.response.pose.orientation.y;
+        agvPoseOutput.pose.pose.orientation.z = srv.response.pose.orientation.z;
+        agvPoseOutput.pose.pose.orientation.w = srv.response.pose.orientation.w;
+      }
+      else {
+        std::cout << "failed to get response" << std::endl;
+      }
+    }
+
+    float x = agvPoseOutput.pose.pose.position.x / grid_->info.resolution;   //[unit: collision cells]
+    float y = agvPoseOutput.pose.pose.position.y / grid_->info.resolution;
+    float t = tf::getYaw(agvPoseOutput.pose.pose.orientation);
 
     if (grid_->info.height >= y && y >= 0 && grid_->info.width >= x && x >= 0) {
       isStartvalid_ = true;
       Action action = startSetting;
-      start_ = *start;
+      // start_ = *start;
+      start_ = agvPoseOutput;
       
       // automata
       outputAutomata(action);
@@ -49,6 +74,7 @@ namespace HybridAStar{
     float y = goal->pose.position.y / grid_->info.resolution;
     float t = tf::getYaw(goal->pose.orientation);
 
+    // get goal pose from JsonRPC
     // {
     //   gazebo_msgs::GetModelState srv;
     //   srv.request.model_name = "goalpose";

@@ -157,6 +157,7 @@ namespace Geometry{
     auto startNode = std::make_shared<Node3d>(start->getX(),start->getY(),start->getT(),pMap_->info_.planResolution,0.08726646,bounds);
     auto goalNode = std::make_shared<Node3d>(goal.getX(),goal.getY(),goal.getT(),pMap_->info_.planResolution,0.08726646,bounds);
 
+    auto a = start->getT()*180/M_PI;
     // TODO:change the last 0.5 to a carplant related value
     // should carplant class be an abstract base class and other class inherit from this class?
     auto reed_shepp_generator = std::make_shared<RSPath4Fork>(1/carPlant_->rad_,0.2);
