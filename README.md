@@ -1,5 +1,13 @@
-Coming later
+# Hybrid A Star Planner
 
+## Code Comments
+---
+To view the comments systematicly, you can follow instructions below to generate the tutorial of this code.  
+
+To generate the tutorial, Doxygen should be install in advance.
+
+>$ doxygen DoxyFile  
+then find the file named **index.html** in html directory. run it by your browser.
 <!-- ### Hybrid A* Path Planner for the KTH Research Concept Vehicle [![Build Status](https://travis-ci.org/karlkurzer/path_planner.svg?branch=master)](https://travis-ci.org/karlkurzer/path_planner)
 
 * [Characteristics](#characteristics)
@@ -60,3 +68,5 @@ sudo apt install libompl-dev \
 2. Click 2D Pose Estimate to set a start point on the map (`p`)
 3. Click 2D Nav Goal to set a goal point on the map (`g`)
 4. Wait for the path being searched! (this process can be visualized [optional]) -->
+
+
