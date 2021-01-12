@@ -2,6 +2,10 @@
 #include "Node.h"
 namespace HybridAStar{
 namespace Geometry {
+/**
+ * @brief x y and yaw node. for reeds shepp planner
+ * 
+ */
 class Node3d : public Node {
  public:
   Node3d(const double x, const double y, const double phi,

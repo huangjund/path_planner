@@ -21,11 +21,10 @@ namespace HybridAStar
 {
 namespace Geometry
 {
-  // TODO: this class should be inherit from Planner
   /**
    * @brief reference to [RRTx: Asymptotically Optimal Single-Query Sampling-Based Motion]
    * Planning with Quick Replanning
-   * 
+   * not in use now
    */
   class RRTXdynamic
   {

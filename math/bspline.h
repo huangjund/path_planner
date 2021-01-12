@@ -16,8 +16,17 @@
 
 namespace HybridAStar
 {
+
+/**
+ * @brief get a piece of smooth b spline
+ * 
+ */
 class BSpline : public Smoother {
   public:
+    /**
+     * @brief control point structure
+     * 
+     */
     struct ctrlPoint {
       double value;
       int multiplicity = 1;
@@ -27,11 +36,11 @@ class BSpline : public Smoother {
     };
 
   private:
-    std::vector<std::vector<ctrlPoint>> ctrlPointSet; // the size should = trajPointSet size = splineOrder size
-    std::vector<std::vector<Vector2D>> trajPointSet;
-    std::vector<std::vector<Vector2D>> outputTrajPointSet;  // this vector is for agv, not for inner planning
-    std::vector<bool> trajDirctionSet; // if is forward, true, if is backward, false;
-    std::vector<unsigned int> splineOrder;
+    std::vector<std::vector<ctrlPoint>> ctrlPointSet; ///< control point set. the size should = trajPointSet size = splineOrder size
+    std::vector<std::vector<Vector2D>> trajPointSet;  ///< trajectory point set
+    std::vector<std::vector<Vector2D>> outputTrajPointSet;  ///< this vector is for agv, not for inner planning
+    std::vector<bool> trajDirctionSet; ///< if is forward, true, if is backward, false;
+    std::vector<unsigned int> splineOrder;  ///< order of every piece of spline
     std::vector<std::shared_ptr<Common::SE2State>> bpath_;
 
     void addPointBetweenLine();
@@ -40,23 +49,64 @@ class BSpline : public Smoother {
     BSpline();
     virtual ~BSpline();
     
+    /**
+     * @brief trace the path from the end point of the path
+     * 
+     * @param node end point
+     */
     virtual void tracePath(const std::shared_ptr<Common::SE2State> node);
+
+    /**
+     * @brief smooth the traced path
+     * 
+     * @param width 
+     * @param height 
+     */
     virtual void smoothPath(float width, float height);
+
+    /**
+     * @brief whether it is a cusp point
+     * 
+     * @param i 
+     * @return true 
+     * @return false 
+     */
     virtual bool isCusp(int i);
     virtual void clearPath();
+
+    /**
+     * @brief initialize orders of the traced path
+     * 
+     * @param autogen auto generate
+     */
     void initializeSplineOrders(bool autogen = true);
+
+    /**
+     * @brief Set the control Points of every traced path
+     * 
+     * @param autogen 
+     */
     void setCtrlPoints(bool autogen = true);
     std::vector<std::vector<Vector2D>>& returnTrajSet() {return outputTrajPointSet;}
     std::vector<bool>& returnDirectionSet() {return trajDirctionSet;}
     
-    //visualization
+  //visualization
   private:
   ros::NodeHandle n;
   ros::Publisher pub;
   nav_msgs::Path path;
 
   public:
+  /**
+   * @brief for ros visualization
+   * 
+   */
   void interpolate();
+
+  /**
+   * @brief for ros visualization
+   * 
+   */
   void splinePub() {
     path.poses.clear();
     bpath_.clear();

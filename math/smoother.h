@@ -23,22 +23,22 @@ class Smoother {
 
   /*!
      \brief This function takes a path consisting of nodes and attempts to iteratively smooth the same using gradient descent.
-
-     During the different interations the following cost are being calculated
-     obstacleCost
-     curvatureCost
-     smoothnessCost
-     voronoiCost
   */
   virtual void smoothPath(float width, float height);
 
   /*!
-     \brief Given a node pointer the path to the root node will be traced recursively
+     \brief Given a node pointer, the path to the root node will be traced recursively
      \param node a 3D node, usually the goal node
-     \param i a parameter for counting the number of nodes
   */
   virtual void tracePath(const std::shared_ptr<Common::SE2State> node);
 
+  /**
+   * @brief whether point i is cusp point
+   * 
+   * @param i 
+   * @return true 
+   * @return false 
+   */
 	virtual bool isCusp(int i);
 
   virtual void clearPath();
@@ -89,7 +89,6 @@ class Smoother {
   /// maximum possible curvature of the non-holonomic vehicle
   float kappaMax = 1.f / carPlant_->rad_;
   /// maximum distance to obstacles that is penalized
-  //   TODO: this should be in the shield?
   // [m] --- The minimum width of a safe road for the vehicle at hand
   float obsDMax = 1;
   // TODO: below

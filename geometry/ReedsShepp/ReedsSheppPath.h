@@ -33,6 +33,10 @@ struct RSPParam {
   double v = 0.0;
 };
 
+/**
+ * @brief base class for reeds shepp planning
+ * 
+ */
 class ReedShepp {
  public:
   ReedShepp(const double max_kappa, const double step_size);

@@ -19,6 +19,10 @@ namespace Common {
   private:
     bool hasStateSpace_ = false;
   public:
+    /**
+     * @brief map read from map server
+     * 
+     */
     struct RawMap {
       int width;  // [unit: cell]
       int height; // [unit: cell]
@@ -40,9 +44,13 @@ namespace Common {
     explicit Map(const nav_msgs::OccupancyGrid::Ptr map);
     virtual ~Map() = default;
 
-    // TODO:should be removed to other class
-    std::vector<T> statespace;
+    std::vector<T> statespace;  ///< state for every block
     void setMap(const nav_msgs::OccupancyGrid::Ptr map);
+
+    /**
+     * @brief set state space
+     * 
+     */
     void setSS();
     void resetSS();
     // const std::vector<T>& getStateSpace() const;

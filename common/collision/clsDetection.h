@@ -14,43 +14,54 @@
 
 namespace HybridAStar {
 namespace Common {
-		// TODO: this class needs to be modified
+  /**
+   * @brief this class is used for collision detection(configuration space)
+   * 
+   */
   class CollisionDetection
   {
    private:
-    /// Planning Map with occupancy property [planning map]
+    /**
+     * @brief planning map with occupancy percentage
+     */
     struct PlanOccupancyGrid {
       int width; // [unit:cells] planning map
       int height; // [unit:cells] planning map
       std::shared_ptr<float> planGrid; //[unit:percent] counting for occupancy rate of per planning map cells
       float threshold = 0.01;
     }pGrid_;
+
+    /**
+     * @brief 2 dimensional point
+     * 
+     */
     struct relPos {
       /// the x position relative to the center
       int x;
       /// the y position relative to the center
       int y;
     };
+
     /// A structure capturing the lookup for each theta configuration
+    /**
+     * @brief configuration space of the car.
+     *      for every theta posture, there is one collision configuration
+     */
     struct configuration{
       /// the number of cells occupied by this configuration of the vehicle
       int length;
       /*!
         \var relPos pos[64]
         \brief The maximum number of occupied cells
-        \todo needs to be dynamic
       */
-     //TODO: this car related term should not be at here
       relPos pos[2000];
     };
     
-    std::unique_ptr<Multibody::SingleForkLiftPlant> carPlant_;
-    // TODO: change this grid to a Map class
-    nav_msgs::OccupancyGrid::Ptr grid_;
+    std::unique_ptr<Multibody::SingleForkLiftPlant> carPlant_; ///< car configuration parameters
+    nav_msgs::OccupancyGrid::Ptr grid_; ///< collision map 
     
     int sign(double);
-    /// The collision lookup table
-    configuration *collisionLookup_;
+    configuration *collisionLookup_;  ///< The configuration space lookup table
 
    public:
     CollisionDetection(const CollisionDetection&);
@@ -65,15 +76,51 @@ namespace Common {
     void getConfiguration(const SE2State*, float &,float &, float &) ;
     void getConfiguration(const GridState*, float &, float &, float &) ;
 
+    /**
+     * @brief whether the state is collision free
+     * 
+     * @tparam T 
+     * @return true 
+     * @return false 
+     */
     template <class T>
     bool isTraversable(const T*) ;
+
+    /**
+     * @brief whether the state is collision free. this function is for rrtx planner state
+     * 
+     * @tparam T 
+     * @return true 
+     * @return false 
+     */
     template <class T>
     bool isTraversable(const T*, const bool) ;  // when it is rrtx
 
-    bool fastSearch(double*, double*); // search if it is traversable for a line
+    /**
+     * @brief search if the path between two state is traversable
+     * 
+     * @param state1 
+     * @param state2 
+     * @return true 
+     * @return false 
+     */
+    bool fastSearch(double* state1, double*state2); // search if it is traversable for a line
 
+    /**
+     * @brief configuration in collision free space
+     * 
+     * @param x 
+     * @param y 
+     * @param t 
+     * @return true 
+     * @return false 
+     */
     bool configinCFree(float x, float y, float t) ;
     
+    /**
+     * @brief make up collision lookup table \p collisionLookup_
+     * 
+     */
     void makeClsLookup();
   };
 } // namespace Common

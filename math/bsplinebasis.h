@@ -7,18 +7,44 @@
 
 namespace HybridAStar
 {
+  /**
+   * @brief base class for b spline computation
+   * 
+   * \ref reference to: 计算机辅助几何设计与非均匀有理B样条
+   * 
+   */
   class bsplinebasis
   {
   private:
     int order;
-    std::vector<Vector2D> trajPoints;
+    std::vector<Vector2D> trajPoints; ///< trajectory points
 
   public:
     bsplinebasis(const std::vector<Vector2D>& trajp, const int odr = 3);
     ~bsplinebasis() = default;
 
+    /**
+     * @brief compute the point value at \p glb_value
+     * 
+     * @param glb_value global t value
+     * @return Vector2D 
+     */
     Vector2D compute(double glb_value);
+
+    /**
+     * @brief the point value at \p loc on the ith piece
+     * 
+     * @param loc local t value. t belongs to [0,1)
+     * @param piece the i th piece
+     * @return Vector2D 
+     */
     Vector2D pieceiValue(const double loc,const unsigned int piece);
+
+    /**
+     * @brief Set the Order of this piece
+     * 
+     * @param order 
+     */
     void setOrder(const int& order);
     size_t trajSize() const {return trajPoints.size();}
   private:

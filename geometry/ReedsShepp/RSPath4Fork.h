@@ -7,6 +7,10 @@ namespace HybridAStar
 {
 namespace Geometry
 {
+/**
+ * @brief Reeds shepp planner for fork
+ * 
+ */
 class RSPath4Fork : public ReedShepp
 {
 protected:

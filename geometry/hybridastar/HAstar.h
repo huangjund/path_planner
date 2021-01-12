@@ -29,17 +29,21 @@ namespace Geometry {
   using Common::hAStar;
   using Common::Map;
 
+  /**
+   * @brief Hybrid A Star Planner
+   * 
+   */
   class HAstar : Planner {
   private:
-    shared_ptr<SE2State> start_;
-    SE2State goal_;
-    shared_ptr<CollisionDetection> configSpace_;
-    unique_ptr<hRScurve> rsPlanner_;
+    shared_ptr<SE2State> start_;  ///< start point
+    SE2State goal_; ///< goal point
+    shared_ptr<CollisionDetection> configSpace_;  ///< configuration space
+    unique_ptr<hRScurve> rsPlanner_;  ///< heuristic reeds shepp planner
     //unique_ptr<hRRTx> rrtxPlanner_;
-    unique_ptr<hAStar> aStarPlanner_;
-    shared_ptr<Map<SE2State>> pMap_;  // map used for planning
+    unique_ptr<hAStar> aStarPlanner_; ///< heuristic a star planner
+    shared_ptr<Map<SE2State>> pMap_;  ///< planning map
     // TODO: set this as a parameter
-    int defaultIter = 3000;
+    int defaultIter = 3000; ///< searching iterations(searching depth)
   public:
     HAstar() = default;
     explicit HAstar(shared_ptr<SE2State>,SE2State &,shared_ptr<Map<SE2State>>,shared_ptr<CollisionDetection>&);
@@ -48,15 +52,46 @@ namespace Geometry {
     HAstar(const HAstar &) = delete;
     HAstar &operator=(const HAstar &) = delete;
 
-    // TODO: return some prompts
+    /**
+     * @brief 
+     * 
+     * @return shared_ptr<SE2State> the end point of found path
+     */
     shared_ptr<SE2State> solve();
-    void updateHeuristic(SE2State &,SE2State &);
-    shared_ptr<SE2State> dubinsShot(shared_ptr<SE2State>, const SE2State&);
-    shared_ptr<SE2State> ReedsShepp(shared_ptr<SE2State>, const SE2State&);
+
+    /**
+     * @brief update heuristic of current point
+     * 
+     * @param current current searching point
+     * @param goal 
+     */
+    void updateHeuristic(SE2State &current,SE2State &goal);
+
+    /**
+     * @brief get shortest dubins curve from current to goal
+     * 
+     * @param current current position
+     * @param goal goal position
+     * @return shared_ptr<SE2State> return last point on generated dubins curve
+     */
+    shared_ptr<SE2State> dubinsShot(shared_ptr<SE2State> current, const SE2State& goal);
+
+    /**
+     * @brief get shortest reeds shepp curve from current to goal
+     * 
+     * @param current current position
+     * @param goal goal position
+     * @return shared_ptr<SE2State> return last point on generated reeds shepp curve
+     */
+    shared_ptr<SE2State> ReedsShepp(shared_ptr<SE2State> current, const SE2State& goal);
     
     SE2State &getStart();
     SE2State &getGoal();
-    // this function can only be used after the tree has been constructed
+    
+    /**
+     * @brief Set the Start point, this function can only be used after the tree has been constructed
+     * 
+     */
     void setStart(std::shared_ptr<SE2State>);
   };
 } // namespace Geometry

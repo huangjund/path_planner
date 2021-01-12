@@ -19,7 +19,7 @@ namespace Common {
     float g_;
     /// the cost-to-go
     float h_;
-    /// the index of the node in the 2D array
+    /// the index in state space
     int idx_;
     /// the open value
     bool o_;
@@ -95,11 +95,16 @@ namespace Common {
     /// Updates the cost-to-go for the node x' to the goal node.
     void updateH(const GridState& goal) { h_ = movementCost(goal); }
     /// The heuristic as well as the cost measure.
-    // TODO: need to match high dimension
     float movementCost(const GridState& pred) const { return sqrt((x_ - pred.x_) * (x_ - pred.x_) + (y_ - pred.y_) * (y_ - pred.y_)); }
 
-    /// Validity check to test, whether the node is in the 2D array.
-    // TODO: need to fit high dimension
+    /**
+     * @brief check whether this state is in the map
+     * 
+     * @param width 
+     * @param height 
+     * @return true 
+     * @return false 
+     */
     bool isOnGrid(const int width, const int height) const;
 
     void clear();

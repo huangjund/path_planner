@@ -10,6 +10,10 @@
 
 namespace HybridAStar
 {
+  /**
+   * @brief check if the state collide
+   * 
+   */
 class ValidityChecker{
   private:
     std::function<bool(const Common::SE2State*)> checker_;
@@ -20,6 +24,10 @@ class ValidityChecker{
     }
 };
 
+/**
+ * @brief check if the motion between two states collide
+ * 
+ */
 class MotionChecker{
   private:
     std::function<bool(const Common::SE2State*, const Common::SE2State*)> checker_;

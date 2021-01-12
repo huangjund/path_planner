@@ -9,14 +9,12 @@
 #include <nav_msgs/OccupancyGrid.h>
 #include "common/statespace/SE2State.h"
 
-// TODO: this class needs to be changed
 namespace HybridAStar {
 namespace Geometry {
   class Planner {
   protected:
     std::shared_ptr<Common::SE2State> start_;
     Common::SE2State goal_;
-    // TODO: change this into map class
     nav_msgs::OccupancyGrid::Ptr grid_;
   
     std::unique_ptr<Multibody::SingleForkLiftPlant> carPlant_;

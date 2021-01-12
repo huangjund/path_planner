@@ -12,6 +12,10 @@
 #include "math.h"
 namespace HybridAStar{
 namespace Geometry {
+/**
+ * @brief x y position structure for reeds shepp planner
+ * 
+ */
 class Node {
  public:
   int GetGridX() const { return grid_x_; }

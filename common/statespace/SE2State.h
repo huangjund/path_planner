@@ -9,23 +9,25 @@
 
 namespace HybridAStar {
 namespace Common {
-  // the SE2State class contains discretization information
+  /**
+   * @brief SE2 space include x, y and yaw
+   * 
+   */
   class SE2State : State {
   private:
     float x_;
     float y_;
     float t_;
-    float g_;
-    float h_;
-    int prim_;
-    float o_;
-    float c_;
-    float idx_;
-    // TODO: change into intelligent pointer
+    float g_; ///< cost to come
+    float h_; ///< heuristic
+    int prim_;  ///< primitive from its predecessor
+    float o_; ///< open flag
+    float c_; ///< close flag
+    float idx_; ///< index in state space
     std::shared_ptr<SE2State> pred_;
-    float rx_;
-    float ry_;
-    float rt_;
+    float rx_;  ///< relative x value: x/resolution 
+    float ry_;  ///< relative y value: y/resolution
+    float rt_;///< relative t value: t / resolution
     /// planning map cell size [unit: meters/cell]
     float cellSize_;
     /// planning map angle size [unit: rad/piece]
@@ -71,8 +73,25 @@ namespace Common {
     /// get the heading theta
     float getT() const { return t_; }
 
+    /**
+     * @brief get relative x
+     * 
+     * @return float 
+     */
     float getrx() const {return rx_;}
+
+    /**
+     * @brief get relative y
+     * 
+     * @return float 
+     */
     float getry() const {return ry_;}
+
+    /**
+     * @brief get relative t 
+     * 
+     * @return float 
+     */
     float getrt() const {return rt_;}
 
     /// get the cost-so-far (real value)
@@ -101,8 +120,25 @@ namespace Common {
     /// set the heading theta
     void setT(const float& t) { t_ = std::fmod(t,2*M_PI); setrt(t_);}
 
+    /**
+     * @brief set relative x
+     * 
+     * @param x 
+     */
     inline void setrx(const float& x) {rx_ = x/cellSize_; }
+
+    /**
+     * @brief set relative y
+     * 
+     * @param y 
+     */
     inline void setry(const float& y) {ry_ = y/cellSize_; }
+
+    /**
+     * @brief set relative t
+     * 
+     * @param t 
+     */
     inline void setrt(const float& t) {rt_ = std::fmod(t,2*M_PI)/angleSize_;}
     void setRelative(const float& x,const float& y,const float& t){setrx(x);setry(y);setrt(t);}
 
@@ -135,7 +171,12 @@ namespace Common {
     /// Validity check to test, whether the node is in the 3D array.
     bool isOnGrid(const int width, const int height) const;
 
-    // TODO: change this function into a more scientific mode
+    /**
+     * @brief if the state is in map
+     * 
+     * @return true 
+     * @return false 
+     */
     bool isInRange(const SE2State&) const;
 
     // SUCCESSOR CREATION

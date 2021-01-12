@@ -149,7 +149,7 @@ void PlannerCC::tryStartMonitor()
 	}
 }
 
-// try get goal pose from Sensor
+// 
 void PlannerCC::refreshSensorDetection()
 {
 	try
